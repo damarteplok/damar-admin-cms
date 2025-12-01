@@ -17,16 +17,16 @@ MIGRATION_PATH_AUTH_SERVICE := services/auth-service/cmd/migrate/migrations
 
 DB_HOST ?= localhost
 DB_PORT ?= 5432
-DB_USER ?= postgres
-DB_PASSWORD ?= postgres
+DB_USER ?= damarhuda
+DB_PASSWORD ?= password
 DB_NAME ?= damar_admin_cms
 
 # Build database URL for user-service
-USER_SERVICE_DB_NAME := $(DB_NAME)_user
+USER_SERVICE_DB_NAME := $(DB_NAME)
 USER_SERVICE_DB_ADDR := postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(USER_SERVICE_DB_NAME)?sslmode=disable
 
 # Build database URL for auth-service
-AUTH_SERVICE_DB_NAME := $(DB_NAME)_auth
+AUTH_SERVICE_DB_NAME := $(DB_NAME)
 AUTH_SERVICE_DB_ADDR := postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(AUTH_SERVICE_DB_NAME)?sslmode=disable
 
 .PHONY: migration

@@ -13,19 +13,16 @@ func init() {
 	validate = validator.New()
 }
 
-// GetValidator returns the shared validator instance
 func GetValidator() *validator.Validate {
 	return validate
 }
 
-// ValidateStruct validates a struct and returns a formatted error message
 func ValidateStruct(s interface{}) error {
 	err := validate.Struct(s)
 	if err == nil {
 		return nil
 	}
 
-	// Format validation errors into readable messages
 	var errMessages []string
 	for _, err := range err.(validator.ValidationErrors) {
 		errMessages = append(errMessages, formatValidationError(err))
@@ -34,7 +31,6 @@ func ValidateStruct(s interface{}) error {
 	return fmt.Errorf("%s", strings.Join(errMessages, "; "))
 }
 
-// formatValidationError converts validator.FieldError to readable message
 func formatValidationError(err validator.FieldError) string {
 	field := err.Field()
 	tag := err.Tag()
