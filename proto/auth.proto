@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "shared/proto/auth;auth";
+
+service AuthService {
+  rpc Login(LoginRequest) returns (LoginResponse) {}
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {}
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {}
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse) {}
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {}
+  rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse) {}
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {}
+  rpc VerifyResetToken(VerifyResetTokenRequest) returns (VerifyResetTokenResponse) {}
+  rpc SendVerificationEmail(SendVerificationEmailRequest) returns (SendVerificationEmailResponse) {}
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {}
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool success = 1;
+  string message = 2;
+  LoginData data = 3;
+}
+
+message LoginData {
+  string access_token = 1;
+  string refresh_token = 2;
+  int64 expires_in = 3; // in seconds (3600 for 1 hour)
+  UserData user = 4;
+}
+
+message UserData {
+  int64 id = 1;
+  string name = 2;
+  string email = 3;
+  string public_name = 4;
+  bool is_admin = 5;
+  bool is_blocked = 6;
+  string phone_number = 7;
+  string position = 8;
+  bool email_verified = 9;
+  int64 email_verified_at = 10;
+  int64 last_login_at = 11;
+  int64 created_at = 12;
+  int64 updated_at = 13;
+}
+
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
+
+message RefreshTokenResponse {
+  bool success = 1;
+  string message = 2;
+  RefreshTokenData data = 3;
+}
+
+message RefreshTokenData {
+  string access_token = 1;
+  int64 expires_in = 2;
+}
+
+message ValidateTokenRequest {
+  string token = 1;
+}
+
+message ValidateTokenResponse {
+  bool valid = 1;
+  int64 user_id = 2;
+  string email = 3;
+}
+
+message LogoutRequest {
+  string refresh_token = 1;
+  int64 user_id = 2;
+}
+
+message LogoutResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ChangePasswordRequest {
+  int64 user_id = 1;
+  string old_password = 2;
+  string new_password = 3;
+}
+
+message ChangePasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ForgotPasswordRequest {
+  string email = 1;
+}
+
+message ForgotPasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ResetPasswordRequest {
+  string token = 1;
+  string new_password = 2;
+}
+
+message ResetPasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message VerifyResetTokenRequest {
+  string token = 1;
+}
+
+message VerifyResetTokenResponse {
+  bool valid = 1;
+  string email = 2;
+  string message = 3;
+}
+
+message SendVerificationEmailRequest {
+  int64 user_id = 1;
+  string email = 2;
+}
+
+message SendVerificationEmailResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message VerifyEmailRequest {
+  string token = 1;
+}
+
+message VerifyEmailResponse {
+  bool success = 1;
+  string message = 2;
+  int64 user_id = 3;
+}

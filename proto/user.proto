@@ -1,0 +1,169 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "shared/proto/user;user";
+
+service UserService {
+  rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserByEmailResponse) {}
+  rpc GetUserByID(GetUserByIDRequest) returns (GetUserByIDResponse) {}
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {}
+  rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse) {}
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {}
+  rpc GetAllUsers(GetAllUsersRequest) returns (GetAllUsersResponse) {}
+  rpc SearchUsers(SearchUsersRequest) returns (SearchUsersResponse) {}
+  rpc BulkDeleteUsers(BulkDeleteUsersRequest) returns (BulkDeleteUsersResponse) {}
+  rpc BulkBlockUsers(BulkBlockUsersRequest) returns (BulkBlockUsersResponse) {}
+  rpc UpdateEmailVerification(UpdateEmailVerificationRequest) returns (UpdateEmailVerificationResponse) {}
+}
+
+message User {
+  int64 id = 1;
+  string name = 2;
+  string email = 3;
+  string public_name = 4;
+  bool is_admin = 5;
+  bool is_blocked = 6;
+  string phone_number = 7;
+  string position = 8;
+  string password_hash = 9; // only for internal use, never expose to client
+  int64 created_at = 10;
+  int64 updated_at = 11;
+  bool email_verified = 12;
+  int64 email_verified_at = 13;
+  int64 last_login_at = 14;
+}
+
+message GetUserByEmailRequest {
+  string email = 1;
+}
+
+message GetUserByEmailResponse {
+  bool success = 1;
+  string message = 2;
+  User data = 3;
+}
+
+message GetUserByIDRequest {
+  int64 id = 1;
+}
+
+message GetUserByIDResponse {
+  bool success = 1;
+  string message = 2;
+  User data = 3;
+}
+
+message CreateUserRequest {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+  string public_name = 4;
+  string phone_number = 5;
+  string position = 6;
+  bool is_admin = 7;
+}
+
+message CreateUserResponse {
+  bool success = 1;
+  string message = 2;
+  User data = 3;
+}
+
+message UpdateUserRequest {
+  int64 id = 1;
+  string name = 2;
+  string email = 3;
+  string public_name = 4;
+  string phone_number = 5;
+  string position = 6;
+  bool is_admin = 7;
+  bool is_blocked = 8;
+}
+
+message UpdateUserResponse {
+  bool success = 1;
+  string message = 2;
+  User data = 3;
+}
+
+message GetAllUsersRequest {
+  int32 page = 1;
+  int32 per_page = 2;
+}
+
+message GetAllUsersResponse {
+  bool success = 1;
+  string message = 2;
+  GetAllUsersData data = 3;
+}
+
+message GetAllUsersData {
+  repeated User users = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}
+
+message DeleteUserRequest {
+  int64 id = 1;
+}
+
+message DeleteUserResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message SearchUsersRequest {
+  string query = 1;
+  int32 page = 2;
+  int32 per_page = 3;
+}
+
+message SearchUsersResponse {
+  bool success = 1;
+  string message = 2;
+  GetAllUsersData data = 3;
+}
+
+message BulkDeleteUsersRequest {
+  repeated int64 user_ids = 1;
+}
+
+message BulkDeleteUsersResponse {
+  bool success = 1;
+  string message = 2;
+  int32 deleted_count = 3;
+}
+
+message BulkBlockUsersRequest {
+  repeated int64 user_ids = 1;
+  bool is_blocked = 2;
+}
+
+message BulkBlockUsersResponse {
+  bool success = 1;
+  string message = 2;
+  int32 affected_count = 3;
+}
+
+message UpdatePasswordRequest {
+  int64 user_id = 1;
+  string password_hash = 2;
+}
+
+message UpdatePasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message UpdateEmailVerificationRequest {
+  int64 user_id = 1;
+  bool email_verified = 2;
+}
+
+message UpdateEmailVerificationResponse {
+  bool success = 1;
+  string message = 2;
+}

@@ -1,0 +1,177 @@
+# User type
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  publicName: String
+  isAdmin: Boolean!
+  isBlocked: Boolean!
+  phoneNumber: String
+  position: String
+  emailVerified: Boolean!
+  emailVerifiedAt: Int
+  lastLoginAt: Int
+  createdAt: Int
+  updatedAt: Int
+}
+
+# Auth types
+type LoginData {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
+type RefreshTokenData {
+  accessToken: String!
+}
+
+# User list response
+type UserList {
+  users: [User!]!
+  total: Int!
+  page: Int!
+  perPage: Int!
+}
+
+# Response wrappers
+type LoginResponse {
+  success: Boolean!
+  message: String!
+  data: LoginData
+}
+
+type LogoutResponse {
+  success: Boolean!
+  message: String!
+}
+
+type RefreshTokenResponse {
+  success: Boolean!
+  message: String!
+  data: RefreshTokenData
+}
+
+type UserResponse {
+  success: Boolean!
+  message: String!
+  data: User
+}
+
+type UserListResponse {
+  success: Boolean!
+  message: String!
+  data: UserList
+}
+
+type DeleteUserResponse {
+  success: Boolean!
+  message: String!
+}
+
+type ChangePasswordResponse {
+  success: Boolean!
+  message: String!
+}
+
+type ForgotPasswordResponse {
+  success: Boolean!
+  message: String!
+}
+
+type ResetPasswordResponse {
+  success: Boolean!
+  message: String!
+}
+
+type VerifyEmailResponse {
+  success: Boolean!
+  message: String!
+}
+
+type BulkOperationResponse {
+  success: Boolean!
+  message: String!
+  affectedCount: Int!
+}
+
+# Input types
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input RefreshTokenInput {
+  refreshToken: String!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+  publicName: String
+  phoneNumber: String
+  position: String
+  isAdmin: Boolean
+}
+
+input UpdateUserInput {
+  id: ID!
+  name: String!
+  email: String
+  publicName: String
+  phoneNumber: String
+  position: String
+  isAdmin: Boolean
+  isBlocked: Boolean
+}
+
+input ChangePasswordInput {
+  oldPassword: String!
+  newPassword: String!
+}
+
+input ResetPasswordInput {
+  token: String!
+  newPassword: String!
+}
+
+# Queries
+type Query {
+  # Get user by ID
+  user(id: ID!): UserResponse!
+
+  # Get all users with pagination
+  users(page: Int, perPage: Int): UserListResponse!
+
+  # Search users by name or email
+  searchUsers(query: String!, page: Int, perPage: Int): UserListResponse!
+
+  # Get current user (requires auth header)
+  me: UserResponse!
+
+  # Verify reset password token
+  verifyResetToken(token: String!): ForgotPasswordResponse!
+}
+
+# Mutations
+type Mutation {
+  # Auth mutations
+  login(input: LoginInput!): LoginResponse!
+  logout(refreshToken: String!): LogoutResponse!
+  refreshToken(input: RefreshTokenInput!): RefreshTokenResponse!
+  changePassword(input: ChangePasswordInput!): ChangePasswordResponse!
+  forgotPassword(email: String!): ForgotPasswordResponse!
+  resetPassword(input: ResetPasswordInput!): ResetPasswordResponse!
+  verifyEmail(token: String!): VerifyEmailResponse!
+  resendVerificationEmail: VerifyEmailResponse!
+
+  # User mutations
+  createUser(input: CreateUserInput!): UserResponse!
+  updateUser(input: UpdateUserInput!): UserResponse!
+  deleteUser(id: ID!): DeleteUserResponse!
+
+  # Bulk operations (admin only)
+  bulkDeleteUsers(ids: [ID!]!): BulkOperationResponse!
+  bulkBlockUsers(ids: [ID!]!, isBlocked: Boolean!): BulkOperationResponse!
+}
