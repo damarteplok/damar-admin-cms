@@ -3,11 +3,11 @@ package grpc
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/damarteplok/damar-admin-cms/services/user-service/internal/domain"
 	"github.com/damarteplok/damar-admin-cms/services/user-service/pkg/types"
 	pb "github.com/damarteplok/damar-admin-cms/shared/proto/user"
+	"github.com/damarteplok/damar-admin-cms/shared/util"
 	"github.com/damarteplok/damar-admin-cms/shared/validation"
 )
 
@@ -97,9 +97,9 @@ func (s *UserGRPCServer) CreateUser(ctx context.Context, req *pb.CreateUserReque
 		Name:         req.Name,
 		Email:        req.Email,
 		PasswordHash: req.Password,
-		PublicName:   stringPtr(req.PublicName),
-		PhoneNumber:  stringPtr(req.PhoneNumber),
-		Position:     stringPtr(req.Position),
+		PublicName:   util.StringPtr(req.PublicName),
+		PhoneNumber:  util.StringPtr(req.PhoneNumber),
+		Position:     util.StringPtr(req.Position),
 		IsAdmin:      req.IsAdmin,
 	}
 
@@ -136,9 +136,9 @@ func (s *UserGRPCServer) UpdateUser(ctx context.Context, req *pb.UpdateUserReque
 	user := &domain.User{
 		ID:          req.Id,
 		Name:        req.Name,
-		PublicName:  stringPtr(req.PublicName),
-		PhoneNumber: stringPtr(req.PhoneNumber),
-		Position:    stringPtr(req.Position),
+		PublicName:  util.StringPtr(req.PublicName),
+		PhoneNumber: util.StringPtr(req.PhoneNumber),
+		Position:    util.StringPtr(req.Position),
 		IsAdmin:     req.IsAdmin,
 		IsBlocked:   req.IsBlocked,
 	}
@@ -349,7 +349,7 @@ func (s *UserGRPCServer) UpdatePassword(ctx context.Context, req *pb.UpdatePassw
 		}, nil
 	}
 
-	err := s.service.UpdatePassword(ctx, req.UserId, req.PasswordHash)
+	err := s.service.UpdatePasswordHash(ctx, req.UserId, req.PasswordHash)
 	if err != nil {
 		return &pb.UpdatePasswordResponse{
 			Success: false,
@@ -368,37 +368,38 @@ func domainUserToPb(user *domain.User) *pb.User {
 		Id:              user.ID,
 		Name:            user.Name,
 		Email:           user.Email,
-		PublicName:      stringValue(user.PublicName),
+		PublicName:      util.StringValue(user.PublicName),
 		IsAdmin:         user.IsAdmin,
 		IsBlocked:       user.IsBlocked,
-		PhoneNumber:     stringValue(user.PhoneNumber),
-		Position:        stringValue(user.Position),
+		PhoneNumber:     util.StringValue(user.PhoneNumber),
+		Position:        util.StringValue(user.Position),
 		PasswordHash:    user.PasswordHash,
 		EmailVerified:   user.EmailVerified,
-		EmailVerifiedAt: timeToUnix(user.EmailVerifiedAt),
-		LastLoginAt:     timeToUnix(user.LastLoginAt),
-		CreatedAt:       timeToUnix(user.CreatedAt),
-		UpdatedAt:       timeToUnix(user.UpdatedAt),
+		EmailVerifiedAt: util.TimeToUnix(user.EmailVerifiedAt),
+		LastLoginAt:     util.TimeToUnix(user.LastLoginAt),
+		CreatedAt:       util.TimeToUnix(user.CreatedAt),
+		UpdatedAt:       util.TimeToUnix(user.UpdatedAt),
 	}
 }
 
-func stringValue(s *string) string {
-	if s == nil {
-		return ""
+func (s *UserGRPCServer) UpdateLastLogin(ctx context.Context, req *pb.UpdateLastLoginRequest) (*pb.UpdateLastLoginResponse, error) {
+	if req.UserId <= 0 {
+		return &pb.UpdateLastLoginResponse{
+			Success: false,
+			Message: "Invalid user ID",
+		}, nil
 	}
-	return *s
-}
 
-func stringPtr(s string) *string {
-	if s == "" {
-		return nil
+	err := s.service.UpdateLastLogin(ctx, req.UserId)
+	if err != nil {
+		return &pb.UpdateLastLoginResponse{
+			Success: false,
+			Message: err.Error(),
+		}, nil
 	}
-	return &s
-}
 
-func timeToUnix(t *time.Time) int64 {
-	if t == nil {
-		return 0
-	}
-	return t.Unix()
+	return &pb.UpdateLastLoginResponse{
+		Success: true,
+		Message: "Last login updated successfully",
+	}, nil
 }

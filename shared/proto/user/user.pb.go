@@ -1509,6 +1509,102 @@ func (x *UpdateEmailVerificationResponse) GetMessage() string {
 	return ""
 }
 
+type UpdateLastLoginRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateLastLoginRequest) Reset() {
+	*x = UpdateLastLoginRequest{}
+	mi := &file_user_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateLastLoginRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateLastLoginRequest) ProtoMessage() {}
+
+func (x *UpdateLastLoginRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateLastLoginRequest.ProtoReflect.Descriptor instead.
+func (*UpdateLastLoginRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *UpdateLastLoginRequest) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+type UpdateLastLoginResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateLastLoginResponse) Reset() {
+	*x = UpdateLastLoginResponse{}
+	mi := &file_user_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateLastLoginResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateLastLoginResponse) ProtoMessage() {}
+
+func (x *UpdateLastLoginResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateLastLoginResponse.ProtoReflect.Descriptor instead.
+func (*UpdateLastLoginResponse) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *UpdateLastLoginResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *UpdateLastLoginResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 var File_user_proto protoreflect.FileDescriptor
 
 const file_user_proto_rawDesc = "" +
@@ -1630,7 +1726,12 @@ const file_user_proto_rawDesc = "" +
 	"\x0eemail_verified\x18\x02 \x01(\bR\remailVerified\"U\n" +
 	"\x1fUpdateEmailVerificationResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage2\xd1\x06\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"1\n" +
+	"\x16UpdateLastLoginRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\"M\n" +
+	"\x17UpdateLastLoginResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage2\xa3\a\n" +
 	"\vUserService\x12M\n" +
 	"\x0eGetUserByEmail\x12\x1b.user.GetUserByEmailRequest\x1a\x1c.user.GetUserByEmailResponse\"\x00\x12D\n" +
 	"\vGetUserByID\x12\x18.user.GetUserByIDRequest\x1a\x19.user.GetUserByIDResponse\"\x00\x12A\n" +
@@ -1645,7 +1746,8 @@ const file_user_proto_rawDesc = "" +
 	"\vSearchUsers\x12\x18.user.SearchUsersRequest\x1a\x19.user.SearchUsersResponse\"\x00\x12P\n" +
 	"\x0fBulkDeleteUsers\x12\x1c.user.BulkDeleteUsersRequest\x1a\x1d.user.BulkDeleteUsersResponse\"\x00\x12M\n" +
 	"\x0eBulkBlockUsers\x12\x1b.user.BulkBlockUsersRequest\x1a\x1c.user.BulkBlockUsersResponse\"\x00\x12h\n" +
-	"\x17UpdateEmailVerification\x12$.user.UpdateEmailVerificationRequest\x1a%.user.UpdateEmailVerificationResponse\"\x00B:Z8github.com/damarteplok/damar-admin-cms/shared/proto/userb\x06proto3"
+	"\x17UpdateEmailVerification\x12$.user.UpdateEmailVerificationRequest\x1a%.user.UpdateEmailVerificationResponse\"\x00\x12P\n" +
+	"\x0fUpdateLastLogin\x12\x1c.user.UpdateLastLoginRequest\x1a\x1d.user.UpdateLastLoginResponse\"\x00B\x18Z\x16shared/proto/user;userb\x06proto3"
 
 var (
 	file_user_proto_rawDescOnce sync.Once
@@ -1659,7 +1761,7 @@ func file_user_proto_rawDescGZIP() []byte {
 	return file_user_proto_rawDescData
 }
 
-var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
+var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
 var file_user_proto_goTypes = []any{
 	(*User)(nil),                            // 0: user.User
 	(*GetUserByEmailRequest)(nil),           // 1: user.GetUserByEmailRequest
@@ -1685,6 +1787,8 @@ var file_user_proto_goTypes = []any{
 	(*UpdatePasswordResponse)(nil),          // 21: user.UpdatePasswordResponse
 	(*UpdateEmailVerificationRequest)(nil),  // 22: user.UpdateEmailVerificationRequest
 	(*UpdateEmailVerificationResponse)(nil), // 23: user.UpdateEmailVerificationResponse
+	(*UpdateLastLoginRequest)(nil),          // 24: user.UpdateLastLoginRequest
+	(*UpdateLastLoginResponse)(nil),         // 25: user.UpdateLastLoginResponse
 }
 var file_user_proto_depIdxs = []int32{
 	0,  // 0: user.GetUserByEmailResponse.data:type_name -> user.User
@@ -1705,19 +1809,21 @@ var file_user_proto_depIdxs = []int32{
 	16, // 15: user.UserService.BulkDeleteUsers:input_type -> user.BulkDeleteUsersRequest
 	18, // 16: user.UserService.BulkBlockUsers:input_type -> user.BulkBlockUsersRequest
 	22, // 17: user.UserService.UpdateEmailVerification:input_type -> user.UpdateEmailVerificationRequest
-	2,  // 18: user.UserService.GetUserByEmail:output_type -> user.GetUserByEmailResponse
-	4,  // 19: user.UserService.GetUserByID:output_type -> user.GetUserByIDResponse
-	6,  // 20: user.UserService.CreateUser:output_type -> user.CreateUserResponse
-	8,  // 21: user.UserService.UpdateUser:output_type -> user.UpdateUserResponse
-	21, // 22: user.UserService.UpdatePassword:output_type -> user.UpdatePasswordResponse
-	13, // 23: user.UserService.DeleteUser:output_type -> user.DeleteUserResponse
-	10, // 24: user.UserService.GetAllUsers:output_type -> user.GetAllUsersResponse
-	15, // 25: user.UserService.SearchUsers:output_type -> user.SearchUsersResponse
-	17, // 26: user.UserService.BulkDeleteUsers:output_type -> user.BulkDeleteUsersResponse
-	19, // 27: user.UserService.BulkBlockUsers:output_type -> user.BulkBlockUsersResponse
-	23, // 28: user.UserService.UpdateEmailVerification:output_type -> user.UpdateEmailVerificationResponse
-	18, // [18:29] is the sub-list for method output_type
-	7,  // [7:18] is the sub-list for method input_type
+	24, // 18: user.UserService.UpdateLastLogin:input_type -> user.UpdateLastLoginRequest
+	2,  // 19: user.UserService.GetUserByEmail:output_type -> user.GetUserByEmailResponse
+	4,  // 20: user.UserService.GetUserByID:output_type -> user.GetUserByIDResponse
+	6,  // 21: user.UserService.CreateUser:output_type -> user.CreateUserResponse
+	8,  // 22: user.UserService.UpdateUser:output_type -> user.UpdateUserResponse
+	21, // 23: user.UserService.UpdatePassword:output_type -> user.UpdatePasswordResponse
+	13, // 24: user.UserService.DeleteUser:output_type -> user.DeleteUserResponse
+	10, // 25: user.UserService.GetAllUsers:output_type -> user.GetAllUsersResponse
+	15, // 26: user.UserService.SearchUsers:output_type -> user.SearchUsersResponse
+	17, // 27: user.UserService.BulkDeleteUsers:output_type -> user.BulkDeleteUsersResponse
+	19, // 28: user.UserService.BulkBlockUsers:output_type -> user.BulkBlockUsersResponse
+	23, // 29: user.UserService.UpdateEmailVerification:output_type -> user.UpdateEmailVerificationResponse
+	25, // 30: user.UserService.UpdateLastLogin:output_type -> user.UpdateLastLoginResponse
+	19, // [19:31] is the sub-list for method output_type
+	7,  // [7:19] is the sub-list for method input_type
 	7,  // [7:7] is the sub-list for extension type_name
 	7,  // [7:7] is the sub-list for extension extendee
 	0,  // [0:7] is the sub-list for field type_name
@@ -1734,7 +1840,7 @@ func file_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_proto_rawDesc), len(file_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   24,
+			NumMessages:   26,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

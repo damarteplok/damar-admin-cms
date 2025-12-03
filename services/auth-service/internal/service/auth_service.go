@@ -2,13 +2,18 @@ package service
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
 
 	"github.com/damarteplok/damar-admin-cms/services/auth-service/internal/domain"
 	"github.com/damarteplok/damar-admin-cms/services/auth-service/internal/infrastructure/jwt"
+	"github.com/damarteplok/damar-admin-cms/shared/amqp"
+	"github.com/damarteplok/damar-admin-cms/shared/contracts"
+	"github.com/damarteplok/damar-admin-cms/shared/logger"
 	userPb "github.com/damarteplok/damar-admin-cms/shared/proto/user"
+	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc"
 )
@@ -19,6 +24,7 @@ type AuthService struct {
 	emailVerificationRepo domain.EmailVerificationTokenRepository
 	tokenManager          *jwt.TokenManager
 	userClient            userPb.UserServiceClient
+	publisher             *amqp.Publisher
 }
 
 func NewAuthService(
@@ -27,6 +33,7 @@ func NewAuthService(
 	emailVerificationRepo domain.EmailVerificationTokenRepository,
 	tokenManager *jwt.TokenManager,
 	userServiceConn *grpc.ClientConn,
+	publisher *amqp.Publisher,
 ) domain.AuthService {
 	return &AuthService{
 		refreshTokenRepo:      refreshTokenRepo,
@@ -34,6 +41,7 @@ func NewAuthService(
 		emailVerificationRepo: emailVerificationRepo,
 		tokenManager:          tokenManager,
 		userClient:            userPb.NewUserServiceClient(userServiceConn),
+		publisher:             publisher,
 	}
 }
 
@@ -88,6 +96,17 @@ func (s *AuthService) Login(ctx context.Context, email, password string) (*domai
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to save refresh token: %w", err)
+	}
+
+	// Update last login timestamp
+	_, err = s.userClient.UpdateLastLogin(ctx, &userPb.UpdateLastLoginRequest{
+		UserId: user.Id,
+	})
+	if err != nil {
+		// Log error but don't fail login if last_login_at update fails
+		logger.Error("Failed to update last login timestamp",
+			zap.Int64("user_id", user.Id),
+			zap.Error(err))
 	}
 
 	return &domain.LoginData{
@@ -414,8 +433,31 @@ func (s *AuthService) SendVerificationEmail(ctx context.Context, userID int64, e
 		return "", fmt.Errorf("failed to save email verification token: %w", err)
 	}
 
-	// TODO: Send email with verification link (integrate with notification-service)
-	// For now, just return the token
+	// Publish verification email event to RabbitMQ
+	if s.publisher != nil {
+		eventData := map[string]interface{}{
+			"user_id":            userID,
+			"email":              email,
+			"name":               userResp.Data.Name,
+			"verification_token": token,
+		}
+		dataBytes, _ := json.Marshal(eventData)
+		message := contracts.AmqpMessage{
+			OwnerID: fmt.Sprintf("%d", userID),
+			Data:    dataBytes,
+		}
+
+		if err := s.publisher.Publish(ctx, contracts.AuthEventVerificationRequested, message); err != nil {
+			logger.Error("Failed to publish verification email event",
+				zap.Int64("user_id", userID),
+				zap.Error(err))
+		} else {
+			logger.Info("Published verification email event",
+				zap.Int64("user_id", userID),
+				zap.String("email", email))
+		}
+	}
+
 	return token, nil
 }
 

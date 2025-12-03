@@ -61,11 +61,9 @@ func (ec *EventConsumer) ConsumeUserRegistered(ctx context.Context) error {
 			zap.String("email", email),
 			zap.String("name", name))
 
-		// For now, we'll send welcome email without verification token
-		// Later, auth-service should publish verification token in the event
-		verificationToken := "dummy-token-for-now"
-
-		if err := ec.emailService.SendWelcomeEmail(email, name, verificationToken); err != nil {
+		// Send welcome email without verification token
+		// Verification email is sent separately via auth.event.verification_requested
+		if err := ec.emailService.SendWelcomeEmail(email, name, ""); err != nil {
 			logger.Error("Failed to send welcome email",
 				zap.String("email", email),
 				zap.Error(err))

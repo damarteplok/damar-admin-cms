@@ -36,6 +36,7 @@ type UserRepository interface {
 	BulkUpdateBlockStatus(ctx context.Context, ids []int64, isBlocked bool) (int32, error)
 	UpdateEmailVerification(ctx context.Context, userID int64, verified bool) error
 	UpdatePasswordHash(ctx context.Context, userID int64, passwordHash string) error
+	UpdateLastLogin(ctx context.Context, userID int64) error
 }
 
 // UserService defines business logic for users
@@ -50,5 +51,6 @@ type UserService interface {
 	BulkDeleteUsers(ctx context.Context, ids []int64) (int32, error)
 	BulkBlockUsers(ctx context.Context, ids []int64, isBlocked bool) (int32, error)
 	UpdateEmailVerification(ctx context.Context, userID int64, verified bool) error
-	UpdatePassword(ctx context.Context, userID int64, passwordHash string) error
+	UpdatePasswordHash(ctx context.Context, userID int64, passwordHash string) error
+	UpdateLastLogin(ctx context.Context, userID int64) error
 }

@@ -16,6 +16,7 @@ service UserService {
   rpc BulkDeleteUsers(BulkDeleteUsersRequest) returns (BulkDeleteUsersResponse) {}
   rpc BulkBlockUsers(BulkBlockUsersRequest) returns (BulkBlockUsersResponse) {}
   rpc UpdateEmailVerification(UpdateEmailVerificationRequest) returns (UpdateEmailVerificationResponse) {}
+  rpc UpdateLastLogin(UpdateLastLoginRequest) returns (UpdateLastLoginResponse) {}
 }
 
 message User {
@@ -164,6 +165,15 @@ message UpdateEmailVerificationRequest {
 }
 
 message UpdateEmailVerificationResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message UpdateLastLoginRequest {
+  int64 user_id = 1;
+}
+
+message UpdateLastLoginResponse {
   bool success = 1;
   string message = 2;
 }

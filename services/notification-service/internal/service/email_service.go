@@ -21,16 +21,19 @@ func NewEmailService(smtpClient *smtp.SMTPClient, appURL, frontendURL string) *E
 }
 
 func (s *EmailService) SendWelcomeEmail(email, name string, verificationToken string) error {
-	verificationURL := fmt.Sprintf("%s/verify-email?token=%s", s.frontendURL, verificationToken)
-
 	data := map[string]string{
-		"Name":            name,
-		"VerificationURL": verificationURL,
+		"Name": name,
+	}
+
+	// Include verification URL only if token is provided
+	if verificationToken != "" {
+		verificationURL := fmt.Sprintf("%s/verify-email?token=%s", s.frontendURL, verificationToken)
+		data["VerificationURL"] = verificationURL
 	}
 
 	return s.smtpClient.SendTemplateEmail(
 		email,
-		"Welcome to Damar Admin CMS - Verify Your Email",
+		"Welcome to Damar Admin CMS",
 		"welcome",
 		data,
 	)

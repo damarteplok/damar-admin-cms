@@ -114,13 +114,8 @@ var emailTemplates = map[string]string{
         <div class="content">
             <p>Hello <strong>{{.Name}}</strong>,</p>
             <p>Thank you for registering! Your account has been created successfully.</p>
-            <p>Please verify your email address to activate your account:</p>
-            <p style="text-align: center; margin: 30px 0;">
-                <a href="{{.VerificationURL}}" class="button">Verify Email Address</a>
-            </p>
-            <p>If the button doesn't work, copy and paste this link into your browser:</p>
-            <p style="word-break: break-all; color: #666;">{{.VerificationURL}}</p>
-            <p>This verification link will expire in 24 hours.</p>
+            <p>You will receive a separate email with instructions to verify your email address.</p>
+            <p>We're excited to have you on board!</p>
         </div>
         <div class="footer">
             <p>&copy; 2025 Damar Admin CMS. All rights reserved.</p>

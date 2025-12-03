@@ -165,7 +165,7 @@ func (s *UserService) UpdateEmailVerification(ctx context.Context, userID int64,
 	return s.repo.UpdateEmailVerification(ctx, userID, verified)
 }
 
-func (s *UserService) UpdatePassword(ctx context.Context, userID int64, passwordHash string) error {
+func (s *UserService) UpdatePasswordHash(ctx context.Context, userID int64, passwordHash string) error {
 	// Input validation is handled at gRPC layer
 
 	// Business validation: Check if user exists
@@ -183,4 +183,8 @@ func (s *UserService) UpdatePassword(ctx context.Context, userID int64, password
 	}
 
 	return s.repo.UpdatePasswordHash(ctx, userID, passwordHash)
+}
+
+func (s *UserService) UpdateLastLogin(ctx context.Context, userID int64) error {
+	return s.repo.UpdateLastLogin(ctx, userID)
 }

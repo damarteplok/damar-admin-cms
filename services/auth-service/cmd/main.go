@@ -13,6 +13,7 @@ import (
 	"github.com/damarteplok/damar-admin-cms/services/auth-service/internal/infrastructure/jwt"
 	"github.com/damarteplok/damar-admin-cms/services/auth-service/internal/infrastructure/repository"
 	"github.com/damarteplok/damar-admin-cms/services/auth-service/internal/service"
+	"github.com/damarteplok/damar-admin-cms/shared/amqp"
 	"github.com/damarteplok/damar-admin-cms/shared/database"
 	"github.com/damarteplok/damar-admin-cms/shared/env"
 	"github.com/damarteplok/damar-admin-cms/shared/logger"
@@ -73,12 +74,28 @@ func main() {
 
 	logger.Info("Successfully connected to user-service", zap.String("address", userServiceAddr))
 
+	// Connect to RabbitMQ
+	rabbitmqURL := env.GetString("RABBITMQ_URL", "amqp://guest:guest@localhost:5672/")
+	rabbitmqConn, err := amqp.NewConnection(rabbitmqURL)
+	if err != nil {
+		logger.Fatal("Failed to connect to RabbitMQ", zap.Error(err))
+	}
+	defer rabbitmqConn.Close()
+
+	// Create publisher for auth events
+	publisher, err := amqp.NewPublisher(rabbitmqConn, "damar.events")
+	if err != nil {
+		logger.Fatal("Failed to create RabbitMQ publisher", zap.Error(err))
+	}
+
+	logger.Info("Successfully connected to RabbitMQ")
+
 	// Initialize dependencies
 	tokenManager := jwt.NewTokenManager(jwtSecret, 1*time.Hour, 7*24*time.Hour)
 	refreshTokenRepo := repository.NewRefreshTokenRepository(pool)
 	passwordResetRepo := repository.NewPasswordResetTokenRepository(pool)
 	emailVerificationRepo := repository.NewEmailVerificationTokenRepository(pool)
-	authService := service.NewAuthService(refreshTokenRepo, passwordResetRepo, emailVerificationRepo, tokenManager, userConn)
+	authService := service.NewAuthService(refreshTokenRepo, passwordResetRepo, emailVerificationRepo, tokenManager, userConn, publisher)
 	authHandler := grpc.NewAuthGRPCServer(authService)
 
 	// Setup gRPC server

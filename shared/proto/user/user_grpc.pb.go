@@ -30,6 +30,7 @@ const (
 	UserService_BulkDeleteUsers_FullMethodName         = "/user.UserService/BulkDeleteUsers"
 	UserService_BulkBlockUsers_FullMethodName          = "/user.UserService/BulkBlockUsers"
 	UserService_UpdateEmailVerification_FullMethodName = "/user.UserService/UpdateEmailVerification"
+	UserService_UpdateLastLogin_FullMethodName         = "/user.UserService/UpdateLastLogin"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -47,6 +48,7 @@ type UserServiceClient interface {
 	BulkDeleteUsers(ctx context.Context, in *BulkDeleteUsersRequest, opts ...grpc.CallOption) (*BulkDeleteUsersResponse, error)
 	BulkBlockUsers(ctx context.Context, in *BulkBlockUsersRequest, opts ...grpc.CallOption) (*BulkBlockUsersResponse, error)
 	UpdateEmailVerification(ctx context.Context, in *UpdateEmailVerificationRequest, opts ...grpc.CallOption) (*UpdateEmailVerificationResponse, error)
+	UpdateLastLogin(ctx context.Context, in *UpdateLastLoginRequest, opts ...grpc.CallOption) (*UpdateLastLoginResponse, error)
 }
 
 type userServiceClient struct {
@@ -167,6 +169,16 @@ func (c *userServiceClient) UpdateEmailVerification(ctx context.Context, in *Upd
 	return out, nil
 }
 
+func (c *userServiceClient) UpdateLastLogin(ctx context.Context, in *UpdateLastLoginRequest, opts ...grpc.CallOption) (*UpdateLastLoginResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateLastLoginResponse)
+	err := c.cc.Invoke(ctx, UserService_UpdateLastLogin_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility.
@@ -182,6 +194,7 @@ type UserServiceServer interface {
 	BulkDeleteUsers(context.Context, *BulkDeleteUsersRequest) (*BulkDeleteUsersResponse, error)
 	BulkBlockUsers(context.Context, *BulkBlockUsersRequest) (*BulkBlockUsersResponse, error)
 	UpdateEmailVerification(context.Context, *UpdateEmailVerificationRequest) (*UpdateEmailVerificationResponse, error)
+	UpdateLastLogin(context.Context, *UpdateLastLoginRequest) (*UpdateLastLoginResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -224,6 +237,9 @@ func (UnimplementedUserServiceServer) BulkBlockUsers(context.Context, *BulkBlock
 }
 func (UnimplementedUserServiceServer) UpdateEmailVerification(context.Context, *UpdateEmailVerificationRequest) (*UpdateEmailVerificationResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateEmailVerification not implemented")
+}
+func (UnimplementedUserServiceServer) UpdateLastLogin(context.Context, *UpdateLastLoginRequest) (*UpdateLastLoginResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateLastLogin not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 func (UnimplementedUserServiceServer) testEmbeddedByValue()                     {}
@@ -444,6 +460,24 @@ func _UserService_UpdateEmailVerification_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_UpdateLastLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateLastLoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).UpdateLastLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_UpdateLastLogin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).UpdateLastLogin(ctx, req.(*UpdateLastLoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -494,6 +528,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateEmailVerification",
 			Handler:    _UserService_UpdateEmailVerification_Handler,
+		},
+		{
+			MethodName: "UpdateLastLogin",
+			Handler:    _UserService_UpdateLastLogin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

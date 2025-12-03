@@ -84,8 +84,8 @@ func (r *UserRepository) GetByEmail(ctx context.Context, email string) (*domain.
 
 func (r *UserRepository) Create(ctx context.Context, user *domain.User) (*domain.User, error) {
 	query := `
-		INSERT INTO users (name, email, password_hash, public_name, is_admin, phone_number, position)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		INSERT INTO users (name, email, password_hash, public_name, is_admin, phone_number, position, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
 		RETURNING id, created_at, updated_at
 	`
 
@@ -319,6 +319,26 @@ func (r *UserRepository) UpdatePasswordHash(ctx context.Context, userID int64, p
 	result, err := r.db.Exec(ctx, query, passwordHash, userID)
 	if err != nil {
 		return fmt.Errorf("failed to update password: %w", err)
+	}
+
+	if result.RowsAffected() == 0 {
+		return fmt.Errorf("user not found")
+	}
+
+	return nil
+}
+
+func (r *UserRepository) UpdateLastLogin(ctx context.Context, userID int64) error {
+	query := `
+		UPDATE users 
+		SET last_login_at = NOW(),
+		    updated_at = NOW()
+		WHERE id = $1
+	`
+
+	result, err := r.db.Exec(ctx, query, userID)
+	if err != nil {
+		return fmt.Errorf("failed to update last login: %w", err)
 	}
 
 	if result.RowsAffected() == 0 {

@@ -333,6 +333,17 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUse
 		}, nil
 	}
 
+	// Generate verification token after user creation
+	verifyResp, err := r.AuthClient.SendVerificationEmail(ctx, &authPb.SendVerificationEmailRequest{
+		UserId: resp.Data.Id,
+		Email:  resp.Data.Email,
+	})
+	if err != nil || !verifyResp.Success {
+		// Log error but don't fail user creation
+		// User can resend verification email later
+		fmt.Printf("Warning: Failed to send verification email: %v\n", err)
+	}
+
 	emailVerifiedAt := int32(resp.Data.EmailVerifiedAt)
 	lastLoginAt := int32(resp.Data.LastLoginAt)
 	createdAt := int32(resp.Data.CreatedAt)
@@ -340,7 +351,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUse
 
 	return &model.UserResponse{
 		Success: true,
-		Message: "User created successfully",
+		Message: "User created successfully. Please check your email to verify your account.",
 		Data: &model.User{
 			ID:              fmt.Sprintf("%d", resp.Data.Id),
 			Name:            resp.Data.Name,
