@@ -63,7 +63,8 @@ message RefreshTokenResponse {
 
 message RefreshTokenData {
   string access_token = 1;
-  int64 expires_in = 2;
+  string refresh_token = 2;
+  int64 expires_in = 3;
 }
 
 message ValidateTokenRequest {
@@ -74,6 +75,7 @@ message ValidateTokenResponse {
   bool valid = 1;
   int64 user_id = 2;
   string email = 3;
+  bool is_admin = 4;
 }
 
 message LogoutRequest {

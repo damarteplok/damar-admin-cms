@@ -2,6 +2,7 @@ package validation
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
@@ -11,6 +12,20 @@ var validate *validator.Validate
 
 func init() {
 	validate = validator.New()
+
+	// Register custom validation functions
+	validate.RegisterValidation("alphanum_hyphen", validateAlphanumHyphen)
+}
+
+// validateAlphanumHyphen validates that a string contains only alphanumeric characters and hyphens
+func validateAlphanumHyphen(fl validator.FieldLevel) bool {
+	value := fl.Field().String()
+	if value == "" {
+		return true // Allow empty for omitempty fields
+	}
+	// Allow lowercase letters, numbers, and hyphens
+	matched, _ := regexp.MatchString(`^[a-z0-9-]+$`, value)
+	return matched
 }
 
 func GetValidator() *validator.Validate {
@@ -61,6 +76,12 @@ func formatValidationError(err validator.FieldError) string {
 		return fmt.Sprintf("%s must be less than %s", field, param)
 	case "lte":
 		return fmt.Sprintf("%s must be less than or equal to %s", field, param)
+	case "alphanum_hyphen":
+		return fmt.Sprintf("%s must contain only lowercase letters, numbers, and hyphens", field)
+	case "fqdn":
+		return fmt.Sprintf("%s must be a valid domain name", field)
+	case "uuid":
+		return fmt.Sprintf("%s must be a valid UUID", field)
 	default:
 		return fmt.Sprintf("%s failed validation for '%s'", field, tag)
 	}

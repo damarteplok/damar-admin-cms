@@ -1,0 +1,4 @@
+-- Drop plan_meter_payment_provider_data table
+DROP INDEX IF EXISTS idx_plan_meter_payment_provider_data_payment_provider_id;
+DROP INDEX IF EXISTS idx_plan_meter_payment_provider_data_plan_meter_id;
+DROP TABLE IF EXISTS plan_meter_payment_provider_data;

@@ -1,11 +1,11 @@
 package repository
 
 import (
-"context"
-"fmt"
+	"context"
+	"fmt"
 
-"github.com/damarteplok/damar-admin-cms/services/auth-service/internal/domain"
-"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/damarteplok/damar-admin-cms/services/auth-service/internal/domain"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type RefreshTokenRepository struct {
@@ -18,20 +18,19 @@ func NewRefreshTokenRepository(db *pgxpool.Pool) domain.RefreshTokenRepository {
 
 func (r *RefreshTokenRepository) Create(ctx context.Context, token *domain.RefreshToken) (*domain.RefreshToken, error) {
 	query := `
-		INSERT INTO refresh_tokens (user_id, token, expires_at, revoked)
-		VALUES ($1, $2, $3, $4)
+		INSERT INTO refresh_tokens (user_id, token, expires_at, revoked, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, NOW(), NOW())
 		RETURNING id, created_at, updated_at
 	`
 
 	err := r.db.QueryRow(
-ctx,
-query,
-token.UserID,
-token.Token,
-token.ExpiresAt,
-token.Revoked,
-).Scan(&token.ID, &token.CreatedAt, &token.UpdatedAt)
-
+		ctx,
+		query,
+		token.UserID,
+		token.Token,
+		token.ExpiresAt,
+		token.Revoked,
+	).Scan(&token.ID, &token.CreatedAt, &token.UpdatedAt)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create refresh token: %w", err)
 	}
@@ -48,7 +47,7 @@ func (r *RefreshTokenRepository) GetByToken(ctx context.Context, token string) (
 
 	rt := &domain.RefreshToken{}
 	err := r.db.QueryRow(ctx, query, token).Scan(
-&rt.ID,
+		&rt.ID,
 		&rt.UserID,
 		&rt.Token,
 		&rt.ExpiresAt,
@@ -56,7 +55,6 @@ func (r *RefreshTokenRepository) GetByToken(ctx context.Context, token string) (
 		&rt.CreatedAt,
 		&rt.UpdatedAt,
 	)
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to get refresh token: %w", err)
 	}
@@ -83,12 +81,17 @@ func (r *RefreshTokenRepository) RevokeByToken(ctx context.Context, token string
 	query := `
 		UPDATE refresh_tokens
 		SET revoked = true, updated_at = NOW()
-		WHERE token = $1
+		WHERE token = $1 AND revoked = false
 	`
 
-	_, err := r.db.Exec(ctx, query, token)
+	result, err := r.db.Exec(ctx, query, token)
 	if err != nil {
 		return fmt.Errorf("failed to revoke token: %w", err)
+	}
+
+	rowsAffected := result.RowsAffected()
+	if rowsAffected == 0 {
+		return fmt.Errorf("token not found or already revoked")
 	}
 
 	return nil

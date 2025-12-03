@@ -34,6 +34,7 @@ message User {
   bool email_verified = 12;
   int64 email_verified_at = 13;
   int64 last_login_at = 14;
+  int64 deleted_at = 15; // soft delete timestamp
 }
 
 message GetUserByEmailRequest {

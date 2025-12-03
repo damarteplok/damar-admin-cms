@@ -1,0 +1,326 @@
+syntax = "proto3";
+
+package subscription;
+
+option go_package = "shared/proto/subscription;subscription";
+
+service SubscriptionService {
+  // Subscription operations
+  rpc GetSubscriptionByID(GetSubscriptionByIDRequest) returns (GetSubscriptionByIDResponse) {}
+  rpc GetSubscriptionByUUID(GetSubscriptionByUUIDRequest) returns (GetSubscriptionByUUIDResponse) {}
+  rpc GetSubscriptionsByUser(GetSubscriptionsByUserRequest) returns (GetSubscriptionsByUserResponse) {}
+  rpc GetSubscriptionsByTenant(GetSubscriptionsByTenantRequest) returns (GetSubscriptionsByTenantResponse) {}
+  rpc CreateSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse) {}
+  rpc UpdateSubscription(UpdateSubscriptionRequest) returns (UpdateSubscriptionResponse) {}
+  rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse) {}
+  rpc ResumeSubscription(ResumeSubscriptionRequest) returns (ResumeSubscriptionResponse) {}
+  rpc RenewSubscription(RenewSubscriptionRequest) returns (RenewSubscriptionResponse) {}
+  rpc GetAllSubscriptions(GetAllSubscriptionsRequest) returns (GetAllSubscriptionsResponse) {}
+  
+  // Subscription Usage operations
+  rpc RecordUsage(RecordUsageRequest) returns (RecordUsageResponse) {}
+  rpc GetUsageBySubscription(GetUsageBySubscriptionRequest) returns (GetUsageBySubscriptionResponse) {}
+  
+  // Subscription Discount operations
+  rpc AddDiscount(AddDiscountRequest) returns (AddDiscountResponse) {}
+  rpc RemoveDiscount(RemoveDiscountRequest) returns (RemoveDiscountResponse) {}
+  rpc GetDiscountsBySubscription(GetDiscountsBySubscriptionRequest) returns (GetDiscountsBySubscriptionResponse) {}
+  
+  // Subscription Version operations (audit trail)
+  rpc GetVersionHistory(GetVersionHistoryRequest) returns (GetVersionHistoryResponse) {}
+}
+
+// Subscription messages
+
+message Subscription {
+  int64 id = 1;
+  string uuid = 2;
+  int64 user_id = 3;
+  int64 plan_id = 4;
+  int32 price = 5;
+  int64 currency_id = 6;
+  int64 ends_at = 7;
+  int64 cancelled_at = 8;
+  string payment_provider_subscription_id = 9;
+  string payment_provider_status = 10;
+  int64 payment_provider_id = 11;
+  int64 trial_ends_at = 12;
+  string status = 13; // active, cancelled, expired, trialing, past_due, etc.
+  int64 interval_id = 14;
+  int32 interval_count = 15;
+  bool is_canceled_at_end_of_cycle = 16;
+  string cancellation_reason = 17;
+  string cancellation_additional_info = 18;
+  int32 quantity = 19;
+  int64 tenant_id = 20;
+  string price_type = 21; // flat_rate, per_unit, tiered
+  string price_tiers = 22; // JSON string
+  string price_per_unit = 23;
+  string extra_payment_provider_data = 24; // JSON string
+  string type = 25; // payment_provider_managed, manual
+  string comments = 26;
+  string metadata = 27; // JSON string
+  int64 created_at = 28;
+  int64 updated_at = 29;
+}
+
+message GetSubscriptionByIDRequest {
+  int64 id = 1;
+}
+
+message GetSubscriptionByIDResponse {
+  bool success = 1;
+  string message = 2;
+  Subscription data = 3;
+}
+
+message GetSubscriptionByUUIDRequest {
+  string uuid = 1;
+}
+
+message GetSubscriptionByUUIDResponse {
+  bool success = 1;
+  string message = 2;
+  Subscription data = 3;
+}
+
+message GetSubscriptionsByUserRequest {
+  int64 user_id = 1;
+  int32 page = 2;
+  int32 per_page = 3;
+}
+
+message GetSubscriptionsByUserResponse {
+  bool success = 1;
+  string message = 2;
+  GetAllSubscriptionsData data = 3;
+}
+
+message GetSubscriptionsByTenantRequest {
+  int64 tenant_id = 1;
+  int32 page = 2;
+  int32 per_page = 3;
+}
+
+message GetSubscriptionsByTenantResponse {
+  bool success = 1;
+  string message = 2;
+  GetAllSubscriptionsData data = 3;
+}
+
+message CreateSubscriptionRequest {
+  int64 user_id = 1;
+  int64 plan_id = 2;
+  int32 price = 3;
+  int64 currency_id = 4;
+  int64 tenant_id = 5;
+  int64 trial_ends_at = 6;
+  string payment_provider_subscription_id = 7;
+  int64 payment_provider_id = 8;
+  int64 interval_id = 9;
+  int32 interval_count = 10;
+  int32 quantity = 11;
+  string price_type = 12;
+  string price_tiers = 13; // JSON string
+  string price_per_unit = 14;
+  string type = 15;
+  string comments = 16;
+  string metadata = 17; // JSON string
+}
+
+message CreateSubscriptionResponse {
+  bool success = 1;
+  string message = 2;
+  Subscription data = 3;
+}
+
+message UpdateSubscriptionRequest {
+  int64 id = 1;
+  int32 price = 2;
+  int64 ends_at = 3;
+  string payment_provider_status = 4;
+  string status = 5;
+  int32 quantity = 6;
+  string comments = 7;
+  string metadata = 8; // JSON string
+  string extra_payment_provider_data = 9; // JSON string
+}
+
+message UpdateSubscriptionResponse {
+  bool success = 1;
+  string message = 2;
+  Subscription data = 3;
+}
+
+message CancelSubscriptionRequest {
+  int64 id = 1;
+  bool cancel_at_end_of_cycle = 2;
+  string cancellation_reason = 3;
+  string cancellation_additional_info = 4;
+}
+
+message CancelSubscriptionResponse {
+  bool success = 1;
+  string message = 2;
+  Subscription data = 3;
+}
+
+message ResumeSubscriptionRequest {
+  int64 id = 1;
+}
+
+message ResumeSubscriptionResponse {
+  bool success = 1;
+  string message = 2;
+  Subscription data = 3;
+}
+
+message RenewSubscriptionRequest {
+  int64 id = 1;
+  int64 ends_at = 2;
+}
+
+message RenewSubscriptionResponse {
+  bool success = 1;
+  string message = 2;
+  Subscription data = 3;
+}
+
+message GetAllSubscriptionsRequest {
+  int32 page = 1;
+  int32 per_page = 2;
+  string status = 3; // filter by status
+}
+
+message GetAllSubscriptionsData {
+  repeated Subscription subscriptions = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}
+
+message GetAllSubscriptionsResponse {
+  bool success = 1;
+  string message = 2;
+  GetAllSubscriptionsData data = 3;
+}
+
+// Subscription Usage messages
+
+message SubscriptionUsage {
+  int64 id = 1;
+  int64 subscription_id = 2;
+  int32 unit_count = 3;
+  int64 created_at = 4;
+  int64 updated_at = 5;
+}
+
+message RecordUsageRequest {
+  int64 subscription_id = 1;
+  int32 unit_count = 2;
+}
+
+message RecordUsageResponse {
+  bool success = 1;
+  string message = 2;
+  SubscriptionUsage data = 3;
+}
+
+message GetUsageBySubscriptionRequest {
+  int64 subscription_id = 1;
+  int32 page = 2;
+  int32 per_page = 3;
+}
+
+message GetUsageBySubscriptionData {
+  repeated SubscriptionUsage usages = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}
+
+message GetUsageBySubscriptionResponse {
+  bool success = 1;
+  string message = 2;
+  GetUsageBySubscriptionData data = 3;
+}
+
+// Subscription Discount messages
+
+message SubscriptionDiscount {
+  int64 id = 1;
+  int64 subscription_id = 2;
+  int64 discount_id = 3;
+  string type = 4; // percentage, fixed
+  double amount = 5;
+  int64 valid_until = 6;
+  bool is_recurring = 7;
+  int64 created_at = 8;
+  int64 updated_at = 9;
+}
+
+message AddDiscountRequest {
+  int64 subscription_id = 1;
+  int64 discount_id = 2;
+  string type = 3;
+  double amount = 4;
+  int64 valid_until = 5;
+  bool is_recurring = 6;
+}
+
+message AddDiscountResponse {
+  bool success = 1;
+  string message = 2;
+  SubscriptionDiscount data = 3;
+}
+
+message RemoveDiscountRequest {
+  int64 id = 1;
+}
+
+message RemoveDiscountResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetDiscountsBySubscriptionRequest {
+  int64 subscription_id = 1;
+}
+
+message GetDiscountsBySubscriptionResponse {
+  bool success = 1;
+  string message = 2;
+  repeated SubscriptionDiscount data = 3;
+}
+
+// Subscription Version messages (audit trail)
+
+message SubscriptionVersion {
+  int32 version_id = 1;
+  string versionable_id = 2;
+  string versionable_type = 3;
+  string user_id = 4;
+  string model_data = 5; // JSON string of the subscription state
+  string reason = 6;
+  int64 created_at = 7;
+  int64 updated_at = 8;
+}
+
+message GetVersionHistoryRequest {
+  int64 subscription_id = 1;
+  int32 page = 2;
+  int32 per_page = 3;
+}
+
+message GetVersionHistoryData {
+  repeated SubscriptionVersion versions = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}
+
+message GetVersionHistoryResponse {
+  bool success = 1;
+  string message = 2;
+  GetVersionHistoryData data = 3;
+}

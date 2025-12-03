@@ -47,7 +47,8 @@ type LoginData struct {
 }
 
 type RefreshTokenData struct {
-	AccessToken string
+	AccessToken  string
+	RefreshToken string
 }
 
 type RefreshTokenRepository interface {

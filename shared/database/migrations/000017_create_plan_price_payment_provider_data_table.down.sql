@@ -1,0 +1,4 @@
+-- Drop plan_price_payment_provider_data table
+DROP INDEX IF EXISTS idx_plan_price_payment_provider_data_payment_provider_id;
+DROP INDEX IF EXISTS idx_plan_price_payment_provider_data_plan_price_id;
+DROP TABLE IF EXISTS plan_price_payment_provider_data;

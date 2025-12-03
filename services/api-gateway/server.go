@@ -13,6 +13,7 @@ import (
 	"github.com/damarteplok/damar-admin-cms/shared/env"
 	"github.com/damarteplok/damar-admin-cms/shared/logger"
 	authPb "github.com/damarteplok/damar-admin-cms/shared/proto/auth"
+	tenantPb "github.com/damarteplok/damar-admin-cms/shared/proto/tenant"
 	userPb "github.com/damarteplok/damar-admin-cms/shared/proto/user"
 	"github.com/vektah/gqlparser/v2/ast"
 	"go.uber.org/zap"
@@ -37,6 +38,7 @@ func main() {
 
 	authAddr := env.GetString("AUTH_SERVICE_ADDR", "localhost:50052")
 	userAddr := env.GetString("USER_SERVICE_ADDR", "localhost:50051")
+	tenantAddr := env.GetString("TENANT_SERVICE_ADDR", "localhost:50053")
 
 	authConn, err := grpc.NewClient(authAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
@@ -50,12 +52,20 @@ func main() {
 	}
 	defer userConn.Close()
 
+	tenantConn, err := grpc.NewClient(tenantAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger.Fatal("Failed to connect to tenant service", zap.Error(err))
+	}
+	defer tenantConn.Close()
+
 	authClient := authPb.NewAuthServiceClient(authConn)
 	userClient := userPb.NewUserServiceClient(userConn)
+	tenantClient := tenantPb.NewTenantServiceClient(tenantConn)
 
 	resolver := &graph.Resolver{
-		AuthClient: authClient,
-		UserClient: userClient,
+		AuthClient:   authClient,
+		UserClient:   userClient,
+		TenantClient: tenantClient,
 	}
 
 	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))

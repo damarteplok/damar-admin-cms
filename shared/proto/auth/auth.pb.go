@@ -448,7 +448,8 @@ func (x *RefreshTokenResponse) GetData() *RefreshTokenData {
 type RefreshTokenData struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AccessToken   string                 `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
-	ExpiresIn     int64                  `protobuf:"varint,2,opt,name=expires_in,json=expiresIn,proto3" json:"expires_in,omitempty"`
+	RefreshToken  string                 `protobuf:"bytes,2,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	ExpiresIn     int64                  `protobuf:"varint,3,opt,name=expires_in,json=expiresIn,proto3" json:"expires_in,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -486,6 +487,13 @@ func (*RefreshTokenData) Descriptor() ([]byte, []int) {
 func (x *RefreshTokenData) GetAccessToken() string {
 	if x != nil {
 		return x.AccessToken
+	}
+	return ""
+}
+
+func (x *RefreshTokenData) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
 	}
 	return ""
 }
@@ -546,6 +554,7 @@ type ValidateTokenResponse struct {
 	Valid         bool                   `protobuf:"varint,1,opt,name=valid,proto3" json:"valid,omitempty"`
 	UserId        int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	IsAdmin       bool                   `protobuf:"varint,4,opt,name=is_admin,json=isAdmin,proto3" json:"is_admin,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -599,6 +608,13 @@ func (x *ValidateTokenResponse) GetEmail() string {
 		return x.Email
 	}
 	return ""
+}
+
+func (x *ValidateTokenResponse) GetIsAdmin() bool {
+	if x != nil {
+		return x.IsAdmin
+	}
+	return false
 }
 
 type LogoutRequest struct {
@@ -1372,17 +1388,19 @@ const file_auth_proto_rawDesc = "" +
 	"\x14RefreshTokenResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12*\n" +
-	"\x04data\x18\x03 \x01(\v2\x16.auth.RefreshTokenDataR\x04data\"T\n" +
+	"\x04data\x18\x03 \x01(\v2\x16.auth.RefreshTokenDataR\x04data\"y\n" +
 	"\x10RefreshTokenData\x12!\n" +
-	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12\x1d\n" +
+	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12#\n" +
+	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\x12\x1d\n" +
 	"\n" +
-	"expires_in\x18\x02 \x01(\x03R\texpiresIn\",\n" +
+	"expires_in\x18\x03 \x01(\x03R\texpiresIn\",\n" +
 	"\x14ValidateTokenRequest\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\tR\x05token\"\\\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\"w\n" +
 	"\x15ValidateTokenResponse\x12\x14\n" +
 	"\x05valid\x18\x01 \x01(\bR\x05valid\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x14\n" +
-	"\x05email\x18\x03 \x01(\tR\x05email\"M\n" +
+	"\x05email\x18\x03 \x01(\tR\x05email\x12\x19\n" +
+	"\bis_admin\x18\x04 \x01(\bR\aisAdmin\"M\n" +
 	"\rLogoutRequest\x12#\n" +
 	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\x03R\x06userId\"D\n" +
@@ -1435,7 +1453,7 @@ const file_auth_proto_rawDesc = "" +
 	"\rResetPassword\x12\x1a.auth.ResetPasswordRequest\x1a\x1b.auth.ResetPasswordResponse\"\x00\x12S\n" +
 	"\x10VerifyResetToken\x12\x1d.auth.VerifyResetTokenRequest\x1a\x1e.auth.VerifyResetTokenResponse\"\x00\x12b\n" +
 	"\x15SendVerificationEmail\x12\".auth.SendVerificationEmailRequest\x1a#.auth.SendVerificationEmailResponse\"\x00\x12D\n" +
-	"\vVerifyEmail\x12\x18.auth.VerifyEmailRequest\x1a\x19.auth.VerifyEmailResponse\"\x00B:Z8github.com/damarteplok/damar-admin-cms/shared/proto/authb\x06proto3"
+	"\vVerifyEmail\x12\x18.auth.VerifyEmailRequest\x1a\x19.auth.VerifyEmailResponse\"\x00B\x18Z\x16shared/proto/auth;authb\x06proto3"
 
 var (
 	file_auth_proto_rawDescOnce sync.Once

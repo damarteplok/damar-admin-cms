@@ -12,10 +12,53 @@ Setelah menjalankan `tilt up`, GraphQL Playground bisa diakses di:
 
 GraphQL Endpoint untuk client apps: http://localhost:8080/query
 
+## Important Notes
+
+### Soft Delete Implementation
+
+**Users Table** menggunakan **soft delete** (sejak migration 000024):
+
+- User yang dihapus TIDAK benar-benar hilang dari database
+- Field `deleted_at` diset dengan timestamp saat delete
+- **Email Uniqueness**: Menggunakan partial unique index - email hanya unique untuk user aktif (`deleted_at IS NULL`)
+- **Re-registration**: User bisa sign up lagi dengan email yang sama setelah account dihapus
+- **Login Prevention**: User yang sudah dihapus tidak bisa login (error: "this account has been deleted")
+- **Tenant Relations**: Saat user dihapus, `tenants.created_by` tetap tersimpan (audit trail terjaga)
+
+**Tenants Table** juga menggunakan **soft delete** (sejak migration 000025):
+
+- Tenant yang dihapus tetap tersimpan dengan `deleted_at` timestamp
+- **Slug/Domain/UUID Uniqueness**: Menggunakan partial unique index - hanya unique untuk tenant aktif (`deleted_at IS NULL`)
+- **Re-creation**: Tenant bisa dibuat lagi dengan slug/domain yang sama setelah tenant lama dihapus
+- Foreign key `created_by` REFERENCES `users(id)` dengan ON DELETE SET NULL
+- Creator info tetap terjaga bahkan setelah user dihapus
+
+### Soft Delete Behavior Summary
+
+**What Happens to Deleted Users/Tenants:**
+
+| Operation                                                 | Deleted User/Tenant | Status                 |
+| --------------------------------------------------------- | ------------------- | ---------------------- |
+| Get by ID                                                 | ❌ Not found        | Filtered out           |
+| Get by Email/Slug                                         | ❌ Not found        | Filtered out           |
+| List (GetAll/Search)                                      | ❌ Not shown        | Filtered out           |
+| Update                                                    | ❌ Fails            | "not found"            |
+| Delete (again)                                            | ❌ Fails            | "not found"            |
+| Login (users only)                                        | ❌ Blocked          | "deleted"              |
+| Create with same email/slug                               | ✅ Allowed          | Unique for active only |
+| Related operations (tenant operations for deleted tenant) | ❌ Fails            | "tenant not found"     |
+
+**Database State:**
+
+- Record exists in database with `deleted_at` timestamp
+- Audit trail preserved for compliance
+- Foreign key relationships maintained (created_by not NULL)
+
 ## Table of Contents
 
 - [Authentication Flow](#authentication-flow)
 - [User Management](#user-management)
+- [Tenant Management](#tenant-management)
 - [Testing Scenarios](#testing-scenarios)
 
 ---
@@ -638,6 +681,547 @@ query {
         isBlocked
       }
     }
+  }
+}
+```
+
+### Scenario 5: Soft Delete Testing (Users)
+
+1. **Create test user:**
+
+```graphql
+mutation {
+  createUser(
+    input: {
+      name: "Delete Test User"
+      email: "deletetest@example.com"
+      password: "Test123!"
+    }
+  ) {
+    success
+    data {
+      id
+      email
+    }
+  }
+}
+```
+
+2. **Delete user (soft delete):**
+
+```graphql
+mutation {
+  deleteUser(id: "USER_ID_FROM_STEP_1") {
+    success
+    message
+  }
+}
+```
+
+3. **Try to get deleted user (should fail):**
+
+```graphql
+query {
+  user(id: "USER_ID_FROM_STEP_1") {
+    success
+    message
+  }
+}
+# Expected: { success: false, message: "user not found" }
+```
+
+4. **Try to login with deleted user (should fail):**
+
+```graphql
+mutation {
+  login(input: { email: "deletetest@example.com", password: "Test123!" }) {
+    success
+    message
+  }
+}
+# Expected: { success: false, message: "this account has been deleted" }
+```
+
+5. **Register again with same email (should succeed):**
+
+```graphql
+mutation {
+  createUser(
+    input: {
+      name: "Delete Test User Reborn"
+      email: "deletetest@example.com"
+      password: "NewPassword123!"
+    }
+  ) {
+    success
+    data {
+      id
+      email
+    }
+  }
+}
+# Expected: success: true (new user created with different ID)
+```
+
+6. **Login with new account (should succeed):**
+
+```graphql
+mutation {
+  login(
+    input: { email: "deletetest@example.com", password: "NewPassword123!" }
+  ) {
+    success
+    data {
+      accessToken
+    }
+  }
+}
+```
+
+### Scenario 6: Soft Delete Testing (Tenants)
+
+1. **Create tenant:**
+
+```graphql
+mutation {
+  createTenant(input: { name: "Delete Test Corp", slug: "delete-test" }) {
+    success
+    data {
+      id
+      slug
+    }
+  }
+}
+```
+
+2. **Add user to tenant:**
+
+```graphql
+mutation {
+  addUserToTenant(
+    input: { userId: "8", tenantId: "TENANT_ID", role: "member" }
+  ) {
+    success
+  }
+}
+```
+
+3. **Delete tenant (soft delete):**
+
+```graphql
+mutation {
+  deleteTenant(id: "TENANT_ID") {
+    success
+  }
+}
+```
+
+4. **Try to get deleted tenant (should fail):**
+
+```graphql
+query {
+  tenant(id: "TENANT_ID") {
+    success
+    message
+  }
+}
+# Expected: { success: false, message: "tenant not found" }
+```
+
+5. **Try to get tenant users (should fail):**
+
+```graphql
+query {
+  tenantUsers(tenantId: "TENANT_ID") {
+    success
+    message
+  }
+}
+# Expected: { success: false, message: "tenant not found" }
+```
+
+6. **Try to update deleted tenant (should fail):**
+
+```graphql
+mutation {
+  updateTenant(input: { id: "TENANT_ID", name: "New Name" }) {
+    success
+    message
+  }
+}
+# Expected: { success: false, message: "tenant not found" }
+```
+
+7. **Create tenant with same slug (should succeed):**
+
+```graphql
+mutation {
+  createTenant(input: { name: "Delete Test Corp V2", slug: "delete-test" }) {
+    success
+    data {
+      id
+      slug
+    }
+  }
+}
+# Expected: success: true (new tenant with different ID)
+```
+
+---
+
+## Tenant Management
+
+### Get Tenant by ID
+
+**Query:**
+
+```graphql
+query GetTenant {
+  tenant(id: "1") {
+    success
+    message
+    data {
+      id
+      uuid
+      name
+      slug
+      domain
+      isNameAutoGenerated
+      createdBy
+      createdAt
+      updatedAt
+    }
+  }
+}
+```
+
+**Requires**: Authorization header (admin only)
+
+### Get Tenant by Slug
+
+**Query:**
+
+```graphql
+query GetTenantBySlug {
+  tenantBySlug(slug: "acme-corp") {
+    success
+    message
+    data {
+      id
+      name
+      slug
+      domain
+    }
+  }
+}
+```
+
+### Get All Tenants
+
+**Query:**
+
+```graphql
+query GetAllTenants {
+  tenants(page: 1, perPage: 10) {
+    success
+    message
+    data {
+      tenants {
+        id
+        name
+        slug
+        domain
+        createdBy
+        createdAt
+      }
+      total
+      page
+      perPage
+    }
+  }
+}
+```
+
+### Create Tenant
+
+**Mutation:**
+
+```graphql
+mutation CreateTenant {
+  createTenant(
+    input: {
+      name: "Acme Corporation"
+      slug: "acme-corp"
+      domain: "acme.example.com"
+    }
+  ) {
+    success
+    message
+    data {
+      id
+      uuid
+      name
+      slug
+      domain
+      createdAt
+    }
+  }
+}
+```
+
+**Note**: Slug is optional (auto-generated if not provided)
+
+### Update Tenant
+
+**Mutation:**
+
+```graphql
+mutation UpdateTenant {
+  updateTenant(
+    input: {
+      id: "1"
+      name: "Acme Corp Updated"
+      domain: "new-domain.example.com"
+    }
+  ) {
+    success
+    message
+    data {
+      id
+      name
+      domain
+      updatedAt
+    }
+  }
+}
+```
+
+### Delete Tenant
+
+**Mutation:**
+
+```graphql
+mutation DeleteTenant {
+  deleteTenant(id: "1") {
+    success
+    message
+  }
+}
+```
+
+---
+
+## Tenant Users Management
+
+### Get Tenant Users
+
+**Query:**
+
+```graphql
+query GetTenantUsers {
+  tenantUsers(tenantId: "1") {
+    success
+    message
+    data {
+      id
+      userId
+      tenantId
+      role
+      isDefault
+      email
+      createdAt
+    }
+  }
+}
+```
+
+**Note**: Returns error if tenant is deleted or not found
+
+### Get User Tenants
+
+**Query:**
+
+```graphql
+query GetUserTenants {
+  userTenants(userId: "8") {
+    success
+    message
+    data {
+      id
+      tenantId
+      role
+      isDefault
+      createdAt
+    }
+  }
+}
+```
+
+### Add User to Tenant
+
+**Mutation:**
+
+```graphql
+mutation AddUserToTenant {
+  addUserToTenant(
+    input: { userId: "8", tenantId: "1", role: "member", isDefault: false }
+  ) {
+    success
+    message
+    data {
+      id
+      userId
+      tenantId
+      role
+      isDefault
+      email
+    }
+  }
+}
+```
+
+**Roles**: `owner`, `admin`, `member`, `guest`
+
+### Remove User from Tenant
+
+**Mutation:**
+
+```graphql
+mutation RemoveUserFromTenant {
+  removeUserFromTenant(userId: "8", tenantId: "1") {
+    success
+    message
+  }
+}
+```
+
+### Update User Role
+
+**Mutation:**
+
+```graphql
+mutation UpdateUserRole {
+  updateUserRole(input: { userId: "8", tenantId: "1", role: "admin" }) {
+    success
+    message
+  }
+}
+```
+
+### Set Default Tenant
+
+**Mutation:**
+
+```graphql
+mutation SetDefaultTenant {
+  setDefaultTenant(input: { userId: "8", tenantId: "1" }) {
+    success
+    message
+  }
+}
+```
+
+**Note**: Only one tenant can be default per user
+
+---
+
+## Tenant Settings Management
+
+### Get Tenant Setting
+
+**Query:**
+
+```graphql
+query GetTenantSetting {
+  tenantSetting(tenantId: "1", key: "theme") {
+    success
+    message
+    data {
+      id
+      tenantId
+      key
+      value
+      createdAt
+      updatedAt
+    }
+  }
+}
+```
+
+**Note**: Returns error if tenant is deleted or not found
+
+### Get All Tenant Settings
+
+**Query:**
+
+```graphql
+query GetAllTenantSettings {
+  tenantSettings(tenantId: "1") {
+    success
+    message
+    data {
+      id
+      key
+      value
+      createdAt
+    }
+  }
+}
+```
+
+**Note**: Returns error if tenant is deleted or not found
+
+### Set Tenant Setting
+
+**Mutation:**
+
+```graphql
+mutation SetTenantSetting {
+  setTenantSetting(input: { tenantId: "1", key: "theme", value: "dark" }) {
+    success
+    message
+    data {
+      id
+      key
+      value
+      updatedAt
+    }
+  }
+}
+```
+
+**Value Format Examples:**
+
+```graphql
+# Plain string
+setTenantSetting(input: { tenantId: "1", key: "theme", value: "dark" })
+
+# Number (as string)
+setTenantSetting(input: { tenantId: "1", key: "max_users", value: "100" })
+
+# Boolean (as string)
+setTenantSetting(input: { tenantId: "1", key: "feature_enabled", value: "true" })
+
+# JSON object (as string)
+setTenantSetting(input: { tenantId: "1", key: "config", value: "{\"color\":\"blue\",\"size\":\"large\"}" })
+```
+
+**Note**:
+
+- Upsert operation (creates if not exists, updates if exists)
+- Value is stored as JSON in database
+- Plain strings are automatically wrapped in JSON quotes
+- JSON objects/arrays should be passed as stringified JSON
+
+### Delete Tenant Setting
+
+**Mutation:**
+
+```graphql
+mutation DeleteTenantSetting {
+  deleteTenantSetting(tenantId: "1", key: "theme") {
+    success
+    message
   }
 }
 ```

@@ -1,0 +1,399 @@
+syntax = "proto3";
+
+package product;
+
+option go_package = "shared/proto/product;product";
+
+service ProductService {
+  // Product operations
+  rpc GetProductByID(GetProductByIDRequest) returns (GetProductByIDResponse) {}
+  rpc GetProductBySlug(GetProductBySlugRequest) returns (GetProductBySlugResponse) {}
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse) {}
+  rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse) {}
+  rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse) {}
+  rpc GetAllProducts(GetAllProductsRequest) returns (GetAllProductsResponse) {}
+  
+  // Plan operations
+  rpc GetPlanByID(GetPlanByIDRequest) returns (GetPlanByIDResponse) {}
+  rpc GetPlanBySlug(GetPlanBySlugRequest) returns (GetPlanBySlugResponse) {}
+  rpc GetPlansByProduct(GetPlansByProductRequest) returns (GetPlansByProductResponse) {}
+  rpc CreatePlan(CreatePlanRequest) returns (CreatePlanResponse) {}
+  rpc UpdatePlan(UpdatePlanRequest) returns (UpdatePlanResponse) {}
+  rpc DeletePlan(DeletePlanRequest) returns (DeletePlanResponse) {}
+  rpc GetAllPlans(GetAllPlansRequest) returns (GetAllPlansResponse) {}
+  
+  // Plan Price operations
+  rpc GetPlanPrice(GetPlanPriceRequest) returns (GetPlanPriceResponse) {}
+  rpc GetPlanPricesByPlan(GetPlanPricesByPlanRequest) returns (GetPlanPricesByPlanResponse) {}
+  rpc CreatePlanPrice(CreatePlanPriceRequest) returns (CreatePlanPriceResponse) {}
+  rpc UpdatePlanPrice(UpdatePlanPriceRequest) returns (UpdatePlanPriceResponse) {}
+  rpc DeletePlanPrice(DeletePlanPriceRequest) returns (DeletePlanPriceResponse) {}
+  
+  // Plan Meter operations
+  rpc GetPlanMeterByID(GetPlanMeterByIDRequest) returns (GetPlanMeterByIDResponse) {}
+  rpc GetAllPlanMeters(GetAllPlanMetersRequest) returns (GetAllPlanMetersResponse) {}
+  rpc CreatePlanMeter(CreatePlanMeterRequest) returns (CreatePlanMeterResponse) {}
+  rpc UpdatePlanMeter(UpdatePlanMeterRequest) returns (UpdatePlanMeterResponse) {}
+  rpc DeletePlanMeter(DeletePlanMeterRequest) returns (DeletePlanMeterResponse) {}
+}
+
+// Product messages
+
+message Product {
+  int64 id = 1;
+  string name = 2;
+  string slug = 3;
+  string description = 4;
+  string metadata = 5; // JSON string
+  string features = 6; // JSON string
+  bool is_popular = 7;
+  bool is_default = 8;
+  int64 created_at = 9;
+  int64 updated_at = 10;
+}
+
+message GetProductByIDRequest {
+  int64 id = 1;
+}
+
+message GetProductByIDResponse {
+  bool success = 1;
+  string message = 2;
+  Product data = 3;
+}
+
+message GetProductBySlugRequest {
+  string slug = 1;
+}
+
+message GetProductBySlugResponse {
+  bool success = 1;
+  string message = 2;
+  Product data = 3;
+}
+
+message CreateProductRequest {
+  string name = 1;
+  string slug = 2;
+  string description = 3;
+  string metadata = 4; // JSON string
+  string features = 5; // JSON string
+  bool is_popular = 6;
+  bool is_default = 7;
+}
+
+message CreateProductResponse {
+  bool success = 1;
+  string message = 2;
+  Product data = 3;
+}
+
+message UpdateProductRequest {
+  int64 id = 1;
+  string name = 2;
+  string slug = 3;
+  string description = 4;
+  string metadata = 5; // JSON string
+  string features = 6; // JSON string
+  bool is_popular = 7;
+  bool is_default = 8;
+}
+
+message UpdateProductResponse {
+  bool success = 1;
+  string message = 2;
+  Product data = 3;
+}
+
+message DeleteProductRequest {
+  int64 id = 1;
+}
+
+message DeleteProductResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetAllProductsRequest {
+  int32 page = 1;
+  int32 per_page = 2;
+}
+
+message GetAllProductsData {
+  repeated Product products = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}
+
+message GetAllProductsResponse {
+  bool success = 1;
+  string message = 2;
+  GetAllProductsData data = 3;
+}
+
+// Plan messages
+
+message Plan {
+  int64 id = 1;
+  string name = 2;
+  string slug = 3;
+  int64 interval_id = 4;
+  int64 product_id = 5;
+  bool is_active = 6;
+  bool has_trial = 7;
+  int64 trial_interval_id = 8;
+  int32 interval_count = 9;
+  int32 trial_interval_count = 10;
+  string description = 11;
+  string type = 12; // flat_rate, per_unit, tiered
+  int32 max_users_per_tenant = 13;
+  int64 meter_id = 14;
+  bool is_visible = 15;
+  int64 created_at = 16;
+  int64 updated_at = 17;
+}
+
+message GetPlanByIDRequest {
+  int64 id = 1;
+}
+
+message GetPlanByIDResponse {
+  bool success = 1;
+  string message = 2;
+  Plan data = 3;
+}
+
+message GetPlanBySlugRequest {
+  string slug = 1;
+}
+
+message GetPlanBySlugResponse {
+  bool success = 1;
+  string message = 2;
+  Plan data = 3;
+}
+
+message GetPlansByProductRequest {
+  int64 product_id = 1;
+}
+
+message GetPlansByProductResponse {
+  bool success = 1;
+  string message = 2;
+  repeated Plan data = 3;
+}
+
+message CreatePlanRequest {
+  string name = 1;
+  string slug = 2;
+  int64 interval_id = 3;
+  int64 product_id = 4;
+  bool is_active = 5;
+  bool has_trial = 6;
+  int64 trial_interval_id = 7;
+  int32 interval_count = 8;
+  int32 trial_interval_count = 9;
+  string description = 10;
+  string type = 11;
+  int32 max_users_per_tenant = 12;
+  int64 meter_id = 13;
+  bool is_visible = 14;
+}
+
+message CreatePlanResponse {
+  bool success = 1;
+  string message = 2;
+  Plan data = 3;
+}
+
+message UpdatePlanRequest {
+  int64 id = 1;
+  string name = 2;
+  string slug = 3;
+  int64 interval_id = 4;
+  bool is_active = 5;
+  bool has_trial = 6;
+  int64 trial_interval_id = 7;
+  int32 interval_count = 8;
+  int32 trial_interval_count = 9;
+  string description = 10;
+  string type = 11;
+  int32 max_users_per_tenant = 12;
+  int64 meter_id = 13;
+  bool is_visible = 14;
+}
+
+message UpdatePlanResponse {
+  bool success = 1;
+  string message = 2;
+  Plan data = 3;
+}
+
+message DeletePlanRequest {
+  int64 id = 1;
+}
+
+message DeletePlanResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetAllPlansRequest {
+  int32 page = 1;
+  int32 per_page = 2;
+  bool active_only = 3;
+  bool visible_only = 4;
+}
+
+message GetAllPlansData {
+  repeated Plan plans = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}
+
+message GetAllPlansResponse {
+  bool success = 1;
+  string message = 2;
+  GetAllPlansData data = 3;
+}
+
+// Plan Price messages
+
+message PlanPrice {
+  int64 id = 1;
+  int64 plan_id = 2;
+  int64 currency_id = 3;
+  int32 price = 4;
+  int32 price_per_unit = 5;
+  string type = 6; // flat_rate, per_unit, tiered
+  string tiers = 7; // JSON string
+  int64 created_at = 8;
+  int64 updated_at = 9;
+}
+
+message GetPlanPriceRequest {
+  int64 id = 1;
+}
+
+message GetPlanPriceResponse {
+  bool success = 1;
+  string message = 2;
+  PlanPrice data = 3;
+}
+
+message GetPlanPricesByPlanRequest {
+  int64 plan_id = 1;
+}
+
+message GetPlanPricesByPlanResponse {
+  bool success = 1;
+  string message = 2;
+  repeated PlanPrice data = 3;
+}
+
+message CreatePlanPriceRequest {
+  int64 plan_id = 1;
+  int64 currency_id = 2;
+  int32 price = 3;
+  int32 price_per_unit = 4;
+  string type = 5;
+  string tiers = 6; // JSON string
+}
+
+message CreatePlanPriceResponse {
+  bool success = 1;
+  string message = 2;
+  PlanPrice data = 3;
+}
+
+message UpdatePlanPriceRequest {
+  int64 id = 1;
+  int32 price = 2;
+  int32 price_per_unit = 3;
+  string type = 4;
+  string tiers = 5; // JSON string
+}
+
+message UpdatePlanPriceResponse {
+  bool success = 1;
+  string message = 2;
+  PlanPrice data = 3;
+}
+
+message DeletePlanPriceRequest {
+  int64 id = 1;
+}
+
+message DeletePlanPriceResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Plan Meter messages
+
+message PlanMeter {
+  int64 id = 1;
+  string name = 2;
+  int64 created_at = 3;
+  int64 updated_at = 4;
+}
+
+message GetPlanMeterByIDRequest {
+  int64 id = 1;
+}
+
+message GetPlanMeterByIDResponse {
+  bool success = 1;
+  string message = 2;
+  PlanMeter data = 3;
+}
+
+message GetAllPlanMetersRequest {
+  int32 page = 1;
+  int32 per_page = 2;
+}
+
+message GetAllPlanMetersData {
+  repeated PlanMeter meters = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}
+
+message GetAllPlanMetersResponse {
+  bool success = 1;
+  string message = 2;
+  GetAllPlanMetersData data = 3;
+}
+
+message CreatePlanMeterRequest {
+  string name = 1;
+}
+
+message CreatePlanMeterResponse {
+  bool success = 1;
+  string message = 2;
+  PlanMeter data = 3;
+}
+
+message UpdatePlanMeterRequest {
+  int64 id = 1;
+  string name = 2;
+}
+
+message UpdatePlanMeterResponse {
+  bool success = 1;
+  string message = 2;
+  PlanMeter data = 3;
+}
+
+message DeletePlanMeterRequest {
+  int64 id = 1;
+}
+
+message DeletePlanMeterResponse {
+  bool success = 1;
+  string message = 2;
+}

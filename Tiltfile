@@ -71,7 +71,32 @@ local_resource(
 )
 
 #############################################
-# 3. API Gateway (GraphQL - Port 8080)
+# 3. Tenant Service (gRPC - Port 50053)
+#############################################
+
+local_resource(
+    'tenant-service',
+    serve_cmd='cd services/tenant-service && go run cmd/main.go',
+    serve_dir='.',
+    env={'GRPC_PORT': '50053'},
+    deps=[
+        'services/tenant-service/cmd',
+        'services/tenant-service/internal',
+        'services/tenant-service/pkg',
+        'shared/proto/tenant',
+    ],
+    readiness_probe=probe(
+        period_secs=3,
+        tcp_socket=tcp_socket_action(50053)
+    ),
+    labels=['backend', 'grpc', 'core'],
+    links=[
+        link('http://localhost:50053', 'gRPC Endpoint'),
+    ],
+)
+
+#############################################
+# 4. API Gateway (GraphQL - Port 8080)
 #############################################
 
 local_resource(
@@ -89,7 +114,7 @@ local_resource(
         http_get=http_get_action(8080, '/'),
     ),
     labels=['frontend', 'gateway', 'core'],
-    resource_deps=['auth-service', 'user-service'],
+    resource_deps=['auth-service', 'user-service', 'tenant-service'],
     links=[
         link('http://localhost:8080', 'GraphQL Playground'),
         link('http://localhost:8080/query', 'GraphQL API'),
@@ -97,40 +122,18 @@ local_resource(
 )
 
 #############################################
-# 4. Product Service (gRPC - Port 50053)
+# 5. Product Service (gRPC - Port 50054)
 #############################################
 
 local_resource(
     'product-service',
     serve_cmd='cd services/product-service && go run cmd/main.go',
     serve_dir='.',
-    env={'GRPC_PORT': '50053'},
+    env={'GRPC_PORT': '50054'},
     deps=[
         'services/product-service/cmd',
         'services/product-service/internal',
         'services/product-service/pkg',
-    ],
-    readiness_probe=probe(
-        period_secs=3,
-        tcp_socket=tcp_socket_action(50053)
-    ),
-    labels=['backend', 'grpc', 'optional'],
-    auto_init=False,
-)
-
-#############################################
-# 5. Billing Service (gRPC - Port 50054)
-#############################################
-
-local_resource(
-    'billing-service',
-    serve_cmd='cd services/billing-service && go run cmd/main.go',
-    serve_dir='.',
-    env={'GRPC_PORT': '50054'},
-    deps=[
-        'services/billing-service/cmd',
-        'services/billing-service/internal',
-        'services/billing-service/pkg',
     ],
     readiness_probe=probe(
         period_secs=3,
@@ -141,7 +144,29 @@ local_resource(
 )
 
 #############################################
-# 6. Notification Service (Event Consumer)
+# 6. Billing Service (gRPC - Port 50055)
+#############################################
+
+local_resource(
+    'billing-service',
+    serve_cmd='cd services/billing-service && go run cmd/main.go',
+    serve_dir='.',
+    env={'GRPC_PORT': '50055'},
+    deps=[
+        'services/billing-service/cmd',
+        'services/billing-service/internal',
+        'services/billing-service/pkg',
+    ],
+    readiness_probe=probe(
+        period_secs=3,
+        tcp_socket=tcp_socket_action(50055)
+    ),
+    labels=['backend', 'grpc', 'optional'],
+    auto_init=False,
+)
+
+#############################################
+# 7. Notification Service (Event Consumer)
 #############################################
 
 local_resource(
@@ -163,7 +188,7 @@ local_resource(
 )
 
 #############################################
-# 7. Media Service (gRPC - Port 50056)
+# 8. Media Service (gRPC - Port 50056)
 #############################################
 
 local_resource(
@@ -179,28 +204,6 @@ local_resource(
     readiness_probe=probe(
         period_secs=3,
         tcp_socket=tcp_socket_action(50056)
-    ),
-    labels=['backend', 'grpc', 'optional'],
-    auto_init=False,
-)
-
-#############################################
-# 8. Tenant Service (gRPC - Port 50057)
-#############################################
-
-local_resource(
-    'tenant-service',
-    serve_cmd='cd services/tenant-service && go run cmd/main.go',
-    serve_dir='.',
-    env={'GRPC_PORT': '50057'},
-    deps=[
-        'services/tenant-service/cmd',
-        'services/tenant-service/internal',
-        'services/tenant-service/pkg',
-    ],
-    readiness_probe=probe(
-        period_secs=3,
-        tcp_socket=tcp_socket_action(50057)
     ),
     labels=['backend', 'grpc', 'optional'],
     auto_init=False,
@@ -236,14 +239,13 @@ print("""
 🎯 Core Services (auto-start):
    - user-service      : gRPC Port 50051
    - auth-service      : gRPC Port 50052
+   - tenant-service    : gRPC Port 50053
    - api-gateway       : HTTP Port 8080 (GraphQL Playground)
 
 🔧 Optional Services (manual start via Tilt UI):
-   - product-service      : gRPC Port 50053
-   - billing-service      : gRPC Port 50054
-   - notification-service : gRPC Port 50055
+   - product-service      : gRPC Port 50054
+   - billing-service      : gRPC Port 50055
    - media-service        : gRPC Port 50056
-   - tenant-service       : gRPC Port 50057
 
 🛠️  Development Tools (manual trigger):
    - generate-proto    : Generate protobuf files

@@ -105,13 +105,15 @@ func (ec *EventConsumer) ConsumePasswordResetRequested(ctx context.Context) erro
 		}
 
 		email, _ := eventData["email"].(string)
-		name, _ := eventData["name"].(string)
-		resetToken, _ := eventData["reset_token"].(string)
+		userName, _ := eventData["user_name"].(string)
+		resetToken, _ := eventData["token"].(string)
 
 		logger.Info("Processing password reset event",
-			zap.String("email", email))
+			zap.String("email", email),
+			zap.String("user_name", userName),
+		)
 
-		if err := ec.emailService.SendPasswordResetEmail(email, name, resetToken); err != nil {
+		if err := ec.emailService.SendPasswordResetEmail(email, userName, resetToken); err != nil {
 			logger.Error("Failed to send password reset email",
 				zap.String("email", email),
 				zap.Error(err))

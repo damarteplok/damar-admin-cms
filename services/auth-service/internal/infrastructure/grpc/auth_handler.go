@@ -55,7 +55,8 @@ func (s *AuthGRPCServer) RefreshToken(ctx context.Context, req *pb.RefreshTokenR
 		Success: true,
 		Message: "Token refreshed successfully",
 		Data: &pb.RefreshTokenData{
-			AccessToken: refreshData.AccessToken,
+			AccessToken:  refreshData.AccessToken,
+			RefreshToken: refreshData.RefreshToken,
 		},
 	}, nil
 }
@@ -71,9 +72,10 @@ func (s *AuthGRPCServer) ValidateToken(ctx context.Context, req *pb.ValidateToke
 	}
 
 	return &pb.ValidateTokenResponse{
-		Valid:  true,
-		UserId: user.ID,
-		Email:  user.Email,
+		Valid:   true,
+		UserId:  user.ID,
+		Email:   user.Email,
+		IsAdmin: user.IsAdmin,
 	}, nil
 }
 

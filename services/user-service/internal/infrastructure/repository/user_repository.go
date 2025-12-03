@@ -20,9 +20,9 @@ func (r *UserRepository) GetByID(ctx context.Context, id int64) (*domain.User, e
 	query := `
 		SELECT id, name, email, email_verified, email_verified_at, password_hash, 
 		       public_name, is_admin, is_blocked, phone_number, position, 
-		       last_login_at, created_at, updated_at
+		       last_login_at, created_at, updated_at, deleted_at
 		FROM users 
-		WHERE id = $1
+		WHERE id = $1 AND deleted_at IS NULL
 	`
 
 	user := &domain.User{}
@@ -41,6 +41,7 @@ func (r *UserRepository) GetByID(ctx context.Context, id int64) (*domain.User, e
 		&user.LastLoginAt,
 		&user.CreatedAt,
 		&user.UpdatedAt,
+		&user.DeletedAt,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user by ID: %w", err)
@@ -53,9 +54,9 @@ func (r *UserRepository) GetByEmail(ctx context.Context, email string) (*domain.
 	query := `
 		SELECT id, name, email, email_verified, email_verified_at, password_hash, 
 		       public_name, is_admin, is_blocked, phone_number, position, 
-		       last_login_at, created_at, updated_at
+		       last_login_at, created_at, updated_at, deleted_at
 		FROM users 
-		WHERE email = $1
+		WHERE email = $1 AND deleted_at IS NULL
 	`
 
 	user := &domain.User{}
@@ -74,6 +75,7 @@ func (r *UserRepository) GetByEmail(ctx context.Context, email string) (*domain.
 		&user.LastLoginAt,
 		&user.CreatedAt,
 		&user.UpdatedAt,
+		&user.DeletedAt,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user by email: %w", err)
@@ -135,7 +137,8 @@ func (r *UserRepository) Update(ctx context.Context, user *domain.User) (*domain
 }
 
 func (r *UserRepository) Delete(ctx context.Context, id int64) error {
-	query := `DELETE FROM users WHERE id = $1`
+	// Soft delete: set deleted_at timestamp instead of physically removing the record
+	query := `UPDATE users SET deleted_at = NOW(), updated_at = NOW() WHERE id = $1 AND deleted_at IS NULL`
 
 	result, err := r.db.Exec(ctx, query, id)
 	if err != nil {
@@ -143,7 +146,7 @@ func (r *UserRepository) Delete(ctx context.Context, id int64) error {
 	}
 
 	if result.RowsAffected() == 0 {
-		return fmt.Errorf("user not found")
+		return fmt.Errorf("user not found or already deleted")
 	}
 
 	return nil
@@ -153,7 +156,7 @@ func (r *UserRepository) GetAll(ctx context.Context, page, perPage int) ([]*doma
 	offset := (page - 1) * perPage
 
 	var total int64
-	countQuery := `SELECT COUNT(*) FROM users`
+	countQuery := `SELECT COUNT(*) FROM users WHERE deleted_at IS NULL`
 	err := r.db.QueryRow(ctx, countQuery).Scan(&total)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to count users: %w", err)
@@ -162,8 +165,9 @@ func (r *UserRepository) GetAll(ctx context.Context, page, perPage int) ([]*doma
 	query := `
 		SELECT id, name, email, email_verified, email_verified_at, password_hash, 
 		       public_name, is_admin, is_blocked, phone_number, position, 
-		       last_login_at, created_at, updated_at
+		       last_login_at, created_at, updated_at, deleted_at
 		FROM users 
+		WHERE deleted_at IS NULL
 		ORDER BY id DESC
 		LIMIT $1 OFFSET $2
 	`
@@ -192,6 +196,7 @@ func (r *UserRepository) GetAll(ctx context.Context, page, perPage int) ([]*doma
 			&user.LastLoginAt,
 			&user.CreatedAt,
 			&user.UpdatedAt,
+			&user.DeletedAt,
 		)
 		if err != nil {
 			return nil, 0, fmt.Errorf("failed to scan user: %w", err)
@@ -211,7 +216,7 @@ func (r *UserRepository) Search(ctx context.Context, query string, page, perPage
 	searchPattern := "%" + query + "%"
 
 	var total int64
-	countQuery := `SELECT COUNT(*) FROM users WHERE name ILIKE $1 OR email ILIKE $1`
+	countQuery := `SELECT COUNT(*) FROM users WHERE (name ILIKE $1 OR email ILIKE $1) AND deleted_at IS NULL`
 	err := r.db.QueryRow(ctx, countQuery, searchPattern).Scan(&total)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to count users: %w", err)
@@ -220,9 +225,9 @@ func (r *UserRepository) Search(ctx context.Context, query string, page, perPage
 	sqlQuery := `
 		SELECT id, name, email, email_verified, email_verified_at, password_hash, 
 		       public_name, is_admin, is_blocked, phone_number, position, 
-		       last_login_at, created_at, updated_at
+		       last_login_at, created_at, updated_at, deleted_at
 		FROM users 
-		WHERE name ILIKE $1 OR email ILIKE $1
+		WHERE (name ILIKE $1 OR email ILIKE $1) AND deleted_at IS NULL
 		ORDER BY id DESC
 		LIMIT $2 OFFSET $3
 	`
@@ -251,6 +256,7 @@ func (r *UserRepository) Search(ctx context.Context, query string, page, perPage
 			&user.LastLoginAt,
 			&user.CreatedAt,
 			&user.UpdatedAt,
+			&user.DeletedAt,
 		)
 		if err != nil {
 			return nil, 0, fmt.Errorf("failed to scan user: %w", err)
@@ -266,7 +272,8 @@ func (r *UserRepository) Search(ctx context.Context, query string, page, perPage
 }
 
 func (r *UserRepository) BulkDelete(ctx context.Context, ids []int64) (int32, error) {
-	query := `DELETE FROM users WHERE id = ANY($1)`
+	// Soft delete: set deleted_at for multiple users
+	query := `UPDATE users SET deleted_at = NOW(), updated_at = NOW() WHERE id = ANY($1) AND deleted_at IS NULL`
 
 	result, err := r.db.Exec(ctx, query, ids)
 	if err != nil {

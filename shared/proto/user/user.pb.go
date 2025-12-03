@@ -37,6 +37,7 @@ type User struct {
 	EmailVerified   bool                   `protobuf:"varint,12,opt,name=email_verified,json=emailVerified,proto3" json:"email_verified,omitempty"`
 	EmailVerifiedAt int64                  `protobuf:"varint,13,opt,name=email_verified_at,json=emailVerifiedAt,proto3" json:"email_verified_at,omitempty"`
 	LastLoginAt     int64                  `protobuf:"varint,14,opt,name=last_login_at,json=lastLoginAt,proto3" json:"last_login_at,omitempty"`
+	DeletedAt       int64                  `protobuf:"varint,15,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"` // soft delete timestamp
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -165,6 +166,13 @@ func (x *User) GetEmailVerifiedAt() int64 {
 func (x *User) GetLastLoginAt() int64 {
 	if x != nil {
 		return x.LastLoginAt
+	}
+	return 0
+}
+
+func (x *User) GetDeletedAt() int64 {
+	if x != nil {
+		return x.DeletedAt
 	}
 	return 0
 }
@@ -1610,7 +1618,7 @@ var File_user_proto protoreflect.FileDescriptor
 const file_user_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"user.proto\x12\x04user\"\xb4\x03\n" +
+	"user.proto\x12\x04user\"\xd3\x03\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
@@ -1630,7 +1638,9 @@ const file_user_proto_rawDesc = "" +
 	"updated_at\x18\v \x01(\x03R\tupdatedAt\x12%\n" +
 	"\x0eemail_verified\x18\f \x01(\bR\remailVerified\x12*\n" +
 	"\x11email_verified_at\x18\r \x01(\x03R\x0femailVerifiedAt\x12\"\n" +
-	"\rlast_login_at\x18\x0e \x01(\x03R\vlastLoginAt\"-\n" +
+	"\rlast_login_at\x18\x0e \x01(\x03R\vlastLoginAt\x12\x1d\n" +
+	"\n" +
+	"deleted_at\x18\x0f \x01(\x03R\tdeletedAt\"-\n" +
 	"\x15GetUserByEmailRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\"l\n" +
 	"\x16GetUserByEmailResponse\x12\x18\n" +

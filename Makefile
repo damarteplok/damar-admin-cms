@@ -11,6 +11,7 @@ help:
 	@echo "  make proto                            - Generate all protobuf files"
 	@echo "  make proto-auth                       - Generate auth protobuf files"
 	@echo "  make proto-user                       - Generate user protobuf files"
+	@echo "  make proto-tenant                     - Generate tenant protobuf files"
 	@echo "  make graphql                          - Generate GraphQL resolvers and models"
 
 # Database migration variables (centralized)
@@ -110,6 +111,16 @@ proto-user:
 		--go-grpc_out=$(GO_OUT) \
 		$(PROTO_DIR)/user.proto
 	@echo "User protobuf files generated!"
+
+.PHONY: proto-tenant
+proto-tenant:
+	@echo "Generating tenant protobuf files..."
+	@protoc \
+		--proto_path=$(PROTO_DIR) \
+		--go_out=$(GO_OUT) \
+		--go-grpc_out=$(GO_OUT) \
+		$(PROTO_DIR)/tenant.proto
+	@echo "Tenant protobuf files generated!"
 
 # GraphQL generation
 .PHONY: graphql

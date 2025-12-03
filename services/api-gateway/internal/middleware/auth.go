@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -15,6 +16,24 @@ type contextKey string
 const (
 	UserContextKey contextKey = "user"
 )
+
+// GraphQL error response structure
+type graphQLError struct {
+	Message string `json:"message"`
+}
+
+type graphQLErrorResponse struct {
+	Errors []graphQLError `json:"errors"`
+}
+
+// writeGraphQLError writes a GraphQL-compatible error response
+func writeGraphQLError(w http.ResponseWriter, message string, statusCode int) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	json.NewEncoder(w).Encode(graphQLErrorResponse{
+		Errors: []graphQLError{{Message: message}},
+	})
+}
 
 // AuthMiddleware validates JWT token if present and adds user info to context.
 // If no token is provided, the request continues without authentication (for public queries).
@@ -33,7 +52,7 @@ func AuthMiddleware(authClient authPb.AuthServiceClient) func(http.Handler) http
 			// Token provided - validate format
 			parts := strings.Split(authHeader, " ")
 			if len(parts) != 2 || parts[0] != "Bearer" {
-				http.Error(w, "Invalid authorization header format", http.StatusUnauthorized)
+				writeGraphQLError(w, "Invalid authorization header format", http.StatusUnauthorized)
 				return
 			}
 
@@ -46,23 +65,24 @@ func AuthMiddleware(authClient authPb.AuthServiceClient) func(http.Handler) http
 			if err != nil {
 				if st, ok := status.FromError(err); ok {
 					if st.Code() == codes.Unauthenticated {
-						http.Error(w, "Invalid or expired token", http.StatusUnauthorized)
+						writeGraphQLError(w, "Invalid or expired token", http.StatusUnauthorized)
 						return
 					}
 				}
-				http.Error(w, "Failed to validate token", http.StatusInternalServerError)
+				writeGraphQLError(w, "Failed to validate token", http.StatusInternalServerError)
 				return
 			}
 
 			if !resp.Valid {
-				http.Error(w, "Invalid token", http.StatusUnauthorized)
+				writeGraphQLError(w, "Invalid or expired token", http.StatusUnauthorized)
 				return
 			}
 
 			// Valid token - add user to context
 			ctx := context.WithValue(r.Context(), UserContextKey, &authPb.UserData{
-				Id:    resp.UserId,
-				Email: resp.Email,
+				Id:      resp.UserId,
+				Email:   resp.Email,
+				IsAdmin: resp.IsAdmin,
 			})
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})

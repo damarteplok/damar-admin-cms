@@ -1,0 +1,258 @@
+syntax = "proto3";
+
+package tenant;
+
+option go_package = "shared/proto/tenant;tenant";
+
+service TenantService {
+  // Tenant operations
+  rpc GetTenantByID(GetTenantByIDRequest) returns (GetTenantByIDResponse) {}
+  rpc GetTenantByUUID(GetTenantByUUIDRequest) returns (GetTenantByUUIDResponse) {}
+  rpc GetTenantBySlug(GetTenantBySlugRequest) returns (GetTenantBySlugResponse) {}
+  rpc CreateTenant(CreateTenantRequest) returns (CreateTenantResponse) {}
+  rpc UpdateTenant(UpdateTenantRequest) returns (UpdateTenantResponse) {}
+  rpc DeleteTenant(DeleteTenantRequest) returns (DeleteTenantResponse) {}
+  rpc GetAllTenants(GetAllTenantsRequest) returns (GetAllTenantsResponse) {}
+  
+  // TenantUser operations
+  rpc AddUserToTenant(AddUserToTenantRequest) returns (AddUserToTenantResponse) {}
+  rpc RemoveUserFromTenant(RemoveUserFromTenantRequest) returns (RemoveUserFromTenantResponse) {}
+  rpc GetTenantUsers(GetTenantUsersRequest) returns (GetTenantUsersResponse) {}
+  rpc GetUserTenants(GetUserTenantsRequest) returns (GetUserTenantsResponse) {}
+  rpc UpdateUserRole(UpdateUserRoleRequest) returns (UpdateUserRoleResponse) {}
+  rpc SetDefaultTenant(SetDefaultTenantRequest) returns (SetDefaultTenantResponse) {}
+  
+  // TenantSetting operations
+  rpc GetSetting(GetSettingRequest) returns (GetSettingResponse) {}
+  rpc GetAllSettings(GetAllSettingsRequest) returns (GetAllSettingsResponse) {}
+  rpc SetSetting(SetSettingRequest) returns (SetSettingResponse) {}
+  rpc DeleteSetting(DeleteSettingRequest) returns (DeleteSettingResponse) {}
+}
+
+message Tenant {
+  int64 id = 1;
+  string uuid = 2;
+  string name = 3;
+  string slug = 4;
+  string domain = 5;
+  bool is_name_auto_generated = 6;
+  int64 created_by = 7;
+  int64 created_at = 8;
+  int64 updated_at = 9;
+}
+
+message TenantUser {
+  int64 id = 1;
+  int64 user_id = 2;
+  int64 tenant_id = 3;
+  string role = 4;
+  bool is_default = 5;
+  string email = 6;
+  int64 created_at = 7;
+  int64 updated_at = 8;
+}
+
+message TenantSetting {
+  int64 id = 1;
+  int64 tenant_id = 2;
+  string key = 3;
+  string value = 4;
+  int64 created_at = 5;
+  int64 updated_at = 6;
+}
+
+// Tenant operation messages
+
+message GetTenantByIDRequest {
+  int64 id = 1;
+}
+
+message GetTenantByIDResponse {
+  bool success = 1;
+  string message = 2;
+  Tenant data = 3;
+}
+
+message GetTenantByUUIDRequest {
+  string uuid = 1;
+}
+
+message GetTenantByUUIDResponse {
+  bool success = 1;
+  string message = 2;
+  Tenant data = 3;
+}
+
+message GetTenantBySlugRequest {
+  string slug = 1;
+}
+
+message GetTenantBySlugResponse {
+  bool success = 1;
+  string message = 2;
+  Tenant data = 3;
+}
+
+message CreateTenantRequest {
+  string name = 1;
+  string slug = 2;
+  string domain = 3;
+  int64 created_by = 4;
+}
+
+message CreateTenantResponse {
+  bool success = 1;
+  string message = 2;
+  Tenant data = 3;
+}
+
+message UpdateTenantRequest {
+  int64 id = 1;
+  string name = 2;
+  string domain = 3;
+}
+
+message UpdateTenantResponse {
+  bool success = 1;
+  string message = 2;
+  Tenant data = 3;
+}
+
+message DeleteTenantRequest {
+  int64 id = 1;
+}
+
+message DeleteTenantResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetAllTenantsRequest {
+  int32 page = 1;
+  int32 per_page = 2;
+}
+
+message GetAllTenantsData {
+  repeated Tenant tenants = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}
+
+message GetAllTenantsResponse {
+  bool success = 1;
+  string message = 2;
+  GetAllTenantsData data = 3;
+}
+
+// TenantUser operation messages
+
+message AddUserToTenantRequest {
+  int64 user_id = 1;
+  int64 tenant_id = 2;
+  string role = 3;
+  bool is_default = 4;
+  string email = 5;
+}
+
+message AddUserToTenantResponse {
+  bool success = 1;
+  string message = 2;
+  TenantUser data = 3;
+}
+
+message RemoveUserFromTenantRequest {
+  int64 user_id = 1;
+  int64 tenant_id = 2;
+}
+
+message RemoveUserFromTenantResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetTenantUsersRequest {
+  int64 tenant_id = 1;
+}
+
+message GetTenantUsersResponse {
+  bool success = 1;
+  string message = 2;
+  repeated TenantUser data = 3;
+}
+
+message GetUserTenantsRequest {
+  int64 user_id = 1;
+}
+
+message GetUserTenantsResponse {
+  bool success = 1;
+  string message = 2;
+  repeated TenantUser data = 3;
+}
+
+message UpdateUserRoleRequest {
+  int64 user_id = 1;
+  int64 tenant_id = 2;
+  string role = 3;
+}
+
+message UpdateUserRoleResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message SetDefaultTenantRequest {
+  int64 user_id = 1;
+  int64 tenant_id = 2;
+}
+
+message SetDefaultTenantResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// TenantSetting operation messages
+
+message GetSettingRequest {
+  int64 tenant_id = 1;
+  string key = 2;
+}
+
+message GetSettingResponse {
+  bool success = 1;
+  string message = 2;
+  TenantSetting data = 3;
+}
+
+message GetAllSettingsRequest {
+  int64 tenant_id = 1;
+}
+
+message GetAllSettingsResponse {
+  bool success = 1;
+  string message = 2;
+  repeated TenantSetting data = 3;
+}
+
+message SetSettingRequest {
+  int64 tenant_id = 1;
+  string key = 2;
+  string value = 3;
+}
+
+message SetSettingResponse {
+  bool success = 1;
+  string message = 2;
+  TenantSetting data = 3;
+}
+
+message DeleteSettingRequest {
+  int64 tenant_id = 1;
+  string key = 2;
+}
+
+message DeleteSettingResponse {
+  bool success = 1;
+  string message = 2;
+}

@@ -379,6 +379,7 @@ func domainUserToPb(user *domain.User) *pb.User {
 		LastLoginAt:     util.TimeToUnix(user.LastLoginAt),
 		CreatedAt:       util.TimeToUnix(user.CreatedAt),
 		UpdatedAt:       util.TimeToUnix(user.UpdatedAt),
+		DeletedAt:       util.TimeToUnix(user.DeletedAt),
 	}
 }
 

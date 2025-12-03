@@ -21,6 +21,7 @@ type User struct {
 	LastLoginAt     *time.Time
 	CreatedAt       *time.Time
 	UpdatedAt       *time.Time
+	DeletedAt       *time.Time
 }
 
 // UserRepository defines the interface for user data access
