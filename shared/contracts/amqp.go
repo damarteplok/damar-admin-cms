@@ -29,4 +29,23 @@ const (
 
 	// Payment commands (payment.cmd.*)
 	PaymentCmdCreateSession = "payment.cmd.create_session"
+
+	// User events (user.event.*)
+	UserEventRegistered      = "user.event.registered"
+	UserEventPasswordChanged = "user.event.password_changed"
+	UserEventEmailVerified   = "user.event.email_verified"
+	UserEventProfileUpdated  = "user.event.profile_updated"
+	UserEventBlocked         = "user.event.blocked"
+	UserEventUnblocked       = "user.event.unblocked"
+	UserEventDeleted         = "user.event.deleted"
+
+	// Auth events (auth.event.*)
+	AuthEventPasswordResetRequested = "auth.event.password_reset_requested"
+	AuthEventPasswordResetCompleted = "auth.event.password_reset_completed"
+	AuthEventVerificationRequested  = "auth.event.verification_requested"
+
+	// Notification commands (notification.cmd.*)
+	NotificationCmdSendEmail = "notification.cmd.send_email"
+	NotificationCmdSendSMS   = "notification.cmd.send_sms"
+	NotificationCmdSendPush  = "notification.cmd.send_push"
 )

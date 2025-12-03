@@ -141,25 +141,25 @@ local_resource(
 )
 
 #############################################
-# 6. Notification Service (gRPC - Port 50055)
+# 6. Notification Service (Event Consumer)
 #############################################
 
 local_resource(
     'notification-service',
     serve_cmd='cd services/notification-service && go run cmd/main.go',
     serve_dir='.',
-    env={'GRPC_PORT': '50055'},
     deps=[
         'services/notification-service/cmd',
         'services/notification-service/internal',
-        'services/notification-service/pkg',
+        'shared/amqp',
+        'shared/contracts',
     ],
-    readiness_probe=probe(
-        period_secs=3,
-        tcp_socket=tcp_socket_action(50055)
-    ),
-    labels=['backend', 'grpc', 'optional'],
-    auto_init=False,
+    labels=['backend', 'events', 'core'],
+    resource_deps=['user-service'],
+    auto_init=True,
+    links=[
+        link('http://localhost:8025', 'Mailhog Web UI'),
+    ],
 )
 
 #############################################

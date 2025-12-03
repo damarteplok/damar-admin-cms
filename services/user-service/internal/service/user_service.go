@@ -2,19 +2,28 @@ package service
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 
 	"github.com/damarteplok/damar-admin-cms/services/user-service/internal/domain"
+	"github.com/damarteplok/damar-admin-cms/shared/amqp"
+	"github.com/damarteplok/damar-admin-cms/shared/contracts"
+	"github.com/damarteplok/damar-admin-cms/shared/logger"
+	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
-	repo domain.UserRepository
+	repo      domain.UserRepository
+	publisher *amqp.Publisher
 }
 
-func NewUserService(repo domain.UserRepository) domain.UserService {
-	return &UserService{repo: repo}
+func NewUserService(repo domain.UserRepository, publisher *amqp.Publisher) domain.UserService {
+	return &UserService{
+		repo:      repo,
+		publisher: publisher,
+	}
 }
 
 func (s *UserService) GetUserByID(ctx context.Context, id int64) (*domain.User, error) {
@@ -43,7 +52,38 @@ func (s *UserService) CreateUser(ctx context.Context, user *domain.User) (*domai
 	}
 	user.PasswordHash = string(hashedPassword)
 
-	return s.repo.Create(ctx, user)
+	// Create user in database
+	createdUser, err := s.repo.Create(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+
+	// Publish user.registered event to RabbitMQ
+	if s.publisher != nil {
+		eventData := map[string]interface{}{
+			"user_id": createdUser.ID,
+			"name":    createdUser.Name,
+			"email":   createdUser.Email,
+		}
+		dataBytes, _ := json.Marshal(eventData)
+		message := contracts.AmqpMessage{
+			OwnerID: fmt.Sprintf("%d", createdUser.ID),
+			Data:    dataBytes,
+		}
+
+		if err := s.publisher.Publish(ctx, contracts.UserEventRegistered, message); err != nil {
+			// Log error but don't fail the user creation
+			logger.Error("Failed to publish user.registered event",
+				zap.Int64("user_id", createdUser.ID),
+				zap.Error(err))
+		} else {
+			logger.Info("Published user.registered event",
+				zap.Int64("user_id", createdUser.ID),
+				zap.String("email", createdUser.Email))
+		}
+	}
+
+	return createdUser, nil
 }
 
 func (s *UserService) UpdateUser(ctx context.Context, user *domain.User) (*domain.User, error) {

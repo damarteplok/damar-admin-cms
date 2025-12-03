@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -12,28 +11,42 @@ import (
 	"github.com/damarteplok/damar-admin-cms/services/api-gateway/graph"
 	"github.com/damarteplok/damar-admin-cms/services/api-gateway/internal/middleware"
 	"github.com/damarteplok/damar-admin-cms/shared/env"
+	"github.com/damarteplok/damar-admin-cms/shared/logger"
 	authPb "github.com/damarteplok/damar-admin-cms/shared/proto/auth"
 	userPb "github.com/damarteplok/damar-admin-cms/shared/proto/user"
 	"github.com/vektah/gqlparser/v2/ast"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
+	// Initialize logger
+	environment := env.GetString("ENVIRONMENT", "development")
+	if err := logger.Initialize(environment); err != nil {
+		panic("Failed to initialize logger: " + err.Error())
+	}
+	defer logger.Sync()
+
 	port := env.GetString("PORT", "8080")
+
+	logger.Info("Starting API Gateway",
+		zap.String("port", port),
+		zap.String("environment", environment),
+	)
 
 	authAddr := env.GetString("AUTH_SERVICE_ADDR", "localhost:50052")
 	userAddr := env.GetString("USER_SERVICE_ADDR", "localhost:50051")
 
 	authConn, err := grpc.NewClient(authAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Failed to connect to auth service: %v", err)
+		logger.Fatal("Failed to connect to auth service", zap.Error(err))
 	}
 	defer authConn.Close()
 
 	userConn, err := grpc.NewClient(userAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Failed to connect to user service: %v", err)
+		logger.Fatal("Failed to connect to user service", zap.Error(err))
 	}
 	defer userConn.Close()
 
@@ -65,17 +78,20 @@ func main() {
 	http.Handle("/graphql", playground.Handler("GraphQL Playground", "/query"))
 	http.Handle("/query", authMiddleware(srv))
 
-	log.Println("╔═══════════════════════════════════════════════════════════╗")
-	log.Println("║                                                           ║")
-	log.Println("║       🚀 GraphQL API Gateway is running! 🚀               ║")
-	log.Println("║                                                           ║")
-	log.Println("╚═══════════════════════════════════════════════════════════╝")
-	log.Printf("📍 GraphQL Playground: http://localhost:%s/", port)
-	log.Printf("📍 Alternative URLs:")
-	log.Printf("   - http://localhost:%s/playground", port)
-	log.Printf("   - http://localhost:%s/graphql", port)
-	log.Printf("🔗 GraphQL Endpoint: http://localhost:%s/query", port)
-	log.Println("════════════════════════════════════════════════════════════")
+	logger.Info("╔═══════════════════════════════════════════════════════════╗")
+	logger.Info("║                                                           ║")
+	logger.Info("║       🚀 GraphQL API Gateway is running! 🚀               ║")
+	logger.Info("║                                                           ║")
+	logger.Info("╚═══════════════════════════════════════════════════════════╝")
+	logger.Info("GraphQL Playground URLs",
+		zap.String("main", "http://localhost:"+port+"/"),
+		zap.String("playground", "http://localhost:"+port+"/playground"),
+		zap.String("graphql", "http://localhost:"+port+"/graphql"),
+		zap.String("endpoint", "http://localhost:"+port+"/query"),
+	)
 
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	logger.Info("Starting HTTP server", zap.String("port", port))
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
+		logger.Fatal("HTTP server failed", zap.Error(err))
+	}
 }
