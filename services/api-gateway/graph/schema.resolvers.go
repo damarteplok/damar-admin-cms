@@ -127,17 +127,17 @@ func (r *mutationResolver) RefreshToken(ctx context.Context, input model.Refresh
 // ChangePassword is the resolver for the changePassword field.
 func (r *mutationResolver) ChangePassword(ctx context.Context, input model.ChangePasswordInput) (*model.ChangePasswordResponse, error) {
 	// Get authenticated user from context
-	currentUser, ok := middleware.GetUserFromContext(ctx)
-	if !ok || !currentUser.IsValid {
+	currentUser, err := middleware.GetUserFromContext(ctx)
+	if err != nil {
 		return &model.ChangePasswordResponse{
 			Success: false,
-			Message: "Unauthorized: Please login first",
+			Message: err.Error(),
 		}, nil
 	}
 
 	// Call auth-service via gRPC
 	resp, err := r.AuthClient.ChangePassword(ctx, &authPb.ChangePasswordRequest{
-		UserId:      currentUser.UserID,
+		UserId:      currentUser.Id,
 		OldPassword: input.OldPassword,
 		NewPassword: input.NewPassword,
 	})
@@ -243,17 +243,17 @@ func (r *mutationResolver) VerifyEmail(ctx context.Context, token string) (*mode
 // ResendVerificationEmail is the resolver for the resendVerificationEmail field.
 func (r *mutationResolver) ResendVerificationEmail(ctx context.Context) (*model.VerifyEmailResponse, error) {
 	// Get authenticated user from context
-	currentUser, ok := middleware.GetUserFromContext(ctx)
-	if !ok || !currentUser.IsValid {
+	currentUser, err := middleware.GetUserFromContext(ctx)
+	if err != nil {
 		return &model.VerifyEmailResponse{
 			Success: false,
-			Message: "Unauthorized: Please login first",
+			Message: err.Error(),
 		}, nil
 	}
 
 	// Get user email from user-service
 	userResp, err := r.UserClient.GetUserByID(ctx, &userPb.GetUserByIDRequest{
-		Id: currentUser.UserID,
+		Id: currentUser.Id,
 	})
 	if err != nil || !userResp.Success {
 		return &model.VerifyEmailResponse{
@@ -264,7 +264,7 @@ func (r *mutationResolver) ResendVerificationEmail(ctx context.Context) (*model.
 
 	// Call auth-service via gRPC
 	resp, err := r.AuthClient.SendVerificationEmail(ctx, &authPb.SendVerificationEmailRequest{
-		UserId: currentUser.UserID,
+		UserId: currentUser.Id,
 		Email:  userResp.Data.Email,
 	})
 	if err != nil {
@@ -362,11 +362,11 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUse
 // UpdateUser is the resolver for the updateUser field.
 func (r *mutationResolver) UpdateUser(ctx context.Context, input model.UpdateUserInput) (*model.UserResponse, error) {
 	// Get authenticated user from context
-	currentUser, ok := middleware.GetUserFromContext(ctx)
-	if !ok || !currentUser.IsValid {
+	currentUser, err := middleware.GetUserFromContext(ctx)
+	if err != nil {
 		return &model.UserResponse{
 			Success: false,
-			Message: "Unauthorized: Please login first",
+			Message: err.Error(),
 		}, nil
 	}
 
@@ -380,7 +380,7 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, input model.UpdateUse
 
 	// Get current user full info to check if admin
 	currentUserResp, err := r.UserClient.GetUserByID(ctx, &userPb.GetUserByIDRequest{
-		Id: currentUser.UserID,
+		Id: currentUser.Id,
 	})
 	if err != nil || !currentUserResp.Success {
 		return &model.UserResponse{
@@ -390,7 +390,7 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, input model.UpdateUse
 	}
 
 	// Authorization check: owner OR admin
-	isOwner := currentUser.UserID == targetUserID
+	isOwner := currentUser.Id == targetUserID
 	isAdmin := currentUserResp.Data.IsAdmin
 
 	if !isOwner && !isAdmin {
@@ -477,11 +477,11 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, input model.UpdateUse
 // DeleteUser is the resolver for the deleteUser field.
 func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.DeleteUserResponse, error) {
 	// Get authenticated user from context
-	currentUser, ok := middleware.GetUserFromContext(ctx)
-	if !ok || !currentUser.IsValid {
+	currentUser, err := middleware.GetUserFromContext(ctx)
+	if err != nil {
 		return &model.DeleteUserResponse{
 			Success: false,
-			Message: "Unauthorized: Please login first",
+			Message: err.Error(),
 		}, nil
 	}
 
@@ -495,7 +495,7 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.De
 
 	// Get current user full info to check if admin
 	currentUserResp, err := r.UserClient.GetUserByID(ctx, &userPb.GetUserByIDRequest{
-		Id: currentUser.UserID,
+		Id: currentUser.Id,
 	})
 	if err != nil || !currentUserResp.Success {
 		return &model.DeleteUserResponse{
@@ -505,7 +505,7 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.De
 	}
 
 	// Authorization check: admin only OR own account
-	isOwner := currentUser.UserID == targetUserID
+	isOwner := currentUser.Id == targetUserID
 	isAdmin := currentUserResp.Data.IsAdmin
 
 	if !isOwner && !isAdmin {
@@ -542,18 +542,18 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.De
 // BulkDeleteUsers is the resolver for the bulkDeleteUsers field.
 func (r *mutationResolver) BulkDeleteUsers(ctx context.Context, ids []string) (*model.BulkOperationResponse, error) {
 	// Get authenticated user from context
-	currentUser, ok := middleware.GetUserFromContext(ctx)
-	if !ok || !currentUser.IsValid {
+	currentUser, err := middleware.GetUserFromContext(ctx)
+	if err != nil {
 		return &model.BulkOperationResponse{
 			Success:       false,
-			Message:       "Unauthorized: Please login first",
+			Message:       err.Error(),
 			AffectedCount: 0,
 		}, nil
 	}
 
 	// Get current user full info to check if admin
 	currentUserResp, err := r.UserClient.GetUserByID(ctx, &userPb.GetUserByIDRequest{
-		Id: currentUser.UserID,
+		Id: currentUser.Id,
 	})
 	if err != nil || !currentUserResp.Success {
 		return &model.BulkOperationResponse{
@@ -616,18 +616,18 @@ func (r *mutationResolver) BulkDeleteUsers(ctx context.Context, ids []string) (*
 // BulkBlockUsers is the resolver for the bulkBlockUsers field.
 func (r *mutationResolver) BulkBlockUsers(ctx context.Context, ids []string, isBlocked bool) (*model.BulkOperationResponse, error) {
 	// Get authenticated user from context
-	currentUser, ok := middleware.GetUserFromContext(ctx)
-	if !ok || !currentUser.IsValid {
+	currentUser, err := middleware.GetUserFromContext(ctx)
+	if err != nil {
 		return &model.BulkOperationResponse{
 			Success:       false,
-			Message:       "Unauthorized: Please login first",
+			Message:       err.Error(),
 			AffectedCount: 0,
 		}, nil
 	}
 
 	// Get current user full info to check if admin
 	currentUserResp, err := r.UserClient.GetUserByID(ctx, &userPb.GetUserByIDRequest{
-		Id: currentUser.UserID,
+		Id: currentUser.Id,
 	})
 	if err != nil || !currentUserResp.Success {
 		return &model.BulkOperationResponse{
@@ -867,17 +867,17 @@ func (r *queryResolver) SearchUsers(ctx context.Context, query string, page *int
 // Me is the resolver for the me field.
 func (r *queryResolver) Me(ctx context.Context) (*model.UserResponse, error) {
 	// Get authenticated user from context
-	currentUser, ok := middleware.GetUserFromContext(ctx)
-	if !ok || !currentUser.IsValid {
+	currentUser, err := middleware.GetUserFromContext(ctx)
+	if err != nil {
 		return &model.UserResponse{
 			Success: false,
-			Message: "Unauthorized: Please login first",
+			Message: err.Error(),
 		}, nil
 	}
 
 	// Get user details from user-service
 	resp, err := r.UserClient.GetUserByID(ctx, &userPb.GetUserByIDRequest{
-		Id: currentUser.UserID,
+		Id: currentUser.Id,
 	})
 	if err != nil {
 		return &model.UserResponse{
