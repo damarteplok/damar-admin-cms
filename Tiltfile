@@ -114,7 +114,7 @@ local_resource(
         http_get=http_get_action(8080, '/'),
     ),
     labels=['frontend', 'gateway', 'core'],
-    resource_deps=['auth-service', 'user-service', 'tenant-service'],
+    resource_deps=['auth-service', 'user-service', 'tenant-service', 'product-service'],
     links=[
         link('http://localhost:8080', 'GraphQL Playground'),
         link('http://localhost:8080/query', 'GraphQL API'),
@@ -134,13 +134,16 @@ local_resource(
         'services/product-service/cmd',
         'services/product-service/internal',
         'services/product-service/pkg',
+        'shared/proto/product',
     ],
     readiness_probe=probe(
         period_secs=3,
         tcp_socket=tcp_socket_action(50054)
     ),
-    labels=['backend', 'grpc', 'optional'],
-    auto_init=False,
+    labels=['backend', 'grpc', 'core'],
+    links=[
+        link('http://localhost:50054', 'gRPC Endpoint'),
+    ],
 )
 
 #############################################
@@ -240,10 +243,10 @@ print("""
    - user-service      : gRPC Port 50051
    - auth-service      : gRPC Port 50052
    - tenant-service    : gRPC Port 50053
+   - product-service   : gRPC Port 50054
    - api-gateway       : HTTP Port 8080 (GraphQL Playground)
 
 🔧 Optional Services (manual start via Tilt UI):
-   - product-service      : gRPC Port 50054
    - billing-service      : gRPC Port 50055
    - media-service        : gRPC Port 50056
 

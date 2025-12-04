@@ -4,6 +4,7 @@ package graph
 
 import (
 	authPb "github.com/damarteplok/damar-admin-cms/shared/proto/auth"
+	productPb "github.com/damarteplok/damar-admin-cms/shared/proto/product"
 	tenantPb "github.com/damarteplok/damar-admin-cms/shared/proto/tenant"
 	userPb "github.com/damarteplok/damar-admin-cms/shared/proto/user"
 )
@@ -14,7 +15,8 @@ import (
 // here.
 
 type Resolver struct {
-	AuthClient   authPb.AuthServiceClient
-	UserClient   userPb.UserServiceClient
-	TenantClient tenantPb.TenantServiceClient
+	AuthClient    authPb.AuthServiceClient
+	UserClient    userPb.UserServiceClient
+	TenantClient  tenantPb.TenantServiceClient
+	ProductClient productPb.ProductServiceClient
 }

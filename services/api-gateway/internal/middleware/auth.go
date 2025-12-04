@@ -118,3 +118,16 @@ func GetUserIDFromContext(ctx context.Context) (int64, error) {
 	}
 	return user.Id, nil
 }
+
+// RequireAdmin checks if the authenticated user is an admin.
+// Returns error if user is not authenticated or not an admin.
+func RequireAdmin(ctx context.Context) error {
+	user, err := GetUserFromContext(ctx)
+	if err != nil {
+		return err
+	}
+	if !user.IsAdmin {
+		return status.Error(codes.PermissionDenied, "Admin access required")
+	}
+	return nil
+}

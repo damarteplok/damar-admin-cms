@@ -13,6 +13,7 @@ import (
 	"github.com/damarteplok/damar-admin-cms/services/api-gateway/graph/model"
 	"github.com/damarteplok/damar-admin-cms/services/api-gateway/internal/middleware"
 	authPb "github.com/damarteplok/damar-admin-cms/shared/proto/auth"
+	productPb "github.com/damarteplok/damar-admin-cms/shared/proto/product"
 	tenantPb "github.com/damarteplok/damar-admin-cms/shared/proto/tenant"
 	userPb "github.com/damarteplok/damar-admin-cms/shared/proto/user"
 	"github.com/damarteplok/damar-admin-cms/shared/util"
@@ -1155,6 +1156,190 @@ func (r *mutationResolver) DeleteTenantSetting(ctx context.Context, tenantID str
 	}, nil
 }
 
+// CreateProduct is the resolver for the createProduct field.
+func (r *mutationResolver) CreateProduct(ctx context.Context, input model.CreateProductInput) (*model.ProductResponse, error) {
+	// Admin only
+	if err := middleware.RequireAdmin(ctx); err != nil {
+		return &model.ProductResponse{
+			Success: false,
+			Message: "Admin access required",
+		}, nil
+	}
+
+	// Prepare request with optional fields
+	req := &productPb.CreateProductRequest{
+		Name: input.Name,
+	}
+	if input.Slug != nil {
+		req.Slug = *input.Slug
+	}
+	if input.Description != nil {
+		req.Description = *input.Description
+	}
+	if input.Metadata != nil {
+		req.Metadata = *input.Metadata
+	}
+	if input.Features != nil {
+		req.Features = *input.Features
+	}
+	if input.IsPopular != nil {
+		req.IsPopular = *input.IsPopular
+	}
+	if input.IsDefault != nil {
+		req.IsDefault = *input.IsDefault
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.CreateProduct(ctx, req)
+	if err != nil {
+		return &model.ProductResponse{
+			Success: false,
+			Message: fmt.Sprintf("Create product failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.ProductResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	// Convert proto product to GraphQL model
+	product := resp.Data
+	return &model.ProductResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Product{
+			ID:          strconv.FormatInt(product.Id, 10),
+			Name:        product.Name,
+			Slug:        product.Slug,
+			Description: &product.Description,
+			Metadata:    &product.Metadata,
+			Features:    &product.Features,
+			IsPopular:   product.IsPopular,
+			IsDefault:   product.IsDefault,
+			CreatedAt:   int32(product.CreatedAt),
+			UpdatedAt:   int32(product.UpdatedAt),
+		},
+	}, nil
+}
+
+// UpdateProduct is the resolver for the updateProduct field.
+func (r *mutationResolver) UpdateProduct(ctx context.Context, input model.UpdateProductInput) (*model.ProductResponse, error) {
+	// Admin only
+	if err := middleware.RequireAdmin(ctx); err != nil {
+		return &model.ProductResponse{
+			Success: false,
+			Message: "Admin access required",
+		}, nil
+	}
+
+	// Parse product ID
+	productID, err := strconv.ParseInt(input.ID, 10, 64)
+	if err != nil {
+		return &model.ProductResponse{
+			Success: false,
+			Message: "Invalid product ID",
+		}, nil
+	}
+
+	// Prepare request
+	req := &productPb.UpdateProductRequest{
+		Id:   productID,
+		Name: input.Name,
+	}
+	if input.Slug != nil {
+		req.Slug = *input.Slug
+	}
+	if input.Description != nil {
+		req.Description = *input.Description
+	}
+	if input.Metadata != nil {
+		req.Metadata = *input.Metadata
+	}
+	if input.Features != nil {
+		req.Features = *input.Features
+	}
+	if input.IsPopular != nil {
+		req.IsPopular = *input.IsPopular
+	}
+	if input.IsDefault != nil {
+		req.IsDefault = *input.IsDefault
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.UpdateProduct(ctx, req)
+	if err != nil {
+		return &model.ProductResponse{
+			Success: false,
+			Message: fmt.Sprintf("Update product failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.ProductResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	// Convert proto product to GraphQL model
+	product := resp.Data
+	return &model.ProductResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Product{
+			ID:          strconv.FormatInt(product.Id, 10),
+			Name:        product.Name,
+			Slug:        product.Slug,
+			Description: &product.Description,
+			Metadata:    &product.Metadata,
+			Features:    &product.Features,
+			IsPopular:   product.IsPopular,
+			IsDefault:   product.IsDefault,
+			CreatedAt:   int32(product.CreatedAt),
+			UpdatedAt:   int32(product.UpdatedAt),
+		},
+	}, nil
+}
+
+// DeleteProduct is the resolver for the deleteProduct field.
+func (r *mutationResolver) DeleteProduct(ctx context.Context, id string) (*model.DeleteProductResponse, error) {
+	// Admin only
+	if err := middleware.RequireAdmin(ctx); err != nil {
+		return &model.DeleteProductResponse{
+			Success: false,
+			Message: "Admin access required",
+		}, nil
+	}
+
+	// Parse product ID
+	productID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.DeleteProductResponse{
+			Success: false,
+			Message: "Invalid product ID",
+		}, nil
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.DeleteProduct(ctx, &productPb.DeleteProductRequest{
+		Id: productID,
+	})
+	if err != nil {
+		return &model.DeleteProductResponse{
+			Success: false,
+			Message: fmt.Sprintf("Delete product failed: %v", err),
+		}, nil
+	}
+
+	return &model.DeleteProductResponse{
+		Success: resp.Success,
+		Message: resp.Message,
+	}, nil
+}
+
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.UserResponse, error) {
 	userID, err := strconv.ParseInt(id, 10, 64)
@@ -1797,6 +1982,152 @@ func (r *queryResolver) TenantSettings(ctx context.Context, tenantID string) (*m
 		Success: true,
 		Message: "Tenant settings retrieved successfully",
 		Data:    settings,
+	}, nil
+}
+
+// Product is the resolver for the product field.
+func (r *queryResolver) Product(ctx context.Context, id string) (*model.ProductResponse, error) {
+	productID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.ProductResponse{
+			Success: false,
+			Message: "Invalid product ID",
+		}, nil
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.GetProductByID(ctx, &productPb.GetProductByIDRequest{
+		Id: productID,
+	})
+	if err != nil {
+		return &model.ProductResponse{
+			Success: false,
+			Message: fmt.Sprintf("Get product failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.ProductResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	product := resp.Data
+	return &model.ProductResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Product{
+			ID:          strconv.FormatInt(product.Id, 10),
+			Name:        product.Name,
+			Slug:        product.Slug,
+			Description: &product.Description,
+			Metadata:    &product.Metadata,
+			Features:    &product.Features,
+			IsPopular:   product.IsPopular,
+			IsDefault:   product.IsDefault,
+			CreatedAt:   int32(product.CreatedAt),
+			UpdatedAt:   int32(product.UpdatedAt),
+		},
+	}, nil
+}
+
+// ProductBySlug is the resolver for the productBySlug field.
+func (r *queryResolver) ProductBySlug(ctx context.Context, slug string) (*model.ProductResponse, error) {
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.GetProductBySlug(ctx, &productPb.GetProductBySlugRequest{
+		Slug: slug,
+	})
+	if err != nil {
+		return &model.ProductResponse{
+			Success: false,
+			Message: fmt.Sprintf("Get product failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.ProductResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	product := resp.Data
+	return &model.ProductResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Product{
+			ID:          strconv.FormatInt(product.Id, 10),
+			Name:        product.Name,
+			Slug:        product.Slug,
+			Description: &product.Description,
+			Metadata:    &product.Metadata,
+			Features:    &product.Features,
+			IsPopular:   product.IsPopular,
+			IsDefault:   product.IsDefault,
+			CreatedAt:   int32(product.CreatedAt),
+			UpdatedAt:   int32(product.UpdatedAt),
+		},
+	}, nil
+}
+
+// Products is the resolver for the products field.
+func (r *queryResolver) Products(ctx context.Context, page *int32, perPage *int32) (*model.ProductListResponse, error) {
+	// Set default pagination
+	pageNum := int32(1)
+	pageSize := int32(10)
+	if page != nil && *page > 0 {
+		pageNum = *page
+	}
+	if perPage != nil && *perPage > 0 {
+		pageSize = *perPage
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.GetAllProducts(ctx, &productPb.GetAllProductsRequest{
+		Page:    pageNum,
+		PerPage: pageSize,
+	})
+	if err != nil {
+		return &model.ProductListResponse{
+			Success: false,
+			Message: fmt.Sprintf("Get products failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.ProductListResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	// Convert products
+	products := make([]*model.Product, len(resp.Data.Products))
+	for i, p := range resp.Data.Products {
+		products[i] = &model.Product{
+			ID:          strconv.FormatInt(p.Id, 10),
+			Name:        p.Name,
+			Slug:        p.Slug,
+			Description: &p.Description,
+			Metadata:    &p.Metadata,
+			Features:    &p.Features,
+			IsPopular:   p.IsPopular,
+			IsDefault:   p.IsDefault,
+			CreatedAt:   int32(p.CreatedAt),
+			UpdatedAt:   int32(p.UpdatedAt),
+		}
+	}
+
+	return &model.ProductListResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.ProductList{
+			Products: products,
+			Total:    resp.Data.Total,
+			Page:     resp.Data.Page,
+			PerPage:  resp.Data.PerPage,
+		},
 	}, nil
 }
 

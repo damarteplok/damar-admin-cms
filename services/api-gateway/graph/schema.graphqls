@@ -15,6 +15,20 @@ type User {
   updatedAt: Int
 }
 
+# Product type
+type Product {
+  id: ID!
+  name: String!
+  slug: String!
+  description: String
+  metadata: String
+  features: String
+  isPopular: Boolean!
+  isDefault: Boolean!
+  createdAt: Int!
+  updatedAt: Int!
+}
+
 # Tenant type
 type Tenant {
   id: ID!
@@ -65,6 +79,14 @@ type RefreshTokenData {
 # User list response
 type UserList {
   users: [User!]!
+  total: Int!
+  page: Int!
+  perPage: Int!
+}
+
+# Product list response
+type ProductList {
+  products: [Product!]!
   total: Int!
   page: Int!
   perPage: Int!
@@ -195,6 +217,23 @@ type DeleteSettingResponse {
   message: String!
 }
 
+type ProductResponse {
+  success: Boolean!
+  message: String!
+  data: Product
+}
+
+type ProductListResponse {
+  success: Boolean!
+  message: String!
+  data: ProductList
+}
+
+type DeleteProductResponse {
+  success: Boolean!
+  message: String!
+}
+
 # Input types
 input LoginInput {
   email: String!
@@ -272,6 +311,27 @@ input SetSettingInput {
   value: String!
 }
 
+input CreateProductInput {
+  name: String!
+  slug: String
+  description: String
+  metadata: String
+  features: String
+  isPopular: Boolean
+  isDefault: Boolean
+}
+
+input UpdateProductInput {
+  id: ID!
+  name: String!
+  slug: String
+  description: String
+  metadata: String
+  features: String
+  isPopular: Boolean
+  isDefault: Boolean
+}
+
 # Queries
 type Query {
   # Get user by ID
@@ -299,6 +359,11 @@ type Query {
   # Tenant settings queries
   tenantSetting(tenantId: ID!, key: String!): TenantSettingResponse!
   tenantSettings(tenantId: ID!): TenantSettingsResponse!
+
+  # Product queries
+  product(id: ID!): ProductResponse!
+  productBySlug(slug: String!): ProductResponse!
+  products(page: Int, perPage: Int): ProductListResponse!
 }
 
 # Mutations
@@ -334,4 +399,9 @@ type Mutation {
   # Tenant settings mutations
   setTenantSetting(input: SetSettingInput!): TenantSettingResponse!
   deleteTenantSetting(tenantId: ID!, key: String!): DeleteSettingResponse!
+
+  # Product mutations (admin only)
+  createProduct(input: CreateProductInput!): ProductResponse!
+  updateProduct(input: UpdateProductInput!): ProductResponse!
+  deleteProduct(id: ID!): DeleteProductResponse!
 }

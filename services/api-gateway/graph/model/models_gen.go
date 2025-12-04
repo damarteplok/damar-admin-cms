@@ -25,6 +25,16 @@ type ChangePasswordResponse struct {
 	Message string `json:"message"`
 }
 
+type CreateProductInput struct {
+	Name        string  `json:"name"`
+	Slug        *string `json:"slug,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Metadata    *string `json:"metadata,omitempty"`
+	Features    *string `json:"features,omitempty"`
+	IsPopular   *bool   `json:"isPopular,omitempty"`
+	IsDefault   *bool   `json:"isDefault,omitempty"`
+}
+
 type CreateTenantInput struct {
 	Name   string  `json:"name"`
 	Slug   *string `json:"slug,omitempty"`
@@ -39,6 +49,11 @@ type CreateUserInput struct {
 	PhoneNumber *string `json:"phoneNumber,omitempty"`
 	Position    *string `json:"position,omitempty"`
 	IsAdmin     *bool   `json:"isAdmin,omitempty"`
+}
+
+type DeleteProductResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
 }
 
 type DeleteSettingResponse struct {
@@ -84,6 +99,38 @@ type LogoutResponse struct {
 }
 
 type Mutation struct {
+}
+
+type Product struct {
+	ID          string  `json:"id"`
+	Name        string  `json:"name"`
+	Slug        string  `json:"slug"`
+	Description *string `json:"description,omitempty"`
+	Metadata    *string `json:"metadata,omitempty"`
+	Features    *string `json:"features,omitempty"`
+	IsPopular   bool    `json:"isPopular"`
+	IsDefault   bool    `json:"isDefault"`
+	CreatedAt   int32   `json:"createdAt"`
+	UpdatedAt   int32   `json:"updatedAt"`
+}
+
+type ProductList struct {
+	Products []*Product `json:"products"`
+	Total    int32      `json:"total"`
+	Page     int32      `json:"page"`
+	PerPage  int32      `json:"perPage"`
+}
+
+type ProductListResponse struct {
+	Success bool         `json:"success"`
+	Message string       `json:"message"`
+	Data    *ProductList `json:"data,omitempty"`
+}
+
+type ProductResponse struct {
+	Success bool     `json:"success"`
+	Message string   `json:"message"`
+	Data    *Product `json:"data,omitempty"`
 }
 
 type Query struct {
@@ -203,6 +250,17 @@ type TenantUsersResponse struct {
 	Success bool          `json:"success"`
 	Message string        `json:"message"`
 	Data    []*TenantUser `json:"data,omitempty"`
+}
+
+type UpdateProductInput struct {
+	ID          string  `json:"id"`
+	Name        string  `json:"name"`
+	Slug        *string `json:"slug,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Metadata    *string `json:"metadata,omitempty"`
+	Features    *string `json:"features,omitempty"`
+	IsPopular   *bool   `json:"isPopular,omitempty"`
+	IsDefault   *bool   `json:"isDefault,omitempty"`
 }
 
 type UpdateTenantInput struct {
