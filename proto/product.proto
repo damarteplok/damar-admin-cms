@@ -442,20 +442,20 @@ message DeletePlanMeterResponse {
 message Discount {
   int64 id = 1;
   string name = 2;
-  string description = 3;
+  optional string description = 3;
   string type = 4; // percentage, fixed
   double amount = 5;
-  int64 valid_until = 6;
+  optional int64 valid_until = 6;
   bool is_active = 7;
-  string action_type = 8; // add_subscription_time, reduce_price
-  int32 max_redemptions = 9;
-  int32 max_redemptions_per_user = 10;
+  optional string action_type = 8; // add_subscription_time, reduce_price
+  optional int32 max_redemptions = 9;
+  optional int32 max_redemptions_per_user = 10;
   int32 redemptions = 11;
   bool is_recurring = 12;
-  int32 duration_in_months = 13;
-  int32 maximum_recurring_intervals = 14;
-  int32 redeem_type = 15; // 1=normal, 2=special (mapped from smallint)
-  int32 bonus_days = 16;
+  optional int32 duration_in_months = 13;
+  optional int32 maximum_recurring_intervals = 14;
+  optional int32 redeem_type = 15; // 1=normal, 2=special (mapped from smallint)
+  optional int32 bonus_days = 16;
   bool is_enabled_for_all_plans = 17;
   bool is_enabled_for_all_one_time_products = 18;
   int64 created_at = 19;
@@ -484,19 +484,19 @@ message GetDiscountByCodeResponse {
 
 message CreateDiscountRequest {
   string name = 1;
-  string description = 2;
+  optional string description = 2;
   string type = 3;
   double amount = 4;
-  int64 valid_until = 5;
+  optional int64 valid_until = 5;
   bool is_active = 6;
-  string action_type = 7;
-  int32 max_redemptions = 8;
-  int32 max_redemptions_per_user = 9;
+  optional string action_type = 7;
+  optional int32 max_redemptions = 8;
+  optional int32 max_redemptions_per_user = 9;
   bool is_recurring = 10;
-  int32 duration_in_months = 11;
-  int32 maximum_recurring_intervals = 12;
-  int32 redeem_type = 13;
-  int32 bonus_days = 14;
+  optional int32 duration_in_months = 11;
+  optional int32 maximum_recurring_intervals = 12;
+  optional int32 redeem_type = 13;
+  optional int32 bonus_days = 14;
   bool is_enabled_for_all_plans = 15;
   bool is_enabled_for_all_one_time_products = 16;
 }
@@ -510,19 +510,19 @@ message CreateDiscountResponse {
 message UpdateDiscountRequest {
   int64 id = 1;
   string name = 2;
-  string description = 3;
+  optional string description = 3;
   string type = 4;
   double amount = 5;
-  int64 valid_until = 6;
+  optional int64 valid_until = 6;
   bool is_active = 7;
-  string action_type = 8;
-  int32 max_redemptions = 9;
-  int32 max_redemptions_per_user = 10;
+  optional string action_type = 8;
+  optional int32 max_redemptions = 9;
+  optional int32 max_redemptions_per_user = 10;
   bool is_recurring = 11;
-  int32 duration_in_months = 12;
-  int32 maximum_recurring_intervals = 13;
-  int32 redeem_type = 14;
-  int32 bonus_days = 15;
+  optional int32 duration_in_months = 12;
+  optional int32 maximum_recurring_intervals = 13;
+  optional int32 redeem_type = 14;
+  optional int32 bonus_days = 15;
   bool is_enabled_for_all_plans = 16;
   bool is_enabled_for_all_one_time_products = 17;
 }

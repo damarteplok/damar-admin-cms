@@ -1630,6 +1630,350 @@ func (r *mutationResolver) DeletePlan(ctx context.Context, id string) (*model.De
 	}, nil
 }
 
+// CreateDiscount is the resolver for the createDiscount field.
+func (r *mutationResolver) CreateDiscount(ctx context.Context, input model.CreateDiscountInput) (*model.DiscountResponse, error) {
+	// Admin only
+	if err := middleware.RequireAdmin(ctx); err != nil {
+		return &model.DiscountResponse{
+			Success: false,
+			Message: "Admin access required",
+		}, nil
+	}
+
+	// Prepare request
+	req := &productPb.CreateDiscountRequest{
+		Name:        input.Name,
+		Type:        input.Type,
+		Amount:      input.Amount,
+		IsActive:    input.IsActive,
+		IsRecurring: input.IsRecurring,
+	}
+
+	// Handle optional fields
+	if input.Description != nil {
+		req.Description = input.Description
+	}
+	if input.ValidUntil != nil {
+		validUntil := int64(*input.ValidUntil)
+		req.ValidUntil = &validUntil
+	}
+	if input.ActionType != nil {
+		req.ActionType = input.ActionType
+	}
+	if input.MaxRedemptions != nil {
+		maxRedemptions := int32(*input.MaxRedemptions)
+		req.MaxRedemptions = &maxRedemptions
+	}
+	if input.MaxRedemptionsPerUser != nil {
+		maxRedemptionsPerUser := int32(*input.MaxRedemptionsPerUser)
+		req.MaxRedemptionsPerUser = &maxRedemptionsPerUser
+	}
+	if input.DurationInMonths != nil {
+		durationInMonths := int32(*input.DurationInMonths)
+		req.DurationInMonths = &durationInMonths
+	}
+	if input.MaximumRecurringIntervals != nil {
+		maximumRecurringIntervals := int32(*input.MaximumRecurringIntervals)
+		req.MaximumRecurringIntervals = &maximumRecurringIntervals
+	}
+	if input.RedeemType != nil {
+		redeemType := int32(*input.RedeemType)
+		req.RedeemType = &redeemType
+	}
+	if input.BonusDays != nil {
+		bonusDays := int32(*input.BonusDays)
+		req.BonusDays = &bonusDays
+	}
+	if input.IsEnabledForAllPlans != nil {
+		req.IsEnabledForAllPlans = *input.IsEnabledForAllPlans
+	}
+	if input.IsEnabledForAllOneTimeProducts != nil {
+		req.IsEnabledForAllOneTimeProducts = *input.IsEnabledForAllOneTimeProducts
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.CreateDiscount(ctx, req)
+	if err != nil {
+		return &model.DiscountResponse{
+			Success: false,
+			Message: fmt.Sprintf("Create discount failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.DiscountResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	// Convert proto discount to GraphQL model
+	discount := resp.Data
+	return &model.DiscountResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Discount{
+			ID:          strconv.FormatInt(discount.Id, 10),
+			Name:        discount.Name,
+			Description: discount.Description,
+			Type:        discount.Type,
+			Amount:      discount.Amount,
+			ValidUntil: func() *int32 {
+				if discount.ValidUntil != nil {
+					v := int32(*discount.ValidUntil)
+					return &v
+				}
+				return nil
+			}(),
+			IsActive:   discount.IsActive,
+			ActionType: discount.ActionType,
+			MaxRedemptions: func() *int32 {
+				if discount.MaxRedemptions != nil {
+					v := int32(*discount.MaxRedemptions)
+					return &v
+				}
+				return nil
+			}(),
+			MaxRedemptionsPerUser: func() *int32 {
+				if discount.MaxRedemptionsPerUser != nil {
+					v := int32(*discount.MaxRedemptionsPerUser)
+					return &v
+				}
+				return nil
+			}(),
+			Redemptions: int32(discount.Redemptions),
+			IsRecurring: discount.IsRecurring,
+			DurationInMonths: func() *int32 {
+				if discount.DurationInMonths != nil {
+					v := int32(*discount.DurationInMonths)
+					return &v
+				}
+				return nil
+			}(),
+			MaximumRecurringIntervals: func() *int32 {
+				if discount.MaximumRecurringIntervals != nil {
+					v := int32(*discount.MaximumRecurringIntervals)
+					return &v
+				}
+				return nil
+			}(),
+			RedeemType: func() *int32 {
+				if discount.RedeemType != nil {
+					v := int32(*discount.RedeemType)
+					return &v
+				}
+				return nil
+			}(),
+			BonusDays: func() *int32 {
+				if discount.BonusDays != nil {
+					v := int32(*discount.BonusDays)
+					return &v
+				}
+				return nil
+			}(),
+			IsEnabledForAllPlans:           discount.IsEnabledForAllPlans,
+			IsEnabledForAllOneTimeProducts: discount.IsEnabledForAllOneTimeProducts,
+			CreatedAt:                      int32(discount.CreatedAt),
+			UpdatedAt:                      int32(discount.UpdatedAt),
+		},
+	}, nil
+}
+
+// UpdateDiscount is the resolver for the updateDiscount field.
+func (r *mutationResolver) UpdateDiscount(ctx context.Context, input model.UpdateDiscountInput) (*model.DiscountResponse, error) {
+	// Admin only
+	if err := middleware.RequireAdmin(ctx); err != nil {
+		return &model.DiscountResponse{
+			Success: false,
+			Message: "Admin access required",
+		}, nil
+	}
+
+	// Parse ID
+	discountID, err := strconv.ParseInt(input.ID, 10, 64)
+	if err != nil {
+		return &model.DiscountResponse{
+			Success: false,
+			Message: "Invalid discount ID",
+		}, nil
+	}
+
+	// Prepare request
+	req := &productPb.UpdateDiscountRequest{
+		Id:          discountID,
+		Name:        input.Name,
+		Type:        input.Type,
+		Amount:      input.Amount,
+		IsActive:    input.IsActive,
+		IsRecurring: input.IsRecurring,
+	}
+
+	// Handle optional fields
+	if input.Description != nil {
+		req.Description = input.Description
+	}
+	if input.ValidUntil != nil {
+		validUntil := int64(*input.ValidUntil)
+		req.ValidUntil = &validUntil
+	}
+	if input.ActionType != nil {
+		req.ActionType = input.ActionType
+	}
+	if input.MaxRedemptions != nil {
+		maxRedemptions := int32(*input.MaxRedemptions)
+		req.MaxRedemptions = &maxRedemptions
+	}
+	if input.MaxRedemptionsPerUser != nil {
+		maxRedemptionsPerUser := int32(*input.MaxRedemptionsPerUser)
+		req.MaxRedemptionsPerUser = &maxRedemptionsPerUser
+	}
+	if input.DurationInMonths != nil {
+		durationInMonths := int32(*input.DurationInMonths)
+		req.DurationInMonths = &durationInMonths
+	}
+	if input.MaximumRecurringIntervals != nil {
+		maximumRecurringIntervals := int32(*input.MaximumRecurringIntervals)
+		req.MaximumRecurringIntervals = &maximumRecurringIntervals
+	}
+	if input.RedeemType != nil {
+		redeemType := int32(*input.RedeemType)
+		req.RedeemType = &redeemType
+	}
+	if input.BonusDays != nil {
+		bonusDays := int32(*input.BonusDays)
+		req.BonusDays = &bonusDays
+	}
+	if input.IsEnabledForAllPlans != nil {
+		req.IsEnabledForAllPlans = *input.IsEnabledForAllPlans
+	}
+	if input.IsEnabledForAllOneTimeProducts != nil {
+		req.IsEnabledForAllOneTimeProducts = *input.IsEnabledForAllOneTimeProducts
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.UpdateDiscount(ctx, req)
+	if err != nil {
+		return &model.DiscountResponse{
+			Success: false,
+			Message: fmt.Sprintf("Update discount failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.DiscountResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	// Convert proto discount to GraphQL model
+	discount := resp.Data
+	return &model.DiscountResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Discount{
+			ID:          strconv.FormatInt(discount.Id, 10),
+			Name:        discount.Name,
+			Description: discount.Description,
+			Type:        discount.Type,
+			Amount:      discount.Amount,
+			ValidUntil: func() *int32 {
+				if discount.ValidUntil != nil {
+					v := int32(*discount.ValidUntil)
+					return &v
+				}
+				return nil
+			}(),
+			IsActive:   discount.IsActive,
+			ActionType: discount.ActionType,
+			MaxRedemptions: func() *int32 {
+				if discount.MaxRedemptions != nil {
+					v := int32(*discount.MaxRedemptions)
+					return &v
+				}
+				return nil
+			}(),
+			MaxRedemptionsPerUser: func() *int32 {
+				if discount.MaxRedemptionsPerUser != nil {
+					v := int32(*discount.MaxRedemptionsPerUser)
+					return &v
+				}
+				return nil
+			}(),
+			Redemptions: int32(discount.Redemptions),
+			IsRecurring: discount.IsRecurring,
+			DurationInMonths: func() *int32 {
+				if discount.DurationInMonths != nil {
+					v := int32(*discount.DurationInMonths)
+					return &v
+				}
+				return nil
+			}(),
+			MaximumRecurringIntervals: func() *int32 {
+				if discount.MaximumRecurringIntervals != nil {
+					v := int32(*discount.MaximumRecurringIntervals)
+					return &v
+				}
+				return nil
+			}(),
+			RedeemType: func() *int32 {
+				if discount.RedeemType != nil {
+					v := int32(*discount.RedeemType)
+					return &v
+				}
+				return nil
+			}(),
+			BonusDays: func() *int32 {
+				if discount.BonusDays != nil {
+					v := int32(*discount.BonusDays)
+					return &v
+				}
+				return nil
+			}(),
+			IsEnabledForAllPlans:           discount.IsEnabledForAllPlans,
+			IsEnabledForAllOneTimeProducts: discount.IsEnabledForAllOneTimeProducts,
+			CreatedAt:                      int32(discount.CreatedAt),
+			UpdatedAt:                      int32(discount.UpdatedAt),
+		},
+	}, nil
+}
+
+// DeleteDiscount is the resolver for the deleteDiscount field.
+func (r *mutationResolver) DeleteDiscount(ctx context.Context, id string) (*model.DeleteDiscountResponse, error) {
+	// Admin only
+	if err := middleware.RequireAdmin(ctx); err != nil {
+		return &model.DeleteDiscountResponse{
+			Success: false,
+			Message: "Admin access required",
+		}, nil
+	}
+
+	// Parse ID
+	discountID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.DeleteDiscountResponse{
+			Success: false,
+			Message: "Invalid discount ID",
+		}, nil
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.DeleteDiscount(ctx, &productPb.DeleteDiscountRequest{
+		Id: discountID,
+	})
+	if err != nil {
+		return &model.DeleteDiscountResponse{
+			Success: false,
+			Message: fmt.Sprintf("Delete discount failed: %v", err),
+		}, nil
+	}
+
+	return &model.DeleteDiscountResponse{
+		Success: resp.Success,
+		Message: resp.Message,
+	}, nil
+}
+
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.UserResponse, error) {
 	userID, err := strconv.ParseInt(id, 10, 64)
@@ -2701,6 +3045,224 @@ func (r *queryResolver) PlansByProduct(ctx context.Context, productID string) (*
 		Success: true,
 		Message: resp.Message,
 		Data:    plans,
+	}, nil
+}
+
+// Discount is the resolver for the discount field.
+func (r *queryResolver) Discount(ctx context.Context, id string) (*model.DiscountResponse, error) {
+	// Parse ID
+	discountID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.DiscountResponse{
+			Success: false,
+			Message: "Invalid discount ID",
+		}, nil
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.GetDiscountByID(ctx, &productPb.GetDiscountByIDRequest{
+		Id: discountID,
+	})
+	if err != nil {
+		return &model.DiscountResponse{
+			Success: false,
+			Message: fmt.Sprintf("Get discount failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.DiscountResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	// Convert proto discount to GraphQL model
+	discount := resp.Data
+	return &model.DiscountResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Discount{
+			ID:          strconv.FormatInt(discount.Id, 10),
+			Name:        discount.Name,
+			Description: discount.Description,
+			Type:        discount.Type,
+			Amount:      discount.Amount,
+			ValidUntil: func() *int32 {
+				if discount.ValidUntil != nil {
+					v := int32(*discount.ValidUntil)
+					return &v
+				}
+				return nil
+			}(),
+			IsActive:   discount.IsActive,
+			ActionType: discount.ActionType,
+			MaxRedemptions: func() *int32 {
+				if discount.MaxRedemptions != nil {
+					v := int32(*discount.MaxRedemptions)
+					return &v
+				}
+				return nil
+			}(),
+			MaxRedemptionsPerUser: func() *int32 {
+				if discount.MaxRedemptionsPerUser != nil {
+					v := int32(*discount.MaxRedemptionsPerUser)
+					return &v
+				}
+				return nil
+			}(),
+			Redemptions: int32(discount.Redemptions),
+			IsRecurring: discount.IsRecurring,
+			DurationInMonths: func() *int32 {
+				if discount.DurationInMonths != nil {
+					v := int32(*discount.DurationInMonths)
+					return &v
+				}
+				return nil
+			}(),
+			MaximumRecurringIntervals: func() *int32 {
+				if discount.MaximumRecurringIntervals != nil {
+					v := int32(*discount.MaximumRecurringIntervals)
+					return &v
+				}
+				return nil
+			}(),
+			RedeemType: func() *int32 {
+				if discount.RedeemType != nil {
+					v := int32(*discount.RedeemType)
+					return &v
+				}
+				return nil
+			}(),
+			BonusDays: func() *int32 {
+				if discount.BonusDays != nil {
+					v := int32(*discount.BonusDays)
+					return &v
+				}
+				return nil
+			}(),
+			IsEnabledForAllPlans:           discount.IsEnabledForAllPlans,
+			IsEnabledForAllOneTimeProducts: discount.IsEnabledForAllOneTimeProducts,
+			CreatedAt:                      int32(discount.CreatedAt),
+			UpdatedAt:                      int32(discount.UpdatedAt),
+		},
+	}, nil
+}
+
+// Discounts is the resolver for the discounts field.
+func (r *queryResolver) Discounts(ctx context.Context, page *int32, perPage *int32, activeOnly *bool) (*model.DiscountListResponse, error) {
+	// Set defaults
+	p := int32(1)
+	if page != nil {
+		p = *page
+	}
+	pp := int32(10)
+	if perPage != nil {
+		pp = *perPage
+	}
+	ao := false
+	if activeOnly != nil {
+		ao = *activeOnly
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.GetAllDiscounts(ctx, &productPb.GetAllDiscountsRequest{
+		Page:       p,
+		PerPage:    pp,
+		ActiveOnly: ao,
+	})
+	if err != nil {
+		return &model.DiscountListResponse{
+			Success: false,
+			Message: fmt.Sprintf("Get discounts failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.DiscountListResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	// Convert proto discounts to GraphQL models
+	discounts := make([]*model.Discount, len(resp.Data.Discounts))
+	for i, d := range resp.Data.Discounts {
+		discounts[i] = &model.Discount{
+			ID:          strconv.FormatInt(d.Id, 10),
+			Name:        d.Name,
+			Description: d.Description,
+			Type:        d.Type,
+			Amount:      d.Amount,
+			ValidUntil: func() *int32 {
+				if d.ValidUntil != nil {
+					v := int32(*d.ValidUntil)
+					return &v
+				}
+				return nil
+			}(),
+			IsActive:   d.IsActive,
+			ActionType: d.ActionType,
+			MaxRedemptions: func() *int32 {
+				if d.MaxRedemptions != nil {
+					v := int32(*d.MaxRedemptions)
+					return &v
+				}
+				return nil
+			}(),
+			MaxRedemptionsPerUser: func() *int32 {
+				if d.MaxRedemptionsPerUser != nil {
+					v := int32(*d.MaxRedemptionsPerUser)
+					return &v
+				}
+				return nil
+			}(),
+			Redemptions: int32(d.Redemptions),
+			IsRecurring: d.IsRecurring,
+			DurationInMonths: func() *int32 {
+				if d.DurationInMonths != nil {
+					v := int32(*d.DurationInMonths)
+					return &v
+				}
+				return nil
+			}(),
+			MaximumRecurringIntervals: func() *int32 {
+				if d.MaximumRecurringIntervals != nil {
+					v := int32(*d.MaximumRecurringIntervals)
+					return &v
+				}
+				return nil
+			}(),
+			RedeemType: func() *int32 {
+				if d.RedeemType != nil {
+					v := int32(*d.RedeemType)
+					return &v
+				}
+				return nil
+			}(),
+			BonusDays: func() *int32 {
+				if d.BonusDays != nil {
+					v := int32(*d.BonusDays)
+					return &v
+				}
+				return nil
+			}(),
+			IsEnabledForAllPlans:           d.IsEnabledForAllPlans,
+			IsEnabledForAllOneTimeProducts: d.IsEnabledForAllOneTimeProducts,
+			CreatedAt:                      int32(d.CreatedAt),
+			UpdatedAt:                      int32(d.UpdatedAt),
+		}
+	}
+
+	return &model.DiscountListResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.DiscountList{
+			Discounts: discounts,
+			Total:     int32(resp.Data.Total),
+			Page:      resp.Data.Page,
+			PerPage:   resp.Data.PerPage,
+		},
 	}, nil
 }
 

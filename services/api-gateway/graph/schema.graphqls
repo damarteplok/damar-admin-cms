@@ -286,6 +286,55 @@ type DeletePlanResponse {
   message: String!
 }
 
+# Discount type
+type Discount {
+  id: ID!
+  name: String!
+  description: String
+  type: String!
+  amount: Float!
+  validUntil: Int
+  isActive: Boolean!
+  actionType: String
+  maxRedemptions: Int
+  maxRedemptionsPerUser: Int
+  redemptions: Int!
+  isRecurring: Boolean!
+  durationInMonths: Int
+  maximumRecurringIntervals: Int
+  redeemType: Int
+  bonusDays: Int
+  isEnabledForAllPlans: Boolean!
+  isEnabledForAllOneTimeProducts: Boolean!
+  createdAt: Int!
+  updatedAt: Int!
+}
+
+# Discount list response
+type DiscountList {
+  discounts: [Discount!]!
+  total: Int!
+  page: Int!
+  perPage: Int!
+}
+
+type DiscountResponse {
+  success: Boolean!
+  message: String!
+  data: Discount
+}
+
+type DiscountListResponse {
+  success: Boolean!
+  message: String!
+  data: DiscountList
+}
+
+type DeleteDiscountResponse {
+  success: Boolean!
+  message: String!
+}
+
 # Input types
 input LoginInput {
   email: String!
@@ -418,6 +467,45 @@ input UpdatePlanInput {
   isVisible: Boolean
 }
 
+input CreateDiscountInput {
+  name: String!
+  description: String
+  type: String!
+  amount: Float!
+  validUntil: Int
+  isActive: Boolean!
+  actionType: String
+  maxRedemptions: Int
+  maxRedemptionsPerUser: Int
+  isRecurring: Boolean!
+  durationInMonths: Int
+  maximumRecurringIntervals: Int
+  redeemType: Int
+  bonusDays: Int
+  isEnabledForAllPlans: Boolean
+  isEnabledForAllOneTimeProducts: Boolean
+}
+
+input UpdateDiscountInput {
+  id: ID!
+  name: String!
+  description: String
+  type: String!
+  amount: Float!
+  validUntil: Int
+  isActive: Boolean!
+  actionType: String
+  maxRedemptions: Int
+  maxRedemptionsPerUser: Int
+  isRecurring: Boolean!
+  durationInMonths: Int
+  maximumRecurringIntervals: Int
+  redeemType: Int
+  bonusDays: Int
+  isEnabledForAllPlans: Boolean
+  isEnabledForAllOneTimeProducts: Boolean
+}
+
 # Queries
 type Query {
   # Get user by ID
@@ -461,6 +549,10 @@ type Query {
     visibleOnly: Boolean
   ): PlanListResponse!
   plansByProduct(productId: ID!): PlansResponse!
+
+  # Discount queries
+  discount(id: ID!): DiscountResponse!
+  discounts(page: Int, perPage: Int, activeOnly: Boolean): DiscountListResponse!
 }
 
 # Mutations
@@ -506,4 +598,9 @@ type Mutation {
   createPlan(input: CreatePlanInput!): PlanResponse!
   updatePlan(input: UpdatePlanInput!): PlanResponse!
   deletePlan(id: ID!): DeletePlanResponse!
+
+  # Discount mutations (admin only)
+  createDiscount(input: CreateDiscountInput!): DiscountResponse!
+  updateDiscount(input: UpdateDiscountInput!): DiscountResponse!
+  deleteDiscount(id: ID!): DeleteDiscountResponse!
 }

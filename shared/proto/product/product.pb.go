@@ -3485,20 +3485,20 @@ type Discount struct {
 	state                          protoimpl.MessageState `protogen:"open.v1"`
 	Id                             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name                           string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Description                    string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Description                    *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	Type                           string                 `protobuf:"bytes,4,opt,name=type,proto3" json:"type,omitempty"` // percentage, fixed
 	Amount                         float64                `protobuf:"fixed64,5,opt,name=amount,proto3" json:"amount,omitempty"`
-	ValidUntil                     int64                  `protobuf:"varint,6,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`
+	ValidUntil                     *int64                 `protobuf:"varint,6,opt,name=valid_until,json=validUntil,proto3,oneof" json:"valid_until,omitempty"`
 	IsActive                       bool                   `protobuf:"varint,7,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
-	ActionType                     string                 `protobuf:"bytes,8,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"` // add_subscription_time, reduce_price
-	MaxRedemptions                 int32                  `protobuf:"varint,9,opt,name=max_redemptions,json=maxRedemptions,proto3" json:"max_redemptions,omitempty"`
-	MaxRedemptionsPerUser          int32                  `protobuf:"varint,10,opt,name=max_redemptions_per_user,json=maxRedemptionsPerUser,proto3" json:"max_redemptions_per_user,omitempty"`
+	ActionType                     *string                `protobuf:"bytes,8,opt,name=action_type,json=actionType,proto3,oneof" json:"action_type,omitempty"` // add_subscription_time, reduce_price
+	MaxRedemptions                 *int32                 `protobuf:"varint,9,opt,name=max_redemptions,json=maxRedemptions,proto3,oneof" json:"max_redemptions,omitempty"`
+	MaxRedemptionsPerUser          *int32                 `protobuf:"varint,10,opt,name=max_redemptions_per_user,json=maxRedemptionsPerUser,proto3,oneof" json:"max_redemptions_per_user,omitempty"`
 	Redemptions                    int32                  `protobuf:"varint,11,opt,name=redemptions,proto3" json:"redemptions,omitempty"`
 	IsRecurring                    bool                   `protobuf:"varint,12,opt,name=is_recurring,json=isRecurring,proto3" json:"is_recurring,omitempty"`
-	DurationInMonths               int32                  `protobuf:"varint,13,opt,name=duration_in_months,json=durationInMonths,proto3" json:"duration_in_months,omitempty"`
-	MaximumRecurringIntervals      int32                  `protobuf:"varint,14,opt,name=maximum_recurring_intervals,json=maximumRecurringIntervals,proto3" json:"maximum_recurring_intervals,omitempty"`
-	RedeemType                     int32                  `protobuf:"varint,15,opt,name=redeem_type,json=redeemType,proto3" json:"redeem_type,omitempty"` // 1=normal, 2=special (mapped from smallint)
-	BonusDays                      int32                  `protobuf:"varint,16,opt,name=bonus_days,json=bonusDays,proto3" json:"bonus_days,omitempty"`
+	DurationInMonths               *int32                 `protobuf:"varint,13,opt,name=duration_in_months,json=durationInMonths,proto3,oneof" json:"duration_in_months,omitempty"`
+	MaximumRecurringIntervals      *int32                 `protobuf:"varint,14,opt,name=maximum_recurring_intervals,json=maximumRecurringIntervals,proto3,oneof" json:"maximum_recurring_intervals,omitempty"`
+	RedeemType                     *int32                 `protobuf:"varint,15,opt,name=redeem_type,json=redeemType,proto3,oneof" json:"redeem_type,omitempty"` // 1=normal, 2=special (mapped from smallint)
+	BonusDays                      *int32                 `protobuf:"varint,16,opt,name=bonus_days,json=bonusDays,proto3,oneof" json:"bonus_days,omitempty"`
 	IsEnabledForAllPlans           bool                   `protobuf:"varint,17,opt,name=is_enabled_for_all_plans,json=isEnabledForAllPlans,proto3" json:"is_enabled_for_all_plans,omitempty"`
 	IsEnabledForAllOneTimeProducts bool                   `protobuf:"varint,18,opt,name=is_enabled_for_all_one_time_products,json=isEnabledForAllOneTimeProducts,proto3" json:"is_enabled_for_all_one_time_products,omitempty"`
 	CreatedAt                      int64                  `protobuf:"varint,19,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
@@ -3552,8 +3552,8 @@ func (x *Discount) GetName() string {
 }
 
 func (x *Discount) GetDescription() string {
-	if x != nil {
-		return x.Description
+	if x != nil && x.Description != nil {
+		return *x.Description
 	}
 	return ""
 }
@@ -3573,8 +3573,8 @@ func (x *Discount) GetAmount() float64 {
 }
 
 func (x *Discount) GetValidUntil() int64 {
-	if x != nil {
-		return x.ValidUntil
+	if x != nil && x.ValidUntil != nil {
+		return *x.ValidUntil
 	}
 	return 0
 }
@@ -3587,22 +3587,22 @@ func (x *Discount) GetIsActive() bool {
 }
 
 func (x *Discount) GetActionType() string {
-	if x != nil {
-		return x.ActionType
+	if x != nil && x.ActionType != nil {
+		return *x.ActionType
 	}
 	return ""
 }
 
 func (x *Discount) GetMaxRedemptions() int32 {
-	if x != nil {
-		return x.MaxRedemptions
+	if x != nil && x.MaxRedemptions != nil {
+		return *x.MaxRedemptions
 	}
 	return 0
 }
 
 func (x *Discount) GetMaxRedemptionsPerUser() int32 {
-	if x != nil {
-		return x.MaxRedemptionsPerUser
+	if x != nil && x.MaxRedemptionsPerUser != nil {
+		return *x.MaxRedemptionsPerUser
 	}
 	return 0
 }
@@ -3622,29 +3622,29 @@ func (x *Discount) GetIsRecurring() bool {
 }
 
 func (x *Discount) GetDurationInMonths() int32 {
-	if x != nil {
-		return x.DurationInMonths
+	if x != nil && x.DurationInMonths != nil {
+		return *x.DurationInMonths
 	}
 	return 0
 }
 
 func (x *Discount) GetMaximumRecurringIntervals() int32 {
-	if x != nil {
-		return x.MaximumRecurringIntervals
+	if x != nil && x.MaximumRecurringIntervals != nil {
+		return *x.MaximumRecurringIntervals
 	}
 	return 0
 }
 
 func (x *Discount) GetRedeemType() int32 {
-	if x != nil {
-		return x.RedeemType
+	if x != nil && x.RedeemType != nil {
+		return *x.RedeemType
 	}
 	return 0
 }
 
 func (x *Discount) GetBonusDays() int32 {
-	if x != nil {
-		return x.BonusDays
+	if x != nil && x.BonusDays != nil {
+		return *x.BonusDays
 	}
 	return 0
 }
@@ -3888,19 +3888,19 @@ func (x *GetDiscountByCodeResponse) GetData() *Discount {
 type CreateDiscountRequest struct {
 	state                          protoimpl.MessageState `protogen:"open.v1"`
 	Name                           string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Description                    string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	Description                    *string                `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	Type                           string                 `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
 	Amount                         float64                `protobuf:"fixed64,4,opt,name=amount,proto3" json:"amount,omitempty"`
-	ValidUntil                     int64                  `protobuf:"varint,5,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`
+	ValidUntil                     *int64                 `protobuf:"varint,5,opt,name=valid_until,json=validUntil,proto3,oneof" json:"valid_until,omitempty"`
 	IsActive                       bool                   `protobuf:"varint,6,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
-	ActionType                     string                 `protobuf:"bytes,7,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"`
-	MaxRedemptions                 int32                  `protobuf:"varint,8,opt,name=max_redemptions,json=maxRedemptions,proto3" json:"max_redemptions,omitempty"`
-	MaxRedemptionsPerUser          int32                  `protobuf:"varint,9,opt,name=max_redemptions_per_user,json=maxRedemptionsPerUser,proto3" json:"max_redemptions_per_user,omitempty"`
+	ActionType                     *string                `protobuf:"bytes,7,opt,name=action_type,json=actionType,proto3,oneof" json:"action_type,omitempty"`
+	MaxRedemptions                 *int32                 `protobuf:"varint,8,opt,name=max_redemptions,json=maxRedemptions,proto3,oneof" json:"max_redemptions,omitempty"`
+	MaxRedemptionsPerUser          *int32                 `protobuf:"varint,9,opt,name=max_redemptions_per_user,json=maxRedemptionsPerUser,proto3,oneof" json:"max_redemptions_per_user,omitempty"`
 	IsRecurring                    bool                   `protobuf:"varint,10,opt,name=is_recurring,json=isRecurring,proto3" json:"is_recurring,omitempty"`
-	DurationInMonths               int32                  `protobuf:"varint,11,opt,name=duration_in_months,json=durationInMonths,proto3" json:"duration_in_months,omitempty"`
-	MaximumRecurringIntervals      int32                  `protobuf:"varint,12,opt,name=maximum_recurring_intervals,json=maximumRecurringIntervals,proto3" json:"maximum_recurring_intervals,omitempty"`
-	RedeemType                     int32                  `protobuf:"varint,13,opt,name=redeem_type,json=redeemType,proto3" json:"redeem_type,omitempty"`
-	BonusDays                      int32                  `protobuf:"varint,14,opt,name=bonus_days,json=bonusDays,proto3" json:"bonus_days,omitempty"`
+	DurationInMonths               *int32                 `protobuf:"varint,11,opt,name=duration_in_months,json=durationInMonths,proto3,oneof" json:"duration_in_months,omitempty"`
+	MaximumRecurringIntervals      *int32                 `protobuf:"varint,12,opt,name=maximum_recurring_intervals,json=maximumRecurringIntervals,proto3,oneof" json:"maximum_recurring_intervals,omitempty"`
+	RedeemType                     *int32                 `protobuf:"varint,13,opt,name=redeem_type,json=redeemType,proto3,oneof" json:"redeem_type,omitempty"`
+	BonusDays                      *int32                 `protobuf:"varint,14,opt,name=bonus_days,json=bonusDays,proto3,oneof" json:"bonus_days,omitempty"`
 	IsEnabledForAllPlans           bool                   `protobuf:"varint,15,opt,name=is_enabled_for_all_plans,json=isEnabledForAllPlans,proto3" json:"is_enabled_for_all_plans,omitempty"`
 	IsEnabledForAllOneTimeProducts bool                   `protobuf:"varint,16,opt,name=is_enabled_for_all_one_time_products,json=isEnabledForAllOneTimeProducts,proto3" json:"is_enabled_for_all_one_time_products,omitempty"`
 	unknownFields                  protoimpl.UnknownFields
@@ -3945,8 +3945,8 @@ func (x *CreateDiscountRequest) GetName() string {
 }
 
 func (x *CreateDiscountRequest) GetDescription() string {
-	if x != nil {
-		return x.Description
+	if x != nil && x.Description != nil {
+		return *x.Description
 	}
 	return ""
 }
@@ -3966,8 +3966,8 @@ func (x *CreateDiscountRequest) GetAmount() float64 {
 }
 
 func (x *CreateDiscountRequest) GetValidUntil() int64 {
-	if x != nil {
-		return x.ValidUntil
+	if x != nil && x.ValidUntil != nil {
+		return *x.ValidUntil
 	}
 	return 0
 }
@@ -3980,22 +3980,22 @@ func (x *CreateDiscountRequest) GetIsActive() bool {
 }
 
 func (x *CreateDiscountRequest) GetActionType() string {
-	if x != nil {
-		return x.ActionType
+	if x != nil && x.ActionType != nil {
+		return *x.ActionType
 	}
 	return ""
 }
 
 func (x *CreateDiscountRequest) GetMaxRedemptions() int32 {
-	if x != nil {
-		return x.MaxRedemptions
+	if x != nil && x.MaxRedemptions != nil {
+		return *x.MaxRedemptions
 	}
 	return 0
 }
 
 func (x *CreateDiscountRequest) GetMaxRedemptionsPerUser() int32 {
-	if x != nil {
-		return x.MaxRedemptionsPerUser
+	if x != nil && x.MaxRedemptionsPerUser != nil {
+		return *x.MaxRedemptionsPerUser
 	}
 	return 0
 }
@@ -4008,29 +4008,29 @@ func (x *CreateDiscountRequest) GetIsRecurring() bool {
 }
 
 func (x *CreateDiscountRequest) GetDurationInMonths() int32 {
-	if x != nil {
-		return x.DurationInMonths
+	if x != nil && x.DurationInMonths != nil {
+		return *x.DurationInMonths
 	}
 	return 0
 }
 
 func (x *CreateDiscountRequest) GetMaximumRecurringIntervals() int32 {
-	if x != nil {
-		return x.MaximumRecurringIntervals
+	if x != nil && x.MaximumRecurringIntervals != nil {
+		return *x.MaximumRecurringIntervals
 	}
 	return 0
 }
 
 func (x *CreateDiscountRequest) GetRedeemType() int32 {
-	if x != nil {
-		return x.RedeemType
+	if x != nil && x.RedeemType != nil {
+		return *x.RedeemType
 	}
 	return 0
 }
 
 func (x *CreateDiscountRequest) GetBonusDays() int32 {
-	if x != nil {
-		return x.BonusDays
+	if x != nil && x.BonusDays != nil {
+		return *x.BonusDays
 	}
 	return 0
 }
@@ -4113,19 +4113,19 @@ type UpdateDiscountRequest struct {
 	state                          protoimpl.MessageState `protogen:"open.v1"`
 	Id                             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name                           string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Description                    string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Description                    *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	Type                           string                 `protobuf:"bytes,4,opt,name=type,proto3" json:"type,omitempty"`
 	Amount                         float64                `protobuf:"fixed64,5,opt,name=amount,proto3" json:"amount,omitempty"`
-	ValidUntil                     int64                  `protobuf:"varint,6,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`
+	ValidUntil                     *int64                 `protobuf:"varint,6,opt,name=valid_until,json=validUntil,proto3,oneof" json:"valid_until,omitempty"`
 	IsActive                       bool                   `protobuf:"varint,7,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
-	ActionType                     string                 `protobuf:"bytes,8,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"`
-	MaxRedemptions                 int32                  `protobuf:"varint,9,opt,name=max_redemptions,json=maxRedemptions,proto3" json:"max_redemptions,omitempty"`
-	MaxRedemptionsPerUser          int32                  `protobuf:"varint,10,opt,name=max_redemptions_per_user,json=maxRedemptionsPerUser,proto3" json:"max_redemptions_per_user,omitempty"`
+	ActionType                     *string                `protobuf:"bytes,8,opt,name=action_type,json=actionType,proto3,oneof" json:"action_type,omitempty"`
+	MaxRedemptions                 *int32                 `protobuf:"varint,9,opt,name=max_redemptions,json=maxRedemptions,proto3,oneof" json:"max_redemptions,omitempty"`
+	MaxRedemptionsPerUser          *int32                 `protobuf:"varint,10,opt,name=max_redemptions_per_user,json=maxRedemptionsPerUser,proto3,oneof" json:"max_redemptions_per_user,omitempty"`
 	IsRecurring                    bool                   `protobuf:"varint,11,opt,name=is_recurring,json=isRecurring,proto3" json:"is_recurring,omitempty"`
-	DurationInMonths               int32                  `protobuf:"varint,12,opt,name=duration_in_months,json=durationInMonths,proto3" json:"duration_in_months,omitempty"`
-	MaximumRecurringIntervals      int32                  `protobuf:"varint,13,opt,name=maximum_recurring_intervals,json=maximumRecurringIntervals,proto3" json:"maximum_recurring_intervals,omitempty"`
-	RedeemType                     int32                  `protobuf:"varint,14,opt,name=redeem_type,json=redeemType,proto3" json:"redeem_type,omitempty"`
-	BonusDays                      int32                  `protobuf:"varint,15,opt,name=bonus_days,json=bonusDays,proto3" json:"bonus_days,omitempty"`
+	DurationInMonths               *int32                 `protobuf:"varint,12,opt,name=duration_in_months,json=durationInMonths,proto3,oneof" json:"duration_in_months,omitempty"`
+	MaximumRecurringIntervals      *int32                 `protobuf:"varint,13,opt,name=maximum_recurring_intervals,json=maximumRecurringIntervals,proto3,oneof" json:"maximum_recurring_intervals,omitempty"`
+	RedeemType                     *int32                 `protobuf:"varint,14,opt,name=redeem_type,json=redeemType,proto3,oneof" json:"redeem_type,omitempty"`
+	BonusDays                      *int32                 `protobuf:"varint,15,opt,name=bonus_days,json=bonusDays,proto3,oneof" json:"bonus_days,omitempty"`
 	IsEnabledForAllPlans           bool                   `protobuf:"varint,16,opt,name=is_enabled_for_all_plans,json=isEnabledForAllPlans,proto3" json:"is_enabled_for_all_plans,omitempty"`
 	IsEnabledForAllOneTimeProducts bool                   `protobuf:"varint,17,opt,name=is_enabled_for_all_one_time_products,json=isEnabledForAllOneTimeProducts,proto3" json:"is_enabled_for_all_one_time_products,omitempty"`
 	unknownFields                  protoimpl.UnknownFields
@@ -4177,8 +4177,8 @@ func (x *UpdateDiscountRequest) GetName() string {
 }
 
 func (x *UpdateDiscountRequest) GetDescription() string {
-	if x != nil {
-		return x.Description
+	if x != nil && x.Description != nil {
+		return *x.Description
 	}
 	return ""
 }
@@ -4198,8 +4198,8 @@ func (x *UpdateDiscountRequest) GetAmount() float64 {
 }
 
 func (x *UpdateDiscountRequest) GetValidUntil() int64 {
-	if x != nil {
-		return x.ValidUntil
+	if x != nil && x.ValidUntil != nil {
+		return *x.ValidUntil
 	}
 	return 0
 }
@@ -4212,22 +4212,22 @@ func (x *UpdateDiscountRequest) GetIsActive() bool {
 }
 
 func (x *UpdateDiscountRequest) GetActionType() string {
-	if x != nil {
-		return x.ActionType
+	if x != nil && x.ActionType != nil {
+		return *x.ActionType
 	}
 	return ""
 }
 
 func (x *UpdateDiscountRequest) GetMaxRedemptions() int32 {
-	if x != nil {
-		return x.MaxRedemptions
+	if x != nil && x.MaxRedemptions != nil {
+		return *x.MaxRedemptions
 	}
 	return 0
 }
 
 func (x *UpdateDiscountRequest) GetMaxRedemptionsPerUser() int32 {
-	if x != nil {
-		return x.MaxRedemptionsPerUser
+	if x != nil && x.MaxRedemptionsPerUser != nil {
+		return *x.MaxRedemptionsPerUser
 	}
 	return 0
 }
@@ -4240,29 +4240,29 @@ func (x *UpdateDiscountRequest) GetIsRecurring() bool {
 }
 
 func (x *UpdateDiscountRequest) GetDurationInMonths() int32 {
-	if x != nil {
-		return x.DurationInMonths
+	if x != nil && x.DurationInMonths != nil {
+		return *x.DurationInMonths
 	}
 	return 0
 }
 
 func (x *UpdateDiscountRequest) GetMaximumRecurringIntervals() int32 {
-	if x != nil {
-		return x.MaximumRecurringIntervals
+	if x != nil && x.MaximumRecurringIntervals != nil {
+		return *x.MaximumRecurringIntervals
 	}
 	return 0
 }
 
 func (x *UpdateDiscountRequest) GetRedeemType() int32 {
-	if x != nil {
-		return x.RedeemType
+	if x != nil && x.RedeemType != nil {
+		return *x.RedeemType
 	}
 	return 0
 }
 
 func (x *UpdateDiscountRequest) GetBonusDays() int32 {
-	if x != nil {
-		return x.BonusDays
+	if x != nil && x.BonusDays != nil {
+		return *x.BonusDays
 	}
 	return 0
 }
@@ -7564,35 +7564,44 @@ const file_product_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"M\n" +
 	"\x17DeletePlanMeterResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"\xf4\x05\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\xd8\a\n" +
 	"\bDiscount\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12%\n" +
+	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x12\x12\n" +
 	"\x04type\x18\x04 \x01(\tR\x04type\x12\x16\n" +
-	"\x06amount\x18\x05 \x01(\x01R\x06amount\x12\x1f\n" +
-	"\vvalid_until\x18\x06 \x01(\x03R\n" +
-	"validUntil\x12\x1b\n" +
-	"\tis_active\x18\a \x01(\bR\bisActive\x12\x1f\n" +
-	"\vaction_type\x18\b \x01(\tR\n" +
-	"actionType\x12'\n" +
-	"\x0fmax_redemptions\x18\t \x01(\x05R\x0emaxRedemptions\x127\n" +
+	"\x06amount\x18\x05 \x01(\x01R\x06amount\x12$\n" +
+	"\vvalid_until\x18\x06 \x01(\x03H\x01R\n" +
+	"validUntil\x88\x01\x01\x12\x1b\n" +
+	"\tis_active\x18\a \x01(\bR\bisActive\x12$\n" +
+	"\vaction_type\x18\b \x01(\tH\x02R\n" +
+	"actionType\x88\x01\x01\x12,\n" +
+	"\x0fmax_redemptions\x18\t \x01(\x05H\x03R\x0emaxRedemptions\x88\x01\x01\x12<\n" +
 	"\x18max_redemptions_per_user\x18\n" +
-	" \x01(\x05R\x15maxRedemptionsPerUser\x12 \n" +
+	" \x01(\x05H\x04R\x15maxRedemptionsPerUser\x88\x01\x01\x12 \n" +
 	"\vredemptions\x18\v \x01(\x05R\vredemptions\x12!\n" +
-	"\fis_recurring\x18\f \x01(\bR\visRecurring\x12,\n" +
-	"\x12duration_in_months\x18\r \x01(\x05R\x10durationInMonths\x12>\n" +
-	"\x1bmaximum_recurring_intervals\x18\x0e \x01(\x05R\x19maximumRecurringIntervals\x12\x1f\n" +
-	"\vredeem_type\x18\x0f \x01(\x05R\n" +
-	"redeemType\x12\x1d\n" +
+	"\fis_recurring\x18\f \x01(\bR\visRecurring\x121\n" +
+	"\x12duration_in_months\x18\r \x01(\x05H\x05R\x10durationInMonths\x88\x01\x01\x12C\n" +
+	"\x1bmaximum_recurring_intervals\x18\x0e \x01(\x05H\x06R\x19maximumRecurringIntervals\x88\x01\x01\x12$\n" +
+	"\vredeem_type\x18\x0f \x01(\x05H\aR\n" +
+	"redeemType\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"bonus_days\x18\x10 \x01(\x05R\tbonusDays\x126\n" +
+	"bonus_days\x18\x10 \x01(\x05H\bR\tbonusDays\x88\x01\x01\x126\n" +
 	"\x18is_enabled_for_all_plans\x18\x11 \x01(\bR\x14isEnabledForAllPlans\x12L\n" +
 	"$is_enabled_for_all_one_time_products\x18\x12 \x01(\bR\x1eisEnabledForAllOneTimeProducts\x12\x1d\n" +
 	"\n" +
 	"created_at\x18\x13 \x01(\x03R\tcreatedAt\x12\x1d\n" +
 	"\n" +
-	"updated_at\x18\x14 \x01(\x03R\tupdatedAt\"(\n" +
+	"updated_at\x18\x14 \x01(\x03R\tupdatedAtB\x0e\n" +
+	"\f_descriptionB\x0e\n" +
+	"\f_valid_untilB\x0e\n" +
+	"\f_action_typeB\x12\n" +
+	"\x10_max_redemptionsB\x1b\n" +
+	"\x19_max_redemptions_per_userB\x15\n" +
+	"\x13_duration_in_monthsB\x1e\n" +
+	"\x1c_maximum_recurring_intervalsB\x0e\n" +
+	"\f_redeem_typeB\r\n" +
+	"\v_bonus_days\"(\n" +
 	"\x16GetDiscountByIDRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"t\n" +
 	"\x17GetDiscountByIDResponse\x12\x18\n" +
@@ -7604,56 +7613,74 @@ const file_product_proto_rawDesc = "" +
 	"\x19GetDiscountByCodeResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12%\n" +
-	"\x04data\x18\x03 \x01(\v2\x11.product.DiscountR\x04data\"\x91\x05\n" +
+	"\x04data\x18\x03 \x01(\v2\x11.product.DiscountR\x04data\"\xf5\x06\n" +
 	"\x15CreateDiscountRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12%\n" +
+	"\vdescription\x18\x02 \x01(\tH\x00R\vdescription\x88\x01\x01\x12\x12\n" +
 	"\x04type\x18\x03 \x01(\tR\x04type\x12\x16\n" +
-	"\x06amount\x18\x04 \x01(\x01R\x06amount\x12\x1f\n" +
-	"\vvalid_until\x18\x05 \x01(\x03R\n" +
-	"validUntil\x12\x1b\n" +
-	"\tis_active\x18\x06 \x01(\bR\bisActive\x12\x1f\n" +
-	"\vaction_type\x18\a \x01(\tR\n" +
-	"actionType\x12'\n" +
-	"\x0fmax_redemptions\x18\b \x01(\x05R\x0emaxRedemptions\x127\n" +
-	"\x18max_redemptions_per_user\x18\t \x01(\x05R\x15maxRedemptionsPerUser\x12!\n" +
+	"\x06amount\x18\x04 \x01(\x01R\x06amount\x12$\n" +
+	"\vvalid_until\x18\x05 \x01(\x03H\x01R\n" +
+	"validUntil\x88\x01\x01\x12\x1b\n" +
+	"\tis_active\x18\x06 \x01(\bR\bisActive\x12$\n" +
+	"\vaction_type\x18\a \x01(\tH\x02R\n" +
+	"actionType\x88\x01\x01\x12,\n" +
+	"\x0fmax_redemptions\x18\b \x01(\x05H\x03R\x0emaxRedemptions\x88\x01\x01\x12<\n" +
+	"\x18max_redemptions_per_user\x18\t \x01(\x05H\x04R\x15maxRedemptionsPerUser\x88\x01\x01\x12!\n" +
 	"\fis_recurring\x18\n" +
-	" \x01(\bR\visRecurring\x12,\n" +
-	"\x12duration_in_months\x18\v \x01(\x05R\x10durationInMonths\x12>\n" +
-	"\x1bmaximum_recurring_intervals\x18\f \x01(\x05R\x19maximumRecurringIntervals\x12\x1f\n" +
-	"\vredeem_type\x18\r \x01(\x05R\n" +
-	"redeemType\x12\x1d\n" +
+	" \x01(\bR\visRecurring\x121\n" +
+	"\x12duration_in_months\x18\v \x01(\x05H\x05R\x10durationInMonths\x88\x01\x01\x12C\n" +
+	"\x1bmaximum_recurring_intervals\x18\f \x01(\x05H\x06R\x19maximumRecurringIntervals\x88\x01\x01\x12$\n" +
+	"\vredeem_type\x18\r \x01(\x05H\aR\n" +
+	"redeemType\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"bonus_days\x18\x0e \x01(\x05R\tbonusDays\x126\n" +
+	"bonus_days\x18\x0e \x01(\x05H\bR\tbonusDays\x88\x01\x01\x126\n" +
 	"\x18is_enabled_for_all_plans\x18\x0f \x01(\bR\x14isEnabledForAllPlans\x12L\n" +
-	"$is_enabled_for_all_one_time_products\x18\x10 \x01(\bR\x1eisEnabledForAllOneTimeProducts\"s\n" +
+	"$is_enabled_for_all_one_time_products\x18\x10 \x01(\bR\x1eisEnabledForAllOneTimeProductsB\x0e\n" +
+	"\f_descriptionB\x0e\n" +
+	"\f_valid_untilB\x0e\n" +
+	"\f_action_typeB\x12\n" +
+	"\x10_max_redemptionsB\x1b\n" +
+	"\x19_max_redemptions_per_userB\x15\n" +
+	"\x13_duration_in_monthsB\x1e\n" +
+	"\x1c_maximum_recurring_intervalsB\x0e\n" +
+	"\f_redeem_typeB\r\n" +
+	"\v_bonus_days\"s\n" +
 	"\x16CreateDiscountResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12%\n" +
-	"\x04data\x18\x03 \x01(\v2\x11.product.DiscountR\x04data\"\xa1\x05\n" +
+	"\x04data\x18\x03 \x01(\v2\x11.product.DiscountR\x04data\"\x85\a\n" +
 	"\x15UpdateDiscountRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12%\n" +
+	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x12\x12\n" +
 	"\x04type\x18\x04 \x01(\tR\x04type\x12\x16\n" +
-	"\x06amount\x18\x05 \x01(\x01R\x06amount\x12\x1f\n" +
-	"\vvalid_until\x18\x06 \x01(\x03R\n" +
-	"validUntil\x12\x1b\n" +
-	"\tis_active\x18\a \x01(\bR\bisActive\x12\x1f\n" +
-	"\vaction_type\x18\b \x01(\tR\n" +
-	"actionType\x12'\n" +
-	"\x0fmax_redemptions\x18\t \x01(\x05R\x0emaxRedemptions\x127\n" +
+	"\x06amount\x18\x05 \x01(\x01R\x06amount\x12$\n" +
+	"\vvalid_until\x18\x06 \x01(\x03H\x01R\n" +
+	"validUntil\x88\x01\x01\x12\x1b\n" +
+	"\tis_active\x18\a \x01(\bR\bisActive\x12$\n" +
+	"\vaction_type\x18\b \x01(\tH\x02R\n" +
+	"actionType\x88\x01\x01\x12,\n" +
+	"\x0fmax_redemptions\x18\t \x01(\x05H\x03R\x0emaxRedemptions\x88\x01\x01\x12<\n" +
 	"\x18max_redemptions_per_user\x18\n" +
-	" \x01(\x05R\x15maxRedemptionsPerUser\x12!\n" +
-	"\fis_recurring\x18\v \x01(\bR\visRecurring\x12,\n" +
-	"\x12duration_in_months\x18\f \x01(\x05R\x10durationInMonths\x12>\n" +
-	"\x1bmaximum_recurring_intervals\x18\r \x01(\x05R\x19maximumRecurringIntervals\x12\x1f\n" +
-	"\vredeem_type\x18\x0e \x01(\x05R\n" +
-	"redeemType\x12\x1d\n" +
+	" \x01(\x05H\x04R\x15maxRedemptionsPerUser\x88\x01\x01\x12!\n" +
+	"\fis_recurring\x18\v \x01(\bR\visRecurring\x121\n" +
+	"\x12duration_in_months\x18\f \x01(\x05H\x05R\x10durationInMonths\x88\x01\x01\x12C\n" +
+	"\x1bmaximum_recurring_intervals\x18\r \x01(\x05H\x06R\x19maximumRecurringIntervals\x88\x01\x01\x12$\n" +
+	"\vredeem_type\x18\x0e \x01(\x05H\aR\n" +
+	"redeemType\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"bonus_days\x18\x0f \x01(\x05R\tbonusDays\x126\n" +
+	"bonus_days\x18\x0f \x01(\x05H\bR\tbonusDays\x88\x01\x01\x126\n" +
 	"\x18is_enabled_for_all_plans\x18\x10 \x01(\bR\x14isEnabledForAllPlans\x12L\n" +
-	"$is_enabled_for_all_one_time_products\x18\x11 \x01(\bR\x1eisEnabledForAllOneTimeProducts\"s\n" +
+	"$is_enabled_for_all_one_time_products\x18\x11 \x01(\bR\x1eisEnabledForAllOneTimeProductsB\x0e\n" +
+	"\f_descriptionB\x0e\n" +
+	"\f_valid_untilB\x0e\n" +
+	"\f_action_typeB\x12\n" +
+	"\x10_max_redemptionsB\x1b\n" +
+	"\x19_max_redemptions_per_userB\x15\n" +
+	"\x13_duration_in_monthsB\x1e\n" +
+	"\x1c_maximum_recurring_intervalsB\x0e\n" +
+	"\f_redeem_typeB\r\n" +
+	"\v_bonus_days\"s\n" +
 	"\x16UpdateDiscountResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12%\n" +
@@ -8210,6 +8237,9 @@ func file_product_proto_init() {
 	file_product_proto_msgTypes[14].OneofWrappers = []any{}
 	file_product_proto_msgTypes[21].OneofWrappers = []any{}
 	file_product_proto_msgTypes[23].OneofWrappers = []any{}
+	file_product_proto_msgTypes[53].OneofWrappers = []any{}
+	file_product_proto_msgTypes[58].OneofWrappers = []any{}
+	file_product_proto_msgTypes[60].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

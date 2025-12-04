@@ -58,6 +58,11 @@ type ComplexityRoot struct {
 		Success func(childComplexity int) int
 	}
 
+	DeleteDiscountResponse struct {
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
 	DeletePlanResponse struct {
 		Message func(childComplexity int) int
 		Success func(childComplexity int) int
@@ -79,6 +84,48 @@ type ComplexityRoot struct {
 	}
 
 	DeleteUserResponse struct {
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
+	Discount struct {
+		ActionType                     func(childComplexity int) int
+		Amount                         func(childComplexity int) int
+		BonusDays                      func(childComplexity int) int
+		CreatedAt                      func(childComplexity int) int
+		Description                    func(childComplexity int) int
+		DurationInMonths               func(childComplexity int) int
+		ID                             func(childComplexity int) int
+		IsActive                       func(childComplexity int) int
+		IsEnabledForAllOneTimeProducts func(childComplexity int) int
+		IsEnabledForAllPlans           func(childComplexity int) int
+		IsRecurring                    func(childComplexity int) int
+		MaxRedemptions                 func(childComplexity int) int
+		MaxRedemptionsPerUser          func(childComplexity int) int
+		MaximumRecurringIntervals      func(childComplexity int) int
+		Name                           func(childComplexity int) int
+		RedeemType                     func(childComplexity int) int
+		Redemptions                    func(childComplexity int) int
+		Type                           func(childComplexity int) int
+		UpdatedAt                      func(childComplexity int) int
+		ValidUntil                     func(childComplexity int) int
+	}
+
+	DiscountList struct {
+		Discounts func(childComplexity int) int
+		Page      func(childComplexity int) int
+		PerPage   func(childComplexity int) int
+		Total     func(childComplexity int) int
+	}
+
+	DiscountListResponse struct {
+		Data    func(childComplexity int) int
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
+	DiscountResponse struct {
+		Data    func(childComplexity int) int
 		Message func(childComplexity int) int
 		Success func(childComplexity int) int
 	}
@@ -110,10 +157,12 @@ type ComplexityRoot struct {
 		BulkBlockUsers          func(childComplexity int, ids []string, isBlocked bool) int
 		BulkDeleteUsers         func(childComplexity int, ids []string) int
 		ChangePassword          func(childComplexity int, input model.ChangePasswordInput) int
+		CreateDiscount          func(childComplexity int, input model.CreateDiscountInput) int
 		CreatePlan              func(childComplexity int, input model.CreatePlanInput) int
 		CreateProduct           func(childComplexity int, input model.CreateProductInput) int
 		CreateTenant            func(childComplexity int, input model.CreateTenantInput) int
 		CreateUser              func(childComplexity int, input model.CreateUserInput) int
+		DeleteDiscount          func(childComplexity int, id string) int
 		DeletePlan              func(childComplexity int, id string) int
 		DeleteProduct           func(childComplexity int, id string) int
 		DeleteTenant            func(childComplexity int, id string) int
@@ -128,6 +177,7 @@ type ComplexityRoot struct {
 		ResetPassword           func(childComplexity int, input model.ResetPasswordInput) int
 		SetDefaultTenant        func(childComplexity int, input model.SetDefaultTenantInput) int
 		SetTenantSetting        func(childComplexity int, input model.SetSettingInput) int
+		UpdateDiscount          func(childComplexity int, input model.UpdateDiscountInput) int
 		UpdatePlan              func(childComplexity int, input model.UpdatePlanInput) int
 		UpdateProduct           func(childComplexity int, input model.UpdateProductInput) int
 		UpdateTenant            func(childComplexity int, input model.UpdateTenantInput) int
@@ -214,6 +264,8 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		Discount         func(childComplexity int, id string) int
+		Discounts        func(childComplexity int, page *int32, perPage *int32, activeOnly *bool) int
 		Me               func(childComplexity int) int
 		Plan             func(childComplexity int, id string) int
 		PlanBySlug       func(childComplexity int, slug string) int
@@ -406,6 +458,9 @@ type MutationResolver interface {
 	CreatePlan(ctx context.Context, input model.CreatePlanInput) (*model.PlanResponse, error)
 	UpdatePlan(ctx context.Context, input model.UpdatePlanInput) (*model.PlanResponse, error)
 	DeletePlan(ctx context.Context, id string) (*model.DeletePlanResponse, error)
+	CreateDiscount(ctx context.Context, input model.CreateDiscountInput) (*model.DiscountResponse, error)
+	UpdateDiscount(ctx context.Context, input model.UpdateDiscountInput) (*model.DiscountResponse, error)
+	DeleteDiscount(ctx context.Context, id string) (*model.DeleteDiscountResponse, error)
 }
 type QueryResolver interface {
 	User(ctx context.Context, id string) (*model.UserResponse, error)
@@ -427,6 +482,8 @@ type QueryResolver interface {
 	PlanBySlug(ctx context.Context, slug string) (*model.PlanResponse, error)
 	Plans(ctx context.Context, page *int32, perPage *int32, activeOnly *bool, visibleOnly *bool) (*model.PlanListResponse, error)
 	PlansByProduct(ctx context.Context, productID string) (*model.PlansResponse, error)
+	Discount(ctx context.Context, id string) (*model.DiscountResponse, error)
+	Discounts(ctx context.Context, page *int32, perPage *int32, activeOnly *bool) (*model.DiscountListResponse, error)
 }
 
 type executableSchema struct {
@@ -479,6 +536,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ChangePasswordResponse.Success(childComplexity), true
+
+	case "DeleteDiscountResponse.message":
+		if e.complexity.DeleteDiscountResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.DeleteDiscountResponse.Message(childComplexity), true
+	case "DeleteDiscountResponse.success":
+		if e.complexity.DeleteDiscountResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.DeleteDiscountResponse.Success(childComplexity), true
 
 	case "DeletePlanResponse.message":
 		if e.complexity.DeletePlanResponse.Message == nil {
@@ -544,6 +614,190 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DeleteUserResponse.Success(childComplexity), true
+
+	case "Discount.actionType":
+		if e.complexity.Discount.ActionType == nil {
+			break
+		}
+
+		return e.complexity.Discount.ActionType(childComplexity), true
+	case "Discount.amount":
+		if e.complexity.Discount.Amount == nil {
+			break
+		}
+
+		return e.complexity.Discount.Amount(childComplexity), true
+	case "Discount.bonusDays":
+		if e.complexity.Discount.BonusDays == nil {
+			break
+		}
+
+		return e.complexity.Discount.BonusDays(childComplexity), true
+	case "Discount.createdAt":
+		if e.complexity.Discount.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Discount.CreatedAt(childComplexity), true
+	case "Discount.description":
+		if e.complexity.Discount.Description == nil {
+			break
+		}
+
+		return e.complexity.Discount.Description(childComplexity), true
+	case "Discount.durationInMonths":
+		if e.complexity.Discount.DurationInMonths == nil {
+			break
+		}
+
+		return e.complexity.Discount.DurationInMonths(childComplexity), true
+	case "Discount.id":
+		if e.complexity.Discount.ID == nil {
+			break
+		}
+
+		return e.complexity.Discount.ID(childComplexity), true
+	case "Discount.isActive":
+		if e.complexity.Discount.IsActive == nil {
+			break
+		}
+
+		return e.complexity.Discount.IsActive(childComplexity), true
+	case "Discount.isEnabledForAllOneTimeProducts":
+		if e.complexity.Discount.IsEnabledForAllOneTimeProducts == nil {
+			break
+		}
+
+		return e.complexity.Discount.IsEnabledForAllOneTimeProducts(childComplexity), true
+	case "Discount.isEnabledForAllPlans":
+		if e.complexity.Discount.IsEnabledForAllPlans == nil {
+			break
+		}
+
+		return e.complexity.Discount.IsEnabledForAllPlans(childComplexity), true
+	case "Discount.isRecurring":
+		if e.complexity.Discount.IsRecurring == nil {
+			break
+		}
+
+		return e.complexity.Discount.IsRecurring(childComplexity), true
+	case "Discount.maxRedemptions":
+		if e.complexity.Discount.MaxRedemptions == nil {
+			break
+		}
+
+		return e.complexity.Discount.MaxRedemptions(childComplexity), true
+	case "Discount.maxRedemptionsPerUser":
+		if e.complexity.Discount.MaxRedemptionsPerUser == nil {
+			break
+		}
+
+		return e.complexity.Discount.MaxRedemptionsPerUser(childComplexity), true
+	case "Discount.maximumRecurringIntervals":
+		if e.complexity.Discount.MaximumRecurringIntervals == nil {
+			break
+		}
+
+		return e.complexity.Discount.MaximumRecurringIntervals(childComplexity), true
+	case "Discount.name":
+		if e.complexity.Discount.Name == nil {
+			break
+		}
+
+		return e.complexity.Discount.Name(childComplexity), true
+	case "Discount.redeemType":
+		if e.complexity.Discount.RedeemType == nil {
+			break
+		}
+
+		return e.complexity.Discount.RedeemType(childComplexity), true
+	case "Discount.redemptions":
+		if e.complexity.Discount.Redemptions == nil {
+			break
+		}
+
+		return e.complexity.Discount.Redemptions(childComplexity), true
+	case "Discount.type":
+		if e.complexity.Discount.Type == nil {
+			break
+		}
+
+		return e.complexity.Discount.Type(childComplexity), true
+	case "Discount.updatedAt":
+		if e.complexity.Discount.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Discount.UpdatedAt(childComplexity), true
+	case "Discount.validUntil":
+		if e.complexity.Discount.ValidUntil == nil {
+			break
+		}
+
+		return e.complexity.Discount.ValidUntil(childComplexity), true
+
+	case "DiscountList.discounts":
+		if e.complexity.DiscountList.Discounts == nil {
+			break
+		}
+
+		return e.complexity.DiscountList.Discounts(childComplexity), true
+	case "DiscountList.page":
+		if e.complexity.DiscountList.Page == nil {
+			break
+		}
+
+		return e.complexity.DiscountList.Page(childComplexity), true
+	case "DiscountList.perPage":
+		if e.complexity.DiscountList.PerPage == nil {
+			break
+		}
+
+		return e.complexity.DiscountList.PerPage(childComplexity), true
+	case "DiscountList.total":
+		if e.complexity.DiscountList.Total == nil {
+			break
+		}
+
+		return e.complexity.DiscountList.Total(childComplexity), true
+
+	case "DiscountListResponse.data":
+		if e.complexity.DiscountListResponse.Data == nil {
+			break
+		}
+
+		return e.complexity.DiscountListResponse.Data(childComplexity), true
+	case "DiscountListResponse.message":
+		if e.complexity.DiscountListResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.DiscountListResponse.Message(childComplexity), true
+	case "DiscountListResponse.success":
+		if e.complexity.DiscountListResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.DiscountListResponse.Success(childComplexity), true
+
+	case "DiscountResponse.data":
+		if e.complexity.DiscountResponse.Data == nil {
+			break
+		}
+
+		return e.complexity.DiscountResponse.Data(childComplexity), true
+	case "DiscountResponse.message":
+		if e.complexity.DiscountResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.DiscountResponse.Message(childComplexity), true
+	case "DiscountResponse.success":
+		if e.complexity.DiscountResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.DiscountResponse.Success(childComplexity), true
 
 	case "ForgotPasswordResponse.message":
 		if e.complexity.ForgotPasswordResponse.Message == nil {
@@ -653,6 +907,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.ChangePassword(childComplexity, args["input"].(model.ChangePasswordInput)), true
+	case "Mutation.createDiscount":
+		if e.complexity.Mutation.CreateDiscount == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createDiscount_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateDiscount(childComplexity, args["input"].(model.CreateDiscountInput)), true
 	case "Mutation.createPlan":
 		if e.complexity.Mutation.CreatePlan == nil {
 			break
@@ -697,6 +962,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(model.CreateUserInput)), true
+	case "Mutation.deleteDiscount":
+		if e.complexity.Mutation.DeleteDiscount == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteDiscount_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteDiscount(childComplexity, args["id"].(string)), true
 	case "Mutation.deletePlan":
 		if e.complexity.Mutation.DeletePlan == nil {
 			break
@@ -846,6 +1122,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.SetTenantSetting(childComplexity, args["input"].(model.SetSettingInput)), true
+	case "Mutation.updateDiscount":
+		if e.complexity.Mutation.UpdateDiscount == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateDiscount_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDiscount(childComplexity, args["input"].(model.UpdateDiscountInput)), true
 	case "Mutation.updatePlan":
 		if e.complexity.Mutation.UpdatePlan == nil {
 			break
@@ -1222,6 +1509,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProductResponse.Success(childComplexity), true
 
+	case "Query.discount":
+		if e.complexity.Query.Discount == nil {
+			break
+		}
+
+		args, err := ec.field_Query_discount_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Discount(childComplexity, args["id"].(string)), true
+	case "Query.discounts":
+		if e.complexity.Query.Discounts == nil {
+			break
+		}
+
+		args, err := ec.field_Query_discounts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Discounts(childComplexity, args["page"].(*int32), args["perPage"].(*int32), args["activeOnly"].(*bool)), true
 	case "Query.me":
 		if e.complexity.Query.Me == nil {
 			break
@@ -1943,6 +2252,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputAddUserToTenantInput,
 		ec.unmarshalInputChangePasswordInput,
+		ec.unmarshalInputCreateDiscountInput,
 		ec.unmarshalInputCreatePlanInput,
 		ec.unmarshalInputCreateProductInput,
 		ec.unmarshalInputCreateTenantInput,
@@ -1952,6 +2262,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputResetPasswordInput,
 		ec.unmarshalInputSetDefaultTenantInput,
 		ec.unmarshalInputSetSettingInput,
+		ec.unmarshalInputUpdateDiscountInput,
 		ec.unmarshalInputUpdatePlanInput,
 		ec.unmarshalInputUpdateProductInput,
 		ec.unmarshalInputUpdateTenantInput,
@@ -2122,6 +2433,17 @@ func (ec *executionContext) field_Mutation_changePassword_args(ctx context.Conte
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createDiscount_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDiscountInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCreateDiscountInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -2163,6 +2485,17 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 		return nil, err
 	}
 	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteDiscount_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -2319,6 +2652,17 @@ func (ec *executionContext) field_Mutation_setTenantSetting_args(ctx context.Con
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateDiscount_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDiscountInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐUpdateDiscountInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updatePlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -2393,6 +2737,38 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		return nil, err
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_discount_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_discounts_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "page", ec.unmarshalOInt2ᚖint32)
+	if err != nil {
+		return nil, err
+	}
+	args["page"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "perPage", ec.unmarshalOInt2ᚖint32)
+	if err != nil {
+		return nil, err
+	}
+	args["perPage"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "activeOnly", ec.unmarshalOBoolean2ᚖbool)
+	if err != nil {
+		return nil, err
+	}
+	args["activeOnly"] = arg2
 	return args, nil
 }
 
@@ -2836,6 +3212,64 @@ func (ec *executionContext) fieldContext_ChangePasswordResponse_message(_ contex
 	return fc, nil
 }
 
+func (ec *executionContext) _DeleteDiscountResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.DeleteDiscountResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DeleteDiscountResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DeleteDiscountResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeleteDiscountResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeleteDiscountResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.DeleteDiscountResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DeleteDiscountResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DeleteDiscountResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeleteDiscountResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _DeletePlanResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.DeletePlanResponse) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -3121,6 +3555,970 @@ func (ec *executionContext) fieldContext_DeleteUserResponse_message(_ context.Co
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_id(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_id,
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_name(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_name,
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_description(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_description,
+		func(ctx context.Context) (any, error) {
+			return obj.Description, nil
+		},
+		nil,
+		ec.marshalOString2ᚖstring,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_type(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_type,
+		func(ctx context.Context) (any, error) {
+			return obj.Type, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_type(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_amount(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_amount,
+		func(ctx context.Context) (any, error) {
+			return obj.Amount, nil
+		},
+		nil,
+		ec.marshalNFloat2float64,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_amount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_validUntil(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_validUntil,
+		func(ctx context.Context) (any, error) {
+			return obj.ValidUntil, nil
+		},
+		nil,
+		ec.marshalOInt2ᚖint32,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_validUntil(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_isActive(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_isActive,
+		func(ctx context.Context) (any, error) {
+			return obj.IsActive, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_isActive(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_actionType(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_actionType,
+		func(ctx context.Context) (any, error) {
+			return obj.ActionType, nil
+		},
+		nil,
+		ec.marshalOString2ᚖstring,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_actionType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_maxRedemptions(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_maxRedemptions,
+		func(ctx context.Context) (any, error) {
+			return obj.MaxRedemptions, nil
+		},
+		nil,
+		ec.marshalOInt2ᚖint32,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_maxRedemptions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_maxRedemptionsPerUser(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_maxRedemptionsPerUser,
+		func(ctx context.Context) (any, error) {
+			return obj.MaxRedemptionsPerUser, nil
+		},
+		nil,
+		ec.marshalOInt2ᚖint32,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_maxRedemptionsPerUser(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_redemptions(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_redemptions,
+		func(ctx context.Context) (any, error) {
+			return obj.Redemptions, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_redemptions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_isRecurring(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_isRecurring,
+		func(ctx context.Context) (any, error) {
+			return obj.IsRecurring, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_isRecurring(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_durationInMonths(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_durationInMonths,
+		func(ctx context.Context) (any, error) {
+			return obj.DurationInMonths, nil
+		},
+		nil,
+		ec.marshalOInt2ᚖint32,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_durationInMonths(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_maximumRecurringIntervals(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_maximumRecurringIntervals,
+		func(ctx context.Context) (any, error) {
+			return obj.MaximumRecurringIntervals, nil
+		},
+		nil,
+		ec.marshalOInt2ᚖint32,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_maximumRecurringIntervals(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_redeemType(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_redeemType,
+		func(ctx context.Context) (any, error) {
+			return obj.RedeemType, nil
+		},
+		nil,
+		ec.marshalOInt2ᚖint32,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_redeemType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_bonusDays(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_bonusDays,
+		func(ctx context.Context) (any, error) {
+			return obj.BonusDays, nil
+		},
+		nil,
+		ec.marshalOInt2ᚖint32,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_bonusDays(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_isEnabledForAllPlans(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_isEnabledForAllPlans,
+		func(ctx context.Context) (any, error) {
+			return obj.IsEnabledForAllPlans, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_isEnabledForAllPlans(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_isEnabledForAllOneTimeProducts(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_isEnabledForAllOneTimeProducts,
+		func(ctx context.Context) (any, error) {
+			return obj.IsEnabledForAllOneTimeProducts, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_isEnabledForAllOneTimeProducts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_createdAt,
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Discount_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Discount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Discount_updatedAt,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Discount_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Discount",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DiscountList_discounts(ctx context.Context, field graphql.CollectedField, obj *model.DiscountList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DiscountList_discounts,
+		func(ctx context.Context) (any, error) {
+			return obj.Discounts, nil
+		},
+		nil,
+		ec.marshalNDiscount2ᚕᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscountᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DiscountList_discounts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DiscountList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Discount_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Discount_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Discount_description(ctx, field)
+			case "type":
+				return ec.fieldContext_Discount_type(ctx, field)
+			case "amount":
+				return ec.fieldContext_Discount_amount(ctx, field)
+			case "validUntil":
+				return ec.fieldContext_Discount_validUntil(ctx, field)
+			case "isActive":
+				return ec.fieldContext_Discount_isActive(ctx, field)
+			case "actionType":
+				return ec.fieldContext_Discount_actionType(ctx, field)
+			case "maxRedemptions":
+				return ec.fieldContext_Discount_maxRedemptions(ctx, field)
+			case "maxRedemptionsPerUser":
+				return ec.fieldContext_Discount_maxRedemptionsPerUser(ctx, field)
+			case "redemptions":
+				return ec.fieldContext_Discount_redemptions(ctx, field)
+			case "isRecurring":
+				return ec.fieldContext_Discount_isRecurring(ctx, field)
+			case "durationInMonths":
+				return ec.fieldContext_Discount_durationInMonths(ctx, field)
+			case "maximumRecurringIntervals":
+				return ec.fieldContext_Discount_maximumRecurringIntervals(ctx, field)
+			case "redeemType":
+				return ec.fieldContext_Discount_redeemType(ctx, field)
+			case "bonusDays":
+				return ec.fieldContext_Discount_bonusDays(ctx, field)
+			case "isEnabledForAllPlans":
+				return ec.fieldContext_Discount_isEnabledForAllPlans(ctx, field)
+			case "isEnabledForAllOneTimeProducts":
+				return ec.fieldContext_Discount_isEnabledForAllOneTimeProducts(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Discount_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Discount_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Discount", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DiscountList_total(ctx context.Context, field graphql.CollectedField, obj *model.DiscountList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DiscountList_total,
+		func(ctx context.Context) (any, error) {
+			return obj.Total, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DiscountList_total(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DiscountList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DiscountList_page(ctx context.Context, field graphql.CollectedField, obj *model.DiscountList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DiscountList_page,
+		func(ctx context.Context) (any, error) {
+			return obj.Page, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DiscountList_page(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DiscountList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DiscountList_perPage(ctx context.Context, field graphql.CollectedField, obj *model.DiscountList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DiscountList_perPage,
+		func(ctx context.Context) (any, error) {
+			return obj.PerPage, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DiscountList_perPage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DiscountList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DiscountListResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.DiscountListResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DiscountListResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DiscountListResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DiscountListResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DiscountListResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.DiscountListResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DiscountListResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DiscountListResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DiscountListResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DiscountListResponse_data(ctx context.Context, field graphql.CollectedField, obj *model.DiscountListResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DiscountListResponse_data,
+		func(ctx context.Context) (any, error) {
+			return obj.Data, nil
+		},
+		nil,
+		ec.marshalODiscountList2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscountList,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_DiscountListResponse_data(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DiscountListResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "discounts":
+				return ec.fieldContext_DiscountList_discounts(ctx, field)
+			case "total":
+				return ec.fieldContext_DiscountList_total(ctx, field)
+			case "page":
+				return ec.fieldContext_DiscountList_page(ctx, field)
+			case "perPage":
+				return ec.fieldContext_DiscountList_perPage(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DiscountList", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DiscountResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.DiscountResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DiscountResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DiscountResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DiscountResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DiscountResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.DiscountResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DiscountResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DiscountResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DiscountResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DiscountResponse_data(ctx context.Context, field graphql.CollectedField, obj *model.DiscountResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DiscountResponse_data,
+		func(ctx context.Context) (any, error) {
+			return obj.Data, nil
+		},
+		nil,
+		ec.marshalODiscount2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscount,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_DiscountResponse_data(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DiscountResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Discount_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Discount_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Discount_description(ctx, field)
+			case "type":
+				return ec.fieldContext_Discount_type(ctx, field)
+			case "amount":
+				return ec.fieldContext_Discount_amount(ctx, field)
+			case "validUntil":
+				return ec.fieldContext_Discount_validUntil(ctx, field)
+			case "isActive":
+				return ec.fieldContext_Discount_isActive(ctx, field)
+			case "actionType":
+				return ec.fieldContext_Discount_actionType(ctx, field)
+			case "maxRedemptions":
+				return ec.fieldContext_Discount_maxRedemptions(ctx, field)
+			case "maxRedemptionsPerUser":
+				return ec.fieldContext_Discount_maxRedemptionsPerUser(ctx, field)
+			case "redemptions":
+				return ec.fieldContext_Discount_redemptions(ctx, field)
+			case "isRecurring":
+				return ec.fieldContext_Discount_isRecurring(ctx, field)
+			case "durationInMonths":
+				return ec.fieldContext_Discount_durationInMonths(ctx, field)
+			case "maximumRecurringIntervals":
+				return ec.fieldContext_Discount_maximumRecurringIntervals(ctx, field)
+			case "redeemType":
+				return ec.fieldContext_Discount_redeemType(ctx, field)
+			case "bonusDays":
+				return ec.fieldContext_Discount_bonusDays(ctx, field)
+			case "isEnabledForAllPlans":
+				return ec.fieldContext_Discount_isEnabledForAllPlans(ctx, field)
+			case "isEnabledForAllOneTimeProducts":
+				return ec.fieldContext_Discount_isEnabledForAllOneTimeProducts(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Discount_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Discount_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Discount", field.Name)
 		},
 	}
 	return fc, nil
@@ -4778,6 +6176,151 @@ func (ec *executionContext) fieldContext_Mutation_deletePlan(ctx context.Context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deletePlan_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createDiscount(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createDiscount,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateDiscount(ctx, fc.Args["input"].(model.CreateDiscountInput))
+		},
+		nil,
+		ec.marshalNDiscountResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscountResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createDiscount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_DiscountResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_DiscountResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_DiscountResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DiscountResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createDiscount_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateDiscount(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateDiscount,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateDiscount(ctx, fc.Args["input"].(model.UpdateDiscountInput))
+		},
+		nil,
+		ec.marshalNDiscountResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscountResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateDiscount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_DiscountResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_DiscountResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_DiscountResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DiscountResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateDiscount_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteDiscount(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteDiscount,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteDiscount(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNDeleteDiscountResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteDiscountResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteDiscount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_DeleteDiscountResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_DeleteDiscountResponse_message(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DeleteDiscountResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteDiscount_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -7317,6 +8860,104 @@ func (ec *executionContext) fieldContext_Query_plansByProduct(ctx context.Contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_plansByProduct_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_discount(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_discount,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().Discount(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNDiscountResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscountResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_discount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_DiscountResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_DiscountResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_DiscountResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DiscountResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_discount_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_discounts(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_discounts,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().Discounts(ctx, fc.Args["page"].(*int32), fc.Args["perPage"].(*int32), fc.Args["activeOnly"].(*bool))
+		},
+		nil,
+		ec.marshalNDiscountListResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscountListResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_discounts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_DiscountListResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_DiscountListResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_DiscountListResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DiscountListResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_discounts_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -11494,6 +13135,138 @@ func (ec *executionContext) unmarshalInputChangePasswordInput(ctx context.Contex
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputCreateDiscountInput(ctx context.Context, obj any) (model.CreateDiscountInput, error) {
+	var it model.CreateDiscountInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "description", "type", "amount", "validUntil", "isActive", "actionType", "maxRedemptions", "maxRedemptionsPerUser", "isRecurring", "durationInMonths", "maximumRecurringIntervals", "redeemType", "bonusDays", "isEnabledForAllPlans", "isEnabledForAllOneTimeProducts"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "amount":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amount"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Amount = data
+		case "validUntil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("validUntil"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ValidUntil = data
+		case "isActive":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isActive"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsActive = data
+		case "actionType":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("actionType"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ActionType = data
+		case "maxRedemptions":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxRedemptions"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxRedemptions = data
+		case "maxRedemptionsPerUser":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxRedemptionsPerUser"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxRedemptionsPerUser = data
+		case "isRecurring":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isRecurring"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsRecurring = data
+		case "durationInMonths":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("durationInMonths"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DurationInMonths = data
+		case "maximumRecurringIntervals":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maximumRecurringIntervals"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaximumRecurringIntervals = data
+		case "redeemType":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("redeemType"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RedeemType = data
+		case "bonusDays":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bonusDays"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BonusDays = data
+		case "isEnabledForAllPlans":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isEnabledForAllPlans"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsEnabledForAllPlans = data
+		case "isEnabledForAllOneTimeProducts":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isEnabledForAllOneTimeProducts"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsEnabledForAllOneTimeProducts = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputCreatePlanInput(ctx context.Context, obj any) (model.CreatePlanInput, error) {
 	var it model.CreatePlanInput
 	asMap := map[string]any{}
@@ -11961,6 +13734,145 @@ func (ec *executionContext) unmarshalInputSetSettingInput(ctx context.Context, o
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateDiscountInput(ctx context.Context, obj any) (model.UpdateDiscountInput, error) {
+	var it model.UpdateDiscountInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "name", "description", "type", "amount", "validUntil", "isActive", "actionType", "maxRedemptions", "maxRedemptionsPerUser", "isRecurring", "durationInMonths", "maximumRecurringIntervals", "redeemType", "bonusDays", "isEnabledForAllPlans", "isEnabledForAllOneTimeProducts"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "amount":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amount"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Amount = data
+		case "validUntil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("validUntil"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ValidUntil = data
+		case "isActive":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isActive"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsActive = data
+		case "actionType":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("actionType"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ActionType = data
+		case "maxRedemptions":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxRedemptions"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxRedemptions = data
+		case "maxRedemptionsPerUser":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxRedemptionsPerUser"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxRedemptionsPerUser = data
+		case "isRecurring":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isRecurring"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsRecurring = data
+		case "durationInMonths":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("durationInMonths"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DurationInMonths = data
+		case "maximumRecurringIntervals":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maximumRecurringIntervals"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaximumRecurringIntervals = data
+		case "redeemType":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("redeemType"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RedeemType = data
+		case "bonusDays":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bonusDays"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BonusDays = data
+		case "isEnabledForAllPlans":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isEnabledForAllPlans"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsEnabledForAllPlans = data
+		case "isEnabledForAllOneTimeProducts":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isEnabledForAllOneTimeProducts"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsEnabledForAllOneTimeProducts = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdatePlanInput(ctx context.Context, obj any) (model.UpdatePlanInput, error) {
 	var it model.UpdatePlanInput
 	asMap := map[string]any{}
@@ -12414,6 +14326,50 @@ func (ec *executionContext) _ChangePasswordResponse(ctx context.Context, sel ast
 	return out
 }
 
+var deleteDiscountResponseImplementors = []string{"DeleteDiscountResponse"}
+
+func (ec *executionContext) _DeleteDiscountResponse(ctx context.Context, sel ast.SelectionSet, obj *model.DeleteDiscountResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, deleteDiscountResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DeleteDiscountResponse")
+		case "success":
+			out.Values[i] = ec._DeleteDiscountResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._DeleteDiscountResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var deletePlanResponseImplementors = []string{"DeletePlanResponse"}
 
 func (ec *executionContext) _DeletePlanResponse(ctx context.Context, sel ast.SelectionSet, obj *model.DeletePlanResponse) graphql.Marshaler {
@@ -12611,6 +14567,259 @@ func (ec *executionContext) _DeleteUserResponse(ctx context.Context, sel ast.Sel
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var discountImplementors = []string{"Discount"}
+
+func (ec *executionContext) _Discount(ctx context.Context, sel ast.SelectionSet, obj *model.Discount) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, discountImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Discount")
+		case "id":
+			out.Values[i] = ec._Discount_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._Discount_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "description":
+			out.Values[i] = ec._Discount_description(ctx, field, obj)
+		case "type":
+			out.Values[i] = ec._Discount_type(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "amount":
+			out.Values[i] = ec._Discount_amount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "validUntil":
+			out.Values[i] = ec._Discount_validUntil(ctx, field, obj)
+		case "isActive":
+			out.Values[i] = ec._Discount_isActive(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "actionType":
+			out.Values[i] = ec._Discount_actionType(ctx, field, obj)
+		case "maxRedemptions":
+			out.Values[i] = ec._Discount_maxRedemptions(ctx, field, obj)
+		case "maxRedemptionsPerUser":
+			out.Values[i] = ec._Discount_maxRedemptionsPerUser(ctx, field, obj)
+		case "redemptions":
+			out.Values[i] = ec._Discount_redemptions(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isRecurring":
+			out.Values[i] = ec._Discount_isRecurring(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "durationInMonths":
+			out.Values[i] = ec._Discount_durationInMonths(ctx, field, obj)
+		case "maximumRecurringIntervals":
+			out.Values[i] = ec._Discount_maximumRecurringIntervals(ctx, field, obj)
+		case "redeemType":
+			out.Values[i] = ec._Discount_redeemType(ctx, field, obj)
+		case "bonusDays":
+			out.Values[i] = ec._Discount_bonusDays(ctx, field, obj)
+		case "isEnabledForAllPlans":
+			out.Values[i] = ec._Discount_isEnabledForAllPlans(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isEnabledForAllOneTimeProducts":
+			out.Values[i] = ec._Discount_isEnabledForAllOneTimeProducts(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._Discount_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Discount_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var discountListImplementors = []string{"DiscountList"}
+
+func (ec *executionContext) _DiscountList(ctx context.Context, sel ast.SelectionSet, obj *model.DiscountList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, discountListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DiscountList")
+		case "discounts":
+			out.Values[i] = ec._DiscountList_discounts(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "total":
+			out.Values[i] = ec._DiscountList_total(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "page":
+			out.Values[i] = ec._DiscountList_page(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "perPage":
+			out.Values[i] = ec._DiscountList_perPage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var discountListResponseImplementors = []string{"DiscountListResponse"}
+
+func (ec *executionContext) _DiscountListResponse(ctx context.Context, sel ast.SelectionSet, obj *model.DiscountListResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, discountListResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DiscountListResponse")
+		case "success":
+			out.Values[i] = ec._DiscountListResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._DiscountListResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "data":
+			out.Values[i] = ec._DiscountListResponse_data(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var discountResponseImplementors = []string{"DiscountResponse"}
+
+func (ec *executionContext) _DiscountResponse(ctx context.Context, sel ast.SelectionSet, obj *model.DiscountResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, discountResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DiscountResponse")
+		case "success":
+			out.Values[i] = ec._DiscountResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._DiscountResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "data":
+			out.Values[i] = ec._DiscountResponse_data(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -13028,6 +15237,27 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deletePlan":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deletePlan(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createDiscount":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createDiscount(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateDiscount":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateDiscount(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteDiscount":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteDiscount(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -13997,6 +16227,50 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_plansByProduct(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "discount":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_discount(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "discounts":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_discounts(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -15463,6 +17737,11 @@ func (ec *executionContext) marshalNChangePasswordResponse2ᚖgithubᚗcomᚋdam
 	return ec._ChangePasswordResponse(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalNCreateDiscountInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCreateDiscountInput(ctx context.Context, v any) (model.CreateDiscountInput, error) {
+	res, err := ec.unmarshalInputCreateDiscountInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNCreatePlanInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCreatePlanInput(ctx context.Context, v any) (model.CreatePlanInput, error) {
 	res, err := ec.unmarshalInputCreatePlanInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -15481,6 +17760,20 @@ func (ec *executionContext) unmarshalNCreateTenantInput2githubᚗcomᚋdamartepl
 func (ec *executionContext) unmarshalNCreateUserInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCreateUserInput(ctx context.Context, v any) (model.CreateUserInput, error) {
 	res, err := ec.unmarshalInputCreateUserInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNDeleteDiscountResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteDiscountResponse(ctx context.Context, sel ast.SelectionSet, v model.DeleteDiscountResponse) graphql.Marshaler {
+	return ec._DeleteDiscountResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDeleteDiscountResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteDiscountResponse(ctx context.Context, sel ast.SelectionSet, v *model.DeleteDiscountResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DeleteDiscountResponse(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNDeletePlanResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeletePlanResponse(ctx context.Context, sel ast.SelectionSet, v model.DeletePlanResponse) graphql.Marshaler {
@@ -15551,6 +17844,104 @@ func (ec *executionContext) marshalNDeleteUserResponse2ᚖgithubᚗcomᚋdamarte
 		return graphql.Null
 	}
 	return ec._DeleteUserResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNDiscount2ᚕᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscountᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Discount) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNDiscount2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscount(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNDiscount2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscount(ctx context.Context, sel ast.SelectionSet, v *model.Discount) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Discount(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNDiscountListResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscountListResponse(ctx context.Context, sel ast.SelectionSet, v model.DiscountListResponse) graphql.Marshaler {
+	return ec._DiscountListResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDiscountListResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscountListResponse(ctx context.Context, sel ast.SelectionSet, v *model.DiscountListResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DiscountListResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNDiscountResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscountResponse(ctx context.Context, sel ast.SelectionSet, v model.DiscountResponse) graphql.Marshaler {
+	return ec._DiscountResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDiscountResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscountResponse(ctx context.Context, sel ast.SelectionSet, v *model.DiscountResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DiscountResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v any) (float64, error) {
+	res, err := graphql.UnmarshalFloatContext(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalFloatContext(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return graphql.WrapContextMarshaler(ctx, res)
 }
 
 func (ec *executionContext) marshalNForgotPasswordResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐForgotPasswordResponse(ctx context.Context, sel ast.SelectionSet, v model.ForgotPasswordResponse) graphql.Marshaler {
@@ -16076,6 +18467,11 @@ func (ec *executionContext) marshalNTenantUsersResponse2ᚖgithubᚗcomᚋdamart
 	return ec._TenantUsersResponse(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalNUpdateDiscountInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐUpdateDiscountInput(ctx context.Context, v any) (model.UpdateDiscountInput, error) {
+	res, err := ec.unmarshalInputUpdateDiscountInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNUpdatePlanInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐUpdatePlanInput(ctx context.Context, v any) (model.UpdatePlanInput, error) {
 	res, err := ec.unmarshalInputUpdatePlanInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -16492,6 +18888,20 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	_ = ctx
 	res := graphql.MarshalBoolean(*v)
 	return res
+}
+
+func (ec *executionContext) marshalODiscount2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscount(ctx context.Context, sel ast.SelectionSet, v *model.Discount) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Discount(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalODiscountList2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscountList(ctx context.Context, sel ast.SelectionSet, v *model.DiscountList) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._DiscountList(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v any) (*string, error) {

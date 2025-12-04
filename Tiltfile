@@ -38,7 +38,7 @@ local_resource(
         period_secs=3,
         tcp_socket=tcp_socket_action(50051)
     ),
-    labels=['backend', 'grpc', 'core'],
+    labels=['backend'],
     links=[
         link('http://localhost:50051', 'gRPC Endpoint'),
     ],
@@ -63,7 +63,7 @@ local_resource(
         period_secs=3,
         tcp_socket=tcp_socket_action(50052)
     ),
-    labels=['backend', 'grpc', 'core'],
+    labels=['backend'],
     resource_deps=['user-service'],
     links=[
         link('http://localhost:50052', 'gRPC Endpoint'),
@@ -89,7 +89,7 @@ local_resource(
         period_secs=3,
         tcp_socket=tcp_socket_action(50053)
     ),
-    labels=['backend', 'grpc', 'core'],
+    labels=['backend'],
     links=[
         link('http://localhost:50053', 'gRPC Endpoint'),
     ],
@@ -111,9 +111,9 @@ local_resource(
     ],
     readiness_probe=probe(
         period_secs=3,
-        http_get=http_get_action(8080, '/'),
+        tcp_socket=tcp_socket_action(8080)
     ),
-    labels=['frontend', 'gateway', 'core'],
+    labels=['gateway'],
     resource_deps=['auth-service', 'user-service', 'tenant-service', 'product-service'],
     links=[
         link('http://localhost:8080', 'GraphQL Playground'),
@@ -140,7 +140,7 @@ local_resource(
         period_secs=3,
         tcp_socket=tcp_socket_action(50054)
     ),
-    labels=['backend', 'grpc', 'core'],
+    labels=['backend'],
     links=[
         link('http://localhost:50054', 'gRPC Endpoint'),
     ],
@@ -164,7 +164,7 @@ local_resource(
         period_secs=3,
         tcp_socket=tcp_socket_action(50055)
     ),
-    labels=['backend', 'grpc', 'optional'],
+    labels=['backend'],
     auto_init=False,
 )
 
@@ -182,7 +182,7 @@ local_resource(
         'shared/amqp',
         'shared/contracts',
     ],
-    labels=['backend', 'events', 'core'],
+    labels=['events'],
     resource_deps=['user-service'],
     auto_init=True,
     links=[
@@ -208,7 +208,7 @@ local_resource(
         period_secs=3,
         tcp_socket=tcp_socket_action(50056)
     ),
-    labels=['backend', 'grpc', 'optional'],
+    labels=['events', 'optional'],
     auto_init=False,
 )
 

@@ -5,6 +5,7 @@ package grpc
 
 import (
 	"context"
+	"time"
 
 	"github.com/damarteplok/damar-admin-cms/services/product-service/internal/domain"
 	pb "github.com/damarteplok/damar-admin-cms/shared/proto/product"
@@ -54,6 +55,13 @@ func (h *ProductHandler) GetDiscountByCode(ctx context.Context, req *pb.GetDisco
 
 // CreateDiscount creates a new discount
 func (h *ProductHandler) CreateDiscount(ctx context.Context, req *pb.CreateDiscountRequest) (*pb.CreateDiscountResponse, error) {
+	// Set default redeem_type if not provided (database constraint: NOT NULL DEFAULT 1)
+	redeemType := req.RedeemType
+	if redeemType == nil {
+		defaultRedeemType := int32(1)
+		redeemType = &defaultRedeemType
+	}
+
 	discount := &domain.Discount{
 		Name:                           req.Name,
 		Description:                    req.Description,
@@ -61,41 +69,22 @@ func (h *ProductHandler) CreateDiscount(ctx context.Context, req *pb.CreateDisco
 		Amount:                         req.Amount,
 		IsActive:                       req.IsActive,
 		ActionType:                     req.ActionType,
-		MaxRedemptions:                 nil,
-		MaxRedemptionsPerUser:          nil,
+		ValidUntil:                     nil,
+		MaxRedemptions:                 req.MaxRedemptions,
+		MaxRedemptionsPerUser:          req.MaxRedemptionsPerUser,
 		Redemptions:                    0,
 		IsRecurring:                    req.IsRecurring,
-		DurationInMonths:               nil,
-		MaximumRecurringIntervals:      nil,
-		RedeemType:                     req.RedeemType,
-		BonusDays:                      nil,
+		DurationInMonths:               req.DurationInMonths,
+		MaximumRecurringIntervals:      req.MaximumRecurringIntervals,
+		RedeemType:                     redeemType,
+		BonusDays:                      req.BonusDays,
 		IsEnabledForAllPlans:           req.IsEnabledForAllPlans,
 		IsEnabledForAllOneTimeProducts: req.IsEnabledForAllOneTimeProducts,
 	}
 
-	if req.DurationInMonths > 0 {
-		duration := req.DurationInMonths
-		discount.DurationInMonths = &duration
-	}
-
-	if req.MaximumRecurringIntervals > 0 {
-		max := req.MaximumRecurringIntervals
-		discount.MaximumRecurringIntervals = &max
-	}
-
-	if req.BonusDays > 0 {
-		bonus := req.BonusDays
-		discount.BonusDays = &bonus
-	}
-
-	if req.MaxRedemptions > 0 {
-		max := req.MaxRedemptions
-		discount.MaxRedemptions = &max
-	}
-
-	if req.MaxRedemptionsPerUser > 0 {
-		max := req.MaxRedemptionsPerUser
-		discount.MaxRedemptionsPerUser = &max
+	if req.ValidUntil != nil {
+		validUntil := time.Unix(*req.ValidUntil, 0)
+		discount.ValidUntil = &validUntil
 	}
 
 	err := h.discountService.Create(ctx, discount)
@@ -115,6 +104,13 @@ func (h *ProductHandler) CreateDiscount(ctx context.Context, req *pb.CreateDisco
 
 // UpdateDiscount updates an existing discount
 func (h *ProductHandler) UpdateDiscount(ctx context.Context, req *pb.UpdateDiscountRequest) (*pb.UpdateDiscountResponse, error) {
+	// Set default redeem_type if not provided (database constraint: NOT NULL DEFAULT 1)
+	redeemType := req.RedeemType
+	if redeemType == nil {
+		defaultRedeemType := int32(1)
+		redeemType = &defaultRedeemType
+	}
+
 	discount := &domain.Discount{
 		ID:                             req.Id,
 		Name:                           req.Name,
@@ -123,40 +119,21 @@ func (h *ProductHandler) UpdateDiscount(ctx context.Context, req *pb.UpdateDisco
 		Amount:                         req.Amount,
 		IsActive:                       req.IsActive,
 		ActionType:                     req.ActionType,
-		MaxRedemptions:                 nil,
-		MaxRedemptionsPerUser:          nil,
+		ValidUntil:                     nil,
+		MaxRedemptions:                 req.MaxRedemptions,
+		MaxRedemptionsPerUser:          req.MaxRedemptionsPerUser,
 		IsRecurring:                    req.IsRecurring,
-		DurationInMonths:               nil,
-		MaximumRecurringIntervals:      nil,
-		RedeemType:                     req.RedeemType,
-		BonusDays:                      nil,
+		DurationInMonths:               req.DurationInMonths,
+		MaximumRecurringIntervals:      req.MaximumRecurringIntervals,
+		RedeemType:                     redeemType,
+		BonusDays:                      req.BonusDays,
 		IsEnabledForAllPlans:           req.IsEnabledForAllPlans,
 		IsEnabledForAllOneTimeProducts: req.IsEnabledForAllOneTimeProducts,
 	}
 
-	if req.DurationInMonths > 0 {
-		duration := req.DurationInMonths
-		discount.DurationInMonths = &duration
-	}
-
-	if req.MaximumRecurringIntervals > 0 {
-		max := req.MaximumRecurringIntervals
-		discount.MaximumRecurringIntervals = &max
-	}
-
-	if req.BonusDays > 0 {
-		bonus := req.BonusDays
-		discount.BonusDays = &bonus
-	}
-
-	if req.MaxRedemptions > 0 {
-		max := req.MaxRedemptions
-		discount.MaxRedemptions = &max
-	}
-
-	if req.MaxRedemptionsPerUser > 0 {
-		max := req.MaxRedemptionsPerUser
-		discount.MaxRedemptionsPerUser = &max
+	if req.ValidUntil != nil {
+		validUntil := time.Unix(*req.ValidUntil, 0)
+		discount.ValidUntil = &validUntil
 	}
 
 	err := h.discountService.Update(ctx, discount)
@@ -542,35 +519,26 @@ func domainDiscountToPb(discount *domain.Discount) *pb.Discount {
 		Description:                    discount.Description,
 		Type:                           discount.Type,
 		Amount:                         discount.Amount,
+		ValidUntil:                     nil,
 		IsActive:                       discount.IsActive,
 		ActionType:                     discount.ActionType,
+		MaxRedemptions:                 discount.MaxRedemptions,
+		MaxRedemptionsPerUser:          discount.MaxRedemptionsPerUser,
 		Redemptions:                    discount.Redemptions,
 		IsRecurring:                    discount.IsRecurring,
+		DurationInMonths:               discount.DurationInMonths,
+		MaximumRecurringIntervals:      discount.MaximumRecurringIntervals,
 		RedeemType:                     discount.RedeemType,
+		BonusDays:                      discount.BonusDays,
 		IsEnabledForAllPlans:           discount.IsEnabledForAllPlans,
 		IsEnabledForAllOneTimeProducts: discount.IsEnabledForAllOneTimeProducts,
 		CreatedAt:                      discount.CreatedAt.Unix(),
 		UpdatedAt:                      discount.UpdatedAt.Unix(),
 	}
 
-	if discount.DurationInMonths != nil {
-		pbDiscount.DurationInMonths = *discount.DurationInMonths
-	}
-
-	if discount.MaximumRecurringIntervals != nil {
-		pbDiscount.MaximumRecurringIntervals = *discount.MaximumRecurringIntervals
-	}
-
-	if discount.BonusDays != nil {
-		pbDiscount.BonusDays = *discount.BonusDays
-	}
-
-	if discount.MaxRedemptions != nil {
-		pbDiscount.MaxRedemptions = *discount.MaxRedemptions
-	}
-
-	if discount.MaxRedemptionsPerUser != nil {
-		pbDiscount.MaxRedemptionsPerUser = *discount.MaxRedemptionsPerUser
+	if discount.ValidUntil != nil {
+		validUntil := discount.ValidUntil.Unix()
+		pbDiscount.ValidUntil = &validUntil
 	}
 
 	return pbDiscount

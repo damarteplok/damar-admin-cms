@@ -25,6 +25,25 @@ type ChangePasswordResponse struct {
 	Message string `json:"message"`
 }
 
+type CreateDiscountInput struct {
+	Name                           string  `json:"name"`
+	Description                    *string `json:"description,omitempty"`
+	Type                           string  `json:"type"`
+	Amount                         float64 `json:"amount"`
+	ValidUntil                     *int32  `json:"validUntil,omitempty"`
+	IsActive                       bool    `json:"isActive"`
+	ActionType                     *string `json:"actionType,omitempty"`
+	MaxRedemptions                 *int32  `json:"maxRedemptions,omitempty"`
+	MaxRedemptionsPerUser          *int32  `json:"maxRedemptionsPerUser,omitempty"`
+	IsRecurring                    bool    `json:"isRecurring"`
+	DurationInMonths               *int32  `json:"durationInMonths,omitempty"`
+	MaximumRecurringIntervals      *int32  `json:"maximumRecurringIntervals,omitempty"`
+	RedeemType                     *int32  `json:"redeemType,omitempty"`
+	BonusDays                      *int32  `json:"bonusDays,omitempty"`
+	IsEnabledForAllPlans           *bool   `json:"isEnabledForAllPlans,omitempty"`
+	IsEnabledForAllOneTimeProducts *bool   `json:"isEnabledForAllOneTimeProducts,omitempty"`
+}
+
 type CreatePlanInput struct {
 	Name               string  `json:"name"`
 	Slug               *string `json:"slug,omitempty"`
@@ -68,6 +87,11 @@ type CreateUserInput struct {
 	IsAdmin     *bool   `json:"isAdmin,omitempty"`
 }
 
+type DeleteDiscountResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
 type DeletePlanResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
@@ -91,6 +115,48 @@ type DeleteTenantResponse struct {
 type DeleteUserResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
+}
+
+type Discount struct {
+	ID                             string  `json:"id"`
+	Name                           string  `json:"name"`
+	Description                    *string `json:"description,omitempty"`
+	Type                           string  `json:"type"`
+	Amount                         float64 `json:"amount"`
+	ValidUntil                     *int32  `json:"validUntil,omitempty"`
+	IsActive                       bool    `json:"isActive"`
+	ActionType                     *string `json:"actionType,omitempty"`
+	MaxRedemptions                 *int32  `json:"maxRedemptions,omitempty"`
+	MaxRedemptionsPerUser          *int32  `json:"maxRedemptionsPerUser,omitempty"`
+	Redemptions                    int32   `json:"redemptions"`
+	IsRecurring                    bool    `json:"isRecurring"`
+	DurationInMonths               *int32  `json:"durationInMonths,omitempty"`
+	MaximumRecurringIntervals      *int32  `json:"maximumRecurringIntervals,omitempty"`
+	RedeemType                     *int32  `json:"redeemType,omitempty"`
+	BonusDays                      *int32  `json:"bonusDays,omitempty"`
+	IsEnabledForAllPlans           bool    `json:"isEnabledForAllPlans"`
+	IsEnabledForAllOneTimeProducts bool    `json:"isEnabledForAllOneTimeProducts"`
+	CreatedAt                      int32   `json:"createdAt"`
+	UpdatedAt                      int32   `json:"updatedAt"`
+}
+
+type DiscountList struct {
+	Discounts []*Discount `json:"discounts"`
+	Total     int32       `json:"total"`
+	Page      int32       `json:"page"`
+	PerPage   int32       `json:"perPage"`
+}
+
+type DiscountListResponse struct {
+	Success bool          `json:"success"`
+	Message string        `json:"message"`
+	Data    *DiscountList `json:"data,omitempty"`
+}
+
+type DiscountResponse struct {
+	Success bool      `json:"success"`
+	Message string    `json:"message"`
+	Data    *Discount `json:"data,omitempty"`
 }
 
 type ForgotPasswordResponse struct {
@@ -317,6 +383,26 @@ type TenantUsersResponse struct {
 	Success bool          `json:"success"`
 	Message string        `json:"message"`
 	Data    []*TenantUser `json:"data,omitempty"`
+}
+
+type UpdateDiscountInput struct {
+	ID                             string  `json:"id"`
+	Name                           string  `json:"name"`
+	Description                    *string `json:"description,omitempty"`
+	Type                           string  `json:"type"`
+	Amount                         float64 `json:"amount"`
+	ValidUntil                     *int32  `json:"validUntil,omitempty"`
+	IsActive                       bool    `json:"isActive"`
+	ActionType                     *string `json:"actionType,omitempty"`
+	MaxRedemptions                 *int32  `json:"maxRedemptions,omitempty"`
+	MaxRedemptionsPerUser          *int32  `json:"maxRedemptionsPerUser,omitempty"`
+	IsRecurring                    bool    `json:"isRecurring"`
+	DurationInMonths               *int32  `json:"durationInMonths,omitempty"`
+	MaximumRecurringIntervals      *int32  `json:"maximumRecurringIntervals,omitempty"`
+	RedeemType                     *int32  `json:"redeemType,omitempty"`
+	BonusDays                      *int32  `json:"bonusDays,omitempty"`
+	IsEnabledForAllPlans           *bool   `json:"isEnabledForAllPlans,omitempty"`
+	IsEnabledForAllOneTimeProducts *bool   `json:"isEnabledForAllOneTimeProducts,omitempty"`
 }
 
 type UpdatePlanInput struct {

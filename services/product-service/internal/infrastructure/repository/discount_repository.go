@@ -18,7 +18,7 @@ func NewDiscountRepository(db *pgxpool.Pool) domain.DiscountRepository {
 
 func (r *DiscountRepository) GetByID(ctx context.Context, id int64) (*domain.Discount, error) {
 	query := `
-		SELECT id, name, type, amount, is_active, description, action_type, 
+		SELECT id, name, type, amount, is_active, description, valid_until, action_type, 
 		       max_redemptions, max_redemptions_per_user, redemptions, is_recurring,
 		       duration_in_months, maximum_recurring_intervals, redeem_type, bonus_days,
 		       is_enabled_for_all_plans, is_enabled_for_all_one_time_products, 
@@ -35,6 +35,7 @@ func (r *DiscountRepository) GetByID(ctx context.Context, id int64) (*domain.Dis
 		&discount.Amount,
 		&discount.IsActive,
 		&discount.Description,
+		&discount.ValidUntil,
 		&discount.ActionType,
 		&discount.MaxRedemptions,
 		&discount.MaxRedemptionsPerUser,
@@ -58,12 +59,12 @@ func (r *DiscountRepository) GetByID(ctx context.Context, id int64) (*domain.Dis
 
 func (r *DiscountRepository) Create(ctx context.Context, discount *domain.Discount) error {
 	query := `
-		INSERT INTO discounts (name, type, amount, is_active, description, action_type,
+		INSERT INTO discounts (name, type, amount, is_active, description, valid_until, action_type,
 		                       max_redemptions, max_redemptions_per_user, redemptions, is_recurring,
 		                       duration_in_months, maximum_recurring_intervals, redeem_type, bonus_days,
 		                       is_enabled_for_all_plans, is_enabled_for_all_one_time_products,
 		                       created_at, updated_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, NOW(), NOW())
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, NOW(), NOW())
 		RETURNING id, created_at, updated_at
 	`
 
@@ -75,6 +76,7 @@ func (r *DiscountRepository) Create(ctx context.Context, discount *domain.Discou
 		discount.Amount,
 		discount.IsActive,
 		discount.Description,
+		discount.ValidUntil,
 		discount.ActionType,
 		discount.MaxRedemptions,
 		discount.MaxRedemptionsPerUser,
@@ -98,12 +100,12 @@ func (r *DiscountRepository) Update(ctx context.Context, discount *domain.Discou
 	query := `
 		UPDATE discounts 
 		SET name = $1, type = $2, amount = $3, is_active = $4, description = $5,
-		    action_type = $6, max_redemptions = $7, max_redemptions_per_user = $8,
-		    redemptions = $9, is_recurring = $10, duration_in_months = $11,
-		    maximum_recurring_intervals = $12, redeem_type = $13, bonus_days = $14,
-		    is_enabled_for_all_plans = $15, is_enabled_for_all_one_time_products = $16,
+		    valid_until = $6, action_type = $7, max_redemptions = $8, max_redemptions_per_user = $9,
+		    redemptions = $10, is_recurring = $11, duration_in_months = $12,
+		    maximum_recurring_intervals = $13, redeem_type = $14, bonus_days = $15,
+		    is_enabled_for_all_plans = $16, is_enabled_for_all_one_time_products = $17,
 		    updated_at = NOW()
-		WHERE id = $17
+		WHERE id = $18
 		RETURNING updated_at
 	`
 
@@ -115,6 +117,7 @@ func (r *DiscountRepository) Update(ctx context.Context, discount *domain.Discou
 		discount.Amount,
 		discount.IsActive,
 		discount.Description,
+		discount.ValidUntil,
 		discount.ActionType,
 		discount.MaxRedemptions,
 		discount.MaxRedemptionsPerUser,
@@ -156,7 +159,7 @@ func (r *DiscountRepository) GetAll(ctx context.Context, page, perPage int, acti
 	// Build query with filters
 	countQuery := `SELECT COUNT(*) FROM discounts WHERE 1=1`
 	query := `
-		SELECT id, name, type, amount, is_active, description, action_type,
+		SELECT id, name, type, amount, is_active, description, valid_until, action_type,
 		       max_redemptions, max_redemptions_per_user, redemptions, is_recurring,
 		       duration_in_months, maximum_recurring_intervals, redeem_type, bonus_days,
 		       is_enabled_for_all_plans, is_enabled_for_all_one_time_products,
@@ -196,6 +199,7 @@ func (r *DiscountRepository) GetAll(ctx context.Context, page, perPage int, acti
 			&discount.Amount,
 			&discount.IsActive,
 			&discount.Description,
+			&discount.ValidUntil,
 			&discount.ActionType,
 			&discount.MaxRedemptions,
 			&discount.MaxRedemptionsPerUser,
