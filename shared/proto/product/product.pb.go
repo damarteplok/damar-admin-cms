@@ -942,13 +942,13 @@ type Plan struct {
 	ProductId          int64                  `protobuf:"varint,5,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	IsActive           bool                   `protobuf:"varint,6,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
 	HasTrial           bool                   `protobuf:"varint,7,opt,name=has_trial,json=hasTrial,proto3" json:"has_trial,omitempty"`
-	TrialIntervalId    int64                  `protobuf:"varint,8,opt,name=trial_interval_id,json=trialIntervalId,proto3" json:"trial_interval_id,omitempty"`
+	TrialIntervalId    *int64                 `protobuf:"varint,8,opt,name=trial_interval_id,json=trialIntervalId,proto3,oneof" json:"trial_interval_id,omitempty"`
 	IntervalCount      int32                  `protobuf:"varint,9,opt,name=interval_count,json=intervalCount,proto3" json:"interval_count,omitempty"`
 	TrialIntervalCount int32                  `protobuf:"varint,10,opt,name=trial_interval_count,json=trialIntervalCount,proto3" json:"trial_interval_count,omitempty"`
 	Description        string                 `protobuf:"bytes,11,opt,name=description,proto3" json:"description,omitempty"`
 	Type               string                 `protobuf:"bytes,12,opt,name=type,proto3" json:"type,omitempty"` // flat_rate, per_unit, tiered
 	MaxUsersPerTenant  int32                  `protobuf:"varint,13,opt,name=max_users_per_tenant,json=maxUsersPerTenant,proto3" json:"max_users_per_tenant,omitempty"`
-	MeterId            int64                  `protobuf:"varint,14,opt,name=meter_id,json=meterId,proto3" json:"meter_id,omitempty"`
+	MeterId            *int64                 `protobuf:"varint,14,opt,name=meter_id,json=meterId,proto3,oneof" json:"meter_id,omitempty"`
 	IsVisible          bool                   `protobuf:"varint,15,opt,name=is_visible,json=isVisible,proto3" json:"is_visible,omitempty"`
 	CreatedAt          int64                  `protobuf:"varint,16,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt          int64                  `protobuf:"varint,17,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
@@ -1036,8 +1036,8 @@ func (x *Plan) GetHasTrial() bool {
 }
 
 func (x *Plan) GetTrialIntervalId() int64 {
-	if x != nil {
-		return x.TrialIntervalId
+	if x != nil && x.TrialIntervalId != nil {
+		return *x.TrialIntervalId
 	}
 	return 0
 }
@@ -1078,8 +1078,8 @@ func (x *Plan) GetMaxUsersPerTenant() int32 {
 }
 
 func (x *Plan) GetMeterId() int64 {
-	if x != nil {
-		return x.MeterId
+	if x != nil && x.MeterId != nil {
+		return *x.MeterId
 	}
 	return 0
 }
@@ -1425,13 +1425,13 @@ type CreatePlanRequest struct {
 	ProductId          int64                  `protobuf:"varint,4,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	IsActive           bool                   `protobuf:"varint,5,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
 	HasTrial           bool                   `protobuf:"varint,6,opt,name=has_trial,json=hasTrial,proto3" json:"has_trial,omitempty"`
-	TrialIntervalId    int64                  `protobuf:"varint,7,opt,name=trial_interval_id,json=trialIntervalId,proto3" json:"trial_interval_id,omitempty"`
+	TrialIntervalId    *int64                 `protobuf:"varint,7,opt,name=trial_interval_id,json=trialIntervalId,proto3,oneof" json:"trial_interval_id,omitempty"`
 	IntervalCount      int32                  `protobuf:"varint,8,opt,name=interval_count,json=intervalCount,proto3" json:"interval_count,omitempty"`
 	TrialIntervalCount int32                  `protobuf:"varint,9,opt,name=trial_interval_count,json=trialIntervalCount,proto3" json:"trial_interval_count,omitempty"`
 	Description        string                 `protobuf:"bytes,10,opt,name=description,proto3" json:"description,omitempty"`
 	Type               string                 `protobuf:"bytes,11,opt,name=type,proto3" json:"type,omitempty"`
 	MaxUsersPerTenant  int32                  `protobuf:"varint,12,opt,name=max_users_per_tenant,json=maxUsersPerTenant,proto3" json:"max_users_per_tenant,omitempty"`
-	MeterId            int64                  `protobuf:"varint,13,opt,name=meter_id,json=meterId,proto3" json:"meter_id,omitempty"`
+	MeterId            *int64                 `protobuf:"varint,13,opt,name=meter_id,json=meterId,proto3,oneof" json:"meter_id,omitempty"`
 	IsVisible          bool                   `protobuf:"varint,14,opt,name=is_visible,json=isVisible,proto3" json:"is_visible,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
@@ -1510,8 +1510,8 @@ func (x *CreatePlanRequest) GetHasTrial() bool {
 }
 
 func (x *CreatePlanRequest) GetTrialIntervalId() int64 {
-	if x != nil {
-		return x.TrialIntervalId
+	if x != nil && x.TrialIntervalId != nil {
+		return *x.TrialIntervalId
 	}
 	return 0
 }
@@ -1552,8 +1552,8 @@ func (x *CreatePlanRequest) GetMaxUsersPerTenant() int32 {
 }
 
 func (x *CreatePlanRequest) GetMeterId() int64 {
-	if x != nil {
-		return x.MeterId
+	if x != nil && x.MeterId != nil {
+		return *x.MeterId
 	}
 	return 0
 }
@@ -1633,13 +1633,13 @@ type UpdatePlanRequest struct {
 	IntervalId         int64                  `protobuf:"varint,4,opt,name=interval_id,json=intervalId,proto3" json:"interval_id,omitempty"`
 	IsActive           bool                   `protobuf:"varint,5,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
 	HasTrial           bool                   `protobuf:"varint,6,opt,name=has_trial,json=hasTrial,proto3" json:"has_trial,omitempty"`
-	TrialIntervalId    int64                  `protobuf:"varint,7,opt,name=trial_interval_id,json=trialIntervalId,proto3" json:"trial_interval_id,omitempty"`
+	TrialIntervalId    *int64                 `protobuf:"varint,7,opt,name=trial_interval_id,json=trialIntervalId,proto3,oneof" json:"trial_interval_id,omitempty"`
 	IntervalCount      int32                  `protobuf:"varint,8,opt,name=interval_count,json=intervalCount,proto3" json:"interval_count,omitempty"`
 	TrialIntervalCount int32                  `protobuf:"varint,9,opt,name=trial_interval_count,json=trialIntervalCount,proto3" json:"trial_interval_count,omitempty"`
 	Description        string                 `protobuf:"bytes,10,opt,name=description,proto3" json:"description,omitempty"`
 	Type               string                 `protobuf:"bytes,11,opt,name=type,proto3" json:"type,omitempty"`
 	MaxUsersPerTenant  int32                  `protobuf:"varint,12,opt,name=max_users_per_tenant,json=maxUsersPerTenant,proto3" json:"max_users_per_tenant,omitempty"`
-	MeterId            int64                  `protobuf:"varint,13,opt,name=meter_id,json=meterId,proto3" json:"meter_id,omitempty"`
+	MeterId            *int64                 `protobuf:"varint,13,opt,name=meter_id,json=meterId,proto3,oneof" json:"meter_id,omitempty"`
 	IsVisible          bool                   `protobuf:"varint,14,opt,name=is_visible,json=isVisible,proto3" json:"is_visible,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
@@ -1718,8 +1718,8 @@ func (x *UpdatePlanRequest) GetHasTrial() bool {
 }
 
 func (x *UpdatePlanRequest) GetTrialIntervalId() int64 {
-	if x != nil {
-		return x.TrialIntervalId
+	if x != nil && x.TrialIntervalId != nil {
+		return *x.TrialIntervalId
 	}
 	return 0
 }
@@ -1760,8 +1760,8 @@ func (x *UpdatePlanRequest) GetMaxUsersPerTenant() int32 {
 }
 
 func (x *UpdatePlanRequest) GetMeterId() int64 {
-	if x != nil {
-		return x.MeterId
+	if x != nil && x.MeterId != nil {
+		return *x.MeterId
 	}
 	return 0
 }
@@ -7355,7 +7355,7 @@ const file_product_proto_rawDesc = "" +
 	"\x16GetAllProductsResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12/\n" +
-	"\x04data\x18\x03 \x01(\v2\x1b.product.GetAllProductsDataR\x04data\"\x9c\x04\n" +
+	"\x04data\x18\x03 \x01(\v2\x1b.product.GetAllProductsDataR\x04data\"\xc9\x04\n" +
 	"\x04Plan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
@@ -7365,21 +7365,23 @@ const file_product_proto_rawDesc = "" +
 	"\n" +
 	"product_id\x18\x05 \x01(\x03R\tproductId\x12\x1b\n" +
 	"\tis_active\x18\x06 \x01(\bR\bisActive\x12\x1b\n" +
-	"\thas_trial\x18\a \x01(\bR\bhasTrial\x12*\n" +
-	"\x11trial_interval_id\x18\b \x01(\x03R\x0ftrialIntervalId\x12%\n" +
+	"\thas_trial\x18\a \x01(\bR\bhasTrial\x12/\n" +
+	"\x11trial_interval_id\x18\b \x01(\x03H\x00R\x0ftrialIntervalId\x88\x01\x01\x12%\n" +
 	"\x0einterval_count\x18\t \x01(\x05R\rintervalCount\x120\n" +
 	"\x14trial_interval_count\x18\n" +
 	" \x01(\x05R\x12trialIntervalCount\x12 \n" +
 	"\vdescription\x18\v \x01(\tR\vdescription\x12\x12\n" +
 	"\x04type\x18\f \x01(\tR\x04type\x12/\n" +
-	"\x14max_users_per_tenant\x18\r \x01(\x05R\x11maxUsersPerTenant\x12\x19\n" +
-	"\bmeter_id\x18\x0e \x01(\x03R\ameterId\x12\x1d\n" +
+	"\x14max_users_per_tenant\x18\r \x01(\x05R\x11maxUsersPerTenant\x12\x1e\n" +
+	"\bmeter_id\x18\x0e \x01(\x03H\x01R\ameterId\x88\x01\x01\x12\x1d\n" +
 	"\n" +
 	"is_visible\x18\x0f \x01(\bR\tisVisible\x12\x1d\n" +
 	"\n" +
 	"created_at\x18\x10 \x01(\x03R\tcreatedAt\x12\x1d\n" +
 	"\n" +
-	"updated_at\x18\x11 \x01(\x03R\tupdatedAt\"$\n" +
+	"updated_at\x18\x11 \x01(\x03R\tupdatedAtB\x14\n" +
+	"\x12_trial_interval_idB\v\n" +
+	"\t_meter_id\"$\n" +
 	"\x12GetPlanByIDRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"l\n" +
 	"\x13GetPlanByIDResponse\x12\x18\n" +
@@ -7398,7 +7400,7 @@ const file_product_proto_rawDesc = "" +
 	"\x19GetPlansByProductResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12!\n" +
-	"\x04data\x18\x03 \x03(\v2\r.product.PlanR\x04data\"\xdb\x03\n" +
+	"\x04data\x18\x03 \x03(\v2\r.product.PlanR\x04data\"\x88\x04\n" +
 	"\x11CreatePlanRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
 	"\x04slug\x18\x02 \x01(\tR\x04slug\x12\x1f\n" +
@@ -7407,21 +7409,23 @@ const file_product_proto_rawDesc = "" +
 	"\n" +
 	"product_id\x18\x04 \x01(\x03R\tproductId\x12\x1b\n" +
 	"\tis_active\x18\x05 \x01(\bR\bisActive\x12\x1b\n" +
-	"\thas_trial\x18\x06 \x01(\bR\bhasTrial\x12*\n" +
-	"\x11trial_interval_id\x18\a \x01(\x03R\x0ftrialIntervalId\x12%\n" +
+	"\thas_trial\x18\x06 \x01(\bR\bhasTrial\x12/\n" +
+	"\x11trial_interval_id\x18\a \x01(\x03H\x00R\x0ftrialIntervalId\x88\x01\x01\x12%\n" +
 	"\x0einterval_count\x18\b \x01(\x05R\rintervalCount\x120\n" +
 	"\x14trial_interval_count\x18\t \x01(\x05R\x12trialIntervalCount\x12 \n" +
 	"\vdescription\x18\n" +
 	" \x01(\tR\vdescription\x12\x12\n" +
 	"\x04type\x18\v \x01(\tR\x04type\x12/\n" +
-	"\x14max_users_per_tenant\x18\f \x01(\x05R\x11maxUsersPerTenant\x12\x19\n" +
-	"\bmeter_id\x18\r \x01(\x03R\ameterId\x12\x1d\n" +
+	"\x14max_users_per_tenant\x18\f \x01(\x05R\x11maxUsersPerTenant\x12\x1e\n" +
+	"\bmeter_id\x18\r \x01(\x03H\x01R\ameterId\x88\x01\x01\x12\x1d\n" +
 	"\n" +
-	"is_visible\x18\x0e \x01(\bR\tisVisible\"k\n" +
+	"is_visible\x18\x0e \x01(\bR\tisVisibleB\x14\n" +
+	"\x12_trial_interval_idB\v\n" +
+	"\t_meter_id\"k\n" +
 	"\x12CreatePlanResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12!\n" +
-	"\x04data\x18\x03 \x01(\v2\r.product.PlanR\x04data\"\xcc\x03\n" +
+	"\x04data\x18\x03 \x01(\v2\r.product.PlanR\x04data\"\xf9\x03\n" +
 	"\x11UpdatePlanRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
@@ -7429,17 +7433,19 @@ const file_product_proto_rawDesc = "" +
 	"\vinterval_id\x18\x04 \x01(\x03R\n" +
 	"intervalId\x12\x1b\n" +
 	"\tis_active\x18\x05 \x01(\bR\bisActive\x12\x1b\n" +
-	"\thas_trial\x18\x06 \x01(\bR\bhasTrial\x12*\n" +
-	"\x11trial_interval_id\x18\a \x01(\x03R\x0ftrialIntervalId\x12%\n" +
+	"\thas_trial\x18\x06 \x01(\bR\bhasTrial\x12/\n" +
+	"\x11trial_interval_id\x18\a \x01(\x03H\x00R\x0ftrialIntervalId\x88\x01\x01\x12%\n" +
 	"\x0einterval_count\x18\b \x01(\x05R\rintervalCount\x120\n" +
 	"\x14trial_interval_count\x18\t \x01(\x05R\x12trialIntervalCount\x12 \n" +
 	"\vdescription\x18\n" +
 	" \x01(\tR\vdescription\x12\x12\n" +
 	"\x04type\x18\v \x01(\tR\x04type\x12/\n" +
-	"\x14max_users_per_tenant\x18\f \x01(\x05R\x11maxUsersPerTenant\x12\x19\n" +
-	"\bmeter_id\x18\r \x01(\x03R\ameterId\x12\x1d\n" +
+	"\x14max_users_per_tenant\x18\f \x01(\x05R\x11maxUsersPerTenant\x12\x1e\n" +
+	"\bmeter_id\x18\r \x01(\x03H\x01R\ameterId\x88\x01\x01\x12\x1d\n" +
 	"\n" +
-	"is_visible\x18\x0e \x01(\bR\tisVisible\"k\n" +
+	"is_visible\x18\x0e \x01(\bR\tisVisibleB\x14\n" +
+	"\x12_trial_interval_idB\v\n" +
+	"\t_meter_id\"k\n" +
 	"\x12UpdatePlanResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12!\n" +
@@ -8201,6 +8207,9 @@ func file_product_proto_init() {
 	if File_product_proto != nil {
 		return
 	}
+	file_product_proto_msgTypes[14].OneofWrappers = []any{}
+	file_product_proto_msgTypes[21].OneofWrappers = []any{}
+	file_product_proto_msgTypes[23].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

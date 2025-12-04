@@ -181,13 +181,13 @@ message Plan {
   int64 product_id = 5;
   bool is_active = 6;
   bool has_trial = 7;
-  int64 trial_interval_id = 8;
+  optional int64 trial_interval_id = 8;
   int32 interval_count = 9;
   int32 trial_interval_count = 10;
   string description = 11;
   string type = 12; // flat_rate, per_unit, tiered
   int32 max_users_per_tenant = 13;
-  int64 meter_id = 14;
+  optional int64 meter_id = 14;
   bool is_visible = 15;
   int64 created_at = 16;
   int64 updated_at = 17;
@@ -230,13 +230,13 @@ message CreatePlanRequest {
   int64 product_id = 4;
   bool is_active = 5;
   bool has_trial = 6;
-  int64 trial_interval_id = 7;
+  optional int64 trial_interval_id = 7;
   int32 interval_count = 8;
   int32 trial_interval_count = 9;
   string description = 10;
   string type = 11;
   int32 max_users_per_tenant = 12;
-  int64 meter_id = 13;
+  optional int64 meter_id = 13;
   bool is_visible = 14;
 }
 
@@ -253,13 +253,13 @@ message UpdatePlanRequest {
   int64 interval_id = 4;
   bool is_active = 5;
   bool has_trial = 6;
-  int64 trial_interval_id = 7;
+  optional int64 trial_interval_id = 7;
   int32 interval_count = 8;
   int32 trial_interval_count = 9;
   string description = 10;
   string type = 11;
   int32 max_users_per_tenant = 12;
-  int64 meter_id = 13;
+  optional int64 meter_id = 13;
   bool is_visible = 14;
 }
 

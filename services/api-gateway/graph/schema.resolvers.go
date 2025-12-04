@@ -1340,6 +1340,296 @@ func (r *mutationResolver) DeleteProduct(ctx context.Context, id string) (*model
 	}, nil
 }
 
+// CreatePlan is the resolver for the createPlan field.
+func (r *mutationResolver) CreatePlan(ctx context.Context, input model.CreatePlanInput) (*model.PlanResponse, error) {
+	// Admin only
+	if err := middleware.RequireAdmin(ctx); err != nil {
+		return &model.PlanResponse{
+			Success: false,
+			Message: "Admin access required",
+		}, nil
+	}
+
+	// Parse IDs
+	intervalID, err := strconv.ParseInt(input.IntervalID, 10, 64)
+	if err != nil {
+		return &model.PlanResponse{
+			Success: false,
+			Message: "Invalid interval ID",
+		}, nil
+	}
+
+	productID, err := strconv.ParseInt(input.ProductID, 10, 64)
+	if err != nil {
+		return &model.PlanResponse{
+			Success: false,
+			Message: "Invalid product ID",
+		}, nil
+	}
+
+	// Prepare request
+	req := &productPb.CreatePlanRequest{
+		Name:          input.Name,
+		IntervalId:    intervalID,
+		ProductId:     productID,
+		IntervalCount: input.IntervalCount,
+		Type:          input.Type,
+	}
+
+	if input.Slug != nil {
+		req.Slug = *input.Slug
+	}
+	if input.IsActive != nil {
+		req.IsActive = *input.IsActive
+	} else {
+		req.IsActive = true
+	}
+	if input.HasTrial != nil {
+		req.HasTrial = *input.HasTrial
+	}
+	if input.TrialIntervalID != nil {
+		trialIntervalID, err := strconv.ParseInt(*input.TrialIntervalID, 10, 64)
+		if err == nil {
+			req.TrialIntervalId = &trialIntervalID
+		}
+	}
+	if input.TrialIntervalCount != nil {
+		req.TrialIntervalCount = *input.TrialIntervalCount
+	}
+	if input.Description != nil {
+		req.Description = *input.Description
+	}
+	if input.MaxUsersPerTenant != nil {
+		req.MaxUsersPerTenant = *input.MaxUsersPerTenant
+	}
+	if input.MeterID != nil {
+		meterID, err := strconv.ParseInt(*input.MeterID, 10, 64)
+		if err == nil {
+			req.MeterId = &meterID
+		}
+	}
+	if input.IsVisible != nil {
+		req.IsVisible = *input.IsVisible
+	} else {
+		req.IsVisible = true
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.CreatePlan(ctx, req)
+	if err != nil {
+		return &model.PlanResponse{
+			Success: false,
+			Message: fmt.Sprintf("Create plan failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.PlanResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	// Convert proto plan to GraphQL model
+	plan := resp.Data
+	return &model.PlanResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Plan{
+			ID:         strconv.FormatInt(plan.Id, 10),
+			Name:       plan.Name,
+			Slug:       plan.Slug,
+			IntervalID: strconv.FormatInt(plan.IntervalId, 10),
+			ProductID:  strconv.FormatInt(plan.ProductId, 10),
+			IsActive:   plan.IsActive,
+			HasTrial:   plan.HasTrial,
+			TrialIntervalID: func() *string {
+				if plan.TrialIntervalId != nil {
+					s := strconv.FormatInt(*plan.TrialIntervalId, 10)
+					return &s
+				}
+				return nil
+			}(),
+			IntervalCount:      plan.IntervalCount,
+			TrialIntervalCount: &plan.TrialIntervalCount,
+			Description:        &plan.Description,
+			Type:               plan.Type,
+			MaxUsersPerTenant:  &plan.MaxUsersPerTenant,
+			MeterID: func() *string {
+				if plan.MeterId != nil {
+					s := strconv.FormatInt(*plan.MeterId, 10)
+					return &s
+				}
+				return nil
+			}(),
+			IsVisible: plan.IsVisible,
+			CreatedAt: int32(plan.CreatedAt),
+			UpdatedAt: int32(plan.UpdatedAt),
+		},
+	}, nil
+}
+
+// UpdatePlan is the resolver for the updatePlan field.
+func (r *mutationResolver) UpdatePlan(ctx context.Context, input model.UpdatePlanInput) (*model.PlanResponse, error) {
+	// Admin only
+	if err := middleware.RequireAdmin(ctx); err != nil {
+		return &model.PlanResponse{
+			Success: false,
+			Message: "Admin access required",
+		}, nil
+	}
+
+	// Parse IDs
+	planID, err := strconv.ParseInt(input.ID, 10, 64)
+	if err != nil {
+		return &model.PlanResponse{
+			Success: false,
+			Message: "Invalid plan ID",
+		}, nil
+	}
+
+	intervalID, err := strconv.ParseInt(input.IntervalID, 10, 64)
+	if err != nil {
+		return &model.PlanResponse{
+			Success: false,
+			Message: "Invalid interval ID",
+		}, nil
+	}
+
+	// Prepare request
+	req := &productPb.UpdatePlanRequest{
+		Id:            planID,
+		Name:          input.Name,
+		IntervalId:    intervalID,
+		IntervalCount: input.IntervalCount,
+		Type:          input.Type,
+	}
+
+	if input.Slug != nil {
+		req.Slug = *input.Slug
+	}
+	if input.IsActive != nil {
+		req.IsActive = *input.IsActive
+	}
+	if input.HasTrial != nil {
+		req.HasTrial = *input.HasTrial
+	}
+	if input.TrialIntervalID != nil {
+		trialIntervalID, err := strconv.ParseInt(*input.TrialIntervalID, 10, 64)
+		if err == nil {
+			req.TrialIntervalId = &trialIntervalID
+		}
+	}
+	if input.TrialIntervalCount != nil {
+		req.TrialIntervalCount = *input.TrialIntervalCount
+	}
+	if input.Description != nil {
+		req.Description = *input.Description
+	}
+	if input.MaxUsersPerTenant != nil {
+		req.MaxUsersPerTenant = *input.MaxUsersPerTenant
+	}
+	if input.MeterID != nil {
+		meterID, err := strconv.ParseInt(*input.MeterID, 10, 64)
+		if err == nil {
+			req.MeterId = &meterID
+		}
+	}
+	if input.IsVisible != nil {
+		req.IsVisible = *input.IsVisible
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.UpdatePlan(ctx, req)
+	if err != nil {
+		return &model.PlanResponse{
+			Success: false,
+			Message: fmt.Sprintf("Update plan failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.PlanResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	// Convert proto plan to GraphQL model
+	plan := resp.Data
+	return &model.PlanResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Plan{
+			ID:         strconv.FormatInt(plan.Id, 10),
+			Name:       plan.Name,
+			Slug:       plan.Slug,
+			IntervalID: strconv.FormatInt(plan.IntervalId, 10),
+			ProductID:  strconv.FormatInt(plan.ProductId, 10),
+			IsActive:   plan.IsActive,
+			HasTrial:   plan.HasTrial,
+			TrialIntervalID: func() *string {
+				if plan.TrialIntervalId != nil {
+					s := strconv.FormatInt(*plan.TrialIntervalId, 10)
+					return &s
+				}
+				return nil
+			}(),
+			IntervalCount:      plan.IntervalCount,
+			TrialIntervalCount: &plan.TrialIntervalCount,
+			Description:        &plan.Description,
+			Type:               plan.Type,
+			MaxUsersPerTenant:  &plan.MaxUsersPerTenant,
+			MeterID: func() *string {
+				if plan.MeterId != nil {
+					s := strconv.FormatInt(*plan.MeterId, 10)
+					return &s
+				}
+				return nil
+			}(),
+			IsVisible: plan.IsVisible,
+			CreatedAt: int32(plan.CreatedAt),
+			UpdatedAt: int32(plan.UpdatedAt),
+		},
+	}, nil
+}
+
+// DeletePlan is the resolver for the deletePlan field.
+func (r *mutationResolver) DeletePlan(ctx context.Context, id string) (*model.DeletePlanResponse, error) {
+	// Admin only
+	if err := middleware.RequireAdmin(ctx); err != nil {
+		return &model.DeletePlanResponse{
+			Success: false,
+			Message: "Admin access required",
+		}, nil
+	}
+
+	// Parse plan ID
+	planID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.DeletePlanResponse{
+			Success: false,
+			Message: "Invalid plan ID",
+		}, nil
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.DeletePlan(ctx, &productPb.DeletePlanRequest{
+		Id: planID,
+	})
+	if err != nil {
+		return &model.DeletePlanResponse{
+			Success: false,
+			Message: fmt.Sprintf("Delete plan failed: %v", err),
+		}, nil
+	}
+
+	return &model.DeletePlanResponse{
+		Success: resp.Success,
+		Message: resp.Message,
+	}, nil
+}
+
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.UserResponse, error) {
 	userID, err := strconv.ParseInt(id, 10, 64)
@@ -2128,6 +2418,289 @@ func (r *queryResolver) Products(ctx context.Context, page *int32, perPage *int3
 			Page:     resp.Data.Page,
 			PerPage:  resp.Data.PerPage,
 		},
+	}, nil
+}
+
+// Plan is the resolver for the plan field.
+func (r *queryResolver) Plan(ctx context.Context, id string) (*model.PlanResponse, error) {
+	planID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.PlanResponse{
+			Success: false,
+			Message: "Invalid plan ID",
+		}, nil
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.GetPlanByID(ctx, &productPb.GetPlanByIDRequest{
+		Id: planID,
+	})
+	if err != nil {
+		return &model.PlanResponse{
+			Success: false,
+			Message: fmt.Sprintf("Get plan failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.PlanResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	plan := resp.Data
+	return &model.PlanResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Plan{
+			ID:         strconv.FormatInt(plan.Id, 10),
+			Name:       plan.Name,
+			Slug:       plan.Slug,
+			IntervalID: strconv.FormatInt(plan.IntervalId, 10),
+			ProductID:  strconv.FormatInt(plan.ProductId, 10),
+			IsActive:   plan.IsActive,
+			HasTrial:   plan.HasTrial,
+			TrialIntervalID: func() *string {
+				if plan.TrialIntervalId != nil {
+					s := strconv.FormatInt(*plan.TrialIntervalId, 10)
+					return &s
+				}
+				return nil
+			}(),
+			IntervalCount:      plan.IntervalCount,
+			TrialIntervalCount: &plan.TrialIntervalCount,
+			Description:        &plan.Description,
+			Type:               plan.Type,
+			MaxUsersPerTenant:  &plan.MaxUsersPerTenant,
+			MeterID: func() *string {
+				if plan.MeterId != nil {
+					s := strconv.FormatInt(*plan.MeterId, 10)
+					return &s
+				}
+				return nil
+			}(),
+			IsVisible: plan.IsVisible,
+			CreatedAt: int32(plan.CreatedAt),
+			UpdatedAt: int32(plan.UpdatedAt),
+		},
+	}, nil
+}
+
+// PlanBySlug is the resolver for the planBySlug field.
+func (r *queryResolver) PlanBySlug(ctx context.Context, slug string) (*model.PlanResponse, error) {
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.GetPlanBySlug(ctx, &productPb.GetPlanBySlugRequest{
+		Slug: slug,
+	})
+	if err != nil {
+		return &model.PlanResponse{
+			Success: false,
+			Message: fmt.Sprintf("Get plan failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.PlanResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	plan := resp.Data
+	return &model.PlanResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Plan{
+			ID:         strconv.FormatInt(plan.Id, 10),
+			Name:       plan.Name,
+			Slug:       plan.Slug,
+			IntervalID: strconv.FormatInt(plan.IntervalId, 10),
+			ProductID:  strconv.FormatInt(plan.ProductId, 10),
+			IsActive:   plan.IsActive,
+			HasTrial:   plan.HasTrial,
+			TrialIntervalID: func() *string {
+				if plan.TrialIntervalId != nil {
+					s := strconv.FormatInt(*plan.TrialIntervalId, 10)
+					return &s
+				}
+				return nil
+			}(),
+			IntervalCount:      plan.IntervalCount,
+			TrialIntervalCount: &plan.TrialIntervalCount,
+			Description:        &plan.Description,
+			Type:               plan.Type,
+			MaxUsersPerTenant:  &plan.MaxUsersPerTenant,
+			MeterID: func() *string {
+				if plan.MeterId != nil {
+					s := strconv.FormatInt(*plan.MeterId, 10)
+					return &s
+				}
+				return nil
+			}(),
+			IsVisible: plan.IsVisible,
+			CreatedAt: int32(plan.CreatedAt),
+			UpdatedAt: int32(plan.UpdatedAt),
+		},
+	}, nil
+}
+
+// Plans is the resolver for the plans field.
+func (r *queryResolver) Plans(ctx context.Context, page *int32, perPage *int32, activeOnly *bool, visibleOnly *bool) (*model.PlanListResponse, error) {
+	// Set default pagination
+	pageNum := int32(1)
+	pageSize := int32(10)
+	if page != nil && *page > 0 {
+		pageNum = *page
+	}
+	if perPage != nil && *perPage > 0 {
+		pageSize = *perPage
+	}
+
+	// Prepare filters
+	req := &productPb.GetAllPlansRequest{
+		Page:    pageNum,
+		PerPage: pageSize,
+	}
+	if activeOnly != nil {
+		req.ActiveOnly = *activeOnly
+	}
+	if visibleOnly != nil {
+		req.VisibleOnly = *visibleOnly
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.GetAllPlans(ctx, req)
+	if err != nil {
+		return &model.PlanListResponse{
+			Success: false,
+			Message: fmt.Sprintf("Get plans failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.PlanListResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	// Convert plans
+	plans := make([]*model.Plan, len(resp.Data.Plans))
+	for i, p := range resp.Data.Plans {
+		plans[i] = &model.Plan{
+			ID:         strconv.FormatInt(p.Id, 10),
+			Name:       p.Name,
+			Slug:       p.Slug,
+			IntervalID: strconv.FormatInt(p.IntervalId, 10),
+			ProductID:  strconv.FormatInt(p.ProductId, 10),
+			IsActive:   p.IsActive,
+			HasTrial:   p.HasTrial,
+			TrialIntervalID: func() *string {
+				if p.TrialIntervalId != nil {
+					s := strconv.FormatInt(*p.TrialIntervalId, 10)
+					return &s
+				}
+				return nil
+			}(),
+			IntervalCount:      p.IntervalCount,
+			TrialIntervalCount: &p.TrialIntervalCount,
+			Description:        &p.Description,
+			Type:               p.Type,
+			MaxUsersPerTenant:  &p.MaxUsersPerTenant,
+			MeterID: func() *string {
+				if p.MeterId != nil {
+					s := strconv.FormatInt(*p.MeterId, 10)
+					return &s
+				}
+				return nil
+			}(),
+			IsVisible: p.IsVisible,
+			CreatedAt: int32(p.CreatedAt),
+			UpdatedAt: int32(p.UpdatedAt),
+		}
+	}
+
+	return &model.PlanListResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.PlanList{
+			Plans:   plans,
+			Total:   resp.Data.Total,
+			Page:    resp.Data.Page,
+			PerPage: resp.Data.PerPage,
+		},
+	}, nil
+}
+
+// PlansByProduct is the resolver for the plansByProduct field.
+func (r *queryResolver) PlansByProduct(ctx context.Context, productID string) (*model.PlansResponse, error) {
+	productIDInt, err := strconv.ParseInt(productID, 10, 64)
+	if err != nil {
+		return &model.PlansResponse{
+			Success: false,
+			Message: "Invalid product ID",
+		}, nil
+	}
+
+	// Call product-service via gRPC
+	resp, err := r.ProductClient.GetPlansByProduct(ctx, &productPb.GetPlansByProductRequest{
+		ProductId: productIDInt,
+	})
+	if err != nil {
+		return &model.PlansResponse{
+			Success: false,
+			Message: fmt.Sprintf("Get plans failed: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.PlansResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	// Convert plans
+	plans := make([]*model.Plan, len(resp.Data))
+	for i, p := range resp.Data {
+		plans[i] = &model.Plan{
+			ID:         strconv.FormatInt(p.Id, 10),
+			Name:       p.Name,
+			Slug:       p.Slug,
+			IntervalID: strconv.FormatInt(p.IntervalId, 10),
+			ProductID:  strconv.FormatInt(p.ProductId, 10),
+			IsActive:   p.IsActive,
+			HasTrial:   p.HasTrial,
+			TrialIntervalID: func() *string {
+				if p.TrialIntervalId != nil {
+					s := strconv.FormatInt(*p.TrialIntervalId, 10)
+					return &s
+				}
+				return nil
+			}(),
+			IntervalCount:      p.IntervalCount,
+			TrialIntervalCount: &p.TrialIntervalCount,
+			Description:        &p.Description,
+			Type:               p.Type,
+			MaxUsersPerTenant:  &p.MaxUsersPerTenant,
+			MeterID: func() *string {
+				if p.MeterId != nil {
+					s := strconv.FormatInt(*p.MeterId, 10)
+					return &s
+				}
+				return nil
+			}(),
+			IsVisible: p.IsVisible,
+			CreatedAt: int32(p.CreatedAt),
+			UpdatedAt: int32(p.UpdatedAt),
+		}
+	}
+
+	return &model.PlansResponse{
+		Success: true,
+		Message: resp.Message,
+		Data:    plans,
 	}, nil
 }
 

@@ -25,6 +25,23 @@ type ChangePasswordResponse struct {
 	Message string `json:"message"`
 }
 
+type CreatePlanInput struct {
+	Name               string  `json:"name"`
+	Slug               *string `json:"slug,omitempty"`
+	IntervalID         string  `json:"intervalId"`
+	ProductID          string  `json:"productId"`
+	IsActive           *bool   `json:"isActive,omitempty"`
+	HasTrial           *bool   `json:"hasTrial,omitempty"`
+	TrialIntervalID    *string `json:"trialIntervalId,omitempty"`
+	IntervalCount      int32   `json:"intervalCount"`
+	TrialIntervalCount *int32  `json:"trialIntervalCount,omitempty"`
+	Description        *string `json:"description,omitempty"`
+	Type               string  `json:"type"`
+	MaxUsersPerTenant  *int32  `json:"maxUsersPerTenant,omitempty"`
+	MeterID            *string `json:"meterId,omitempty"`
+	IsVisible          *bool   `json:"isVisible,omitempty"`
+}
+
 type CreateProductInput struct {
 	Name        string  `json:"name"`
 	Slug        *string `json:"slug,omitempty"`
@@ -49,6 +66,11 @@ type CreateUserInput struct {
 	PhoneNumber *string `json:"phoneNumber,omitempty"`
 	Position    *string `json:"position,omitempty"`
 	IsAdmin     *bool   `json:"isAdmin,omitempty"`
+}
+
+type DeletePlanResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
 }
 
 type DeleteProductResponse struct {
@@ -99,6 +121,51 @@ type LogoutResponse struct {
 }
 
 type Mutation struct {
+}
+
+type Plan struct {
+	ID                 string  `json:"id"`
+	Name               string  `json:"name"`
+	Slug               string  `json:"slug"`
+	IntervalID         string  `json:"intervalId"`
+	ProductID          string  `json:"productId"`
+	IsActive           bool    `json:"isActive"`
+	HasTrial           bool    `json:"hasTrial"`
+	TrialIntervalID    *string `json:"trialIntervalId,omitempty"`
+	IntervalCount      int32   `json:"intervalCount"`
+	TrialIntervalCount *int32  `json:"trialIntervalCount,omitempty"`
+	Description        *string `json:"description,omitempty"`
+	Type               string  `json:"type"`
+	MaxUsersPerTenant  *int32  `json:"maxUsersPerTenant,omitempty"`
+	MeterID            *string `json:"meterId,omitempty"`
+	IsVisible          bool    `json:"isVisible"`
+	CreatedAt          int32   `json:"createdAt"`
+	UpdatedAt          int32   `json:"updatedAt"`
+}
+
+type PlanList struct {
+	Plans   []*Plan `json:"plans"`
+	Total   int32   `json:"total"`
+	Page    int32   `json:"page"`
+	PerPage int32   `json:"perPage"`
+}
+
+type PlanListResponse struct {
+	Success bool      `json:"success"`
+	Message string    `json:"message"`
+	Data    *PlanList `json:"data,omitempty"`
+}
+
+type PlanResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+	Data    *Plan  `json:"data,omitempty"`
+}
+
+type PlansResponse struct {
+	Success bool    `json:"success"`
+	Message string  `json:"message"`
+	Data    []*Plan `json:"data,omitempty"`
 }
 
 type Product struct {
@@ -250,6 +317,23 @@ type TenantUsersResponse struct {
 	Success bool          `json:"success"`
 	Message string        `json:"message"`
 	Data    []*TenantUser `json:"data,omitempty"`
+}
+
+type UpdatePlanInput struct {
+	ID                 string  `json:"id"`
+	Name               string  `json:"name"`
+	Slug               *string `json:"slug,omitempty"`
+	IntervalID         string  `json:"intervalId"`
+	IsActive           *bool   `json:"isActive,omitempty"`
+	HasTrial           *bool   `json:"hasTrial,omitempty"`
+	TrialIntervalID    *string `json:"trialIntervalId,omitempty"`
+	IntervalCount      int32   `json:"intervalCount"`
+	TrialIntervalCount *int32  `json:"trialIntervalCount,omitempty"`
+	Description        *string `json:"description,omitempty"`
+	Type               string  `json:"type"`
+	MaxUsersPerTenant  *int32  `json:"maxUsersPerTenant,omitempty"`
+	MeterID            *string `json:"meterId,omitempty"`
+	IsVisible          *bool   `json:"isVisible,omitempty"`
 }
 
 type UpdateProductInput struct {

@@ -29,6 +29,27 @@ type Product {
   updatedAt: Int!
 }
 
+# Plan type
+type Plan {
+  id: ID!
+  name: String!
+  slug: String!
+  intervalId: ID!
+  productId: ID!
+  isActive: Boolean!
+  hasTrial: Boolean!
+  trialIntervalId: ID
+  intervalCount: Int!
+  trialIntervalCount: Int
+  description: String
+  type: String!
+  maxUsersPerTenant: Int
+  meterId: ID
+  isVisible: Boolean!
+  createdAt: Int!
+  updatedAt: Int!
+}
+
 # Tenant type
 type Tenant {
   id: ID!
@@ -87,6 +108,14 @@ type UserList {
 # Product list response
 type ProductList {
   products: [Product!]!
+  total: Int!
+  page: Int!
+  perPage: Int!
+}
+
+# Plan list response
+type PlanList {
+  plans: [Plan!]!
   total: Int!
   page: Int!
   perPage: Int!
@@ -234,6 +263,29 @@ type DeleteProductResponse {
   message: String!
 }
 
+type PlanResponse {
+  success: Boolean!
+  message: String!
+  data: Plan
+}
+
+type PlanListResponse {
+  success: Boolean!
+  message: String!
+  data: PlanList
+}
+
+type PlansResponse {
+  success: Boolean!
+  message: String!
+  data: [Plan!]
+}
+
+type DeletePlanResponse {
+  success: Boolean!
+  message: String!
+}
+
 # Input types
 input LoginInput {
   email: String!
@@ -332,6 +384,40 @@ input UpdateProductInput {
   isDefault: Boolean
 }
 
+input CreatePlanInput {
+  name: String!
+  slug: String
+  intervalId: ID!
+  productId: ID!
+  isActive: Boolean
+  hasTrial: Boolean
+  trialIntervalId: ID
+  intervalCount: Int!
+  trialIntervalCount: Int
+  description: String
+  type: String!
+  maxUsersPerTenant: Int
+  meterId: ID
+  isVisible: Boolean
+}
+
+input UpdatePlanInput {
+  id: ID!
+  name: String!
+  slug: String
+  intervalId: ID!
+  isActive: Boolean
+  hasTrial: Boolean
+  trialIntervalId: ID
+  intervalCount: Int!
+  trialIntervalCount: Int
+  description: String
+  type: String!
+  maxUsersPerTenant: Int
+  meterId: ID
+  isVisible: Boolean
+}
+
 # Queries
 type Query {
   # Get user by ID
@@ -364,6 +450,17 @@ type Query {
   product(id: ID!): ProductResponse!
   productBySlug(slug: String!): ProductResponse!
   products(page: Int, perPage: Int): ProductListResponse!
+
+  # Plan queries
+  plan(id: ID!): PlanResponse!
+  planBySlug(slug: String!): PlanResponse!
+  plans(
+    page: Int
+    perPage: Int
+    activeOnly: Boolean
+    visibleOnly: Boolean
+  ): PlanListResponse!
+  plansByProduct(productId: ID!): PlansResponse!
 }
 
 # Mutations
@@ -404,4 +501,9 @@ type Mutation {
   createProduct(input: CreateProductInput!): ProductResponse!
   updateProduct(input: UpdateProductInput!): ProductResponse!
   deleteProduct(id: ID!): DeleteProductResponse!
+
+  # Plan mutations (admin only)
+  createPlan(input: CreatePlanInput!): PlanResponse!
+  updatePlan(input: UpdatePlanInput!): PlanResponse!
+  deletePlan(id: ID!): DeletePlanResponse!
 }

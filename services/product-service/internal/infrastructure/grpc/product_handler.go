@@ -3,6 +3,7 @@ package grpc
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/damarteplok/damar-admin-cms/services/product-service/internal/domain"
 	pb "github.com/damarteplok/damar-admin-cms/shared/proto/product"
@@ -274,7 +275,7 @@ func (h *ProductHandler) CreatePlan(ctx context.Context, req *pb.CreatePlanReque
 		Description:        req.Description,
 		Type:               req.Type,
 		MaxUsersPerTenant:  req.MaxUsersPerTenant,
-		MeterID:            req.MeterId,
+		MeterID:            req.MeterId, // now *int64 from proto
 		IsVisible:          req.IsVisible,
 	}
 
@@ -294,11 +295,22 @@ func (h *ProductHandler) CreatePlan(ctx context.Context, req *pb.CreatePlanReque
 }
 
 func (h *ProductHandler) UpdatePlan(ctx context.Context, req *pb.UpdatePlanRequest) (*pb.UpdatePlanResponse, error) {
+	// First, fetch existing plan to preserve product_id and other fields
+	existingPlan, err := h.planService.GetByID(ctx, req.Id)
+	if err != nil {
+		return &pb.UpdatePlanResponse{
+			Success: false,
+			Message: fmt.Sprintf("Plan not found: %v", err),
+		}, nil
+	}
+
+	// Update only the fields provided in the request
 	plan := &domain.Plan{
 		ID:                 req.Id,
 		Name:               req.Name,
 		Slug:               req.Slug,
 		IntervalID:         req.IntervalId,
+		ProductID:          existingPlan.ProductID, // Keep existing product_id
 		IsActive:           req.IsActive,
 		HasTrial:           req.HasTrial,
 		TrialIntervalID:    req.TrialIntervalId,
@@ -307,11 +319,11 @@ func (h *ProductHandler) UpdatePlan(ctx context.Context, req *pb.UpdatePlanReque
 		Description:        req.Description,
 		Type:               req.Type,
 		MaxUsersPerTenant:  req.MaxUsersPerTenant,
-		MeterID:            req.MeterId,
+		MeterID:            req.MeterId, // now *int64 from proto
 		IsVisible:          req.IsVisible,
 	}
 
-	err := h.planService.Update(ctx, plan)
+	err = h.planService.Update(ctx, plan)
 	if err != nil {
 		return &pb.UpdatePlanResponse{
 			Success: false,
@@ -633,7 +645,7 @@ func domainPlanToPb(plan *domain.Plan) *pb.Plan {
 		Description:        plan.Description,
 		Type:               plan.Type,
 		MaxUsersPerTenant:  plan.MaxUsersPerTenant,
-		MeterId:            plan.MeterID,
+		MeterId:            plan.MeterID, // now *int64, proto handles it correctly
 		IsVisible:          plan.IsVisible,
 		CreatedAt:          plan.CreatedAt.Unix(),
 		UpdatedAt:          plan.UpdatedAt.Unix(),

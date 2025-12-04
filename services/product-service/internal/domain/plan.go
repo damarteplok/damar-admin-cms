@@ -13,13 +13,13 @@ type Plan struct {
 	ProductID          int64
 	IsActive           bool
 	HasTrial           bool
-	TrialIntervalID    int64
+	TrialIntervalID    *int64 // nullable
 	IntervalCount      int32
 	TrialIntervalCount int32
 	Description        string
 	Type               string // flat_rate, per_unit, tiered
 	MaxUsersPerTenant  int32
-	MeterID            int64
+	MeterID            *int64 // nullable
 	IsVisible          bool
 	CreatedAt          time.Time
 	UpdatedAt          time.Time
