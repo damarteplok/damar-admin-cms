@@ -1,6 +1,19 @@
-# product service
+# Product Service
 
-This service handles all product-related operations in the system.
+This service handles all product, plan, and discount-related operations in the system.
+
+## Domain Coverage
+
+- **Products**: Product catalog management
+- **Plans**: Subscription plans with pricing tiers
+- **Plan Prices**: Multi-currency pricing for plans
+- **Plan Meters**: Usage-based metering for plans
+- **Discounts**: Discount management and validation
+- **Discount Codes**: Redeemable discount codes
+- **Discount Redemptions**: Audit trail for discount usage
+- **Discount-Plan Associations**: Junction table management
+- **Discount-Product Associations**: Junction table management
+- **Payment Provider Integration**: Discount sync with payment providers
 
 ## Architecture
 
@@ -26,16 +39,19 @@ services/product-service/
 ### Layer Responsibilities
 
 1. **Domain Layer** (`internal/domain/`)
+
    - Contains business domain interfaces
    - Defines contracts for repositories and services
    - Pure business logic, no implementation details
 
 2. **Service Layer** (`internal/service/`)
+
    - Implements business logic
    - Uses repository interfaces
    - Coordinates between different parts of the system
 
 3. **Infrastructure Layer** (`internal/infrastructure/`)
+
    - `repository/`: Implements data persistence
    - `events/`: Handles event publishing and consuming
    - `grpc/`: Handles gRPC communication

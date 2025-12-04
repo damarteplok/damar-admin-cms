@@ -1,4 +1,4 @@
--- Create discounts table
+-- Create discounts table (simple version)
 CREATE TABLE IF NOT EXISTS discounts (
     id BIGSERIAL PRIMARY KEY,
     code VARCHAR(255) NOT NULL UNIQUE,

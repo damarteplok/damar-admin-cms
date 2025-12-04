@@ -8,6 +8,8 @@ Multi-tenant SaaS admin platform built with Go microservices architecture and Gr
 
 - Go 1.25.1+
 - PostgreSQL 16
+- Redis 7+ (for APQ cache)
+- RabbitMQ (for event-driven messaging)
 - Tilt (for development)
 
 ### Setup
@@ -52,6 +54,8 @@ Multi-tenant SaaS admin platform built with Go microservices architecture and Gr
 ## 📚 Documentation
 
 - **[GraphQL API Testing Guide](docs/GRAPHQL_TESTING.md)** - Complete guide dengan contoh queries & mutations yang bisa langsung copas
+- **[API Gateway Middleware](docs/API_GATEWAY_MIDDLEWARE.md)** - CORS, security headers, compression, dan middleware stack
+- **[APQ with Redis](docs/APQ_REDIS.md)** - Automatic Persisted Queries untuk bandwidth optimization
 - **[Tilt Development Guide](docs/TILT.md)** - Detailed guide untuk development dengan Tilt
 
 ## 🏗️ Architecture

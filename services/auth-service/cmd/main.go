@@ -24,7 +24,6 @@ import (
 )
 
 func main() {
-	// Initialize logger
 	environment := env.GetString("ENVIRONMENT", "development")
 	if err := logger.Initialize(environment); err != nil {
 		panic("Failed to initialize logger: " + err.Error())
@@ -33,7 +32,6 @@ func main() {
 
 	ctx := context.Background()
 
-	// Set default DB_NAME if not provided
 	if os.Getenv("DB_NAME") == "" {
 		os.Setenv("DB_NAME", "damar_admin_cms")
 	}
@@ -48,7 +46,6 @@ func main() {
 		zap.String("user_service", userServiceAddr),
 	)
 
-	// Connect to database
 	pool, err := database.NewPostgresPool(ctx)
 	if err != nil {
 		logger.Fatal("Failed to connect to database", zap.Error(err))
@@ -57,12 +54,9 @@ func main() {
 
 	logger.Info("Successfully connected to database")
 
-	// Connect to user-service
-	userConn, err := grpcLib.Dial(
+	userConn, err := grpcLib.NewClient(
 		userServiceAddr,
 		grpcLib.WithTransportCredentials(insecure.NewCredentials()),
-		grpcLib.WithBlock(),
-		grpcLib.WithTimeout(5*time.Second),
 	)
 	if err != nil {
 		logger.Fatal("Failed to connect to user-service",
@@ -74,7 +68,6 @@ func main() {
 
 	logger.Info("Successfully connected to user-service", zap.String("address", userServiceAddr))
 
-	// Connect to RabbitMQ
 	rabbitmqURL := env.GetString("RABBITMQ_URL", "amqp://guest:guest@localhost:5672/")
 	rabbitmqConn, err := amqp.NewConnection(rabbitmqURL)
 	if err != nil {
@@ -82,7 +75,6 @@ func main() {
 	}
 	defer rabbitmqConn.Close()
 
-	// Create publisher for auth events
 	publisher, err := amqp.NewPublisher(rabbitmqConn, "damar.events")
 	if err != nil {
 		logger.Fatal("Failed to create RabbitMQ publisher", zap.Error(err))

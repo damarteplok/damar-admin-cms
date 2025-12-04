@@ -1,11 +1,11 @@
 package database
 
 import (
-"context"
-"fmt"
-"os"
+	"context"
+	"fmt"
+	"os"
 
-"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 // NewPostgresPool creates a new PostgreSQL connection pool from environment variables
@@ -38,9 +38,9 @@ func NewPostgresPool(ctx context.Context) (*pgxpool.Pool, error) {
 	}
 
 	connString := fmt.Sprintf(
-"postgres://%s:%s@%s:%s/%s?sslmode=disable",
-dbUser, dbPassword, dbHost, dbPort, dbName,
-)
+		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
+		dbUser, dbPassword, dbHost, dbPort, dbName,
+	)
 
 	config, err := pgxpool.ParseConfig(connString)
 	if err != nil {

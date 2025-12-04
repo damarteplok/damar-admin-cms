@@ -19,29 +19,54 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ProductService_GetProductByID_FullMethodName      = "/product.ProductService/GetProductByID"
-	ProductService_GetProductBySlug_FullMethodName    = "/product.ProductService/GetProductBySlug"
-	ProductService_CreateProduct_FullMethodName       = "/product.ProductService/CreateProduct"
-	ProductService_UpdateProduct_FullMethodName       = "/product.ProductService/UpdateProduct"
-	ProductService_DeleteProduct_FullMethodName       = "/product.ProductService/DeleteProduct"
-	ProductService_GetAllProducts_FullMethodName      = "/product.ProductService/GetAllProducts"
-	ProductService_GetPlanByID_FullMethodName         = "/product.ProductService/GetPlanByID"
-	ProductService_GetPlanBySlug_FullMethodName       = "/product.ProductService/GetPlanBySlug"
-	ProductService_GetPlansByProduct_FullMethodName   = "/product.ProductService/GetPlansByProduct"
-	ProductService_CreatePlan_FullMethodName          = "/product.ProductService/CreatePlan"
-	ProductService_UpdatePlan_FullMethodName          = "/product.ProductService/UpdatePlan"
-	ProductService_DeletePlan_FullMethodName          = "/product.ProductService/DeletePlan"
-	ProductService_GetAllPlans_FullMethodName         = "/product.ProductService/GetAllPlans"
-	ProductService_GetPlanPrice_FullMethodName        = "/product.ProductService/GetPlanPrice"
-	ProductService_GetPlanPricesByPlan_FullMethodName = "/product.ProductService/GetPlanPricesByPlan"
-	ProductService_CreatePlanPrice_FullMethodName     = "/product.ProductService/CreatePlanPrice"
-	ProductService_UpdatePlanPrice_FullMethodName     = "/product.ProductService/UpdatePlanPrice"
-	ProductService_DeletePlanPrice_FullMethodName     = "/product.ProductService/DeletePlanPrice"
-	ProductService_GetPlanMeterByID_FullMethodName    = "/product.ProductService/GetPlanMeterByID"
-	ProductService_GetAllPlanMeters_FullMethodName    = "/product.ProductService/GetAllPlanMeters"
-	ProductService_CreatePlanMeter_FullMethodName     = "/product.ProductService/CreatePlanMeter"
-	ProductService_UpdatePlanMeter_FullMethodName     = "/product.ProductService/UpdatePlanMeter"
-	ProductService_DeletePlanMeter_FullMethodName     = "/product.ProductService/DeletePlanMeter"
+	ProductService_GetProductByID_FullMethodName                    = "/product.ProductService/GetProductByID"
+	ProductService_GetProductBySlug_FullMethodName                  = "/product.ProductService/GetProductBySlug"
+	ProductService_CreateProduct_FullMethodName                     = "/product.ProductService/CreateProduct"
+	ProductService_UpdateProduct_FullMethodName                     = "/product.ProductService/UpdateProduct"
+	ProductService_DeleteProduct_FullMethodName                     = "/product.ProductService/DeleteProduct"
+	ProductService_GetAllProducts_FullMethodName                    = "/product.ProductService/GetAllProducts"
+	ProductService_GetPlanByID_FullMethodName                       = "/product.ProductService/GetPlanByID"
+	ProductService_GetPlanBySlug_FullMethodName                     = "/product.ProductService/GetPlanBySlug"
+	ProductService_GetPlansByProduct_FullMethodName                 = "/product.ProductService/GetPlansByProduct"
+	ProductService_CreatePlan_FullMethodName                        = "/product.ProductService/CreatePlan"
+	ProductService_UpdatePlan_FullMethodName                        = "/product.ProductService/UpdatePlan"
+	ProductService_DeletePlan_FullMethodName                        = "/product.ProductService/DeletePlan"
+	ProductService_GetAllPlans_FullMethodName                       = "/product.ProductService/GetAllPlans"
+	ProductService_GetPlanPrice_FullMethodName                      = "/product.ProductService/GetPlanPrice"
+	ProductService_GetPlanPricesByPlan_FullMethodName               = "/product.ProductService/GetPlanPricesByPlan"
+	ProductService_CreatePlanPrice_FullMethodName                   = "/product.ProductService/CreatePlanPrice"
+	ProductService_UpdatePlanPrice_FullMethodName                   = "/product.ProductService/UpdatePlanPrice"
+	ProductService_DeletePlanPrice_FullMethodName                   = "/product.ProductService/DeletePlanPrice"
+	ProductService_GetPlanMeterByID_FullMethodName                  = "/product.ProductService/GetPlanMeterByID"
+	ProductService_GetAllPlanMeters_FullMethodName                  = "/product.ProductService/GetAllPlanMeters"
+	ProductService_CreatePlanMeter_FullMethodName                   = "/product.ProductService/CreatePlanMeter"
+	ProductService_UpdatePlanMeter_FullMethodName                   = "/product.ProductService/UpdatePlanMeter"
+	ProductService_DeletePlanMeter_FullMethodName                   = "/product.ProductService/DeletePlanMeter"
+	ProductService_GetDiscountByID_FullMethodName                   = "/product.ProductService/GetDiscountByID"
+	ProductService_GetDiscountByCode_FullMethodName                 = "/product.ProductService/GetDiscountByCode"
+	ProductService_CreateDiscount_FullMethodName                    = "/product.ProductService/CreateDiscount"
+	ProductService_UpdateDiscount_FullMethodName                    = "/product.ProductService/UpdateDiscount"
+	ProductService_DeleteDiscount_FullMethodName                    = "/product.ProductService/DeleteDiscount"
+	ProductService_GetAllDiscounts_FullMethodName                   = "/product.ProductService/GetAllDiscounts"
+	ProductService_GetDiscountCodeByID_FullMethodName               = "/product.ProductService/GetDiscountCodeByID"
+	ProductService_GetDiscountCodeByCode_FullMethodName             = "/product.ProductService/GetDiscountCodeByCode"
+	ProductService_GetDiscountCodesByDiscount_FullMethodName        = "/product.ProductService/GetDiscountCodesByDiscount"
+	ProductService_CreateDiscountCode_FullMethodName                = "/product.ProductService/CreateDiscountCode"
+	ProductService_DeleteDiscountCode_FullMethodName                = "/product.ProductService/DeleteDiscountCode"
+	ProductService_AddPlanToDiscount_FullMethodName                 = "/product.ProductService/AddPlanToDiscount"
+	ProductService_RemovePlanFromDiscount_FullMethodName            = "/product.ProductService/RemovePlanFromDiscount"
+	ProductService_GetPlansByDiscount_FullMethodName                = "/product.ProductService/GetPlansByDiscount"
+	ProductService_AddOneTimeProductToDiscount_FullMethodName       = "/product.ProductService/AddOneTimeProductToDiscount"
+	ProductService_RemoveOneTimeProductFromDiscount_FullMethodName  = "/product.ProductService/RemoveOneTimeProductFromDiscount"
+	ProductService_GetOneTimeProductsByDiscount_FullMethodName      = "/product.ProductService/GetOneTimeProductsByDiscount"
+	ProductService_GetDiscountPaymentProviderData_FullMethodName    = "/product.ProductService/GetDiscountPaymentProviderData"
+	ProductService_CreateDiscountPaymentProviderData_FullMethodName = "/product.ProductService/CreateDiscountPaymentProviderData"
+	ProductService_UpdateDiscountPaymentProviderData_FullMethodName = "/product.ProductService/UpdateDiscountPaymentProviderData"
+	ProductService_DeleteDiscountPaymentProviderData_FullMethodName = "/product.ProductService/DeleteDiscountPaymentProviderData"
+	ProductService_RedeemDiscountCode_FullMethodName                = "/product.ProductService/RedeemDiscountCode"
+	ProductService_GetRedemptionsByUser_FullMethodName              = "/product.ProductService/GetRedemptionsByUser"
+	ProductService_GetRedemptionsByDiscountCode_FullMethodName      = "/product.ProductService/GetRedemptionsByDiscountCode"
+	ProductService_ValidateDiscountCode_FullMethodName              = "/product.ProductService/ValidateDiscountCode"
 )
 
 // ProductServiceClient is the client API for ProductService service.
@@ -75,6 +100,38 @@ type ProductServiceClient interface {
 	CreatePlanMeter(ctx context.Context, in *CreatePlanMeterRequest, opts ...grpc.CallOption) (*CreatePlanMeterResponse, error)
 	UpdatePlanMeter(ctx context.Context, in *UpdatePlanMeterRequest, opts ...grpc.CallOption) (*UpdatePlanMeterResponse, error)
 	DeletePlanMeter(ctx context.Context, in *DeletePlanMeterRequest, opts ...grpc.CallOption) (*DeletePlanMeterResponse, error)
+	// Discount operations
+	GetDiscountByID(ctx context.Context, in *GetDiscountByIDRequest, opts ...grpc.CallOption) (*GetDiscountByIDResponse, error)
+	GetDiscountByCode(ctx context.Context, in *GetDiscountByCodeRequest, opts ...grpc.CallOption) (*GetDiscountByCodeResponse, error)
+	CreateDiscount(ctx context.Context, in *CreateDiscountRequest, opts ...grpc.CallOption) (*CreateDiscountResponse, error)
+	UpdateDiscount(ctx context.Context, in *UpdateDiscountRequest, opts ...grpc.CallOption) (*UpdateDiscountResponse, error)
+	DeleteDiscount(ctx context.Context, in *DeleteDiscountRequest, opts ...grpc.CallOption) (*DeleteDiscountResponse, error)
+	GetAllDiscounts(ctx context.Context, in *GetAllDiscountsRequest, opts ...grpc.CallOption) (*GetAllDiscountsResponse, error)
+	// Discount Code operations
+	GetDiscountCodeByID(ctx context.Context, in *GetDiscountCodeByIDRequest, opts ...grpc.CallOption) (*GetDiscountCodeByIDResponse, error)
+	GetDiscountCodeByCode(ctx context.Context, in *GetDiscountCodeByCodeRequest, opts ...grpc.CallOption) (*GetDiscountCodeByCodeResponse, error)
+	GetDiscountCodesByDiscount(ctx context.Context, in *GetDiscountCodesByDiscountRequest, opts ...grpc.CallOption) (*GetDiscountCodesByDiscountResponse, error)
+	CreateDiscountCode(ctx context.Context, in *CreateDiscountCodeRequest, opts ...grpc.CallOption) (*CreateDiscountCodeResponse, error)
+	DeleteDiscountCode(ctx context.Context, in *DeleteDiscountCodeRequest, opts ...grpc.CallOption) (*DeleteDiscountCodeResponse, error)
+	// Discount Plan operations (junction table)
+	AddPlanToDiscount(ctx context.Context, in *AddPlanToDiscountRequest, opts ...grpc.CallOption) (*AddPlanToDiscountResponse, error)
+	RemovePlanFromDiscount(ctx context.Context, in *RemovePlanFromDiscountRequest, opts ...grpc.CallOption) (*RemovePlanFromDiscountResponse, error)
+	GetPlansByDiscount(ctx context.Context, in *GetPlansByDiscountRequest, opts ...grpc.CallOption) (*GetPlansByDiscountResponse, error)
+	// Discount One Time Product operations (junction table)
+	AddOneTimeProductToDiscount(ctx context.Context, in *AddOneTimeProductToDiscountRequest, opts ...grpc.CallOption) (*AddOneTimeProductToDiscountResponse, error)
+	RemoveOneTimeProductFromDiscount(ctx context.Context, in *RemoveOneTimeProductFromDiscountRequest, opts ...grpc.CallOption) (*RemoveOneTimeProductFromDiscountResponse, error)
+	GetOneTimeProductsByDiscount(ctx context.Context, in *GetOneTimeProductsByDiscountRequest, opts ...grpc.CallOption) (*GetOneTimeProductsByDiscountResponse, error)
+	// Discount Payment Provider Data operations
+	GetDiscountPaymentProviderData(ctx context.Context, in *GetDiscountPaymentProviderDataRequest, opts ...grpc.CallOption) (*GetDiscountPaymentProviderDataResponse, error)
+	CreateDiscountPaymentProviderData(ctx context.Context, in *CreateDiscountPaymentProviderDataRequest, opts ...grpc.CallOption) (*CreateDiscountPaymentProviderDataResponse, error)
+	UpdateDiscountPaymentProviderData(ctx context.Context, in *UpdateDiscountPaymentProviderDataRequest, opts ...grpc.CallOption) (*UpdateDiscountPaymentProviderDataResponse, error)
+	DeleteDiscountPaymentProviderData(ctx context.Context, in *DeleteDiscountPaymentProviderDataRequest, opts ...grpc.CallOption) (*DeleteDiscountPaymentProviderDataResponse, error)
+	// Discount Code Redemption operations
+	RedeemDiscountCode(ctx context.Context, in *RedeemDiscountCodeRequest, opts ...grpc.CallOption) (*RedeemDiscountCodeResponse, error)
+	GetRedemptionsByUser(ctx context.Context, in *GetRedemptionsByUserRequest, opts ...grpc.CallOption) (*GetRedemptionsByUserResponse, error)
+	GetRedemptionsByDiscountCode(ctx context.Context, in *GetRedemptionsByDiscountCodeRequest, opts ...grpc.CallOption) (*GetRedemptionsByDiscountCodeResponse, error)
+	// Validation operations
+	ValidateDiscountCode(ctx context.Context, in *ValidateDiscountCodeRequest, opts ...grpc.CallOption) (*ValidateDiscountCodeResponse, error)
 }
 
 type productServiceClient struct {
@@ -315,6 +372,256 @@ func (c *productServiceClient) DeletePlanMeter(ctx context.Context, in *DeletePl
 	return out, nil
 }
 
+func (c *productServiceClient) GetDiscountByID(ctx context.Context, in *GetDiscountByIDRequest, opts ...grpc.CallOption) (*GetDiscountByIDResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetDiscountByIDResponse)
+	err := c.cc.Invoke(ctx, ProductService_GetDiscountByID_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) GetDiscountByCode(ctx context.Context, in *GetDiscountByCodeRequest, opts ...grpc.CallOption) (*GetDiscountByCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetDiscountByCodeResponse)
+	err := c.cc.Invoke(ctx, ProductService_GetDiscountByCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) CreateDiscount(ctx context.Context, in *CreateDiscountRequest, opts ...grpc.CallOption) (*CreateDiscountResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateDiscountResponse)
+	err := c.cc.Invoke(ctx, ProductService_CreateDiscount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) UpdateDiscount(ctx context.Context, in *UpdateDiscountRequest, opts ...grpc.CallOption) (*UpdateDiscountResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateDiscountResponse)
+	err := c.cc.Invoke(ctx, ProductService_UpdateDiscount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) DeleteDiscount(ctx context.Context, in *DeleteDiscountRequest, opts ...grpc.CallOption) (*DeleteDiscountResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteDiscountResponse)
+	err := c.cc.Invoke(ctx, ProductService_DeleteDiscount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) GetAllDiscounts(ctx context.Context, in *GetAllDiscountsRequest, opts ...grpc.CallOption) (*GetAllDiscountsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAllDiscountsResponse)
+	err := c.cc.Invoke(ctx, ProductService_GetAllDiscounts_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) GetDiscountCodeByID(ctx context.Context, in *GetDiscountCodeByIDRequest, opts ...grpc.CallOption) (*GetDiscountCodeByIDResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetDiscountCodeByIDResponse)
+	err := c.cc.Invoke(ctx, ProductService_GetDiscountCodeByID_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) GetDiscountCodeByCode(ctx context.Context, in *GetDiscountCodeByCodeRequest, opts ...grpc.CallOption) (*GetDiscountCodeByCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetDiscountCodeByCodeResponse)
+	err := c.cc.Invoke(ctx, ProductService_GetDiscountCodeByCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) GetDiscountCodesByDiscount(ctx context.Context, in *GetDiscountCodesByDiscountRequest, opts ...grpc.CallOption) (*GetDiscountCodesByDiscountResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetDiscountCodesByDiscountResponse)
+	err := c.cc.Invoke(ctx, ProductService_GetDiscountCodesByDiscount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) CreateDiscountCode(ctx context.Context, in *CreateDiscountCodeRequest, opts ...grpc.CallOption) (*CreateDiscountCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateDiscountCodeResponse)
+	err := c.cc.Invoke(ctx, ProductService_CreateDiscountCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) DeleteDiscountCode(ctx context.Context, in *DeleteDiscountCodeRequest, opts ...grpc.CallOption) (*DeleteDiscountCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteDiscountCodeResponse)
+	err := c.cc.Invoke(ctx, ProductService_DeleteDiscountCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) AddPlanToDiscount(ctx context.Context, in *AddPlanToDiscountRequest, opts ...grpc.CallOption) (*AddPlanToDiscountResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddPlanToDiscountResponse)
+	err := c.cc.Invoke(ctx, ProductService_AddPlanToDiscount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) RemovePlanFromDiscount(ctx context.Context, in *RemovePlanFromDiscountRequest, opts ...grpc.CallOption) (*RemovePlanFromDiscountResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RemovePlanFromDiscountResponse)
+	err := c.cc.Invoke(ctx, ProductService_RemovePlanFromDiscount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) GetPlansByDiscount(ctx context.Context, in *GetPlansByDiscountRequest, opts ...grpc.CallOption) (*GetPlansByDiscountResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPlansByDiscountResponse)
+	err := c.cc.Invoke(ctx, ProductService_GetPlansByDiscount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) AddOneTimeProductToDiscount(ctx context.Context, in *AddOneTimeProductToDiscountRequest, opts ...grpc.CallOption) (*AddOneTimeProductToDiscountResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddOneTimeProductToDiscountResponse)
+	err := c.cc.Invoke(ctx, ProductService_AddOneTimeProductToDiscount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) RemoveOneTimeProductFromDiscount(ctx context.Context, in *RemoveOneTimeProductFromDiscountRequest, opts ...grpc.CallOption) (*RemoveOneTimeProductFromDiscountResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RemoveOneTimeProductFromDiscountResponse)
+	err := c.cc.Invoke(ctx, ProductService_RemoveOneTimeProductFromDiscount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) GetOneTimeProductsByDiscount(ctx context.Context, in *GetOneTimeProductsByDiscountRequest, opts ...grpc.CallOption) (*GetOneTimeProductsByDiscountResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetOneTimeProductsByDiscountResponse)
+	err := c.cc.Invoke(ctx, ProductService_GetOneTimeProductsByDiscount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) GetDiscountPaymentProviderData(ctx context.Context, in *GetDiscountPaymentProviderDataRequest, opts ...grpc.CallOption) (*GetDiscountPaymentProviderDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetDiscountPaymentProviderDataResponse)
+	err := c.cc.Invoke(ctx, ProductService_GetDiscountPaymentProviderData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) CreateDiscountPaymentProviderData(ctx context.Context, in *CreateDiscountPaymentProviderDataRequest, opts ...grpc.CallOption) (*CreateDiscountPaymentProviderDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateDiscountPaymentProviderDataResponse)
+	err := c.cc.Invoke(ctx, ProductService_CreateDiscountPaymentProviderData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) UpdateDiscountPaymentProviderData(ctx context.Context, in *UpdateDiscountPaymentProviderDataRequest, opts ...grpc.CallOption) (*UpdateDiscountPaymentProviderDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateDiscountPaymentProviderDataResponse)
+	err := c.cc.Invoke(ctx, ProductService_UpdateDiscountPaymentProviderData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) DeleteDiscountPaymentProviderData(ctx context.Context, in *DeleteDiscountPaymentProviderDataRequest, opts ...grpc.CallOption) (*DeleteDiscountPaymentProviderDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteDiscountPaymentProviderDataResponse)
+	err := c.cc.Invoke(ctx, ProductService_DeleteDiscountPaymentProviderData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) RedeemDiscountCode(ctx context.Context, in *RedeemDiscountCodeRequest, opts ...grpc.CallOption) (*RedeemDiscountCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RedeemDiscountCodeResponse)
+	err := c.cc.Invoke(ctx, ProductService_RedeemDiscountCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) GetRedemptionsByUser(ctx context.Context, in *GetRedemptionsByUserRequest, opts ...grpc.CallOption) (*GetRedemptionsByUserResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetRedemptionsByUserResponse)
+	err := c.cc.Invoke(ctx, ProductService_GetRedemptionsByUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) GetRedemptionsByDiscountCode(ctx context.Context, in *GetRedemptionsByDiscountCodeRequest, opts ...grpc.CallOption) (*GetRedemptionsByDiscountCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetRedemptionsByDiscountCodeResponse)
+	err := c.cc.Invoke(ctx, ProductService_GetRedemptionsByDiscountCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) ValidateDiscountCode(ctx context.Context, in *ValidateDiscountCodeRequest, opts ...grpc.CallOption) (*ValidateDiscountCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ValidateDiscountCodeResponse)
+	err := c.cc.Invoke(ctx, ProductService_ValidateDiscountCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProductServiceServer is the server API for ProductService service.
 // All implementations must embed UnimplementedProductServiceServer
 // for forward compatibility.
@@ -346,6 +653,38 @@ type ProductServiceServer interface {
 	CreatePlanMeter(context.Context, *CreatePlanMeterRequest) (*CreatePlanMeterResponse, error)
 	UpdatePlanMeter(context.Context, *UpdatePlanMeterRequest) (*UpdatePlanMeterResponse, error)
 	DeletePlanMeter(context.Context, *DeletePlanMeterRequest) (*DeletePlanMeterResponse, error)
+	// Discount operations
+	GetDiscountByID(context.Context, *GetDiscountByIDRequest) (*GetDiscountByIDResponse, error)
+	GetDiscountByCode(context.Context, *GetDiscountByCodeRequest) (*GetDiscountByCodeResponse, error)
+	CreateDiscount(context.Context, *CreateDiscountRequest) (*CreateDiscountResponse, error)
+	UpdateDiscount(context.Context, *UpdateDiscountRequest) (*UpdateDiscountResponse, error)
+	DeleteDiscount(context.Context, *DeleteDiscountRequest) (*DeleteDiscountResponse, error)
+	GetAllDiscounts(context.Context, *GetAllDiscountsRequest) (*GetAllDiscountsResponse, error)
+	// Discount Code operations
+	GetDiscountCodeByID(context.Context, *GetDiscountCodeByIDRequest) (*GetDiscountCodeByIDResponse, error)
+	GetDiscountCodeByCode(context.Context, *GetDiscountCodeByCodeRequest) (*GetDiscountCodeByCodeResponse, error)
+	GetDiscountCodesByDiscount(context.Context, *GetDiscountCodesByDiscountRequest) (*GetDiscountCodesByDiscountResponse, error)
+	CreateDiscountCode(context.Context, *CreateDiscountCodeRequest) (*CreateDiscountCodeResponse, error)
+	DeleteDiscountCode(context.Context, *DeleteDiscountCodeRequest) (*DeleteDiscountCodeResponse, error)
+	// Discount Plan operations (junction table)
+	AddPlanToDiscount(context.Context, *AddPlanToDiscountRequest) (*AddPlanToDiscountResponse, error)
+	RemovePlanFromDiscount(context.Context, *RemovePlanFromDiscountRequest) (*RemovePlanFromDiscountResponse, error)
+	GetPlansByDiscount(context.Context, *GetPlansByDiscountRequest) (*GetPlansByDiscountResponse, error)
+	// Discount One Time Product operations (junction table)
+	AddOneTimeProductToDiscount(context.Context, *AddOneTimeProductToDiscountRequest) (*AddOneTimeProductToDiscountResponse, error)
+	RemoveOneTimeProductFromDiscount(context.Context, *RemoveOneTimeProductFromDiscountRequest) (*RemoveOneTimeProductFromDiscountResponse, error)
+	GetOneTimeProductsByDiscount(context.Context, *GetOneTimeProductsByDiscountRequest) (*GetOneTimeProductsByDiscountResponse, error)
+	// Discount Payment Provider Data operations
+	GetDiscountPaymentProviderData(context.Context, *GetDiscountPaymentProviderDataRequest) (*GetDiscountPaymentProviderDataResponse, error)
+	CreateDiscountPaymentProviderData(context.Context, *CreateDiscountPaymentProviderDataRequest) (*CreateDiscountPaymentProviderDataResponse, error)
+	UpdateDiscountPaymentProviderData(context.Context, *UpdateDiscountPaymentProviderDataRequest) (*UpdateDiscountPaymentProviderDataResponse, error)
+	DeleteDiscountPaymentProviderData(context.Context, *DeleteDiscountPaymentProviderDataRequest) (*DeleteDiscountPaymentProviderDataResponse, error)
+	// Discount Code Redemption operations
+	RedeemDiscountCode(context.Context, *RedeemDiscountCodeRequest) (*RedeemDiscountCodeResponse, error)
+	GetRedemptionsByUser(context.Context, *GetRedemptionsByUserRequest) (*GetRedemptionsByUserResponse, error)
+	GetRedemptionsByDiscountCode(context.Context, *GetRedemptionsByDiscountCodeRequest) (*GetRedemptionsByDiscountCodeResponse, error)
+	// Validation operations
+	ValidateDiscountCode(context.Context, *ValidateDiscountCodeRequest) (*ValidateDiscountCodeResponse, error)
 	mustEmbedUnimplementedProductServiceServer()
 }
 
@@ -424,6 +763,81 @@ func (UnimplementedProductServiceServer) UpdatePlanMeter(context.Context, *Updat
 }
 func (UnimplementedProductServiceServer) DeletePlanMeter(context.Context, *DeletePlanMeterRequest) (*DeletePlanMeterResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeletePlanMeter not implemented")
+}
+func (UnimplementedProductServiceServer) GetDiscountByID(context.Context, *GetDiscountByIDRequest) (*GetDiscountByIDResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetDiscountByID not implemented")
+}
+func (UnimplementedProductServiceServer) GetDiscountByCode(context.Context, *GetDiscountByCodeRequest) (*GetDiscountByCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetDiscountByCode not implemented")
+}
+func (UnimplementedProductServiceServer) CreateDiscount(context.Context, *CreateDiscountRequest) (*CreateDiscountResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateDiscount not implemented")
+}
+func (UnimplementedProductServiceServer) UpdateDiscount(context.Context, *UpdateDiscountRequest) (*UpdateDiscountResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateDiscount not implemented")
+}
+func (UnimplementedProductServiceServer) DeleteDiscount(context.Context, *DeleteDiscountRequest) (*DeleteDiscountResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteDiscount not implemented")
+}
+func (UnimplementedProductServiceServer) GetAllDiscounts(context.Context, *GetAllDiscountsRequest) (*GetAllDiscountsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetAllDiscounts not implemented")
+}
+func (UnimplementedProductServiceServer) GetDiscountCodeByID(context.Context, *GetDiscountCodeByIDRequest) (*GetDiscountCodeByIDResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetDiscountCodeByID not implemented")
+}
+func (UnimplementedProductServiceServer) GetDiscountCodeByCode(context.Context, *GetDiscountCodeByCodeRequest) (*GetDiscountCodeByCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetDiscountCodeByCode not implemented")
+}
+func (UnimplementedProductServiceServer) GetDiscountCodesByDiscount(context.Context, *GetDiscountCodesByDiscountRequest) (*GetDiscountCodesByDiscountResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetDiscountCodesByDiscount not implemented")
+}
+func (UnimplementedProductServiceServer) CreateDiscountCode(context.Context, *CreateDiscountCodeRequest) (*CreateDiscountCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateDiscountCode not implemented")
+}
+func (UnimplementedProductServiceServer) DeleteDiscountCode(context.Context, *DeleteDiscountCodeRequest) (*DeleteDiscountCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteDiscountCode not implemented")
+}
+func (UnimplementedProductServiceServer) AddPlanToDiscount(context.Context, *AddPlanToDiscountRequest) (*AddPlanToDiscountResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddPlanToDiscount not implemented")
+}
+func (UnimplementedProductServiceServer) RemovePlanFromDiscount(context.Context, *RemovePlanFromDiscountRequest) (*RemovePlanFromDiscountResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RemovePlanFromDiscount not implemented")
+}
+func (UnimplementedProductServiceServer) GetPlansByDiscount(context.Context, *GetPlansByDiscountRequest) (*GetPlansByDiscountResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPlansByDiscount not implemented")
+}
+func (UnimplementedProductServiceServer) AddOneTimeProductToDiscount(context.Context, *AddOneTimeProductToDiscountRequest) (*AddOneTimeProductToDiscountResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddOneTimeProductToDiscount not implemented")
+}
+func (UnimplementedProductServiceServer) RemoveOneTimeProductFromDiscount(context.Context, *RemoveOneTimeProductFromDiscountRequest) (*RemoveOneTimeProductFromDiscountResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RemoveOneTimeProductFromDiscount not implemented")
+}
+func (UnimplementedProductServiceServer) GetOneTimeProductsByDiscount(context.Context, *GetOneTimeProductsByDiscountRequest) (*GetOneTimeProductsByDiscountResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetOneTimeProductsByDiscount not implemented")
+}
+func (UnimplementedProductServiceServer) GetDiscountPaymentProviderData(context.Context, *GetDiscountPaymentProviderDataRequest) (*GetDiscountPaymentProviderDataResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetDiscountPaymentProviderData not implemented")
+}
+func (UnimplementedProductServiceServer) CreateDiscountPaymentProviderData(context.Context, *CreateDiscountPaymentProviderDataRequest) (*CreateDiscountPaymentProviderDataResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateDiscountPaymentProviderData not implemented")
+}
+func (UnimplementedProductServiceServer) UpdateDiscountPaymentProviderData(context.Context, *UpdateDiscountPaymentProviderDataRequest) (*UpdateDiscountPaymentProviderDataResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateDiscountPaymentProviderData not implemented")
+}
+func (UnimplementedProductServiceServer) DeleteDiscountPaymentProviderData(context.Context, *DeleteDiscountPaymentProviderDataRequest) (*DeleteDiscountPaymentProviderDataResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteDiscountPaymentProviderData not implemented")
+}
+func (UnimplementedProductServiceServer) RedeemDiscountCode(context.Context, *RedeemDiscountCodeRequest) (*RedeemDiscountCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RedeemDiscountCode not implemented")
+}
+func (UnimplementedProductServiceServer) GetRedemptionsByUser(context.Context, *GetRedemptionsByUserRequest) (*GetRedemptionsByUserResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetRedemptionsByUser not implemented")
+}
+func (UnimplementedProductServiceServer) GetRedemptionsByDiscountCode(context.Context, *GetRedemptionsByDiscountCodeRequest) (*GetRedemptionsByDiscountCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetRedemptionsByDiscountCode not implemented")
+}
+func (UnimplementedProductServiceServer) ValidateDiscountCode(context.Context, *ValidateDiscountCodeRequest) (*ValidateDiscountCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ValidateDiscountCode not implemented")
 }
 func (UnimplementedProductServiceServer) mustEmbedUnimplementedProductServiceServer() {}
 func (UnimplementedProductServiceServer) testEmbeddedByValue()                        {}
@@ -860,6 +1274,456 @@ func _ProductService_DeletePlanMeter_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductService_GetDiscountByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDiscountByIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetDiscountByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_GetDiscountByID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetDiscountByID(ctx, req.(*GetDiscountByIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_GetDiscountByCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDiscountByCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetDiscountByCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_GetDiscountByCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetDiscountByCode(ctx, req.(*GetDiscountByCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_CreateDiscount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateDiscountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).CreateDiscount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_CreateDiscount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).CreateDiscount(ctx, req.(*CreateDiscountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_UpdateDiscount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateDiscountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).UpdateDiscount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_UpdateDiscount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).UpdateDiscount(ctx, req.(*UpdateDiscountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_DeleteDiscount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDiscountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).DeleteDiscount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_DeleteDiscount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).DeleteDiscount(ctx, req.(*DeleteDiscountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_GetAllDiscounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllDiscountsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetAllDiscounts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_GetAllDiscounts_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetAllDiscounts(ctx, req.(*GetAllDiscountsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_GetDiscountCodeByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDiscountCodeByIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetDiscountCodeByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_GetDiscountCodeByID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetDiscountCodeByID(ctx, req.(*GetDiscountCodeByIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_GetDiscountCodeByCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDiscountCodeByCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetDiscountCodeByCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_GetDiscountCodeByCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetDiscountCodeByCode(ctx, req.(*GetDiscountCodeByCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_GetDiscountCodesByDiscount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDiscountCodesByDiscountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetDiscountCodesByDiscount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_GetDiscountCodesByDiscount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetDiscountCodesByDiscount(ctx, req.(*GetDiscountCodesByDiscountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_CreateDiscountCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateDiscountCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).CreateDiscountCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_CreateDiscountCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).CreateDiscountCode(ctx, req.(*CreateDiscountCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_DeleteDiscountCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDiscountCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).DeleteDiscountCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_DeleteDiscountCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).DeleteDiscountCode(ctx, req.(*DeleteDiscountCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_AddPlanToDiscount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddPlanToDiscountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).AddPlanToDiscount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_AddPlanToDiscount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).AddPlanToDiscount(ctx, req.(*AddPlanToDiscountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_RemovePlanFromDiscount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemovePlanFromDiscountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).RemovePlanFromDiscount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_RemovePlanFromDiscount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).RemovePlanFromDiscount(ctx, req.(*RemovePlanFromDiscountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_GetPlansByDiscount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPlansByDiscountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetPlansByDiscount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_GetPlansByDiscount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetPlansByDiscount(ctx, req.(*GetPlansByDiscountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_AddOneTimeProductToDiscount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddOneTimeProductToDiscountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).AddOneTimeProductToDiscount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_AddOneTimeProductToDiscount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).AddOneTimeProductToDiscount(ctx, req.(*AddOneTimeProductToDiscountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_RemoveOneTimeProductFromDiscount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveOneTimeProductFromDiscountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).RemoveOneTimeProductFromDiscount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_RemoveOneTimeProductFromDiscount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).RemoveOneTimeProductFromDiscount(ctx, req.(*RemoveOneTimeProductFromDiscountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_GetOneTimeProductsByDiscount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetOneTimeProductsByDiscountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetOneTimeProductsByDiscount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_GetOneTimeProductsByDiscount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetOneTimeProductsByDiscount(ctx, req.(*GetOneTimeProductsByDiscountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_GetDiscountPaymentProviderData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDiscountPaymentProviderDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetDiscountPaymentProviderData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_GetDiscountPaymentProviderData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetDiscountPaymentProviderData(ctx, req.(*GetDiscountPaymentProviderDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_CreateDiscountPaymentProviderData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateDiscountPaymentProviderDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).CreateDiscountPaymentProviderData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_CreateDiscountPaymentProviderData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).CreateDiscountPaymentProviderData(ctx, req.(*CreateDiscountPaymentProviderDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_UpdateDiscountPaymentProviderData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateDiscountPaymentProviderDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).UpdateDiscountPaymentProviderData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_UpdateDiscountPaymentProviderData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).UpdateDiscountPaymentProviderData(ctx, req.(*UpdateDiscountPaymentProviderDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_DeleteDiscountPaymentProviderData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDiscountPaymentProviderDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).DeleteDiscountPaymentProviderData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_DeleteDiscountPaymentProviderData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).DeleteDiscountPaymentProviderData(ctx, req.(*DeleteDiscountPaymentProviderDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_RedeemDiscountCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RedeemDiscountCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).RedeemDiscountCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_RedeemDiscountCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).RedeemDiscountCode(ctx, req.(*RedeemDiscountCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_GetRedemptionsByUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRedemptionsByUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetRedemptionsByUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_GetRedemptionsByUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetRedemptionsByUser(ctx, req.(*GetRedemptionsByUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_GetRedemptionsByDiscountCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRedemptionsByDiscountCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetRedemptionsByDiscountCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_GetRedemptionsByDiscountCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetRedemptionsByDiscountCode(ctx, req.(*GetRedemptionsByDiscountCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_ValidateDiscountCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ValidateDiscountCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).ValidateDiscountCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_ValidateDiscountCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).ValidateDiscountCode(ctx, req.(*ValidateDiscountCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProductService_ServiceDesc is the grpc.ServiceDesc for ProductService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -958,6 +1822,106 @@ var ProductService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeletePlanMeter",
 			Handler:    _ProductService_DeletePlanMeter_Handler,
+		},
+		{
+			MethodName: "GetDiscountByID",
+			Handler:    _ProductService_GetDiscountByID_Handler,
+		},
+		{
+			MethodName: "GetDiscountByCode",
+			Handler:    _ProductService_GetDiscountByCode_Handler,
+		},
+		{
+			MethodName: "CreateDiscount",
+			Handler:    _ProductService_CreateDiscount_Handler,
+		},
+		{
+			MethodName: "UpdateDiscount",
+			Handler:    _ProductService_UpdateDiscount_Handler,
+		},
+		{
+			MethodName: "DeleteDiscount",
+			Handler:    _ProductService_DeleteDiscount_Handler,
+		},
+		{
+			MethodName: "GetAllDiscounts",
+			Handler:    _ProductService_GetAllDiscounts_Handler,
+		},
+		{
+			MethodName: "GetDiscountCodeByID",
+			Handler:    _ProductService_GetDiscountCodeByID_Handler,
+		},
+		{
+			MethodName: "GetDiscountCodeByCode",
+			Handler:    _ProductService_GetDiscountCodeByCode_Handler,
+		},
+		{
+			MethodName: "GetDiscountCodesByDiscount",
+			Handler:    _ProductService_GetDiscountCodesByDiscount_Handler,
+		},
+		{
+			MethodName: "CreateDiscountCode",
+			Handler:    _ProductService_CreateDiscountCode_Handler,
+		},
+		{
+			MethodName: "DeleteDiscountCode",
+			Handler:    _ProductService_DeleteDiscountCode_Handler,
+		},
+		{
+			MethodName: "AddPlanToDiscount",
+			Handler:    _ProductService_AddPlanToDiscount_Handler,
+		},
+		{
+			MethodName: "RemovePlanFromDiscount",
+			Handler:    _ProductService_RemovePlanFromDiscount_Handler,
+		},
+		{
+			MethodName: "GetPlansByDiscount",
+			Handler:    _ProductService_GetPlansByDiscount_Handler,
+		},
+		{
+			MethodName: "AddOneTimeProductToDiscount",
+			Handler:    _ProductService_AddOneTimeProductToDiscount_Handler,
+		},
+		{
+			MethodName: "RemoveOneTimeProductFromDiscount",
+			Handler:    _ProductService_RemoveOneTimeProductFromDiscount_Handler,
+		},
+		{
+			MethodName: "GetOneTimeProductsByDiscount",
+			Handler:    _ProductService_GetOneTimeProductsByDiscount_Handler,
+		},
+		{
+			MethodName: "GetDiscountPaymentProviderData",
+			Handler:    _ProductService_GetDiscountPaymentProviderData_Handler,
+		},
+		{
+			MethodName: "CreateDiscountPaymentProviderData",
+			Handler:    _ProductService_CreateDiscountPaymentProviderData_Handler,
+		},
+		{
+			MethodName: "UpdateDiscountPaymentProviderData",
+			Handler:    _ProductService_UpdateDiscountPaymentProviderData_Handler,
+		},
+		{
+			MethodName: "DeleteDiscountPaymentProviderData",
+			Handler:    _ProductService_DeleteDiscountPaymentProviderData_Handler,
+		},
+		{
+			MethodName: "RedeemDiscountCode",
+			Handler:    _ProductService_RedeemDiscountCode_Handler,
+		},
+		{
+			MethodName: "GetRedemptionsByUser",
+			Handler:    _ProductService_GetRedemptionsByUser_Handler,
+		},
+		{
+			MethodName: "GetRedemptionsByDiscountCode",
+			Handler:    _ProductService_GetRedemptionsByDiscountCode_Handler,
+		},
+		{
+			MethodName: "ValidateDiscountCode",
+			Handler:    _ProductService_ValidateDiscountCode_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -3481,6 +3481,3802 @@ func (x *DeletePlanMeterResponse) GetMessage() string {
 	return ""
 }
 
+type Discount struct {
+	state                          protoimpl.MessageState `protogen:"open.v1"`
+	Id                             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name                           string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description                    string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Type                           string                 `protobuf:"bytes,4,opt,name=type,proto3" json:"type,omitempty"` // percentage, fixed
+	Amount                         float64                `protobuf:"fixed64,5,opt,name=amount,proto3" json:"amount,omitempty"`
+	ValidUntil                     int64                  `protobuf:"varint,6,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`
+	IsActive                       bool                   `protobuf:"varint,7,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	ActionType                     string                 `protobuf:"bytes,8,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"` // add_subscription_time, reduce_price
+	MaxRedemptions                 int32                  `protobuf:"varint,9,opt,name=max_redemptions,json=maxRedemptions,proto3" json:"max_redemptions,omitempty"`
+	MaxRedemptionsPerUser          int32                  `protobuf:"varint,10,opt,name=max_redemptions_per_user,json=maxRedemptionsPerUser,proto3" json:"max_redemptions_per_user,omitempty"`
+	Redemptions                    int32                  `protobuf:"varint,11,opt,name=redemptions,proto3" json:"redemptions,omitempty"`
+	IsRecurring                    bool                   `protobuf:"varint,12,opt,name=is_recurring,json=isRecurring,proto3" json:"is_recurring,omitempty"`
+	DurationInMonths               int32                  `protobuf:"varint,13,opt,name=duration_in_months,json=durationInMonths,proto3" json:"duration_in_months,omitempty"`
+	MaximumRecurringIntervals      int32                  `protobuf:"varint,14,opt,name=maximum_recurring_intervals,json=maximumRecurringIntervals,proto3" json:"maximum_recurring_intervals,omitempty"`
+	RedeemType                     int32                  `protobuf:"varint,15,opt,name=redeem_type,json=redeemType,proto3" json:"redeem_type,omitempty"` // 1=normal, 2=special (mapped from smallint)
+	BonusDays                      int32                  `protobuf:"varint,16,opt,name=bonus_days,json=bonusDays,proto3" json:"bonus_days,omitempty"`
+	IsEnabledForAllPlans           bool                   `protobuf:"varint,17,opt,name=is_enabled_for_all_plans,json=isEnabledForAllPlans,proto3" json:"is_enabled_for_all_plans,omitempty"`
+	IsEnabledForAllOneTimeProducts bool                   `protobuf:"varint,18,opt,name=is_enabled_for_all_one_time_products,json=isEnabledForAllOneTimeProducts,proto3" json:"is_enabled_for_all_one_time_products,omitempty"`
+	CreatedAt                      int64                  `protobuf:"varint,19,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt                      int64                  `protobuf:"varint,20,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields                  protoimpl.UnknownFields
+	sizeCache                      protoimpl.SizeCache
+}
+
+func (x *Discount) Reset() {
+	*x = Discount{}
+	mi := &file_product_proto_msgTypes[53]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Discount) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Discount) ProtoMessage() {}
+
+func (x *Discount) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[53]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Discount.ProtoReflect.Descriptor instead.
+func (*Discount) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{53}
+}
+
+func (x *Discount) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Discount) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Discount) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *Discount) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *Discount) GetAmount() float64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *Discount) GetValidUntil() int64 {
+	if x != nil {
+		return x.ValidUntil
+	}
+	return 0
+}
+
+func (x *Discount) GetIsActive() bool {
+	if x != nil {
+		return x.IsActive
+	}
+	return false
+}
+
+func (x *Discount) GetActionType() string {
+	if x != nil {
+		return x.ActionType
+	}
+	return ""
+}
+
+func (x *Discount) GetMaxRedemptions() int32 {
+	if x != nil {
+		return x.MaxRedemptions
+	}
+	return 0
+}
+
+func (x *Discount) GetMaxRedemptionsPerUser() int32 {
+	if x != nil {
+		return x.MaxRedemptionsPerUser
+	}
+	return 0
+}
+
+func (x *Discount) GetRedemptions() int32 {
+	if x != nil {
+		return x.Redemptions
+	}
+	return 0
+}
+
+func (x *Discount) GetIsRecurring() bool {
+	if x != nil {
+		return x.IsRecurring
+	}
+	return false
+}
+
+func (x *Discount) GetDurationInMonths() int32 {
+	if x != nil {
+		return x.DurationInMonths
+	}
+	return 0
+}
+
+func (x *Discount) GetMaximumRecurringIntervals() int32 {
+	if x != nil {
+		return x.MaximumRecurringIntervals
+	}
+	return 0
+}
+
+func (x *Discount) GetRedeemType() int32 {
+	if x != nil {
+		return x.RedeemType
+	}
+	return 0
+}
+
+func (x *Discount) GetBonusDays() int32 {
+	if x != nil {
+		return x.BonusDays
+	}
+	return 0
+}
+
+func (x *Discount) GetIsEnabledForAllPlans() bool {
+	if x != nil {
+		return x.IsEnabledForAllPlans
+	}
+	return false
+}
+
+func (x *Discount) GetIsEnabledForAllOneTimeProducts() bool {
+	if x != nil {
+		return x.IsEnabledForAllOneTimeProducts
+	}
+	return false
+}
+
+func (x *Discount) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *Discount) GetUpdatedAt() int64 {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return 0
+}
+
+type GetDiscountByIDRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscountByIDRequest) Reset() {
+	*x = GetDiscountByIDRequest{}
+	mi := &file_product_proto_msgTypes[54]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscountByIDRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscountByIDRequest) ProtoMessage() {}
+
+func (x *GetDiscountByIDRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[54]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscountByIDRequest.ProtoReflect.Descriptor instead.
+func (*GetDiscountByIDRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{54}
+}
+
+func (x *GetDiscountByIDRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type GetDiscountByIDResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *Discount              `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscountByIDResponse) Reset() {
+	*x = GetDiscountByIDResponse{}
+	mi := &file_product_proto_msgTypes[55]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscountByIDResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscountByIDResponse) ProtoMessage() {}
+
+func (x *GetDiscountByIDResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[55]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscountByIDResponse.ProtoReflect.Descriptor instead.
+func (*GetDiscountByIDResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{55}
+}
+
+func (x *GetDiscountByIDResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetDiscountByIDResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetDiscountByIDResponse) GetData() *Discount {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type GetDiscountByCodeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscountByCodeRequest) Reset() {
+	*x = GetDiscountByCodeRequest{}
+	mi := &file_product_proto_msgTypes[56]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscountByCodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscountByCodeRequest) ProtoMessage() {}
+
+func (x *GetDiscountByCodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[56]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscountByCodeRequest.ProtoReflect.Descriptor instead.
+func (*GetDiscountByCodeRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{56}
+}
+
+func (x *GetDiscountByCodeRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+type GetDiscountByCodeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *Discount              `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscountByCodeResponse) Reset() {
+	*x = GetDiscountByCodeResponse{}
+	mi := &file_product_proto_msgTypes[57]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscountByCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscountByCodeResponse) ProtoMessage() {}
+
+func (x *GetDiscountByCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[57]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscountByCodeResponse.ProtoReflect.Descriptor instead.
+func (*GetDiscountByCodeResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{57}
+}
+
+func (x *GetDiscountByCodeResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetDiscountByCodeResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetDiscountByCodeResponse) GetData() *Discount {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type CreateDiscountRequest struct {
+	state                          protoimpl.MessageState `protogen:"open.v1"`
+	Name                           string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Description                    string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	Type                           string                 `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
+	Amount                         float64                `protobuf:"fixed64,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	ValidUntil                     int64                  `protobuf:"varint,5,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`
+	IsActive                       bool                   `protobuf:"varint,6,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	ActionType                     string                 `protobuf:"bytes,7,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"`
+	MaxRedemptions                 int32                  `protobuf:"varint,8,opt,name=max_redemptions,json=maxRedemptions,proto3" json:"max_redemptions,omitempty"`
+	MaxRedemptionsPerUser          int32                  `protobuf:"varint,9,opt,name=max_redemptions_per_user,json=maxRedemptionsPerUser,proto3" json:"max_redemptions_per_user,omitempty"`
+	IsRecurring                    bool                   `protobuf:"varint,10,opt,name=is_recurring,json=isRecurring,proto3" json:"is_recurring,omitempty"`
+	DurationInMonths               int32                  `protobuf:"varint,11,opt,name=duration_in_months,json=durationInMonths,proto3" json:"duration_in_months,omitempty"`
+	MaximumRecurringIntervals      int32                  `protobuf:"varint,12,opt,name=maximum_recurring_intervals,json=maximumRecurringIntervals,proto3" json:"maximum_recurring_intervals,omitempty"`
+	RedeemType                     int32                  `protobuf:"varint,13,opt,name=redeem_type,json=redeemType,proto3" json:"redeem_type,omitempty"`
+	BonusDays                      int32                  `protobuf:"varint,14,opt,name=bonus_days,json=bonusDays,proto3" json:"bonus_days,omitempty"`
+	IsEnabledForAllPlans           bool                   `protobuf:"varint,15,opt,name=is_enabled_for_all_plans,json=isEnabledForAllPlans,proto3" json:"is_enabled_for_all_plans,omitempty"`
+	IsEnabledForAllOneTimeProducts bool                   `protobuf:"varint,16,opt,name=is_enabled_for_all_one_time_products,json=isEnabledForAllOneTimeProducts,proto3" json:"is_enabled_for_all_one_time_products,omitempty"`
+	unknownFields                  protoimpl.UnknownFields
+	sizeCache                      protoimpl.SizeCache
+}
+
+func (x *CreateDiscountRequest) Reset() {
+	*x = CreateDiscountRequest{}
+	mi := &file_product_proto_msgTypes[58]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateDiscountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateDiscountRequest) ProtoMessage() {}
+
+func (x *CreateDiscountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[58]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateDiscountRequest.ProtoReflect.Descriptor instead.
+func (*CreateDiscountRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{58}
+}
+
+func (x *CreateDiscountRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CreateDiscountRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *CreateDiscountRequest) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *CreateDiscountRequest) GetAmount() float64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *CreateDiscountRequest) GetValidUntil() int64 {
+	if x != nil {
+		return x.ValidUntil
+	}
+	return 0
+}
+
+func (x *CreateDiscountRequest) GetIsActive() bool {
+	if x != nil {
+		return x.IsActive
+	}
+	return false
+}
+
+func (x *CreateDiscountRequest) GetActionType() string {
+	if x != nil {
+		return x.ActionType
+	}
+	return ""
+}
+
+func (x *CreateDiscountRequest) GetMaxRedemptions() int32 {
+	if x != nil {
+		return x.MaxRedemptions
+	}
+	return 0
+}
+
+func (x *CreateDiscountRequest) GetMaxRedemptionsPerUser() int32 {
+	if x != nil {
+		return x.MaxRedemptionsPerUser
+	}
+	return 0
+}
+
+func (x *CreateDiscountRequest) GetIsRecurring() bool {
+	if x != nil {
+		return x.IsRecurring
+	}
+	return false
+}
+
+func (x *CreateDiscountRequest) GetDurationInMonths() int32 {
+	if x != nil {
+		return x.DurationInMonths
+	}
+	return 0
+}
+
+func (x *CreateDiscountRequest) GetMaximumRecurringIntervals() int32 {
+	if x != nil {
+		return x.MaximumRecurringIntervals
+	}
+	return 0
+}
+
+func (x *CreateDiscountRequest) GetRedeemType() int32 {
+	if x != nil {
+		return x.RedeemType
+	}
+	return 0
+}
+
+func (x *CreateDiscountRequest) GetBonusDays() int32 {
+	if x != nil {
+		return x.BonusDays
+	}
+	return 0
+}
+
+func (x *CreateDiscountRequest) GetIsEnabledForAllPlans() bool {
+	if x != nil {
+		return x.IsEnabledForAllPlans
+	}
+	return false
+}
+
+func (x *CreateDiscountRequest) GetIsEnabledForAllOneTimeProducts() bool {
+	if x != nil {
+		return x.IsEnabledForAllOneTimeProducts
+	}
+	return false
+}
+
+type CreateDiscountResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *Discount              `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateDiscountResponse) Reset() {
+	*x = CreateDiscountResponse{}
+	mi := &file_product_proto_msgTypes[59]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateDiscountResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateDiscountResponse) ProtoMessage() {}
+
+func (x *CreateDiscountResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[59]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateDiscountResponse.ProtoReflect.Descriptor instead.
+func (*CreateDiscountResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{59}
+}
+
+func (x *CreateDiscountResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreateDiscountResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *CreateDiscountResponse) GetData() *Discount {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type UpdateDiscountRequest struct {
+	state                          protoimpl.MessageState `protogen:"open.v1"`
+	Id                             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name                           string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description                    string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Type                           string                 `protobuf:"bytes,4,opt,name=type,proto3" json:"type,omitempty"`
+	Amount                         float64                `protobuf:"fixed64,5,opt,name=amount,proto3" json:"amount,omitempty"`
+	ValidUntil                     int64                  `protobuf:"varint,6,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`
+	IsActive                       bool                   `protobuf:"varint,7,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	ActionType                     string                 `protobuf:"bytes,8,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"`
+	MaxRedemptions                 int32                  `protobuf:"varint,9,opt,name=max_redemptions,json=maxRedemptions,proto3" json:"max_redemptions,omitempty"`
+	MaxRedemptionsPerUser          int32                  `protobuf:"varint,10,opt,name=max_redemptions_per_user,json=maxRedemptionsPerUser,proto3" json:"max_redemptions_per_user,omitempty"`
+	IsRecurring                    bool                   `protobuf:"varint,11,opt,name=is_recurring,json=isRecurring,proto3" json:"is_recurring,omitempty"`
+	DurationInMonths               int32                  `protobuf:"varint,12,opt,name=duration_in_months,json=durationInMonths,proto3" json:"duration_in_months,omitempty"`
+	MaximumRecurringIntervals      int32                  `protobuf:"varint,13,opt,name=maximum_recurring_intervals,json=maximumRecurringIntervals,proto3" json:"maximum_recurring_intervals,omitempty"`
+	RedeemType                     int32                  `protobuf:"varint,14,opt,name=redeem_type,json=redeemType,proto3" json:"redeem_type,omitempty"`
+	BonusDays                      int32                  `protobuf:"varint,15,opt,name=bonus_days,json=bonusDays,proto3" json:"bonus_days,omitempty"`
+	IsEnabledForAllPlans           bool                   `protobuf:"varint,16,opt,name=is_enabled_for_all_plans,json=isEnabledForAllPlans,proto3" json:"is_enabled_for_all_plans,omitempty"`
+	IsEnabledForAllOneTimeProducts bool                   `protobuf:"varint,17,opt,name=is_enabled_for_all_one_time_products,json=isEnabledForAllOneTimeProducts,proto3" json:"is_enabled_for_all_one_time_products,omitempty"`
+	unknownFields                  protoimpl.UnknownFields
+	sizeCache                      protoimpl.SizeCache
+}
+
+func (x *UpdateDiscountRequest) Reset() {
+	*x = UpdateDiscountRequest{}
+	mi := &file_product_proto_msgTypes[60]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateDiscountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateDiscountRequest) ProtoMessage() {}
+
+func (x *UpdateDiscountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[60]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateDiscountRequest.ProtoReflect.Descriptor instead.
+func (*UpdateDiscountRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{60}
+}
+
+func (x *UpdateDiscountRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateDiscountRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *UpdateDiscountRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *UpdateDiscountRequest) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *UpdateDiscountRequest) GetAmount() float64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *UpdateDiscountRequest) GetValidUntil() int64 {
+	if x != nil {
+		return x.ValidUntil
+	}
+	return 0
+}
+
+func (x *UpdateDiscountRequest) GetIsActive() bool {
+	if x != nil {
+		return x.IsActive
+	}
+	return false
+}
+
+func (x *UpdateDiscountRequest) GetActionType() string {
+	if x != nil {
+		return x.ActionType
+	}
+	return ""
+}
+
+func (x *UpdateDiscountRequest) GetMaxRedemptions() int32 {
+	if x != nil {
+		return x.MaxRedemptions
+	}
+	return 0
+}
+
+func (x *UpdateDiscountRequest) GetMaxRedemptionsPerUser() int32 {
+	if x != nil {
+		return x.MaxRedemptionsPerUser
+	}
+	return 0
+}
+
+func (x *UpdateDiscountRequest) GetIsRecurring() bool {
+	if x != nil {
+		return x.IsRecurring
+	}
+	return false
+}
+
+func (x *UpdateDiscountRequest) GetDurationInMonths() int32 {
+	if x != nil {
+		return x.DurationInMonths
+	}
+	return 0
+}
+
+func (x *UpdateDiscountRequest) GetMaximumRecurringIntervals() int32 {
+	if x != nil {
+		return x.MaximumRecurringIntervals
+	}
+	return 0
+}
+
+func (x *UpdateDiscountRequest) GetRedeemType() int32 {
+	if x != nil {
+		return x.RedeemType
+	}
+	return 0
+}
+
+func (x *UpdateDiscountRequest) GetBonusDays() int32 {
+	if x != nil {
+		return x.BonusDays
+	}
+	return 0
+}
+
+func (x *UpdateDiscountRequest) GetIsEnabledForAllPlans() bool {
+	if x != nil {
+		return x.IsEnabledForAllPlans
+	}
+	return false
+}
+
+func (x *UpdateDiscountRequest) GetIsEnabledForAllOneTimeProducts() bool {
+	if x != nil {
+		return x.IsEnabledForAllOneTimeProducts
+	}
+	return false
+}
+
+type UpdateDiscountResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *Discount              `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateDiscountResponse) Reset() {
+	*x = UpdateDiscountResponse{}
+	mi := &file_product_proto_msgTypes[61]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateDiscountResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateDiscountResponse) ProtoMessage() {}
+
+func (x *UpdateDiscountResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[61]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateDiscountResponse.ProtoReflect.Descriptor instead.
+func (*UpdateDiscountResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{61}
+}
+
+func (x *UpdateDiscountResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *UpdateDiscountResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *UpdateDiscountResponse) GetData() *Discount {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type DeleteDiscountRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteDiscountRequest) Reset() {
+	*x = DeleteDiscountRequest{}
+	mi := &file_product_proto_msgTypes[62]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteDiscountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteDiscountRequest) ProtoMessage() {}
+
+func (x *DeleteDiscountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[62]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteDiscountRequest.ProtoReflect.Descriptor instead.
+func (*DeleteDiscountRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{62}
+}
+
+func (x *DeleteDiscountRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type DeleteDiscountResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteDiscountResponse) Reset() {
+	*x = DeleteDiscountResponse{}
+	mi := &file_product_proto_msgTypes[63]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteDiscountResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteDiscountResponse) ProtoMessage() {}
+
+func (x *DeleteDiscountResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[63]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteDiscountResponse.ProtoReflect.Descriptor instead.
+func (*DeleteDiscountResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{63}
+}
+
+func (x *DeleteDiscountResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *DeleteDiscountResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type GetAllDiscountsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
+	PerPage       int32                  `protobuf:"varint,2,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
+	ActiveOnly    bool                   `protobuf:"varint,3,opt,name=active_only,json=activeOnly,proto3" json:"active_only,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAllDiscountsRequest) Reset() {
+	*x = GetAllDiscountsRequest{}
+	mi := &file_product_proto_msgTypes[64]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAllDiscountsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAllDiscountsRequest) ProtoMessage() {}
+
+func (x *GetAllDiscountsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[64]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAllDiscountsRequest.ProtoReflect.Descriptor instead.
+func (*GetAllDiscountsRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{64}
+}
+
+func (x *GetAllDiscountsRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *GetAllDiscountsRequest) GetPerPage() int32 {
+	if x != nil {
+		return x.PerPage
+	}
+	return 0
+}
+
+func (x *GetAllDiscountsRequest) GetActiveOnly() bool {
+	if x != nil {
+		return x.ActiveOnly
+	}
+	return false
+}
+
+type GetAllDiscountsData struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Discounts     []*Discount            `protobuf:"bytes,1,rep,name=discounts,proto3" json:"discounts,omitempty"`
+	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	Page          int32                  `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
+	PerPage       int32                  `protobuf:"varint,4,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAllDiscountsData) Reset() {
+	*x = GetAllDiscountsData{}
+	mi := &file_product_proto_msgTypes[65]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAllDiscountsData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAllDiscountsData) ProtoMessage() {}
+
+func (x *GetAllDiscountsData) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[65]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAllDiscountsData.ProtoReflect.Descriptor instead.
+func (*GetAllDiscountsData) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{65}
+}
+
+func (x *GetAllDiscountsData) GetDiscounts() []*Discount {
+	if x != nil {
+		return x.Discounts
+	}
+	return nil
+}
+
+func (x *GetAllDiscountsData) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *GetAllDiscountsData) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *GetAllDiscountsData) GetPerPage() int32 {
+	if x != nil {
+		return x.PerPage
+	}
+	return 0
+}
+
+type GetAllDiscountsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *GetAllDiscountsData   `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAllDiscountsResponse) Reset() {
+	*x = GetAllDiscountsResponse{}
+	mi := &file_product_proto_msgTypes[66]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAllDiscountsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAllDiscountsResponse) ProtoMessage() {}
+
+func (x *GetAllDiscountsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[66]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAllDiscountsResponse.ProtoReflect.Descriptor instead.
+func (*GetAllDiscountsResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{66}
+}
+
+func (x *GetAllDiscountsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetAllDiscountsResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetAllDiscountsResponse) GetData() *GetAllDiscountsData {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type DiscountCode struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Code          string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
+	DiscountId    int64                  `protobuf:"varint,3,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	CreatedAt     int64                  `protobuf:"varint,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     int64                  `protobuf:"varint,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DiscountCode) Reset() {
+	*x = DiscountCode{}
+	mi := &file_product_proto_msgTypes[67]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DiscountCode) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DiscountCode) ProtoMessage() {}
+
+func (x *DiscountCode) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[67]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DiscountCode.ProtoReflect.Descriptor instead.
+func (*DiscountCode) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{67}
+}
+
+func (x *DiscountCode) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *DiscountCode) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *DiscountCode) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+func (x *DiscountCode) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *DiscountCode) GetUpdatedAt() int64 {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return 0
+}
+
+type GetDiscountCodeByIDRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscountCodeByIDRequest) Reset() {
+	*x = GetDiscountCodeByIDRequest{}
+	mi := &file_product_proto_msgTypes[68]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscountCodeByIDRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscountCodeByIDRequest) ProtoMessage() {}
+
+func (x *GetDiscountCodeByIDRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[68]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscountCodeByIDRequest.ProtoReflect.Descriptor instead.
+func (*GetDiscountCodeByIDRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{68}
+}
+
+func (x *GetDiscountCodeByIDRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type GetDiscountCodeByIDResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *DiscountCode          `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscountCodeByIDResponse) Reset() {
+	*x = GetDiscountCodeByIDResponse{}
+	mi := &file_product_proto_msgTypes[69]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscountCodeByIDResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscountCodeByIDResponse) ProtoMessage() {}
+
+func (x *GetDiscountCodeByIDResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[69]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscountCodeByIDResponse.ProtoReflect.Descriptor instead.
+func (*GetDiscountCodeByIDResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{69}
+}
+
+func (x *GetDiscountCodeByIDResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetDiscountCodeByIDResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetDiscountCodeByIDResponse) GetData() *DiscountCode {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type GetDiscountCodeByCodeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscountCodeByCodeRequest) Reset() {
+	*x = GetDiscountCodeByCodeRequest{}
+	mi := &file_product_proto_msgTypes[70]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscountCodeByCodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscountCodeByCodeRequest) ProtoMessage() {}
+
+func (x *GetDiscountCodeByCodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[70]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscountCodeByCodeRequest.ProtoReflect.Descriptor instead.
+func (*GetDiscountCodeByCodeRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{70}
+}
+
+func (x *GetDiscountCodeByCodeRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+type GetDiscountCodeByCodeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *DiscountCode          `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscountCodeByCodeResponse) Reset() {
+	*x = GetDiscountCodeByCodeResponse{}
+	mi := &file_product_proto_msgTypes[71]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscountCodeByCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscountCodeByCodeResponse) ProtoMessage() {}
+
+func (x *GetDiscountCodeByCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[71]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscountCodeByCodeResponse.ProtoReflect.Descriptor instead.
+func (*GetDiscountCodeByCodeResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{71}
+}
+
+func (x *GetDiscountCodeByCodeResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetDiscountCodeByCodeResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetDiscountCodeByCodeResponse) GetData() *DiscountCode {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type GetDiscountCodesByDiscountRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	DiscountId    int64                  `protobuf:"varint,1,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscountCodesByDiscountRequest) Reset() {
+	*x = GetDiscountCodesByDiscountRequest{}
+	mi := &file_product_proto_msgTypes[72]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscountCodesByDiscountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscountCodesByDiscountRequest) ProtoMessage() {}
+
+func (x *GetDiscountCodesByDiscountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[72]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscountCodesByDiscountRequest.ProtoReflect.Descriptor instead.
+func (*GetDiscountCodesByDiscountRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{72}
+}
+
+func (x *GetDiscountCodesByDiscountRequest) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+type GetDiscountCodesByDiscountResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          []*DiscountCode        `protobuf:"bytes,3,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscountCodesByDiscountResponse) Reset() {
+	*x = GetDiscountCodesByDiscountResponse{}
+	mi := &file_product_proto_msgTypes[73]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscountCodesByDiscountResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscountCodesByDiscountResponse) ProtoMessage() {}
+
+func (x *GetDiscountCodesByDiscountResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[73]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscountCodesByDiscountResponse.ProtoReflect.Descriptor instead.
+func (*GetDiscountCodesByDiscountResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{73}
+}
+
+func (x *GetDiscountCodesByDiscountResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetDiscountCodesByDiscountResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetDiscountCodesByDiscountResponse) GetData() []*DiscountCode {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type CreateDiscountCodeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	DiscountId    int64                  `protobuf:"varint,2,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateDiscountCodeRequest) Reset() {
+	*x = CreateDiscountCodeRequest{}
+	mi := &file_product_proto_msgTypes[74]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateDiscountCodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateDiscountCodeRequest) ProtoMessage() {}
+
+func (x *CreateDiscountCodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[74]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateDiscountCodeRequest.ProtoReflect.Descriptor instead.
+func (*CreateDiscountCodeRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{74}
+}
+
+func (x *CreateDiscountCodeRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *CreateDiscountCodeRequest) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+type CreateDiscountCodeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *DiscountCode          `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateDiscountCodeResponse) Reset() {
+	*x = CreateDiscountCodeResponse{}
+	mi := &file_product_proto_msgTypes[75]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateDiscountCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateDiscountCodeResponse) ProtoMessage() {}
+
+func (x *CreateDiscountCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[75]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateDiscountCodeResponse.ProtoReflect.Descriptor instead.
+func (*CreateDiscountCodeResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{75}
+}
+
+func (x *CreateDiscountCodeResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreateDiscountCodeResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *CreateDiscountCodeResponse) GetData() *DiscountCode {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type DeleteDiscountCodeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteDiscountCodeRequest) Reset() {
+	*x = DeleteDiscountCodeRequest{}
+	mi := &file_product_proto_msgTypes[76]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteDiscountCodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteDiscountCodeRequest) ProtoMessage() {}
+
+func (x *DeleteDiscountCodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[76]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteDiscountCodeRequest.ProtoReflect.Descriptor instead.
+func (*DeleteDiscountCodeRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{76}
+}
+
+func (x *DeleteDiscountCodeRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type DeleteDiscountCodeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteDiscountCodeResponse) Reset() {
+	*x = DeleteDiscountCodeResponse{}
+	mi := &file_product_proto_msgTypes[77]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteDiscountCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteDiscountCodeResponse) ProtoMessage() {}
+
+func (x *DeleteDiscountCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[77]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteDiscountCodeResponse.ProtoReflect.Descriptor instead.
+func (*DeleteDiscountCodeResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{77}
+}
+
+func (x *DeleteDiscountCodeResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *DeleteDiscountCodeResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type DiscountPlan struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	DiscountId    int64                  `protobuf:"varint,2,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	PlanId        int64                  `protobuf:"varint,3,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	CreatedAt     int64                  `protobuf:"varint,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     int64                  `protobuf:"varint,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DiscountPlan) Reset() {
+	*x = DiscountPlan{}
+	mi := &file_product_proto_msgTypes[78]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DiscountPlan) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DiscountPlan) ProtoMessage() {}
+
+func (x *DiscountPlan) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[78]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DiscountPlan.ProtoReflect.Descriptor instead.
+func (*DiscountPlan) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{78}
+}
+
+func (x *DiscountPlan) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *DiscountPlan) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+func (x *DiscountPlan) GetPlanId() int64 {
+	if x != nil {
+		return x.PlanId
+	}
+	return 0
+}
+
+func (x *DiscountPlan) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *DiscountPlan) GetUpdatedAt() int64 {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return 0
+}
+
+type AddPlanToDiscountRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	DiscountId    int64                  `protobuf:"varint,1,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	PlanId        int64                  `protobuf:"varint,2,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddPlanToDiscountRequest) Reset() {
+	*x = AddPlanToDiscountRequest{}
+	mi := &file_product_proto_msgTypes[79]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddPlanToDiscountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddPlanToDiscountRequest) ProtoMessage() {}
+
+func (x *AddPlanToDiscountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[79]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddPlanToDiscountRequest.ProtoReflect.Descriptor instead.
+func (*AddPlanToDiscountRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{79}
+}
+
+func (x *AddPlanToDiscountRequest) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+func (x *AddPlanToDiscountRequest) GetPlanId() int64 {
+	if x != nil {
+		return x.PlanId
+	}
+	return 0
+}
+
+type AddPlanToDiscountResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *DiscountPlan          `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddPlanToDiscountResponse) Reset() {
+	*x = AddPlanToDiscountResponse{}
+	mi := &file_product_proto_msgTypes[80]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddPlanToDiscountResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddPlanToDiscountResponse) ProtoMessage() {}
+
+func (x *AddPlanToDiscountResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[80]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddPlanToDiscountResponse.ProtoReflect.Descriptor instead.
+func (*AddPlanToDiscountResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{80}
+}
+
+func (x *AddPlanToDiscountResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *AddPlanToDiscountResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *AddPlanToDiscountResponse) GetData() *DiscountPlan {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type RemovePlanFromDiscountRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	DiscountId    int64                  `protobuf:"varint,1,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	PlanId        int64                  `protobuf:"varint,2,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RemovePlanFromDiscountRequest) Reset() {
+	*x = RemovePlanFromDiscountRequest{}
+	mi := &file_product_proto_msgTypes[81]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RemovePlanFromDiscountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RemovePlanFromDiscountRequest) ProtoMessage() {}
+
+func (x *RemovePlanFromDiscountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[81]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RemovePlanFromDiscountRequest.ProtoReflect.Descriptor instead.
+func (*RemovePlanFromDiscountRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{81}
+}
+
+func (x *RemovePlanFromDiscountRequest) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+func (x *RemovePlanFromDiscountRequest) GetPlanId() int64 {
+	if x != nil {
+		return x.PlanId
+	}
+	return 0
+}
+
+type RemovePlanFromDiscountResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RemovePlanFromDiscountResponse) Reset() {
+	*x = RemovePlanFromDiscountResponse{}
+	mi := &file_product_proto_msgTypes[82]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RemovePlanFromDiscountResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RemovePlanFromDiscountResponse) ProtoMessage() {}
+
+func (x *RemovePlanFromDiscountResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[82]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RemovePlanFromDiscountResponse.ProtoReflect.Descriptor instead.
+func (*RemovePlanFromDiscountResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{82}
+}
+
+func (x *RemovePlanFromDiscountResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *RemovePlanFromDiscountResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type GetPlansByDiscountRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	DiscountId    int64                  `protobuf:"varint,1,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPlansByDiscountRequest) Reset() {
+	*x = GetPlansByDiscountRequest{}
+	mi := &file_product_proto_msgTypes[83]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPlansByDiscountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPlansByDiscountRequest) ProtoMessage() {}
+
+func (x *GetPlansByDiscountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[83]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPlansByDiscountRequest.ProtoReflect.Descriptor instead.
+func (*GetPlansByDiscountRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{83}
+}
+
+func (x *GetPlansByDiscountRequest) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+type GetPlansByDiscountResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	PlanIds       []int64                `protobuf:"varint,3,rep,packed,name=plan_ids,json=planIds,proto3" json:"plan_ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPlansByDiscountResponse) Reset() {
+	*x = GetPlansByDiscountResponse{}
+	mi := &file_product_proto_msgTypes[84]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPlansByDiscountResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPlansByDiscountResponse) ProtoMessage() {}
+
+func (x *GetPlansByDiscountResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[84]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPlansByDiscountResponse.ProtoReflect.Descriptor instead.
+func (*GetPlansByDiscountResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{84}
+}
+
+func (x *GetPlansByDiscountResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetPlansByDiscountResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetPlansByDiscountResponse) GetPlanIds() []int64 {
+	if x != nil {
+		return x.PlanIds
+	}
+	return nil
+}
+
+type DiscountOneTimeProduct struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Id               int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	DiscountId       int64                  `protobuf:"varint,2,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	OneTimeProductId int64                  `protobuf:"varint,3,opt,name=one_time_product_id,json=oneTimeProductId,proto3" json:"one_time_product_id,omitempty"`
+	CreatedAt        int64                  `protobuf:"varint,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt        int64                  `protobuf:"varint,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *DiscountOneTimeProduct) Reset() {
+	*x = DiscountOneTimeProduct{}
+	mi := &file_product_proto_msgTypes[85]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DiscountOneTimeProduct) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DiscountOneTimeProduct) ProtoMessage() {}
+
+func (x *DiscountOneTimeProduct) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[85]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DiscountOneTimeProduct.ProtoReflect.Descriptor instead.
+func (*DiscountOneTimeProduct) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{85}
+}
+
+func (x *DiscountOneTimeProduct) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *DiscountOneTimeProduct) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+func (x *DiscountOneTimeProduct) GetOneTimeProductId() int64 {
+	if x != nil {
+		return x.OneTimeProductId
+	}
+	return 0
+}
+
+func (x *DiscountOneTimeProduct) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *DiscountOneTimeProduct) GetUpdatedAt() int64 {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return 0
+}
+
+type AddOneTimeProductToDiscountRequest struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	DiscountId       int64                  `protobuf:"varint,1,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	OneTimeProductId int64                  `protobuf:"varint,2,opt,name=one_time_product_id,json=oneTimeProductId,proto3" json:"one_time_product_id,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *AddOneTimeProductToDiscountRequest) Reset() {
+	*x = AddOneTimeProductToDiscountRequest{}
+	mi := &file_product_proto_msgTypes[86]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddOneTimeProductToDiscountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddOneTimeProductToDiscountRequest) ProtoMessage() {}
+
+func (x *AddOneTimeProductToDiscountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[86]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddOneTimeProductToDiscountRequest.ProtoReflect.Descriptor instead.
+func (*AddOneTimeProductToDiscountRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{86}
+}
+
+func (x *AddOneTimeProductToDiscountRequest) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+func (x *AddOneTimeProductToDiscountRequest) GetOneTimeProductId() int64 {
+	if x != nil {
+		return x.OneTimeProductId
+	}
+	return 0
+}
+
+type AddOneTimeProductToDiscountResponse struct {
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Success       bool                    `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                  `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *DiscountOneTimeProduct `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddOneTimeProductToDiscountResponse) Reset() {
+	*x = AddOneTimeProductToDiscountResponse{}
+	mi := &file_product_proto_msgTypes[87]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddOneTimeProductToDiscountResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddOneTimeProductToDiscountResponse) ProtoMessage() {}
+
+func (x *AddOneTimeProductToDiscountResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[87]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddOneTimeProductToDiscountResponse.ProtoReflect.Descriptor instead.
+func (*AddOneTimeProductToDiscountResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{87}
+}
+
+func (x *AddOneTimeProductToDiscountResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *AddOneTimeProductToDiscountResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *AddOneTimeProductToDiscountResponse) GetData() *DiscountOneTimeProduct {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type RemoveOneTimeProductFromDiscountRequest struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	DiscountId       int64                  `protobuf:"varint,1,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	OneTimeProductId int64                  `protobuf:"varint,2,opt,name=one_time_product_id,json=oneTimeProductId,proto3" json:"one_time_product_id,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *RemoveOneTimeProductFromDiscountRequest) Reset() {
+	*x = RemoveOneTimeProductFromDiscountRequest{}
+	mi := &file_product_proto_msgTypes[88]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RemoveOneTimeProductFromDiscountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RemoveOneTimeProductFromDiscountRequest) ProtoMessage() {}
+
+func (x *RemoveOneTimeProductFromDiscountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[88]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RemoveOneTimeProductFromDiscountRequest.ProtoReflect.Descriptor instead.
+func (*RemoveOneTimeProductFromDiscountRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{88}
+}
+
+func (x *RemoveOneTimeProductFromDiscountRequest) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+func (x *RemoveOneTimeProductFromDiscountRequest) GetOneTimeProductId() int64 {
+	if x != nil {
+		return x.OneTimeProductId
+	}
+	return 0
+}
+
+type RemoveOneTimeProductFromDiscountResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RemoveOneTimeProductFromDiscountResponse) Reset() {
+	*x = RemoveOneTimeProductFromDiscountResponse{}
+	mi := &file_product_proto_msgTypes[89]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RemoveOneTimeProductFromDiscountResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RemoveOneTimeProductFromDiscountResponse) ProtoMessage() {}
+
+func (x *RemoveOneTimeProductFromDiscountResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[89]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RemoveOneTimeProductFromDiscountResponse.ProtoReflect.Descriptor instead.
+func (*RemoveOneTimeProductFromDiscountResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{89}
+}
+
+func (x *RemoveOneTimeProductFromDiscountResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *RemoveOneTimeProductFromDiscountResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type GetOneTimeProductsByDiscountRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	DiscountId    int64                  `protobuf:"varint,1,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetOneTimeProductsByDiscountRequest) Reset() {
+	*x = GetOneTimeProductsByDiscountRequest{}
+	mi := &file_product_proto_msgTypes[90]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetOneTimeProductsByDiscountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetOneTimeProductsByDiscountRequest) ProtoMessage() {}
+
+func (x *GetOneTimeProductsByDiscountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[90]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetOneTimeProductsByDiscountRequest.ProtoReflect.Descriptor instead.
+func (*GetOneTimeProductsByDiscountRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{90}
+}
+
+func (x *GetOneTimeProductsByDiscountRequest) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+type GetOneTimeProductsByDiscountResponse struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Success           bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message           string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	OneTimeProductIds []int64                `protobuf:"varint,3,rep,packed,name=one_time_product_ids,json=oneTimeProductIds,proto3" json:"one_time_product_ids,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *GetOneTimeProductsByDiscountResponse) Reset() {
+	*x = GetOneTimeProductsByDiscountResponse{}
+	mi := &file_product_proto_msgTypes[91]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetOneTimeProductsByDiscountResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetOneTimeProductsByDiscountResponse) ProtoMessage() {}
+
+func (x *GetOneTimeProductsByDiscountResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[91]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetOneTimeProductsByDiscountResponse.ProtoReflect.Descriptor instead.
+func (*GetOneTimeProductsByDiscountResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{91}
+}
+
+func (x *GetOneTimeProductsByDiscountResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetOneTimeProductsByDiscountResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetOneTimeProductsByDiscountResponse) GetOneTimeProductIds() []int64 {
+	if x != nil {
+		return x.OneTimeProductIds
+	}
+	return nil
+}
+
+type DiscountPaymentProviderData struct {
+	state                     protoimpl.MessageState `protogen:"open.v1"`
+	Id                        int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	DiscountId                int64                  `protobuf:"varint,2,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	PaymentProviderId         int64                  `protobuf:"varint,3,opt,name=payment_provider_id,json=paymentProviderId,proto3" json:"payment_provider_id,omitempty"`
+	PaymentProviderDiscountId string                 `protobuf:"bytes,4,opt,name=payment_provider_discount_id,json=paymentProviderDiscountId,proto3" json:"payment_provider_discount_id,omitempty"`
+	CreatedAt                 int64                  `protobuf:"varint,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt                 int64                  `protobuf:"varint,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
+}
+
+func (x *DiscountPaymentProviderData) Reset() {
+	*x = DiscountPaymentProviderData{}
+	mi := &file_product_proto_msgTypes[92]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DiscountPaymentProviderData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DiscountPaymentProviderData) ProtoMessage() {}
+
+func (x *DiscountPaymentProviderData) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[92]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DiscountPaymentProviderData.ProtoReflect.Descriptor instead.
+func (*DiscountPaymentProviderData) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{92}
+}
+
+func (x *DiscountPaymentProviderData) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *DiscountPaymentProviderData) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+func (x *DiscountPaymentProviderData) GetPaymentProviderId() int64 {
+	if x != nil {
+		return x.PaymentProviderId
+	}
+	return 0
+}
+
+func (x *DiscountPaymentProviderData) GetPaymentProviderDiscountId() string {
+	if x != nil {
+		return x.PaymentProviderDiscountId
+	}
+	return ""
+}
+
+func (x *DiscountPaymentProviderData) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *DiscountPaymentProviderData) GetUpdatedAt() int64 {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return 0
+}
+
+type GetDiscountPaymentProviderDataRequest struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	DiscountId        int64                  `protobuf:"varint,1,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	PaymentProviderId int64                  `protobuf:"varint,2,opt,name=payment_provider_id,json=paymentProviderId,proto3" json:"payment_provider_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *GetDiscountPaymentProviderDataRequest) Reset() {
+	*x = GetDiscountPaymentProviderDataRequest{}
+	mi := &file_product_proto_msgTypes[93]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscountPaymentProviderDataRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscountPaymentProviderDataRequest) ProtoMessage() {}
+
+func (x *GetDiscountPaymentProviderDataRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[93]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscountPaymentProviderDataRequest.ProtoReflect.Descriptor instead.
+func (*GetDiscountPaymentProviderDataRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{93}
+}
+
+func (x *GetDiscountPaymentProviderDataRequest) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+func (x *GetDiscountPaymentProviderDataRequest) GetPaymentProviderId() int64 {
+	if x != nil {
+		return x.PaymentProviderId
+	}
+	return 0
+}
+
+type GetDiscountPaymentProviderDataResponse struct {
+	state         protoimpl.MessageState       `protogen:"open.v1"`
+	Success       bool                         `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                       `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *DiscountPaymentProviderData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscountPaymentProviderDataResponse) Reset() {
+	*x = GetDiscountPaymentProviderDataResponse{}
+	mi := &file_product_proto_msgTypes[94]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscountPaymentProviderDataResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscountPaymentProviderDataResponse) ProtoMessage() {}
+
+func (x *GetDiscountPaymentProviderDataResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[94]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscountPaymentProviderDataResponse.ProtoReflect.Descriptor instead.
+func (*GetDiscountPaymentProviderDataResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{94}
+}
+
+func (x *GetDiscountPaymentProviderDataResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetDiscountPaymentProviderDataResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetDiscountPaymentProviderDataResponse) GetData() *DiscountPaymentProviderData {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type CreateDiscountPaymentProviderDataRequest struct {
+	state                     protoimpl.MessageState `protogen:"open.v1"`
+	DiscountId                int64                  `protobuf:"varint,1,opt,name=discount_id,json=discountId,proto3" json:"discount_id,omitempty"`
+	PaymentProviderId         int64                  `protobuf:"varint,2,opt,name=payment_provider_id,json=paymentProviderId,proto3" json:"payment_provider_id,omitempty"`
+	PaymentProviderDiscountId string                 `protobuf:"bytes,3,opt,name=payment_provider_discount_id,json=paymentProviderDiscountId,proto3" json:"payment_provider_discount_id,omitempty"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
+}
+
+func (x *CreateDiscountPaymentProviderDataRequest) Reset() {
+	*x = CreateDiscountPaymentProviderDataRequest{}
+	mi := &file_product_proto_msgTypes[95]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateDiscountPaymentProviderDataRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateDiscountPaymentProviderDataRequest) ProtoMessage() {}
+
+func (x *CreateDiscountPaymentProviderDataRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[95]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateDiscountPaymentProviderDataRequest.ProtoReflect.Descriptor instead.
+func (*CreateDiscountPaymentProviderDataRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{95}
+}
+
+func (x *CreateDiscountPaymentProviderDataRequest) GetDiscountId() int64 {
+	if x != nil {
+		return x.DiscountId
+	}
+	return 0
+}
+
+func (x *CreateDiscountPaymentProviderDataRequest) GetPaymentProviderId() int64 {
+	if x != nil {
+		return x.PaymentProviderId
+	}
+	return 0
+}
+
+func (x *CreateDiscountPaymentProviderDataRequest) GetPaymentProviderDiscountId() string {
+	if x != nil {
+		return x.PaymentProviderDiscountId
+	}
+	return ""
+}
+
+type CreateDiscountPaymentProviderDataResponse struct {
+	state         protoimpl.MessageState       `protogen:"open.v1"`
+	Success       bool                         `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                       `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *DiscountPaymentProviderData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateDiscountPaymentProviderDataResponse) Reset() {
+	*x = CreateDiscountPaymentProviderDataResponse{}
+	mi := &file_product_proto_msgTypes[96]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateDiscountPaymentProviderDataResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateDiscountPaymentProviderDataResponse) ProtoMessage() {}
+
+func (x *CreateDiscountPaymentProviderDataResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[96]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateDiscountPaymentProviderDataResponse.ProtoReflect.Descriptor instead.
+func (*CreateDiscountPaymentProviderDataResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{96}
+}
+
+func (x *CreateDiscountPaymentProviderDataResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreateDiscountPaymentProviderDataResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *CreateDiscountPaymentProviderDataResponse) GetData() *DiscountPaymentProviderData {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type UpdateDiscountPaymentProviderDataRequest struct {
+	state                     protoimpl.MessageState `protogen:"open.v1"`
+	Id                        int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	PaymentProviderDiscountId string                 `protobuf:"bytes,2,opt,name=payment_provider_discount_id,json=paymentProviderDiscountId,proto3" json:"payment_provider_discount_id,omitempty"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
+}
+
+func (x *UpdateDiscountPaymentProviderDataRequest) Reset() {
+	*x = UpdateDiscountPaymentProviderDataRequest{}
+	mi := &file_product_proto_msgTypes[97]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateDiscountPaymentProviderDataRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateDiscountPaymentProviderDataRequest) ProtoMessage() {}
+
+func (x *UpdateDiscountPaymentProviderDataRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[97]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateDiscountPaymentProviderDataRequest.ProtoReflect.Descriptor instead.
+func (*UpdateDiscountPaymentProviderDataRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{97}
+}
+
+func (x *UpdateDiscountPaymentProviderDataRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateDiscountPaymentProviderDataRequest) GetPaymentProviderDiscountId() string {
+	if x != nil {
+		return x.PaymentProviderDiscountId
+	}
+	return ""
+}
+
+type UpdateDiscountPaymentProviderDataResponse struct {
+	state         protoimpl.MessageState       `protogen:"open.v1"`
+	Success       bool                         `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                       `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *DiscountPaymentProviderData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateDiscountPaymentProviderDataResponse) Reset() {
+	*x = UpdateDiscountPaymentProviderDataResponse{}
+	mi := &file_product_proto_msgTypes[98]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateDiscountPaymentProviderDataResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateDiscountPaymentProviderDataResponse) ProtoMessage() {}
+
+func (x *UpdateDiscountPaymentProviderDataResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[98]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateDiscountPaymentProviderDataResponse.ProtoReflect.Descriptor instead.
+func (*UpdateDiscountPaymentProviderDataResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{98}
+}
+
+func (x *UpdateDiscountPaymentProviderDataResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *UpdateDiscountPaymentProviderDataResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *UpdateDiscountPaymentProviderDataResponse) GetData() *DiscountPaymentProviderData {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type DeleteDiscountPaymentProviderDataRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteDiscountPaymentProviderDataRequest) Reset() {
+	*x = DeleteDiscountPaymentProviderDataRequest{}
+	mi := &file_product_proto_msgTypes[99]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteDiscountPaymentProviderDataRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteDiscountPaymentProviderDataRequest) ProtoMessage() {}
+
+func (x *DeleteDiscountPaymentProviderDataRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[99]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteDiscountPaymentProviderDataRequest.ProtoReflect.Descriptor instead.
+func (*DeleteDiscountPaymentProviderDataRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{99}
+}
+
+func (x *DeleteDiscountPaymentProviderDataRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type DeleteDiscountPaymentProviderDataResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteDiscountPaymentProviderDataResponse) Reset() {
+	*x = DeleteDiscountPaymentProviderDataResponse{}
+	mi := &file_product_proto_msgTypes[100]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteDiscountPaymentProviderDataResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteDiscountPaymentProviderDataResponse) ProtoMessage() {}
+
+func (x *DeleteDiscountPaymentProviderDataResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[100]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteDiscountPaymentProviderDataResponse.ProtoReflect.Descriptor instead.
+func (*DeleteDiscountPaymentProviderDataResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{100}
+}
+
+func (x *DeleteDiscountPaymentProviderDataResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *DeleteDiscountPaymentProviderDataResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type DiscountCodeRedemption struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	DiscountCodeId int64                  `protobuf:"varint,2,opt,name=discount_code_id,json=discountCodeId,proto3" json:"discount_code_id,omitempty"`
+	UserId         int64                  `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	SubscriptionId int64                  `protobuf:"varint,4,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	OrderId        int64                  `protobuf:"varint,5,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	CreatedAt      int64                  `protobuf:"varint,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt      int64                  `protobuf:"varint,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *DiscountCodeRedemption) Reset() {
+	*x = DiscountCodeRedemption{}
+	mi := &file_product_proto_msgTypes[101]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DiscountCodeRedemption) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DiscountCodeRedemption) ProtoMessage() {}
+
+func (x *DiscountCodeRedemption) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[101]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DiscountCodeRedemption.ProtoReflect.Descriptor instead.
+func (*DiscountCodeRedemption) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{101}
+}
+
+func (x *DiscountCodeRedemption) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *DiscountCodeRedemption) GetDiscountCodeId() int64 {
+	if x != nil {
+		return x.DiscountCodeId
+	}
+	return 0
+}
+
+func (x *DiscountCodeRedemption) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *DiscountCodeRedemption) GetSubscriptionId() int64 {
+	if x != nil {
+		return x.SubscriptionId
+	}
+	return 0
+}
+
+func (x *DiscountCodeRedemption) GetOrderId() int64 {
+	if x != nil {
+		return x.OrderId
+	}
+	return 0
+}
+
+func (x *DiscountCodeRedemption) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *DiscountCodeRedemption) GetUpdatedAt() int64 {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return 0
+}
+
+type RedeemDiscountCodeRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Code           string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	UserId         int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	SubscriptionId int64                  `protobuf:"varint,3,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	OrderId        int64                  `protobuf:"varint,4,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *RedeemDiscountCodeRequest) Reset() {
+	*x = RedeemDiscountCodeRequest{}
+	mi := &file_product_proto_msgTypes[102]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RedeemDiscountCodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RedeemDiscountCodeRequest) ProtoMessage() {}
+
+func (x *RedeemDiscountCodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[102]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RedeemDiscountCodeRequest.ProtoReflect.Descriptor instead.
+func (*RedeemDiscountCodeRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{102}
+}
+
+func (x *RedeemDiscountCodeRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *RedeemDiscountCodeRequest) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *RedeemDiscountCodeRequest) GetSubscriptionId() int64 {
+	if x != nil {
+		return x.SubscriptionId
+	}
+	return 0
+}
+
+func (x *RedeemDiscountCodeRequest) GetOrderId() int64 {
+	if x != nil {
+		return x.OrderId
+	}
+	return 0
+}
+
+type RedeemDiscountCodeResponse struct {
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Success       bool                    `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                  `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *DiscountCodeRedemption `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RedeemDiscountCodeResponse) Reset() {
+	*x = RedeemDiscountCodeResponse{}
+	mi := &file_product_proto_msgTypes[103]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RedeemDiscountCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RedeemDiscountCodeResponse) ProtoMessage() {}
+
+func (x *RedeemDiscountCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[103]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RedeemDiscountCodeResponse.ProtoReflect.Descriptor instead.
+func (*RedeemDiscountCodeResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{103}
+}
+
+func (x *RedeemDiscountCodeResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *RedeemDiscountCodeResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *RedeemDiscountCodeResponse) GetData() *DiscountCodeRedemption {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type GetRedemptionsByUserRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PerPage       int32                  `protobuf:"varint,3,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRedemptionsByUserRequest) Reset() {
+	*x = GetRedemptionsByUserRequest{}
+	mi := &file_product_proto_msgTypes[104]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRedemptionsByUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRedemptionsByUserRequest) ProtoMessage() {}
+
+func (x *GetRedemptionsByUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[104]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRedemptionsByUserRequest.ProtoReflect.Descriptor instead.
+func (*GetRedemptionsByUserRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{104}
+}
+
+func (x *GetRedemptionsByUserRequest) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *GetRedemptionsByUserRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *GetRedemptionsByUserRequest) GetPerPage() int32 {
+	if x != nil {
+		return x.PerPage
+	}
+	return 0
+}
+
+type GetRedemptionsByUserData struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Redemptions   []*DiscountCodeRedemption `protobuf:"bytes,1,rep,name=redemptions,proto3" json:"redemptions,omitempty"`
+	Total         int32                     `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	Page          int32                     `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
+	PerPage       int32                     `protobuf:"varint,4,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRedemptionsByUserData) Reset() {
+	*x = GetRedemptionsByUserData{}
+	mi := &file_product_proto_msgTypes[105]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRedemptionsByUserData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRedemptionsByUserData) ProtoMessage() {}
+
+func (x *GetRedemptionsByUserData) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[105]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRedemptionsByUserData.ProtoReflect.Descriptor instead.
+func (*GetRedemptionsByUserData) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{105}
+}
+
+func (x *GetRedemptionsByUserData) GetRedemptions() []*DiscountCodeRedemption {
+	if x != nil {
+		return x.Redemptions
+	}
+	return nil
+}
+
+func (x *GetRedemptionsByUserData) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *GetRedemptionsByUserData) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *GetRedemptionsByUserData) GetPerPage() int32 {
+	if x != nil {
+		return x.PerPage
+	}
+	return 0
+}
+
+type GetRedemptionsByUserResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Success       bool                      `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                    `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *GetRedemptionsByUserData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRedemptionsByUserResponse) Reset() {
+	*x = GetRedemptionsByUserResponse{}
+	mi := &file_product_proto_msgTypes[106]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRedemptionsByUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRedemptionsByUserResponse) ProtoMessage() {}
+
+func (x *GetRedemptionsByUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[106]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRedemptionsByUserResponse.ProtoReflect.Descriptor instead.
+func (*GetRedemptionsByUserResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{106}
+}
+
+func (x *GetRedemptionsByUserResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetRedemptionsByUserResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetRedemptionsByUserResponse) GetData() *GetRedemptionsByUserData {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type GetRedemptionsByDiscountCodeRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	DiscountCodeId int64                  `protobuf:"varint,1,opt,name=discount_code_id,json=discountCodeId,proto3" json:"discount_code_id,omitempty"`
+	Page           int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PerPage        int32                  `protobuf:"varint,3,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *GetRedemptionsByDiscountCodeRequest) Reset() {
+	*x = GetRedemptionsByDiscountCodeRequest{}
+	mi := &file_product_proto_msgTypes[107]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRedemptionsByDiscountCodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRedemptionsByDiscountCodeRequest) ProtoMessage() {}
+
+func (x *GetRedemptionsByDiscountCodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[107]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRedemptionsByDiscountCodeRequest.ProtoReflect.Descriptor instead.
+func (*GetRedemptionsByDiscountCodeRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{107}
+}
+
+func (x *GetRedemptionsByDiscountCodeRequest) GetDiscountCodeId() int64 {
+	if x != nil {
+		return x.DiscountCodeId
+	}
+	return 0
+}
+
+func (x *GetRedemptionsByDiscountCodeRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *GetRedemptionsByDiscountCodeRequest) GetPerPage() int32 {
+	if x != nil {
+		return x.PerPage
+	}
+	return 0
+}
+
+type GetRedemptionsByDiscountCodeData struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Redemptions   []*DiscountCodeRedemption `protobuf:"bytes,1,rep,name=redemptions,proto3" json:"redemptions,omitempty"`
+	Total         int32                     `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	Page          int32                     `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
+	PerPage       int32                     `protobuf:"varint,4,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRedemptionsByDiscountCodeData) Reset() {
+	*x = GetRedemptionsByDiscountCodeData{}
+	mi := &file_product_proto_msgTypes[108]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRedemptionsByDiscountCodeData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRedemptionsByDiscountCodeData) ProtoMessage() {}
+
+func (x *GetRedemptionsByDiscountCodeData) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[108]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRedemptionsByDiscountCodeData.ProtoReflect.Descriptor instead.
+func (*GetRedemptionsByDiscountCodeData) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{108}
+}
+
+func (x *GetRedemptionsByDiscountCodeData) GetRedemptions() []*DiscountCodeRedemption {
+	if x != nil {
+		return x.Redemptions
+	}
+	return nil
+}
+
+func (x *GetRedemptionsByDiscountCodeData) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *GetRedemptionsByDiscountCodeData) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *GetRedemptionsByDiscountCodeData) GetPerPage() int32 {
+	if x != nil {
+		return x.PerPage
+	}
+	return 0
+}
+
+type GetRedemptionsByDiscountCodeResponse struct {
+	state         protoimpl.MessageState            `protogen:"open.v1"`
+	Success       bool                              `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                            `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *GetRedemptionsByDiscountCodeData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRedemptionsByDiscountCodeResponse) Reset() {
+	*x = GetRedemptionsByDiscountCodeResponse{}
+	mi := &file_product_proto_msgTypes[109]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRedemptionsByDiscountCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRedemptionsByDiscountCodeResponse) ProtoMessage() {}
+
+func (x *GetRedemptionsByDiscountCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[109]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRedemptionsByDiscountCodeResponse.ProtoReflect.Descriptor instead.
+func (*GetRedemptionsByDiscountCodeResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{109}
+}
+
+func (x *GetRedemptionsByDiscountCodeResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetRedemptionsByDiscountCodeResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetRedemptionsByDiscountCodeResponse) GetData() *GetRedemptionsByDiscountCodeData {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type ValidateDiscountCodeRequest struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Code             string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	UserId           int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	PlanId           int64                  `protobuf:"varint,3,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`                                   // optional
+	OneTimeProductId int64                  `protobuf:"varint,4,opt,name=one_time_product_id,json=oneTimeProductId,proto3" json:"one_time_product_id,omitempty"` // optional
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *ValidateDiscountCodeRequest) Reset() {
+	*x = ValidateDiscountCodeRequest{}
+	mi := &file_product_proto_msgTypes[110]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ValidateDiscountCodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidateDiscountCodeRequest) ProtoMessage() {}
+
+func (x *ValidateDiscountCodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[110]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidateDiscountCodeRequest.ProtoReflect.Descriptor instead.
+func (*ValidateDiscountCodeRequest) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{110}
+}
+
+func (x *ValidateDiscountCodeRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *ValidateDiscountCodeRequest) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *ValidateDiscountCodeRequest) GetPlanId() int64 {
+	if x != nil {
+		return x.PlanId
+	}
+	return 0
+}
+
+func (x *ValidateDiscountCodeRequest) GetOneTimeProductId() int64 {
+	if x != nil {
+		return x.OneTimeProductId
+	}
+	return 0
+}
+
+type ValidateDiscountCodeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	IsValid       bool                   `protobuf:"varint,3,opt,name=is_valid,json=isValid,proto3" json:"is_valid,omitempty"`
+	Discount      *Discount              `protobuf:"bytes,4,opt,name=discount,proto3" json:"discount,omitempty"`
+	ErrorReason   string                 `protobuf:"bytes,5,opt,name=error_reason,json=errorReason,proto3" json:"error_reason,omitempty"` // expired, max_redemptions_reached, not_active, etc.
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ValidateDiscountCodeResponse) Reset() {
+	*x = ValidateDiscountCodeResponse{}
+	mi := &file_product_proto_msgTypes[111]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ValidateDiscountCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidateDiscountCodeResponse) ProtoMessage() {}
+
+func (x *ValidateDiscountCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_product_proto_msgTypes[111]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidateDiscountCodeResponse.ProtoReflect.Descriptor instead.
+func (*ValidateDiscountCodeResponse) Descriptor() ([]byte, []int) {
+	return file_product_proto_rawDescGZIP(), []int{111}
+}
+
+func (x *ValidateDiscountCodeResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ValidateDiscountCodeResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *ValidateDiscountCodeResponse) GetIsValid() bool {
+	if x != nil {
+		return x.IsValid
+	}
+	return false
+}
+
+func (x *ValidateDiscountCodeResponse) GetDiscount() *Discount {
+	if x != nil {
+		return x.Discount
+	}
+	return nil
+}
+
+func (x *ValidateDiscountCodeResponse) GetErrorReason() string {
+	if x != nil {
+		return x.ErrorReason
+	}
+	return ""
+}
+
 var File_product_proto protoreflect.FileDescriptor
 
 const file_product_proto_rawDesc = "" +
@@ -3762,7 +7558,317 @@ const file_product_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"M\n" +
 	"\x17DeletePlanMeterResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage2\xa7\x0f\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\xf4\x05\n" +
+	"\bDiscount\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x12\n" +
+	"\x04type\x18\x04 \x01(\tR\x04type\x12\x16\n" +
+	"\x06amount\x18\x05 \x01(\x01R\x06amount\x12\x1f\n" +
+	"\vvalid_until\x18\x06 \x01(\x03R\n" +
+	"validUntil\x12\x1b\n" +
+	"\tis_active\x18\a \x01(\bR\bisActive\x12\x1f\n" +
+	"\vaction_type\x18\b \x01(\tR\n" +
+	"actionType\x12'\n" +
+	"\x0fmax_redemptions\x18\t \x01(\x05R\x0emaxRedemptions\x127\n" +
+	"\x18max_redemptions_per_user\x18\n" +
+	" \x01(\x05R\x15maxRedemptionsPerUser\x12 \n" +
+	"\vredemptions\x18\v \x01(\x05R\vredemptions\x12!\n" +
+	"\fis_recurring\x18\f \x01(\bR\visRecurring\x12,\n" +
+	"\x12duration_in_months\x18\r \x01(\x05R\x10durationInMonths\x12>\n" +
+	"\x1bmaximum_recurring_intervals\x18\x0e \x01(\x05R\x19maximumRecurringIntervals\x12\x1f\n" +
+	"\vredeem_type\x18\x0f \x01(\x05R\n" +
+	"redeemType\x12\x1d\n" +
+	"\n" +
+	"bonus_days\x18\x10 \x01(\x05R\tbonusDays\x126\n" +
+	"\x18is_enabled_for_all_plans\x18\x11 \x01(\bR\x14isEnabledForAllPlans\x12L\n" +
+	"$is_enabled_for_all_one_time_products\x18\x12 \x01(\bR\x1eisEnabledForAllOneTimeProducts\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x13 \x01(\x03R\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\x14 \x01(\x03R\tupdatedAt\"(\n" +
+	"\x16GetDiscountByIDRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"t\n" +
+	"\x17GetDiscountByIDResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12%\n" +
+	"\x04data\x18\x03 \x01(\v2\x11.product.DiscountR\x04data\".\n" +
+	"\x18GetDiscountByCodeRequest\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\"v\n" +
+	"\x19GetDiscountByCodeResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12%\n" +
+	"\x04data\x18\x03 \x01(\v2\x11.product.DiscountR\x04data\"\x91\x05\n" +
+	"\x15CreateDiscountRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x12\n" +
+	"\x04type\x18\x03 \x01(\tR\x04type\x12\x16\n" +
+	"\x06amount\x18\x04 \x01(\x01R\x06amount\x12\x1f\n" +
+	"\vvalid_until\x18\x05 \x01(\x03R\n" +
+	"validUntil\x12\x1b\n" +
+	"\tis_active\x18\x06 \x01(\bR\bisActive\x12\x1f\n" +
+	"\vaction_type\x18\a \x01(\tR\n" +
+	"actionType\x12'\n" +
+	"\x0fmax_redemptions\x18\b \x01(\x05R\x0emaxRedemptions\x127\n" +
+	"\x18max_redemptions_per_user\x18\t \x01(\x05R\x15maxRedemptionsPerUser\x12!\n" +
+	"\fis_recurring\x18\n" +
+	" \x01(\bR\visRecurring\x12,\n" +
+	"\x12duration_in_months\x18\v \x01(\x05R\x10durationInMonths\x12>\n" +
+	"\x1bmaximum_recurring_intervals\x18\f \x01(\x05R\x19maximumRecurringIntervals\x12\x1f\n" +
+	"\vredeem_type\x18\r \x01(\x05R\n" +
+	"redeemType\x12\x1d\n" +
+	"\n" +
+	"bonus_days\x18\x0e \x01(\x05R\tbonusDays\x126\n" +
+	"\x18is_enabled_for_all_plans\x18\x0f \x01(\bR\x14isEnabledForAllPlans\x12L\n" +
+	"$is_enabled_for_all_one_time_products\x18\x10 \x01(\bR\x1eisEnabledForAllOneTimeProducts\"s\n" +
+	"\x16CreateDiscountResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12%\n" +
+	"\x04data\x18\x03 \x01(\v2\x11.product.DiscountR\x04data\"\xa1\x05\n" +
+	"\x15UpdateDiscountRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x12\n" +
+	"\x04type\x18\x04 \x01(\tR\x04type\x12\x16\n" +
+	"\x06amount\x18\x05 \x01(\x01R\x06amount\x12\x1f\n" +
+	"\vvalid_until\x18\x06 \x01(\x03R\n" +
+	"validUntil\x12\x1b\n" +
+	"\tis_active\x18\a \x01(\bR\bisActive\x12\x1f\n" +
+	"\vaction_type\x18\b \x01(\tR\n" +
+	"actionType\x12'\n" +
+	"\x0fmax_redemptions\x18\t \x01(\x05R\x0emaxRedemptions\x127\n" +
+	"\x18max_redemptions_per_user\x18\n" +
+	" \x01(\x05R\x15maxRedemptionsPerUser\x12!\n" +
+	"\fis_recurring\x18\v \x01(\bR\visRecurring\x12,\n" +
+	"\x12duration_in_months\x18\f \x01(\x05R\x10durationInMonths\x12>\n" +
+	"\x1bmaximum_recurring_intervals\x18\r \x01(\x05R\x19maximumRecurringIntervals\x12\x1f\n" +
+	"\vredeem_type\x18\x0e \x01(\x05R\n" +
+	"redeemType\x12\x1d\n" +
+	"\n" +
+	"bonus_days\x18\x0f \x01(\x05R\tbonusDays\x126\n" +
+	"\x18is_enabled_for_all_plans\x18\x10 \x01(\bR\x14isEnabledForAllPlans\x12L\n" +
+	"$is_enabled_for_all_one_time_products\x18\x11 \x01(\bR\x1eisEnabledForAllOneTimeProducts\"s\n" +
+	"\x16UpdateDiscountResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12%\n" +
+	"\x04data\x18\x03 \x01(\v2\x11.product.DiscountR\x04data\"'\n" +
+	"\x15DeleteDiscountRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"L\n" +
+	"\x16DeleteDiscountResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"h\n" +
+	"\x16GetAllDiscountsRequest\x12\x12\n" +
+	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x19\n" +
+	"\bper_page\x18\x02 \x01(\x05R\aperPage\x12\x1f\n" +
+	"\vactive_only\x18\x03 \x01(\bR\n" +
+	"activeOnly\"\x8b\x01\n" +
+	"\x13GetAllDiscountsData\x12/\n" +
+	"\tdiscounts\x18\x01 \x03(\v2\x11.product.DiscountR\tdiscounts\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\x12\x12\n" +
+	"\x04page\x18\x03 \x01(\x05R\x04page\x12\x19\n" +
+	"\bper_page\x18\x04 \x01(\x05R\aperPage\"\x7f\n" +
+	"\x17GetAllDiscountsResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x120\n" +
+	"\x04data\x18\x03 \x01(\v2\x1c.product.GetAllDiscountsDataR\x04data\"\x91\x01\n" +
+	"\fDiscountCode\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\tR\x04code\x12\x1f\n" +
+	"\vdiscount_id\x18\x03 \x01(\x03R\n" +
+	"discountId\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\x03R\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\x05 \x01(\x03R\tupdatedAt\",\n" +
+	"\x1aGetDiscountCodeByIDRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"|\n" +
+	"\x1bGetDiscountCodeByIDResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12)\n" +
+	"\x04data\x18\x03 \x01(\v2\x15.product.DiscountCodeR\x04data\"2\n" +
+	"\x1cGetDiscountCodeByCodeRequest\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\"~\n" +
+	"\x1dGetDiscountCodeByCodeResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12)\n" +
+	"\x04data\x18\x03 \x01(\v2\x15.product.DiscountCodeR\x04data\"D\n" +
+	"!GetDiscountCodesByDiscountRequest\x12\x1f\n" +
+	"\vdiscount_id\x18\x01 \x01(\x03R\n" +
+	"discountId\"\x83\x01\n" +
+	"\"GetDiscountCodesByDiscountResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12)\n" +
+	"\x04data\x18\x03 \x03(\v2\x15.product.DiscountCodeR\x04data\"P\n" +
+	"\x19CreateDiscountCodeRequest\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\x12\x1f\n" +
+	"\vdiscount_id\x18\x02 \x01(\x03R\n" +
+	"discountId\"{\n" +
+	"\x1aCreateDiscountCodeResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12)\n" +
+	"\x04data\x18\x03 \x01(\v2\x15.product.DiscountCodeR\x04data\"+\n" +
+	"\x19DeleteDiscountCodeRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"P\n" +
+	"\x1aDeleteDiscountCodeResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\x96\x01\n" +
+	"\fDiscountPlan\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1f\n" +
+	"\vdiscount_id\x18\x02 \x01(\x03R\n" +
+	"discountId\x12\x17\n" +
+	"\aplan_id\x18\x03 \x01(\x03R\x06planId\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\x03R\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\x05 \x01(\x03R\tupdatedAt\"T\n" +
+	"\x18AddPlanToDiscountRequest\x12\x1f\n" +
+	"\vdiscount_id\x18\x01 \x01(\x03R\n" +
+	"discountId\x12\x17\n" +
+	"\aplan_id\x18\x02 \x01(\x03R\x06planId\"z\n" +
+	"\x19AddPlanToDiscountResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12)\n" +
+	"\x04data\x18\x03 \x01(\v2\x15.product.DiscountPlanR\x04data\"Y\n" +
+	"\x1dRemovePlanFromDiscountRequest\x12\x1f\n" +
+	"\vdiscount_id\x18\x01 \x01(\x03R\n" +
+	"discountId\x12\x17\n" +
+	"\aplan_id\x18\x02 \x01(\x03R\x06planId\"T\n" +
+	"\x1eRemovePlanFromDiscountResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"<\n" +
+	"\x19GetPlansByDiscountRequest\x12\x1f\n" +
+	"\vdiscount_id\x18\x01 \x01(\x03R\n" +
+	"discountId\"k\n" +
+	"\x1aGetPlansByDiscountResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x19\n" +
+	"\bplan_ids\x18\x03 \x03(\x03R\aplanIds\"\xb6\x01\n" +
+	"\x16DiscountOneTimeProduct\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1f\n" +
+	"\vdiscount_id\x18\x02 \x01(\x03R\n" +
+	"discountId\x12-\n" +
+	"\x13one_time_product_id\x18\x03 \x01(\x03R\x10oneTimeProductId\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\x03R\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\x05 \x01(\x03R\tupdatedAt\"t\n" +
+	"\"AddOneTimeProductToDiscountRequest\x12\x1f\n" +
+	"\vdiscount_id\x18\x01 \x01(\x03R\n" +
+	"discountId\x12-\n" +
+	"\x13one_time_product_id\x18\x02 \x01(\x03R\x10oneTimeProductId\"\x8e\x01\n" +
+	"#AddOneTimeProductToDiscountResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x123\n" +
+	"\x04data\x18\x03 \x01(\v2\x1f.product.DiscountOneTimeProductR\x04data\"y\n" +
+	"'RemoveOneTimeProductFromDiscountRequest\x12\x1f\n" +
+	"\vdiscount_id\x18\x01 \x01(\x03R\n" +
+	"discountId\x12-\n" +
+	"\x13one_time_product_id\x18\x02 \x01(\x03R\x10oneTimeProductId\"^\n" +
+	"(RemoveOneTimeProductFromDiscountResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"F\n" +
+	"#GetOneTimeProductsByDiscountRequest\x12\x1f\n" +
+	"\vdiscount_id\x18\x01 \x01(\x03R\n" +
+	"discountId\"\x8b\x01\n" +
+	"$GetOneTimeProductsByDiscountResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12/\n" +
+	"\x14one_time_product_ids\x18\x03 \x03(\x03R\x11oneTimeProductIds\"\xfd\x01\n" +
+	"\x1bDiscountPaymentProviderData\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1f\n" +
+	"\vdiscount_id\x18\x02 \x01(\x03R\n" +
+	"discountId\x12.\n" +
+	"\x13payment_provider_id\x18\x03 \x01(\x03R\x11paymentProviderId\x12?\n" +
+	"\x1cpayment_provider_discount_id\x18\x04 \x01(\tR\x19paymentProviderDiscountId\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x05 \x01(\x03R\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\x06 \x01(\x03R\tupdatedAt\"x\n" +
+	"%GetDiscountPaymentProviderDataRequest\x12\x1f\n" +
+	"\vdiscount_id\x18\x01 \x01(\x03R\n" +
+	"discountId\x12.\n" +
+	"\x13payment_provider_id\x18\x02 \x01(\x03R\x11paymentProviderId\"\x96\x01\n" +
+	"&GetDiscountPaymentProviderDataResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x128\n" +
+	"\x04data\x18\x03 \x01(\v2$.product.DiscountPaymentProviderDataR\x04data\"\xbc\x01\n" +
+	"(CreateDiscountPaymentProviderDataRequest\x12\x1f\n" +
+	"\vdiscount_id\x18\x01 \x01(\x03R\n" +
+	"discountId\x12.\n" +
+	"\x13payment_provider_id\x18\x02 \x01(\x03R\x11paymentProviderId\x12?\n" +
+	"\x1cpayment_provider_discount_id\x18\x03 \x01(\tR\x19paymentProviderDiscountId\"\x99\x01\n" +
+	")CreateDiscountPaymentProviderDataResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x128\n" +
+	"\x04data\x18\x03 \x01(\v2$.product.DiscountPaymentProviderDataR\x04data\"{\n" +
+	"(UpdateDiscountPaymentProviderDataRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12?\n" +
+	"\x1cpayment_provider_discount_id\x18\x02 \x01(\tR\x19paymentProviderDiscountId\"\x99\x01\n" +
+	")UpdateDiscountPaymentProviderDataResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x128\n" +
+	"\x04data\x18\x03 \x01(\v2$.product.DiscountPaymentProviderDataR\x04data\":\n" +
+	"(DeleteDiscountPaymentProviderDataRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"_\n" +
+	")DeleteDiscountPaymentProviderDataResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\xed\x01\n" +
+	"\x16DiscountCodeRedemption\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12(\n" +
+	"\x10discount_code_id\x18\x02 \x01(\x03R\x0ediscountCodeId\x12\x17\n" +
+	"\auser_id\x18\x03 \x01(\x03R\x06userId\x12'\n" +
+	"\x0fsubscription_id\x18\x04 \x01(\x03R\x0esubscriptionId\x12\x19\n" +
+	"\border_id\x18\x05 \x01(\x03R\aorderId\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x06 \x01(\x03R\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\a \x01(\x03R\tupdatedAt\"\x8c\x01\n" +
+	"\x19RedeemDiscountCodeRequest\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12'\n" +
+	"\x0fsubscription_id\x18\x03 \x01(\x03R\x0esubscriptionId\x12\x19\n" +
+	"\border_id\x18\x04 \x01(\x03R\aorderId\"\x85\x01\n" +
+	"\x1aRedeemDiscountCodeResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x123\n" +
+	"\x04data\x18\x03 \x01(\v2\x1f.product.DiscountCodeRedemptionR\x04data\"e\n" +
+	"\x1bGetRedemptionsByUserRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x19\n" +
+	"\bper_page\x18\x03 \x01(\x05R\aperPage\"\xa2\x01\n" +
+	"\x18GetRedemptionsByUserData\x12A\n" +
+	"\vredemptions\x18\x01 \x03(\v2\x1f.product.DiscountCodeRedemptionR\vredemptions\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\x12\x12\n" +
+	"\x04page\x18\x03 \x01(\x05R\x04page\x12\x19\n" +
+	"\bper_page\x18\x04 \x01(\x05R\aperPage\"\x89\x01\n" +
+	"\x1cGetRedemptionsByUserResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x125\n" +
+	"\x04data\x18\x03 \x01(\v2!.product.GetRedemptionsByUserDataR\x04data\"~\n" +
+	"#GetRedemptionsByDiscountCodeRequest\x12(\n" +
+	"\x10discount_code_id\x18\x01 \x01(\x03R\x0ediscountCodeId\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x19\n" +
+	"\bper_page\x18\x03 \x01(\x05R\aperPage\"\xaa\x01\n" +
+	" GetRedemptionsByDiscountCodeData\x12A\n" +
+	"\vredemptions\x18\x01 \x03(\v2\x1f.product.DiscountCodeRedemptionR\vredemptions\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\x12\x12\n" +
+	"\x04page\x18\x03 \x01(\x05R\x04page\x12\x19\n" +
+	"\bper_page\x18\x04 \x01(\x05R\aperPage\"\x99\x01\n" +
+	"$GetRedemptionsByDiscountCodeResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12=\n" +
+	"\x04data\x18\x03 \x01(\v2).product.GetRedemptionsByDiscountCodeDataR\x04data\"\x92\x01\n" +
+	"\x1bValidateDiscountCodeRequest\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x17\n" +
+	"\aplan_id\x18\x03 \x01(\x03R\x06planId\x12-\n" +
+	"\x13one_time_product_id\x18\x04 \x01(\x03R\x10oneTimeProductId\"\xbf\x01\n" +
+	"\x1cValidateDiscountCodeResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x19\n" +
+	"\bis_valid\x18\x03 \x01(\bR\aisValid\x12-\n" +
+	"\bdiscount\x18\x04 \x01(\v2\x11.product.DiscountR\bdiscount\x12!\n" +
+	"\ferror_reason\x18\x05 \x01(\tR\verrorReason2\xd1$\n" +
 	"\x0eProductService\x12S\n" +
 	"\x0eGetProductByID\x12\x1e.product.GetProductByIDRequest\x1a\x1f.product.GetProductByIDResponse\"\x00\x12Y\n" +
 	"\x10GetProductBySlug\x12 .product.GetProductBySlugRequest\x1a!.product.GetProductBySlugResponse\"\x00\x12P\n" +
@@ -3789,7 +7895,32 @@ const file_product_proto_rawDesc = "" +
 	"\x10GetAllPlanMeters\x12 .product.GetAllPlanMetersRequest\x1a!.product.GetAllPlanMetersResponse\"\x00\x12V\n" +
 	"\x0fCreatePlanMeter\x12\x1f.product.CreatePlanMeterRequest\x1a .product.CreatePlanMeterResponse\"\x00\x12V\n" +
 	"\x0fUpdatePlanMeter\x12\x1f.product.UpdatePlanMeterRequest\x1a .product.UpdatePlanMeterResponse\"\x00\x12V\n" +
-	"\x0fDeletePlanMeter\x12\x1f.product.DeletePlanMeterRequest\x1a .product.DeletePlanMeterResponse\"\x00B\x1eZ\x1cshared/proto/product;productb\x06proto3"
+	"\x0fDeletePlanMeter\x12\x1f.product.DeletePlanMeterRequest\x1a .product.DeletePlanMeterResponse\"\x00\x12V\n" +
+	"\x0fGetDiscountByID\x12\x1f.product.GetDiscountByIDRequest\x1a .product.GetDiscountByIDResponse\"\x00\x12\\\n" +
+	"\x11GetDiscountByCode\x12!.product.GetDiscountByCodeRequest\x1a\".product.GetDiscountByCodeResponse\"\x00\x12S\n" +
+	"\x0eCreateDiscount\x12\x1e.product.CreateDiscountRequest\x1a\x1f.product.CreateDiscountResponse\"\x00\x12S\n" +
+	"\x0eUpdateDiscount\x12\x1e.product.UpdateDiscountRequest\x1a\x1f.product.UpdateDiscountResponse\"\x00\x12S\n" +
+	"\x0eDeleteDiscount\x12\x1e.product.DeleteDiscountRequest\x1a\x1f.product.DeleteDiscountResponse\"\x00\x12V\n" +
+	"\x0fGetAllDiscounts\x12\x1f.product.GetAllDiscountsRequest\x1a .product.GetAllDiscountsResponse\"\x00\x12b\n" +
+	"\x13GetDiscountCodeByID\x12#.product.GetDiscountCodeByIDRequest\x1a$.product.GetDiscountCodeByIDResponse\"\x00\x12h\n" +
+	"\x15GetDiscountCodeByCode\x12%.product.GetDiscountCodeByCodeRequest\x1a&.product.GetDiscountCodeByCodeResponse\"\x00\x12w\n" +
+	"\x1aGetDiscountCodesByDiscount\x12*.product.GetDiscountCodesByDiscountRequest\x1a+.product.GetDiscountCodesByDiscountResponse\"\x00\x12_\n" +
+	"\x12CreateDiscountCode\x12\".product.CreateDiscountCodeRequest\x1a#.product.CreateDiscountCodeResponse\"\x00\x12_\n" +
+	"\x12DeleteDiscountCode\x12\".product.DeleteDiscountCodeRequest\x1a#.product.DeleteDiscountCodeResponse\"\x00\x12\\\n" +
+	"\x11AddPlanToDiscount\x12!.product.AddPlanToDiscountRequest\x1a\".product.AddPlanToDiscountResponse\"\x00\x12k\n" +
+	"\x16RemovePlanFromDiscount\x12&.product.RemovePlanFromDiscountRequest\x1a'.product.RemovePlanFromDiscountResponse\"\x00\x12_\n" +
+	"\x12GetPlansByDiscount\x12\".product.GetPlansByDiscountRequest\x1a#.product.GetPlansByDiscountResponse\"\x00\x12z\n" +
+	"\x1bAddOneTimeProductToDiscount\x12+.product.AddOneTimeProductToDiscountRequest\x1a,.product.AddOneTimeProductToDiscountResponse\"\x00\x12\x89\x01\n" +
+	" RemoveOneTimeProductFromDiscount\x120.product.RemoveOneTimeProductFromDiscountRequest\x1a1.product.RemoveOneTimeProductFromDiscountResponse\"\x00\x12}\n" +
+	"\x1cGetOneTimeProductsByDiscount\x12,.product.GetOneTimeProductsByDiscountRequest\x1a-.product.GetOneTimeProductsByDiscountResponse\"\x00\x12\x83\x01\n" +
+	"\x1eGetDiscountPaymentProviderData\x12..product.GetDiscountPaymentProviderDataRequest\x1a/.product.GetDiscountPaymentProviderDataResponse\"\x00\x12\x8c\x01\n" +
+	"!CreateDiscountPaymentProviderData\x121.product.CreateDiscountPaymentProviderDataRequest\x1a2.product.CreateDiscountPaymentProviderDataResponse\"\x00\x12\x8c\x01\n" +
+	"!UpdateDiscountPaymentProviderData\x121.product.UpdateDiscountPaymentProviderDataRequest\x1a2.product.UpdateDiscountPaymentProviderDataResponse\"\x00\x12\x8c\x01\n" +
+	"!DeleteDiscountPaymentProviderData\x121.product.DeleteDiscountPaymentProviderDataRequest\x1a2.product.DeleteDiscountPaymentProviderDataResponse\"\x00\x12_\n" +
+	"\x12RedeemDiscountCode\x12\".product.RedeemDiscountCodeRequest\x1a#.product.RedeemDiscountCodeResponse\"\x00\x12e\n" +
+	"\x14GetRedemptionsByUser\x12$.product.GetRedemptionsByUserRequest\x1a%.product.GetRedemptionsByUserResponse\"\x00\x12}\n" +
+	"\x1cGetRedemptionsByDiscountCode\x12,.product.GetRedemptionsByDiscountCodeRequest\x1a-.product.GetRedemptionsByDiscountCodeResponse\"\x00\x12e\n" +
+	"\x14ValidateDiscountCode\x12$.product.ValidateDiscountCodeRequest\x1a%.product.ValidateDiscountCodeResponse\"\x00B\x1eZ\x1cshared/proto/product;productb\x06proto3"
 
 var (
 	file_product_proto_rawDescOnce sync.Once
@@ -3803,136 +7934,266 @@ func file_product_proto_rawDescGZIP() []byte {
 	return file_product_proto_rawDescData
 }
 
-var file_product_proto_msgTypes = make([]protoimpl.MessageInfo, 53)
+var file_product_proto_msgTypes = make([]protoimpl.MessageInfo, 112)
 var file_product_proto_goTypes = []any{
-	(*Product)(nil),                     // 0: product.Product
-	(*GetProductByIDRequest)(nil),       // 1: product.GetProductByIDRequest
-	(*GetProductByIDResponse)(nil),      // 2: product.GetProductByIDResponse
-	(*GetProductBySlugRequest)(nil),     // 3: product.GetProductBySlugRequest
-	(*GetProductBySlugResponse)(nil),    // 4: product.GetProductBySlugResponse
-	(*CreateProductRequest)(nil),        // 5: product.CreateProductRequest
-	(*CreateProductResponse)(nil),       // 6: product.CreateProductResponse
-	(*UpdateProductRequest)(nil),        // 7: product.UpdateProductRequest
-	(*UpdateProductResponse)(nil),       // 8: product.UpdateProductResponse
-	(*DeleteProductRequest)(nil),        // 9: product.DeleteProductRequest
-	(*DeleteProductResponse)(nil),       // 10: product.DeleteProductResponse
-	(*GetAllProductsRequest)(nil),       // 11: product.GetAllProductsRequest
-	(*GetAllProductsData)(nil),          // 12: product.GetAllProductsData
-	(*GetAllProductsResponse)(nil),      // 13: product.GetAllProductsResponse
-	(*Plan)(nil),                        // 14: product.Plan
-	(*GetPlanByIDRequest)(nil),          // 15: product.GetPlanByIDRequest
-	(*GetPlanByIDResponse)(nil),         // 16: product.GetPlanByIDResponse
-	(*GetPlanBySlugRequest)(nil),        // 17: product.GetPlanBySlugRequest
-	(*GetPlanBySlugResponse)(nil),       // 18: product.GetPlanBySlugResponse
-	(*GetPlansByProductRequest)(nil),    // 19: product.GetPlansByProductRequest
-	(*GetPlansByProductResponse)(nil),   // 20: product.GetPlansByProductResponse
-	(*CreatePlanRequest)(nil),           // 21: product.CreatePlanRequest
-	(*CreatePlanResponse)(nil),          // 22: product.CreatePlanResponse
-	(*UpdatePlanRequest)(nil),           // 23: product.UpdatePlanRequest
-	(*UpdatePlanResponse)(nil),          // 24: product.UpdatePlanResponse
-	(*DeletePlanRequest)(nil),           // 25: product.DeletePlanRequest
-	(*DeletePlanResponse)(nil),          // 26: product.DeletePlanResponse
-	(*GetAllPlansRequest)(nil),          // 27: product.GetAllPlansRequest
-	(*GetAllPlansData)(nil),             // 28: product.GetAllPlansData
-	(*GetAllPlansResponse)(nil),         // 29: product.GetAllPlansResponse
-	(*PlanPrice)(nil),                   // 30: product.PlanPrice
-	(*GetPlanPriceRequest)(nil),         // 31: product.GetPlanPriceRequest
-	(*GetPlanPriceResponse)(nil),        // 32: product.GetPlanPriceResponse
-	(*GetPlanPricesByPlanRequest)(nil),  // 33: product.GetPlanPricesByPlanRequest
-	(*GetPlanPricesByPlanResponse)(nil), // 34: product.GetPlanPricesByPlanResponse
-	(*CreatePlanPriceRequest)(nil),      // 35: product.CreatePlanPriceRequest
-	(*CreatePlanPriceResponse)(nil),     // 36: product.CreatePlanPriceResponse
-	(*UpdatePlanPriceRequest)(nil),      // 37: product.UpdatePlanPriceRequest
-	(*UpdatePlanPriceResponse)(nil),     // 38: product.UpdatePlanPriceResponse
-	(*DeletePlanPriceRequest)(nil),      // 39: product.DeletePlanPriceRequest
-	(*DeletePlanPriceResponse)(nil),     // 40: product.DeletePlanPriceResponse
-	(*PlanMeter)(nil),                   // 41: product.PlanMeter
-	(*GetPlanMeterByIDRequest)(nil),     // 42: product.GetPlanMeterByIDRequest
-	(*GetPlanMeterByIDResponse)(nil),    // 43: product.GetPlanMeterByIDResponse
-	(*GetAllPlanMetersRequest)(nil),     // 44: product.GetAllPlanMetersRequest
-	(*GetAllPlanMetersData)(nil),        // 45: product.GetAllPlanMetersData
-	(*GetAllPlanMetersResponse)(nil),    // 46: product.GetAllPlanMetersResponse
-	(*CreatePlanMeterRequest)(nil),      // 47: product.CreatePlanMeterRequest
-	(*CreatePlanMeterResponse)(nil),     // 48: product.CreatePlanMeterResponse
-	(*UpdatePlanMeterRequest)(nil),      // 49: product.UpdatePlanMeterRequest
-	(*UpdatePlanMeterResponse)(nil),     // 50: product.UpdatePlanMeterResponse
-	(*DeletePlanMeterRequest)(nil),      // 51: product.DeletePlanMeterRequest
-	(*DeletePlanMeterResponse)(nil),     // 52: product.DeletePlanMeterResponse
+	(*Product)(nil),                                   // 0: product.Product
+	(*GetProductByIDRequest)(nil),                     // 1: product.GetProductByIDRequest
+	(*GetProductByIDResponse)(nil),                    // 2: product.GetProductByIDResponse
+	(*GetProductBySlugRequest)(nil),                   // 3: product.GetProductBySlugRequest
+	(*GetProductBySlugResponse)(nil),                  // 4: product.GetProductBySlugResponse
+	(*CreateProductRequest)(nil),                      // 5: product.CreateProductRequest
+	(*CreateProductResponse)(nil),                     // 6: product.CreateProductResponse
+	(*UpdateProductRequest)(nil),                      // 7: product.UpdateProductRequest
+	(*UpdateProductResponse)(nil),                     // 8: product.UpdateProductResponse
+	(*DeleteProductRequest)(nil),                      // 9: product.DeleteProductRequest
+	(*DeleteProductResponse)(nil),                     // 10: product.DeleteProductResponse
+	(*GetAllProductsRequest)(nil),                     // 11: product.GetAllProductsRequest
+	(*GetAllProductsData)(nil),                        // 12: product.GetAllProductsData
+	(*GetAllProductsResponse)(nil),                    // 13: product.GetAllProductsResponse
+	(*Plan)(nil),                                      // 14: product.Plan
+	(*GetPlanByIDRequest)(nil),                        // 15: product.GetPlanByIDRequest
+	(*GetPlanByIDResponse)(nil),                       // 16: product.GetPlanByIDResponse
+	(*GetPlanBySlugRequest)(nil),                      // 17: product.GetPlanBySlugRequest
+	(*GetPlanBySlugResponse)(nil),                     // 18: product.GetPlanBySlugResponse
+	(*GetPlansByProductRequest)(nil),                  // 19: product.GetPlansByProductRequest
+	(*GetPlansByProductResponse)(nil),                 // 20: product.GetPlansByProductResponse
+	(*CreatePlanRequest)(nil),                         // 21: product.CreatePlanRequest
+	(*CreatePlanResponse)(nil),                        // 22: product.CreatePlanResponse
+	(*UpdatePlanRequest)(nil),                         // 23: product.UpdatePlanRequest
+	(*UpdatePlanResponse)(nil),                        // 24: product.UpdatePlanResponse
+	(*DeletePlanRequest)(nil),                         // 25: product.DeletePlanRequest
+	(*DeletePlanResponse)(nil),                        // 26: product.DeletePlanResponse
+	(*GetAllPlansRequest)(nil),                        // 27: product.GetAllPlansRequest
+	(*GetAllPlansData)(nil),                           // 28: product.GetAllPlansData
+	(*GetAllPlansResponse)(nil),                       // 29: product.GetAllPlansResponse
+	(*PlanPrice)(nil),                                 // 30: product.PlanPrice
+	(*GetPlanPriceRequest)(nil),                       // 31: product.GetPlanPriceRequest
+	(*GetPlanPriceResponse)(nil),                      // 32: product.GetPlanPriceResponse
+	(*GetPlanPricesByPlanRequest)(nil),                // 33: product.GetPlanPricesByPlanRequest
+	(*GetPlanPricesByPlanResponse)(nil),               // 34: product.GetPlanPricesByPlanResponse
+	(*CreatePlanPriceRequest)(nil),                    // 35: product.CreatePlanPriceRequest
+	(*CreatePlanPriceResponse)(nil),                   // 36: product.CreatePlanPriceResponse
+	(*UpdatePlanPriceRequest)(nil),                    // 37: product.UpdatePlanPriceRequest
+	(*UpdatePlanPriceResponse)(nil),                   // 38: product.UpdatePlanPriceResponse
+	(*DeletePlanPriceRequest)(nil),                    // 39: product.DeletePlanPriceRequest
+	(*DeletePlanPriceResponse)(nil),                   // 40: product.DeletePlanPriceResponse
+	(*PlanMeter)(nil),                                 // 41: product.PlanMeter
+	(*GetPlanMeterByIDRequest)(nil),                   // 42: product.GetPlanMeterByIDRequest
+	(*GetPlanMeterByIDResponse)(nil),                  // 43: product.GetPlanMeterByIDResponse
+	(*GetAllPlanMetersRequest)(nil),                   // 44: product.GetAllPlanMetersRequest
+	(*GetAllPlanMetersData)(nil),                      // 45: product.GetAllPlanMetersData
+	(*GetAllPlanMetersResponse)(nil),                  // 46: product.GetAllPlanMetersResponse
+	(*CreatePlanMeterRequest)(nil),                    // 47: product.CreatePlanMeterRequest
+	(*CreatePlanMeterResponse)(nil),                   // 48: product.CreatePlanMeterResponse
+	(*UpdatePlanMeterRequest)(nil),                    // 49: product.UpdatePlanMeterRequest
+	(*UpdatePlanMeterResponse)(nil),                   // 50: product.UpdatePlanMeterResponse
+	(*DeletePlanMeterRequest)(nil),                    // 51: product.DeletePlanMeterRequest
+	(*DeletePlanMeterResponse)(nil),                   // 52: product.DeletePlanMeterResponse
+	(*Discount)(nil),                                  // 53: product.Discount
+	(*GetDiscountByIDRequest)(nil),                    // 54: product.GetDiscountByIDRequest
+	(*GetDiscountByIDResponse)(nil),                   // 55: product.GetDiscountByIDResponse
+	(*GetDiscountByCodeRequest)(nil),                  // 56: product.GetDiscountByCodeRequest
+	(*GetDiscountByCodeResponse)(nil),                 // 57: product.GetDiscountByCodeResponse
+	(*CreateDiscountRequest)(nil),                     // 58: product.CreateDiscountRequest
+	(*CreateDiscountResponse)(nil),                    // 59: product.CreateDiscountResponse
+	(*UpdateDiscountRequest)(nil),                     // 60: product.UpdateDiscountRequest
+	(*UpdateDiscountResponse)(nil),                    // 61: product.UpdateDiscountResponse
+	(*DeleteDiscountRequest)(nil),                     // 62: product.DeleteDiscountRequest
+	(*DeleteDiscountResponse)(nil),                    // 63: product.DeleteDiscountResponse
+	(*GetAllDiscountsRequest)(nil),                    // 64: product.GetAllDiscountsRequest
+	(*GetAllDiscountsData)(nil),                       // 65: product.GetAllDiscountsData
+	(*GetAllDiscountsResponse)(nil),                   // 66: product.GetAllDiscountsResponse
+	(*DiscountCode)(nil),                              // 67: product.DiscountCode
+	(*GetDiscountCodeByIDRequest)(nil),                // 68: product.GetDiscountCodeByIDRequest
+	(*GetDiscountCodeByIDResponse)(nil),               // 69: product.GetDiscountCodeByIDResponse
+	(*GetDiscountCodeByCodeRequest)(nil),              // 70: product.GetDiscountCodeByCodeRequest
+	(*GetDiscountCodeByCodeResponse)(nil),             // 71: product.GetDiscountCodeByCodeResponse
+	(*GetDiscountCodesByDiscountRequest)(nil),         // 72: product.GetDiscountCodesByDiscountRequest
+	(*GetDiscountCodesByDiscountResponse)(nil),        // 73: product.GetDiscountCodesByDiscountResponse
+	(*CreateDiscountCodeRequest)(nil),                 // 74: product.CreateDiscountCodeRequest
+	(*CreateDiscountCodeResponse)(nil),                // 75: product.CreateDiscountCodeResponse
+	(*DeleteDiscountCodeRequest)(nil),                 // 76: product.DeleteDiscountCodeRequest
+	(*DeleteDiscountCodeResponse)(nil),                // 77: product.DeleteDiscountCodeResponse
+	(*DiscountPlan)(nil),                              // 78: product.DiscountPlan
+	(*AddPlanToDiscountRequest)(nil),                  // 79: product.AddPlanToDiscountRequest
+	(*AddPlanToDiscountResponse)(nil),                 // 80: product.AddPlanToDiscountResponse
+	(*RemovePlanFromDiscountRequest)(nil),             // 81: product.RemovePlanFromDiscountRequest
+	(*RemovePlanFromDiscountResponse)(nil),            // 82: product.RemovePlanFromDiscountResponse
+	(*GetPlansByDiscountRequest)(nil),                 // 83: product.GetPlansByDiscountRequest
+	(*GetPlansByDiscountResponse)(nil),                // 84: product.GetPlansByDiscountResponse
+	(*DiscountOneTimeProduct)(nil),                    // 85: product.DiscountOneTimeProduct
+	(*AddOneTimeProductToDiscountRequest)(nil),        // 86: product.AddOneTimeProductToDiscountRequest
+	(*AddOneTimeProductToDiscountResponse)(nil),       // 87: product.AddOneTimeProductToDiscountResponse
+	(*RemoveOneTimeProductFromDiscountRequest)(nil),   // 88: product.RemoveOneTimeProductFromDiscountRequest
+	(*RemoveOneTimeProductFromDiscountResponse)(nil),  // 89: product.RemoveOneTimeProductFromDiscountResponse
+	(*GetOneTimeProductsByDiscountRequest)(nil),       // 90: product.GetOneTimeProductsByDiscountRequest
+	(*GetOneTimeProductsByDiscountResponse)(nil),      // 91: product.GetOneTimeProductsByDiscountResponse
+	(*DiscountPaymentProviderData)(nil),               // 92: product.DiscountPaymentProviderData
+	(*GetDiscountPaymentProviderDataRequest)(nil),     // 93: product.GetDiscountPaymentProviderDataRequest
+	(*GetDiscountPaymentProviderDataResponse)(nil),    // 94: product.GetDiscountPaymentProviderDataResponse
+	(*CreateDiscountPaymentProviderDataRequest)(nil),  // 95: product.CreateDiscountPaymentProviderDataRequest
+	(*CreateDiscountPaymentProviderDataResponse)(nil), // 96: product.CreateDiscountPaymentProviderDataResponse
+	(*UpdateDiscountPaymentProviderDataRequest)(nil),  // 97: product.UpdateDiscountPaymentProviderDataRequest
+	(*UpdateDiscountPaymentProviderDataResponse)(nil), // 98: product.UpdateDiscountPaymentProviderDataResponse
+	(*DeleteDiscountPaymentProviderDataRequest)(nil),  // 99: product.DeleteDiscountPaymentProviderDataRequest
+	(*DeleteDiscountPaymentProviderDataResponse)(nil), // 100: product.DeleteDiscountPaymentProviderDataResponse
+	(*DiscountCodeRedemption)(nil),                    // 101: product.DiscountCodeRedemption
+	(*RedeemDiscountCodeRequest)(nil),                 // 102: product.RedeemDiscountCodeRequest
+	(*RedeemDiscountCodeResponse)(nil),                // 103: product.RedeemDiscountCodeResponse
+	(*GetRedemptionsByUserRequest)(nil),               // 104: product.GetRedemptionsByUserRequest
+	(*GetRedemptionsByUserData)(nil),                  // 105: product.GetRedemptionsByUserData
+	(*GetRedemptionsByUserResponse)(nil),              // 106: product.GetRedemptionsByUserResponse
+	(*GetRedemptionsByDiscountCodeRequest)(nil),       // 107: product.GetRedemptionsByDiscountCodeRequest
+	(*GetRedemptionsByDiscountCodeData)(nil),          // 108: product.GetRedemptionsByDiscountCodeData
+	(*GetRedemptionsByDiscountCodeResponse)(nil),      // 109: product.GetRedemptionsByDiscountCodeResponse
+	(*ValidateDiscountCodeRequest)(nil),               // 110: product.ValidateDiscountCodeRequest
+	(*ValidateDiscountCodeResponse)(nil),              // 111: product.ValidateDiscountCodeResponse
 }
 var file_product_proto_depIdxs = []int32{
-	0,  // 0: product.GetProductByIDResponse.data:type_name -> product.Product
-	0,  // 1: product.GetProductBySlugResponse.data:type_name -> product.Product
-	0,  // 2: product.CreateProductResponse.data:type_name -> product.Product
-	0,  // 3: product.UpdateProductResponse.data:type_name -> product.Product
-	0,  // 4: product.GetAllProductsData.products:type_name -> product.Product
-	12, // 5: product.GetAllProductsResponse.data:type_name -> product.GetAllProductsData
-	14, // 6: product.GetPlanByIDResponse.data:type_name -> product.Plan
-	14, // 7: product.GetPlanBySlugResponse.data:type_name -> product.Plan
-	14, // 8: product.GetPlansByProductResponse.data:type_name -> product.Plan
-	14, // 9: product.CreatePlanResponse.data:type_name -> product.Plan
-	14, // 10: product.UpdatePlanResponse.data:type_name -> product.Plan
-	14, // 11: product.GetAllPlansData.plans:type_name -> product.Plan
-	28, // 12: product.GetAllPlansResponse.data:type_name -> product.GetAllPlansData
-	30, // 13: product.GetPlanPriceResponse.data:type_name -> product.PlanPrice
-	30, // 14: product.GetPlanPricesByPlanResponse.data:type_name -> product.PlanPrice
-	30, // 15: product.CreatePlanPriceResponse.data:type_name -> product.PlanPrice
-	30, // 16: product.UpdatePlanPriceResponse.data:type_name -> product.PlanPrice
-	41, // 17: product.GetPlanMeterByIDResponse.data:type_name -> product.PlanMeter
-	41, // 18: product.GetAllPlanMetersData.meters:type_name -> product.PlanMeter
-	45, // 19: product.GetAllPlanMetersResponse.data:type_name -> product.GetAllPlanMetersData
-	41, // 20: product.CreatePlanMeterResponse.data:type_name -> product.PlanMeter
-	41, // 21: product.UpdatePlanMeterResponse.data:type_name -> product.PlanMeter
-	1,  // 22: product.ProductService.GetProductByID:input_type -> product.GetProductByIDRequest
-	3,  // 23: product.ProductService.GetProductBySlug:input_type -> product.GetProductBySlugRequest
-	5,  // 24: product.ProductService.CreateProduct:input_type -> product.CreateProductRequest
-	7,  // 25: product.ProductService.UpdateProduct:input_type -> product.UpdateProductRequest
-	9,  // 26: product.ProductService.DeleteProduct:input_type -> product.DeleteProductRequest
-	11, // 27: product.ProductService.GetAllProducts:input_type -> product.GetAllProductsRequest
-	15, // 28: product.ProductService.GetPlanByID:input_type -> product.GetPlanByIDRequest
-	17, // 29: product.ProductService.GetPlanBySlug:input_type -> product.GetPlanBySlugRequest
-	19, // 30: product.ProductService.GetPlansByProduct:input_type -> product.GetPlansByProductRequest
-	21, // 31: product.ProductService.CreatePlan:input_type -> product.CreatePlanRequest
-	23, // 32: product.ProductService.UpdatePlan:input_type -> product.UpdatePlanRequest
-	25, // 33: product.ProductService.DeletePlan:input_type -> product.DeletePlanRequest
-	27, // 34: product.ProductService.GetAllPlans:input_type -> product.GetAllPlansRequest
-	31, // 35: product.ProductService.GetPlanPrice:input_type -> product.GetPlanPriceRequest
-	33, // 36: product.ProductService.GetPlanPricesByPlan:input_type -> product.GetPlanPricesByPlanRequest
-	35, // 37: product.ProductService.CreatePlanPrice:input_type -> product.CreatePlanPriceRequest
-	37, // 38: product.ProductService.UpdatePlanPrice:input_type -> product.UpdatePlanPriceRequest
-	39, // 39: product.ProductService.DeletePlanPrice:input_type -> product.DeletePlanPriceRequest
-	42, // 40: product.ProductService.GetPlanMeterByID:input_type -> product.GetPlanMeterByIDRequest
-	44, // 41: product.ProductService.GetAllPlanMeters:input_type -> product.GetAllPlanMetersRequest
-	47, // 42: product.ProductService.CreatePlanMeter:input_type -> product.CreatePlanMeterRequest
-	49, // 43: product.ProductService.UpdatePlanMeter:input_type -> product.UpdatePlanMeterRequest
-	51, // 44: product.ProductService.DeletePlanMeter:input_type -> product.DeletePlanMeterRequest
-	2,  // 45: product.ProductService.GetProductByID:output_type -> product.GetProductByIDResponse
-	4,  // 46: product.ProductService.GetProductBySlug:output_type -> product.GetProductBySlugResponse
-	6,  // 47: product.ProductService.CreateProduct:output_type -> product.CreateProductResponse
-	8,  // 48: product.ProductService.UpdateProduct:output_type -> product.UpdateProductResponse
-	10, // 49: product.ProductService.DeleteProduct:output_type -> product.DeleteProductResponse
-	13, // 50: product.ProductService.GetAllProducts:output_type -> product.GetAllProductsResponse
-	16, // 51: product.ProductService.GetPlanByID:output_type -> product.GetPlanByIDResponse
-	18, // 52: product.ProductService.GetPlanBySlug:output_type -> product.GetPlanBySlugResponse
-	20, // 53: product.ProductService.GetPlansByProduct:output_type -> product.GetPlansByProductResponse
-	22, // 54: product.ProductService.CreatePlan:output_type -> product.CreatePlanResponse
-	24, // 55: product.ProductService.UpdatePlan:output_type -> product.UpdatePlanResponse
-	26, // 56: product.ProductService.DeletePlan:output_type -> product.DeletePlanResponse
-	29, // 57: product.ProductService.GetAllPlans:output_type -> product.GetAllPlansResponse
-	32, // 58: product.ProductService.GetPlanPrice:output_type -> product.GetPlanPriceResponse
-	34, // 59: product.ProductService.GetPlanPricesByPlan:output_type -> product.GetPlanPricesByPlanResponse
-	36, // 60: product.ProductService.CreatePlanPrice:output_type -> product.CreatePlanPriceResponse
-	38, // 61: product.ProductService.UpdatePlanPrice:output_type -> product.UpdatePlanPriceResponse
-	40, // 62: product.ProductService.DeletePlanPrice:output_type -> product.DeletePlanPriceResponse
-	43, // 63: product.ProductService.GetPlanMeterByID:output_type -> product.GetPlanMeterByIDResponse
-	46, // 64: product.ProductService.GetAllPlanMeters:output_type -> product.GetAllPlanMetersResponse
-	48, // 65: product.ProductService.CreatePlanMeter:output_type -> product.CreatePlanMeterResponse
-	50, // 66: product.ProductService.UpdatePlanMeter:output_type -> product.UpdatePlanMeterResponse
-	52, // 67: product.ProductService.DeletePlanMeter:output_type -> product.DeletePlanMeterResponse
-	45, // [45:68] is the sub-list for method output_type
-	22, // [22:45] is the sub-list for method input_type
-	22, // [22:22] is the sub-list for extension type_name
-	22, // [22:22] is the sub-list for extension extendee
-	0,  // [0:22] is the sub-list for field type_name
+	0,   // 0: product.GetProductByIDResponse.data:type_name -> product.Product
+	0,   // 1: product.GetProductBySlugResponse.data:type_name -> product.Product
+	0,   // 2: product.CreateProductResponse.data:type_name -> product.Product
+	0,   // 3: product.UpdateProductResponse.data:type_name -> product.Product
+	0,   // 4: product.GetAllProductsData.products:type_name -> product.Product
+	12,  // 5: product.GetAllProductsResponse.data:type_name -> product.GetAllProductsData
+	14,  // 6: product.GetPlanByIDResponse.data:type_name -> product.Plan
+	14,  // 7: product.GetPlanBySlugResponse.data:type_name -> product.Plan
+	14,  // 8: product.GetPlansByProductResponse.data:type_name -> product.Plan
+	14,  // 9: product.CreatePlanResponse.data:type_name -> product.Plan
+	14,  // 10: product.UpdatePlanResponse.data:type_name -> product.Plan
+	14,  // 11: product.GetAllPlansData.plans:type_name -> product.Plan
+	28,  // 12: product.GetAllPlansResponse.data:type_name -> product.GetAllPlansData
+	30,  // 13: product.GetPlanPriceResponse.data:type_name -> product.PlanPrice
+	30,  // 14: product.GetPlanPricesByPlanResponse.data:type_name -> product.PlanPrice
+	30,  // 15: product.CreatePlanPriceResponse.data:type_name -> product.PlanPrice
+	30,  // 16: product.UpdatePlanPriceResponse.data:type_name -> product.PlanPrice
+	41,  // 17: product.GetPlanMeterByIDResponse.data:type_name -> product.PlanMeter
+	41,  // 18: product.GetAllPlanMetersData.meters:type_name -> product.PlanMeter
+	45,  // 19: product.GetAllPlanMetersResponse.data:type_name -> product.GetAllPlanMetersData
+	41,  // 20: product.CreatePlanMeterResponse.data:type_name -> product.PlanMeter
+	41,  // 21: product.UpdatePlanMeterResponse.data:type_name -> product.PlanMeter
+	53,  // 22: product.GetDiscountByIDResponse.data:type_name -> product.Discount
+	53,  // 23: product.GetDiscountByCodeResponse.data:type_name -> product.Discount
+	53,  // 24: product.CreateDiscountResponse.data:type_name -> product.Discount
+	53,  // 25: product.UpdateDiscountResponse.data:type_name -> product.Discount
+	53,  // 26: product.GetAllDiscountsData.discounts:type_name -> product.Discount
+	65,  // 27: product.GetAllDiscountsResponse.data:type_name -> product.GetAllDiscountsData
+	67,  // 28: product.GetDiscountCodeByIDResponse.data:type_name -> product.DiscountCode
+	67,  // 29: product.GetDiscountCodeByCodeResponse.data:type_name -> product.DiscountCode
+	67,  // 30: product.GetDiscountCodesByDiscountResponse.data:type_name -> product.DiscountCode
+	67,  // 31: product.CreateDiscountCodeResponse.data:type_name -> product.DiscountCode
+	78,  // 32: product.AddPlanToDiscountResponse.data:type_name -> product.DiscountPlan
+	85,  // 33: product.AddOneTimeProductToDiscountResponse.data:type_name -> product.DiscountOneTimeProduct
+	92,  // 34: product.GetDiscountPaymentProviderDataResponse.data:type_name -> product.DiscountPaymentProviderData
+	92,  // 35: product.CreateDiscountPaymentProviderDataResponse.data:type_name -> product.DiscountPaymentProviderData
+	92,  // 36: product.UpdateDiscountPaymentProviderDataResponse.data:type_name -> product.DiscountPaymentProviderData
+	101, // 37: product.RedeemDiscountCodeResponse.data:type_name -> product.DiscountCodeRedemption
+	101, // 38: product.GetRedemptionsByUserData.redemptions:type_name -> product.DiscountCodeRedemption
+	105, // 39: product.GetRedemptionsByUserResponse.data:type_name -> product.GetRedemptionsByUserData
+	101, // 40: product.GetRedemptionsByDiscountCodeData.redemptions:type_name -> product.DiscountCodeRedemption
+	108, // 41: product.GetRedemptionsByDiscountCodeResponse.data:type_name -> product.GetRedemptionsByDiscountCodeData
+	53,  // 42: product.ValidateDiscountCodeResponse.discount:type_name -> product.Discount
+	1,   // 43: product.ProductService.GetProductByID:input_type -> product.GetProductByIDRequest
+	3,   // 44: product.ProductService.GetProductBySlug:input_type -> product.GetProductBySlugRequest
+	5,   // 45: product.ProductService.CreateProduct:input_type -> product.CreateProductRequest
+	7,   // 46: product.ProductService.UpdateProduct:input_type -> product.UpdateProductRequest
+	9,   // 47: product.ProductService.DeleteProduct:input_type -> product.DeleteProductRequest
+	11,  // 48: product.ProductService.GetAllProducts:input_type -> product.GetAllProductsRequest
+	15,  // 49: product.ProductService.GetPlanByID:input_type -> product.GetPlanByIDRequest
+	17,  // 50: product.ProductService.GetPlanBySlug:input_type -> product.GetPlanBySlugRequest
+	19,  // 51: product.ProductService.GetPlansByProduct:input_type -> product.GetPlansByProductRequest
+	21,  // 52: product.ProductService.CreatePlan:input_type -> product.CreatePlanRequest
+	23,  // 53: product.ProductService.UpdatePlan:input_type -> product.UpdatePlanRequest
+	25,  // 54: product.ProductService.DeletePlan:input_type -> product.DeletePlanRequest
+	27,  // 55: product.ProductService.GetAllPlans:input_type -> product.GetAllPlansRequest
+	31,  // 56: product.ProductService.GetPlanPrice:input_type -> product.GetPlanPriceRequest
+	33,  // 57: product.ProductService.GetPlanPricesByPlan:input_type -> product.GetPlanPricesByPlanRequest
+	35,  // 58: product.ProductService.CreatePlanPrice:input_type -> product.CreatePlanPriceRequest
+	37,  // 59: product.ProductService.UpdatePlanPrice:input_type -> product.UpdatePlanPriceRequest
+	39,  // 60: product.ProductService.DeletePlanPrice:input_type -> product.DeletePlanPriceRequest
+	42,  // 61: product.ProductService.GetPlanMeterByID:input_type -> product.GetPlanMeterByIDRequest
+	44,  // 62: product.ProductService.GetAllPlanMeters:input_type -> product.GetAllPlanMetersRequest
+	47,  // 63: product.ProductService.CreatePlanMeter:input_type -> product.CreatePlanMeterRequest
+	49,  // 64: product.ProductService.UpdatePlanMeter:input_type -> product.UpdatePlanMeterRequest
+	51,  // 65: product.ProductService.DeletePlanMeter:input_type -> product.DeletePlanMeterRequest
+	54,  // 66: product.ProductService.GetDiscountByID:input_type -> product.GetDiscountByIDRequest
+	56,  // 67: product.ProductService.GetDiscountByCode:input_type -> product.GetDiscountByCodeRequest
+	58,  // 68: product.ProductService.CreateDiscount:input_type -> product.CreateDiscountRequest
+	60,  // 69: product.ProductService.UpdateDiscount:input_type -> product.UpdateDiscountRequest
+	62,  // 70: product.ProductService.DeleteDiscount:input_type -> product.DeleteDiscountRequest
+	64,  // 71: product.ProductService.GetAllDiscounts:input_type -> product.GetAllDiscountsRequest
+	68,  // 72: product.ProductService.GetDiscountCodeByID:input_type -> product.GetDiscountCodeByIDRequest
+	70,  // 73: product.ProductService.GetDiscountCodeByCode:input_type -> product.GetDiscountCodeByCodeRequest
+	72,  // 74: product.ProductService.GetDiscountCodesByDiscount:input_type -> product.GetDiscountCodesByDiscountRequest
+	74,  // 75: product.ProductService.CreateDiscountCode:input_type -> product.CreateDiscountCodeRequest
+	76,  // 76: product.ProductService.DeleteDiscountCode:input_type -> product.DeleteDiscountCodeRequest
+	79,  // 77: product.ProductService.AddPlanToDiscount:input_type -> product.AddPlanToDiscountRequest
+	81,  // 78: product.ProductService.RemovePlanFromDiscount:input_type -> product.RemovePlanFromDiscountRequest
+	83,  // 79: product.ProductService.GetPlansByDiscount:input_type -> product.GetPlansByDiscountRequest
+	86,  // 80: product.ProductService.AddOneTimeProductToDiscount:input_type -> product.AddOneTimeProductToDiscountRequest
+	88,  // 81: product.ProductService.RemoveOneTimeProductFromDiscount:input_type -> product.RemoveOneTimeProductFromDiscountRequest
+	90,  // 82: product.ProductService.GetOneTimeProductsByDiscount:input_type -> product.GetOneTimeProductsByDiscountRequest
+	93,  // 83: product.ProductService.GetDiscountPaymentProviderData:input_type -> product.GetDiscountPaymentProviderDataRequest
+	95,  // 84: product.ProductService.CreateDiscountPaymentProviderData:input_type -> product.CreateDiscountPaymentProviderDataRequest
+	97,  // 85: product.ProductService.UpdateDiscountPaymentProviderData:input_type -> product.UpdateDiscountPaymentProviderDataRequest
+	99,  // 86: product.ProductService.DeleteDiscountPaymentProviderData:input_type -> product.DeleteDiscountPaymentProviderDataRequest
+	102, // 87: product.ProductService.RedeemDiscountCode:input_type -> product.RedeemDiscountCodeRequest
+	104, // 88: product.ProductService.GetRedemptionsByUser:input_type -> product.GetRedemptionsByUserRequest
+	107, // 89: product.ProductService.GetRedemptionsByDiscountCode:input_type -> product.GetRedemptionsByDiscountCodeRequest
+	110, // 90: product.ProductService.ValidateDiscountCode:input_type -> product.ValidateDiscountCodeRequest
+	2,   // 91: product.ProductService.GetProductByID:output_type -> product.GetProductByIDResponse
+	4,   // 92: product.ProductService.GetProductBySlug:output_type -> product.GetProductBySlugResponse
+	6,   // 93: product.ProductService.CreateProduct:output_type -> product.CreateProductResponse
+	8,   // 94: product.ProductService.UpdateProduct:output_type -> product.UpdateProductResponse
+	10,  // 95: product.ProductService.DeleteProduct:output_type -> product.DeleteProductResponse
+	13,  // 96: product.ProductService.GetAllProducts:output_type -> product.GetAllProductsResponse
+	16,  // 97: product.ProductService.GetPlanByID:output_type -> product.GetPlanByIDResponse
+	18,  // 98: product.ProductService.GetPlanBySlug:output_type -> product.GetPlanBySlugResponse
+	20,  // 99: product.ProductService.GetPlansByProduct:output_type -> product.GetPlansByProductResponse
+	22,  // 100: product.ProductService.CreatePlan:output_type -> product.CreatePlanResponse
+	24,  // 101: product.ProductService.UpdatePlan:output_type -> product.UpdatePlanResponse
+	26,  // 102: product.ProductService.DeletePlan:output_type -> product.DeletePlanResponse
+	29,  // 103: product.ProductService.GetAllPlans:output_type -> product.GetAllPlansResponse
+	32,  // 104: product.ProductService.GetPlanPrice:output_type -> product.GetPlanPriceResponse
+	34,  // 105: product.ProductService.GetPlanPricesByPlan:output_type -> product.GetPlanPricesByPlanResponse
+	36,  // 106: product.ProductService.CreatePlanPrice:output_type -> product.CreatePlanPriceResponse
+	38,  // 107: product.ProductService.UpdatePlanPrice:output_type -> product.UpdatePlanPriceResponse
+	40,  // 108: product.ProductService.DeletePlanPrice:output_type -> product.DeletePlanPriceResponse
+	43,  // 109: product.ProductService.GetPlanMeterByID:output_type -> product.GetPlanMeterByIDResponse
+	46,  // 110: product.ProductService.GetAllPlanMeters:output_type -> product.GetAllPlanMetersResponse
+	48,  // 111: product.ProductService.CreatePlanMeter:output_type -> product.CreatePlanMeterResponse
+	50,  // 112: product.ProductService.UpdatePlanMeter:output_type -> product.UpdatePlanMeterResponse
+	52,  // 113: product.ProductService.DeletePlanMeter:output_type -> product.DeletePlanMeterResponse
+	55,  // 114: product.ProductService.GetDiscountByID:output_type -> product.GetDiscountByIDResponse
+	57,  // 115: product.ProductService.GetDiscountByCode:output_type -> product.GetDiscountByCodeResponse
+	59,  // 116: product.ProductService.CreateDiscount:output_type -> product.CreateDiscountResponse
+	61,  // 117: product.ProductService.UpdateDiscount:output_type -> product.UpdateDiscountResponse
+	63,  // 118: product.ProductService.DeleteDiscount:output_type -> product.DeleteDiscountResponse
+	66,  // 119: product.ProductService.GetAllDiscounts:output_type -> product.GetAllDiscountsResponse
+	69,  // 120: product.ProductService.GetDiscountCodeByID:output_type -> product.GetDiscountCodeByIDResponse
+	71,  // 121: product.ProductService.GetDiscountCodeByCode:output_type -> product.GetDiscountCodeByCodeResponse
+	73,  // 122: product.ProductService.GetDiscountCodesByDiscount:output_type -> product.GetDiscountCodesByDiscountResponse
+	75,  // 123: product.ProductService.CreateDiscountCode:output_type -> product.CreateDiscountCodeResponse
+	77,  // 124: product.ProductService.DeleteDiscountCode:output_type -> product.DeleteDiscountCodeResponse
+	80,  // 125: product.ProductService.AddPlanToDiscount:output_type -> product.AddPlanToDiscountResponse
+	82,  // 126: product.ProductService.RemovePlanFromDiscount:output_type -> product.RemovePlanFromDiscountResponse
+	84,  // 127: product.ProductService.GetPlansByDiscount:output_type -> product.GetPlansByDiscountResponse
+	87,  // 128: product.ProductService.AddOneTimeProductToDiscount:output_type -> product.AddOneTimeProductToDiscountResponse
+	89,  // 129: product.ProductService.RemoveOneTimeProductFromDiscount:output_type -> product.RemoveOneTimeProductFromDiscountResponse
+	91,  // 130: product.ProductService.GetOneTimeProductsByDiscount:output_type -> product.GetOneTimeProductsByDiscountResponse
+	94,  // 131: product.ProductService.GetDiscountPaymentProviderData:output_type -> product.GetDiscountPaymentProviderDataResponse
+	96,  // 132: product.ProductService.CreateDiscountPaymentProviderData:output_type -> product.CreateDiscountPaymentProviderDataResponse
+	98,  // 133: product.ProductService.UpdateDiscountPaymentProviderData:output_type -> product.UpdateDiscountPaymentProviderDataResponse
+	100, // 134: product.ProductService.DeleteDiscountPaymentProviderData:output_type -> product.DeleteDiscountPaymentProviderDataResponse
+	103, // 135: product.ProductService.RedeemDiscountCode:output_type -> product.RedeemDiscountCodeResponse
+	106, // 136: product.ProductService.GetRedemptionsByUser:output_type -> product.GetRedemptionsByUserResponse
+	109, // 137: product.ProductService.GetRedemptionsByDiscountCode:output_type -> product.GetRedemptionsByDiscountCodeResponse
+	111, // 138: product.ProductService.ValidateDiscountCode:output_type -> product.ValidateDiscountCodeResponse
+	91,  // [91:139] is the sub-list for method output_type
+	43,  // [43:91] is the sub-list for method input_type
+	43,  // [43:43] is the sub-list for extension type_name
+	43,  // [43:43] is the sub-list for extension extendee
+	0,   // [0:43] is the sub-list for field type_name
 }
 
 func init() { file_product_proto_init() }
@@ -3946,7 +8207,7 @@ func file_product_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_product_proto_rawDesc), len(file_product_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   53,
+			NumMessages:   112,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

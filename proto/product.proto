@@ -35,6 +35,45 @@ service ProductService {
   rpc CreatePlanMeter(CreatePlanMeterRequest) returns (CreatePlanMeterResponse) {}
   rpc UpdatePlanMeter(UpdatePlanMeterRequest) returns (UpdatePlanMeterResponse) {}
   rpc DeletePlanMeter(DeletePlanMeterRequest) returns (DeletePlanMeterResponse) {}
+  
+  // Discount operations
+  rpc GetDiscountByID(GetDiscountByIDRequest) returns (GetDiscountByIDResponse) {}
+  rpc GetDiscountByCode(GetDiscountByCodeRequest) returns (GetDiscountByCodeResponse) {}
+  rpc CreateDiscount(CreateDiscountRequest) returns (CreateDiscountResponse) {}
+  rpc UpdateDiscount(UpdateDiscountRequest) returns (UpdateDiscountResponse) {}
+  rpc DeleteDiscount(DeleteDiscountRequest) returns (DeleteDiscountResponse) {}
+  rpc GetAllDiscounts(GetAllDiscountsRequest) returns (GetAllDiscountsResponse) {}
+  
+  // Discount Code operations
+  rpc GetDiscountCodeByID(GetDiscountCodeByIDRequest) returns (GetDiscountCodeByIDResponse) {}
+  rpc GetDiscountCodeByCode(GetDiscountCodeByCodeRequest) returns (GetDiscountCodeByCodeResponse) {}
+  rpc GetDiscountCodesByDiscount(GetDiscountCodesByDiscountRequest) returns (GetDiscountCodesByDiscountResponse) {}
+  rpc CreateDiscountCode(CreateDiscountCodeRequest) returns (CreateDiscountCodeResponse) {}
+  rpc DeleteDiscountCode(DeleteDiscountCodeRequest) returns (DeleteDiscountCodeResponse) {}
+  
+  // Discount Plan operations (junction table)
+  rpc AddPlanToDiscount(AddPlanToDiscountRequest) returns (AddPlanToDiscountResponse) {}
+  rpc RemovePlanFromDiscount(RemovePlanFromDiscountRequest) returns (RemovePlanFromDiscountResponse) {}
+  rpc GetPlansByDiscount(GetPlansByDiscountRequest) returns (GetPlansByDiscountResponse) {}
+  
+  // Discount One Time Product operations (junction table)
+  rpc AddOneTimeProductToDiscount(AddOneTimeProductToDiscountRequest) returns (AddOneTimeProductToDiscountResponse) {}
+  rpc RemoveOneTimeProductFromDiscount(RemoveOneTimeProductFromDiscountRequest) returns (RemoveOneTimeProductFromDiscountResponse) {}
+  rpc GetOneTimeProductsByDiscount(GetOneTimeProductsByDiscountRequest) returns (GetOneTimeProductsByDiscountResponse) {}
+  
+  // Discount Payment Provider Data operations
+  rpc GetDiscountPaymentProviderData(GetDiscountPaymentProviderDataRequest) returns (GetDiscountPaymentProviderDataResponse) {}
+  rpc CreateDiscountPaymentProviderData(CreateDiscountPaymentProviderDataRequest) returns (CreateDiscountPaymentProviderDataResponse) {}
+  rpc UpdateDiscountPaymentProviderData(UpdateDiscountPaymentProviderDataRequest) returns (UpdateDiscountPaymentProviderDataResponse) {}
+  rpc DeleteDiscountPaymentProviderData(DeleteDiscountPaymentProviderDataRequest) returns (DeleteDiscountPaymentProviderDataResponse) {}
+  
+  // Discount Code Redemption operations
+  rpc RedeemDiscountCode(RedeemDiscountCodeRequest) returns (RedeemDiscountCodeResponse) {}
+  rpc GetRedemptionsByUser(GetRedemptionsByUserRequest) returns (GetRedemptionsByUserResponse) {}
+  rpc GetRedemptionsByDiscountCode(GetRedemptionsByDiscountCodeRequest) returns (GetRedemptionsByDiscountCodeResponse) {}
+  
+  // Validation operations
+  rpc ValidateDiscountCode(ValidateDiscountCodeRequest) returns (ValidateDiscountCodeResponse) {}
 }
 
 // Product messages
@@ -396,4 +435,404 @@ message DeletePlanMeterRequest {
 message DeletePlanMeterResponse {
   bool success = 1;
   string message = 2;
+}
+
+// Discount messages
+
+message Discount {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string type = 4; // percentage, fixed
+  double amount = 5;
+  int64 valid_until = 6;
+  bool is_active = 7;
+  string action_type = 8; // add_subscription_time, reduce_price
+  int32 max_redemptions = 9;
+  int32 max_redemptions_per_user = 10;
+  int32 redemptions = 11;
+  bool is_recurring = 12;
+  int32 duration_in_months = 13;
+  int32 maximum_recurring_intervals = 14;
+  int32 redeem_type = 15; // 1=normal, 2=special (mapped from smallint)
+  int32 bonus_days = 16;
+  bool is_enabled_for_all_plans = 17;
+  bool is_enabled_for_all_one_time_products = 18;
+  int64 created_at = 19;
+  int64 updated_at = 20;
+}
+
+message GetDiscountByIDRequest {
+  int64 id = 1;
+}
+
+message GetDiscountByIDResponse {
+  bool success = 1;
+  string message = 2;
+  Discount data = 3;
+}
+
+message GetDiscountByCodeRequest {
+  string code = 1;
+}
+
+message GetDiscountByCodeResponse {
+  bool success = 1;
+  string message = 2;
+  Discount data = 3;
+}
+
+message CreateDiscountRequest {
+  string name = 1;
+  string description = 2;
+  string type = 3;
+  double amount = 4;
+  int64 valid_until = 5;
+  bool is_active = 6;
+  string action_type = 7;
+  int32 max_redemptions = 8;
+  int32 max_redemptions_per_user = 9;
+  bool is_recurring = 10;
+  int32 duration_in_months = 11;
+  int32 maximum_recurring_intervals = 12;
+  int32 redeem_type = 13;
+  int32 bonus_days = 14;
+  bool is_enabled_for_all_plans = 15;
+  bool is_enabled_for_all_one_time_products = 16;
+}
+
+message CreateDiscountResponse {
+  bool success = 1;
+  string message = 2;
+  Discount data = 3;
+}
+
+message UpdateDiscountRequest {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string type = 4;
+  double amount = 5;
+  int64 valid_until = 6;
+  bool is_active = 7;
+  string action_type = 8;
+  int32 max_redemptions = 9;
+  int32 max_redemptions_per_user = 10;
+  bool is_recurring = 11;
+  int32 duration_in_months = 12;
+  int32 maximum_recurring_intervals = 13;
+  int32 redeem_type = 14;
+  int32 bonus_days = 15;
+  bool is_enabled_for_all_plans = 16;
+  bool is_enabled_for_all_one_time_products = 17;
+}
+
+message UpdateDiscountResponse {
+  bool success = 1;
+  string message = 2;
+  Discount data = 3;
+}
+
+message DeleteDiscountRequest {
+  int64 id = 1;
+}
+
+message DeleteDiscountResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetAllDiscountsRequest {
+  int32 page = 1;
+  int32 per_page = 2;
+  bool active_only = 3;
+}
+
+message GetAllDiscountsData {
+  repeated Discount discounts = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}
+
+message GetAllDiscountsResponse {
+  bool success = 1;
+  string message = 2;
+  GetAllDiscountsData data = 3;
+}
+
+// Discount Code messages
+
+message DiscountCode {
+  int64 id = 1;
+  string code = 2;
+  int64 discount_id = 3;
+  int64 created_at = 4;
+  int64 updated_at = 5;
+}
+
+message GetDiscountCodeByIDRequest {
+  int64 id = 1;
+}
+
+message GetDiscountCodeByIDResponse {
+  bool success = 1;
+  string message = 2;
+  DiscountCode data = 3;
+}
+
+message GetDiscountCodeByCodeRequest {
+  string code = 1;
+}
+
+message GetDiscountCodeByCodeResponse {
+  bool success = 1;
+  string message = 2;
+  DiscountCode data = 3;
+}
+
+message GetDiscountCodesByDiscountRequest {
+  int64 discount_id = 1;
+}
+
+message GetDiscountCodesByDiscountResponse {
+  bool success = 1;
+  string message = 2;
+  repeated DiscountCode data = 3;
+}
+
+message CreateDiscountCodeRequest {
+  string code = 1;
+  int64 discount_id = 2;
+}
+
+message CreateDiscountCodeResponse {
+  bool success = 1;
+  string message = 2;
+  DiscountCode data = 3;
+}
+
+message DeleteDiscountCodeRequest {
+  int64 id = 1;
+}
+
+message DeleteDiscountCodeResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Discount Plan junction messages
+
+message DiscountPlan {
+  int64 id = 1;
+  int64 discount_id = 2;
+  int64 plan_id = 3;
+  int64 created_at = 4;
+  int64 updated_at = 5;
+}
+
+message AddPlanToDiscountRequest {
+  int64 discount_id = 1;
+  int64 plan_id = 2;
+}
+
+message AddPlanToDiscountResponse {
+  bool success = 1;
+  string message = 2;
+  DiscountPlan data = 3;
+}
+
+message RemovePlanFromDiscountRequest {
+  int64 discount_id = 1;
+  int64 plan_id = 2;
+}
+
+message RemovePlanFromDiscountResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetPlansByDiscountRequest {
+  int64 discount_id = 1;
+}
+
+message GetPlansByDiscountResponse {
+  bool success = 1;
+  string message = 2;
+  repeated int64 plan_ids = 3;
+}
+
+// Discount One Time Product junction messages
+
+message DiscountOneTimeProduct {
+  int64 id = 1;
+  int64 discount_id = 2;
+  int64 one_time_product_id = 3;
+  int64 created_at = 4;
+  int64 updated_at = 5;
+}
+
+message AddOneTimeProductToDiscountRequest {
+  int64 discount_id = 1;
+  int64 one_time_product_id = 2;
+}
+
+message AddOneTimeProductToDiscountResponse {
+  bool success = 1;
+  string message = 2;
+  DiscountOneTimeProduct data = 3;
+}
+
+message RemoveOneTimeProductFromDiscountRequest {
+  int64 discount_id = 1;
+  int64 one_time_product_id = 2;
+}
+
+message RemoveOneTimeProductFromDiscountResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetOneTimeProductsByDiscountRequest {
+  int64 discount_id = 1;
+}
+
+message GetOneTimeProductsByDiscountResponse {
+  bool success = 1;
+  string message = 2;
+  repeated int64 one_time_product_ids = 3;
+}
+
+// Discount Payment Provider Data messages
+
+message DiscountPaymentProviderData {
+  int64 id = 1;
+  int64 discount_id = 2;
+  int64 payment_provider_id = 3;
+  string payment_provider_discount_id = 4;
+  int64 created_at = 5;
+  int64 updated_at = 6;
+}
+
+message GetDiscountPaymentProviderDataRequest {
+  int64 discount_id = 1;
+  int64 payment_provider_id = 2;
+}
+
+message GetDiscountPaymentProviderDataResponse {
+  bool success = 1;
+  string message = 2;
+  DiscountPaymentProviderData data = 3;
+}
+
+message CreateDiscountPaymentProviderDataRequest {
+  int64 discount_id = 1;
+  int64 payment_provider_id = 2;
+  string payment_provider_discount_id = 3;
+}
+
+message CreateDiscountPaymentProviderDataResponse {
+  bool success = 1;
+  string message = 2;
+  DiscountPaymentProviderData data = 3;
+}
+
+message UpdateDiscountPaymentProviderDataRequest {
+  int64 id = 1;
+  string payment_provider_discount_id = 2;
+}
+
+message UpdateDiscountPaymentProviderDataResponse {
+  bool success = 1;
+  string message = 2;
+  DiscountPaymentProviderData data = 3;
+}
+
+message DeleteDiscountPaymentProviderDataRequest {
+  int64 id = 1;
+}
+
+message DeleteDiscountPaymentProviderDataResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Discount Code Redemption messages
+
+message DiscountCodeRedemption {
+  int64 id = 1;
+  int64 discount_code_id = 2;
+  int64 user_id = 3;
+  int64 subscription_id = 4;
+  int64 order_id = 5;
+  int64 created_at = 6;
+  int64 updated_at = 7;
+}
+
+message RedeemDiscountCodeRequest {
+  string code = 1;
+  int64 user_id = 2;
+  int64 subscription_id = 3;
+  int64 order_id = 4;
+}
+
+message RedeemDiscountCodeResponse {
+  bool success = 1;
+  string message = 2;
+  DiscountCodeRedemption data = 3;
+}
+
+message GetRedemptionsByUserRequest {
+  int64 user_id = 1;
+  int32 page = 2;
+  int32 per_page = 3;
+}
+
+message GetRedemptionsByUserData {
+  repeated DiscountCodeRedemption redemptions = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}
+
+message GetRedemptionsByUserResponse {
+  bool success = 1;
+  string message = 2;
+  GetRedemptionsByUserData data = 3;
+}
+
+message GetRedemptionsByDiscountCodeRequest {
+  int64 discount_code_id = 1;
+  int32 page = 2;
+  int32 per_page = 3;
+}
+
+message GetRedemptionsByDiscountCodeData {
+  repeated DiscountCodeRedemption redemptions = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}
+
+message GetRedemptionsByDiscountCodeResponse {
+  bool success = 1;
+  string message = 2;
+  GetRedemptionsByDiscountCodeData data = 3;
+}
+
+// Validation messages
+
+message ValidateDiscountCodeRequest {
+  string code = 1;
+  int64 user_id = 2;
+  int64 plan_id = 3; // optional
+  int64 one_time_product_id = 4; // optional
+}
+
+message ValidateDiscountCodeResponse {
+  bool success = 1;
+  string message = 2;
+  bool is_valid = 3;
+  Discount discount = 4;
+  string error_reason = 5; // expired, max_redemptions_reached, not_active, etc.
 }

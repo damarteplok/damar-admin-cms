@@ -2,6 +2,8 @@ package main
 
 import (
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
@@ -15,6 +17,10 @@ import (
 	authPb "github.com/damarteplok/damar-admin-cms/shared/proto/auth"
 	tenantPb "github.com/damarteplok/damar-admin-cms/shared/proto/tenant"
 	userPb "github.com/damarteplok/damar-admin-cms/shared/proto/user"
+	"github.com/damarteplok/damar-admin-cms/shared/redis"
+	"github.com/go-chi/chi/v5"
+	chiMiddleware "github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"github.com/vektah/gqlparser/v2/ast"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -35,6 +41,21 @@ func main() {
 		zap.String("port", port),
 		zap.String("environment", environment),
 	)
+
+	// Initialize Redis for APQ
+	redisAddr := env.GetString("REDIS_ADDR", "localhost:6379")
+	redisClient, err := redis.NewClient(redisAddr, "", 0)
+	if err != nil {
+		logger.Warn("Failed to connect to Redis, falling back to in-memory cache",
+			zap.Error(err),
+			zap.String("redis_addr", redisAddr),
+		)
+		redisClient = nil
+	}
+	if redisClient != nil {
+		defer redisClient.Close()
+		logger.Info("Connected to Redis", zap.String("addr", redisAddr))
+	}
 
 	authAddr := env.GetString("AUTH_SERVICE_ADDR", "localhost:50052")
 	userAddr := env.GetString("USER_SERVICE_ADDR", "localhost:50051")
@@ -77,16 +98,81 @@ func main() {
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000))
 
 	srv.Use(extension.Introspection{})
-	srv.Use(extension.AutomaticPersistedQuery{
-		Cache: lru.New[string](100),
+
+	// Use Redis for APQ if available, otherwise fallback to LRU cache
+	if redisClient != nil {
+		apqCache := redis.NewAPQCache(redisClient.Client, 24*time.Hour)
+		srv.Use(extension.AutomaticPersistedQuery{
+			Cache: apqCache,
+		})
+		logger.Info("APQ enabled with Redis cache")
+	} else {
+		srv.Use(extension.AutomaticPersistedQuery{
+			Cache: lru.New[string](100),
+		})
+		logger.Info("APQ enabled with LRU cache (in-memory)")
+	}
+
+	// Setup router with middleware
+	router := chi.NewRouter()
+
+	// Core middleware stack
+	router.Use(chiMiddleware.RequestID)
+	router.Use(chiMiddleware.RealIP)
+	router.Use(chiMiddleware.Logger)
+	router.Use(chiMiddleware.Recoverer)
+	router.Use(chiMiddleware.Timeout(60 * time.Second))
+
+	// CORS configuration
+	allowedOrigins := env.GetString("CORS_ALLOWED_ORIGINS", "*")
+	var corsOrigins []string
+	if allowedOrigins == "*" {
+		corsOrigins = []string{"*"}
+	} else {
+		corsOrigins = strings.Split(allowedOrigins, ",")
+	}
+
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   corsOrigins,
+		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token", "X-Request-ID"},
+		ExposedHeaders:   []string{"Link", "X-Request-ID"},
+		AllowCredentials: allowedOrigins != "*", // credentials not allowed with wildcard
+		MaxAge:           300,                   // 5 minutes
+	}))
+
+	// Compress responses
+	router.Use(chiMiddleware.Compress(5))
+
+	// Security headers
+	router.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("X-Content-Type-Options", "nosniff")
+			w.Header().Set("X-Frame-Options", "DENY")
+			w.Header().Set("X-XSS-Protection", "1; mode=block")
+			w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
+			if environment == "production" {
+				w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+			}
+			next.ServeHTTP(w, r)
+		})
 	})
 
-	authMiddleware := middleware.AuthMiddleware(authClient)
+	// Health check endpoint
+	router.Get("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":"ok","service":"api-gateway"}`))
+	})
 
-	http.Handle("/", playground.Handler("GraphQL Playground", "/query"))
-	http.Handle("/playground", playground.Handler("GraphQL Playground", "/query"))
-	http.Handle("/graphql", playground.Handler("GraphQL Playground", "/query"))
-	http.Handle("/query", authMiddleware(srv))
+	// GraphQL Playground routes
+	router.Get("/", playground.Handler("GraphQL Playground", "/query"))
+	router.Get("/playground", playground.Handler("GraphQL Playground", "/query"))
+	router.Get("/graphql", playground.Handler("GraphQL Playground", "/query"))
+
+	// GraphQL API endpoint with auth middleware
+	authMiddleware := middleware.AuthMiddleware(authClient)
+	router.Handle("/query", authMiddleware(srv))
 
 	logger.Info("╔═══════════════════════════════════════════════════════════╗")
 	logger.Info("║                                                           ║")
@@ -98,10 +184,16 @@ func main() {
 		zap.String("playground", "http://localhost:"+port+"/playground"),
 		zap.String("graphql", "http://localhost:"+port+"/graphql"),
 		zap.String("endpoint", "http://localhost:"+port+"/query"),
+		zap.String("health", "http://localhost:"+port+"/health"),
+	)
+	logger.Info("Middleware enabled",
+		zap.String("cors_origins", allowedOrigins),
+		zap.Bool("compression", true),
+		zap.Bool("security_headers", true),
 	)
 
 	logger.Info("Starting HTTP server", zap.String("port", port))
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
+	if err := http.ListenAndServe(":"+port, router); err != nil {
 		logger.Fatal("HTTP server failed", zap.Error(err))
 	}
 }
