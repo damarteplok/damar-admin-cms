@@ -1,10 +1,13 @@
 import { Outlet } from '@tanstack/react-router'
 import { Navbar1 } from '@/components/navbar1'
+import { Footer1 } from '@/components/footer1'
+import { useAuth } from '@/lib/auth-hooks'
+import { UserNav } from './UserNav'
+import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function PublicLayout({ children }: { children?: React.ReactNode }) {
-  // Check if user is logged in (simple check, SSR is disabled for this route)
-  const isLoggedIn =
-    typeof window !== 'undefined' && !!localStorage.getItem('token')
+  const { isAuthenticated, isHydrated } = useAuth()
 
   const menuItems = [
     { title: 'Home', url: '/' },
@@ -12,18 +15,39 @@ export function PublicLayout({ children }: { children?: React.ReactNode }) {
     { title: 'Pricing', url: '/pricing' },
     { title: 'Blog', url: '/blog' },
     { title: 'Contact', url: '/contact' },
-    { title: 'Workspace', url: '/workspace' },
+    ...(isAuthenticated ? [{ title: 'Workspace', url: '/workspace' }] : []),
   ]
 
-  const authConfig = isLoggedIn
-    ? {
-        login: { title: 'Dashboard', url: '/admin' },
-        signup: { title: 'Logout', url: '#' },
-      }
-    : {
-        login: { title: 'Login', url: '/login' },
-        signup: { title: 'Sign Up', url: '/signup' },
-      }
+  const authConfig = {
+    login: { title: 'Login', url: '/login' },
+    signup: { title: 'Sign Up', url: '/signup' },
+  }
+
+  const renderAuthComponent = () => {
+    if (!isHydrated) {
+      return (
+        <div className="flex gap-2">
+          <Skeleton className="h-9 w-9" />
+        </div>
+      )
+    }
+
+    // After hydration, show appropriate UI
+    if (isAuthenticated) {
+      return <UserNav />
+    }
+
+    return (
+      <>
+        <Button asChild variant="outline" size="sm">
+          <a href="/login">Login</a>
+        </Button>
+        <Button asChild size="sm">
+          <a href="/signup">Sign Up</a>
+        </Button>
+      </>
+    )
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -37,6 +61,7 @@ export function PublicLayout({ children }: { children?: React.ReactNode }) {
         }}
         menu={menuItems}
         auth={authConfig}
+        authComponent={renderAuthComponent()}
       />
 
       {/* Main Content with Container */}
@@ -45,35 +70,7 @@ export function PublicLayout({ children }: { children?: React.ReactNode }) {
       </main>
 
       {/* Footer */}
-      <footer className="border-t bg-muted/50">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground">
-              © 2025 Damar CMS. All rights reserved.
-            </p>
-            <div className="flex gap-6">
-              <a
-                href="#"
-                className="text-sm text-muted-foreground hover:text-primary"
-              >
-                Privacy
-              </a>
-              <a
-                href="#"
-                className="text-sm text-muted-foreground hover:text-primary"
-              >
-                Terms
-              </a>
-              <a
-                href="#"
-                className="text-sm text-muted-foreground hover:text-primary"
-              >
-                Support
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer1 />
     </div>
   )
 }

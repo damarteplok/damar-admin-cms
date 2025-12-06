@@ -8,6 +8,7 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { Provider as UrqlProvider } from 'urql'
 import { urqlClient } from '../lib/urql'
+import { AuthProvider } from '../lib/auth-context'
 
 import appCss from '../styles.css?url'
 
@@ -68,18 +69,20 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <UrqlProvider value={urqlClient}>
-          {children}
-          <TanStackDevtools
-            config={{
-              position: 'bottom-right',
-            }}
-            plugins={[
-              {
-                name: 'Tanstack Router',
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-            ]}
-          />
+          <AuthProvider>
+            {children}
+            <TanStackDevtools
+              config={{
+                position: 'bottom-right',
+              }}
+              plugins={[
+                {
+                  name: 'Tanstack Router',
+                  render: <TanStackRouterDevtoolsPanel />,
+                },
+              ]}
+            />
+          </AuthProvider>
         </UrqlProvider>
         <Scripts />
       </body>

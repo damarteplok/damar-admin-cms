@@ -9,46 +9,102 @@ import {
   FieldSeparator,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useMutation } from 'urql'
+import { useForm } from '@tanstack/react-form'
+import { LOGIN_MUTATION, type LoginResponse } from '@/lib/graphql/auth.graphql'
+import { useAuth } from '@/lib/auth-hooks'
+import { AlertCircle } from 'lucide-react'
 import { useState } from 'react'
-import { LOGIN_MUTATION } from '@/lib/graphql/mutations/auth'
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
   const navigate = useNavigate()
-  const [loginResult, login] = useMutation(LOGIN_MUTATION)
+  const auth = useAuth()
+  const [loginResult, loginMutation] =
+    useMutation<LoginResponse>(LOGIN_MUTATION)
+  const [loginError, setLoginError] = useState<string | null>(null)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
+  const form = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    onSubmit: async ({ value }) => {
+      try {
+        setLoginError(null) // Clear previous errors
 
-    const result = await login({ email, password })
+        const result = await loginMutation({
+          input: {
+            email: value.email,
+            password: value.password,
+          },
+        })
 
-    if (result.error) {
-      setError(result.error.message)
-      return
-    }
+        // Handle GraphQL transport errors (network, parsing, etc)
+        if (result.error) {
+          const errorMessage =
+            result.error.graphQLErrors?.[0]?.message || result.error.message
+          setLoginError(errorMessage)
+          return
+        }
 
-    if (result.data?.login) {
-      localStorage.setItem('token', result.data.login.token)
-      navigate({ to: '/admin' })
-    }
-  }
+        // Handle business logic errors (success: false)
+        if (!result.data?.login.success) {
+          setLoginError(result.data?.login.message || 'Login failed')
+          return
+        }
+
+        // Success case
+        if (result.data.login.data) {
+          const { accessToken, refreshToken, user } = result.data.login.data
+
+          // Update auth context
+          auth.login(accessToken, refreshToken, user)
+
+          // Redirect to home page (not admin)
+          navigate({ to: '/' })
+        } else {
+          setLoginError('Login response data is missing')
+        }
+      } catch (error) {
+        // Catch any unexpected errors
+        setLoginError(
+          error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred',
+        )
+      }
+    },
+  })
 
   return (
     <div
       className={cn('flex flex-col gap-6 max-w-4xl mx-auto w-full', className)}
       {...props}
     >
+      {/* Display submission errors at the top */}
+      {loginError && (
+        <Alert variant="destructive">
+          <AlertCircle />
+          <AlertTitle>Login Failed</AlertTitle>
+          <AlertDescription>{loginError}</AlertDescription>
+        </Alert>
+      )}
+
       <Card className="overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8" onSubmit={handleSubmit}>
+          <form
+            className="p-6 md:p-8"
+            onSubmit={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              form.handleSubmit()
+            }}
+          >
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -56,48 +112,94 @@ export function LoginForm({
                   Login to your Damar CMS account
                 </p>
               </div>
+
+              <form.Field
+                name="email"
+                validators={{
+                  onChange: ({ value }) => {
+                    if (!value) return 'Email is required'
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+                      return 'Invalid email address'
+                    return undefined
+                  },
+                }}
+              >
+                {(field) => (
+                  <Field>
+                    <FieldLabel htmlFor="email">Email</FieldLabel>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="m@example.com"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                    {field.state.meta.errors.length > 0 && (
+                      <div className="text-sm text-red-600">
+                        {String(field.state.meta.errors[0])}
+                      </div>
+                    )}
+                  </Field>
+                )}
+              </form.Field>
+
+              <form.Field
+                name="password"
+                validators={{
+                  onChange: ({ value }) => {
+                    if (!value) return 'Password is required'
+                    if (value.length < 8)
+                      return 'Password must be at least 8 characters'
+                    return undefined
+                  },
+                }}
+              >
+                {(field) => (
+                  <Field>
+                    <div className="flex items-center">
+                      <FieldLabel htmlFor="password">Password</FieldLabel>
+                      <a
+                        href="#"
+                        className="ml-auto text-sm underline-offset-2 hover:underline"
+                      >
+                        Forgot your password?
+                      </a>
+                    </div>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                    {field.state.meta.errors.length > 0 && (
+                      <div className="text-sm text-red-600">
+                        {String(field.state.meta.errors[0])}
+                      </div>
+                    )}
+                  </Field>
+                )}
+              </form.Field>
+
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </Field>
-              <Field>
-                <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <a
-                    href="#"
-                    className="ml-auto text-sm underline-offset-2 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </Field>
-              {error && (
-                <div className="text-sm text-red-600 bg-red-50 p-2 rounded">
-                  {error}
-                </div>
-              )}
-              <Field>
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={loginResult.fetching}
+                <form.Subscribe
+                  selector={(state) => [state.canSubmit, state.isSubmitting]}
                 >
-                  {loginResult.fetching ? 'Logging in...' : 'Login'}
-                </Button>
+                  {([canSubmit, isSubmitting]) => (
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      disabled={
+                        !canSubmit || isSubmitting || loginResult.fetching
+                      }
+                    >
+                      {isSubmitting || loginResult.fetching
+                        ? 'Logging in...'
+                        : 'Login'}
+                    </Button>
+                  )}
+                </form.Subscribe>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
