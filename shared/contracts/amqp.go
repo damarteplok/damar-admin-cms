@@ -48,4 +48,10 @@ const (
 	NotificationCmdSendEmail = "notification.cmd.send_email"
 	NotificationCmdSendSMS   = "notification.cmd.send_sms"
 	NotificationCmdSendPush  = "notification.cmd.send_push"
+
+	// Product events (product.event.*)
+	ProductEventCreated      = "product.event.created"
+	ProductEventUpdated      = "product.event.updated"
+	ProductEventDeleted      = "product.event.deleted"
+	ProductEventPriceChanged = "product.event.price_changed"
 )

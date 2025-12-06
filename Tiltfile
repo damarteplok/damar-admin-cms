@@ -213,6 +213,42 @@ local_resource(
 )
 
 #############################################
+# 9. Frontend - Route Generator (TanStack Router)
+#############################################
+
+local_resource(
+    'generate-routes',
+    cmd='cd web && pnpm run generate-routes',
+    deps=[
+        'web/src/routes',
+    ],
+    labels=['frontend'],
+)
+
+#############################################
+# 10. Frontend Web (Vite Dev Server - Port 3000)
+#############################################
+
+local_resource(
+    'web-frontend',
+    serve_cmd='cd web && pnpm exec vite dev --port 3000',
+    serve_dir='.',
+    deps=[
+        'web/src',
+        'web/package.json',
+    ],
+    readiness_probe=probe(
+        period_secs=5,
+        http_get=http_get_action(port=3000, path='/')
+    ),
+    labels=['frontend'],
+    resource_deps=['api-gateway', 'generate-routes'],
+    links=[
+        link('http://localhost:3000', 'Frontend App'),
+    ],
+)
+
+#############################################
 # Development Tools
 #############################################
 
@@ -245,6 +281,7 @@ print("""
    - tenant-service    : gRPC Port 50053
    - product-service   : gRPC Port 50054
    - api-gateway       : HTTP Port 8080 (GraphQL Playground)
+   - web-frontend      : HTTP Port 3000 (TanStack Start)
 
 🔧 Optional Services (manual start via Tilt UI):
    - billing-service      : gRPC Port 50055
@@ -255,6 +292,7 @@ print("""
    - generate-graphql  : Generate GraphQL resolvers
 
 🌐 Quick Links:
+   - Frontend App: http://localhost:3000
    - GraphQL Playground: http://localhost:8080
    - Tilt UI: http://localhost:10350
 

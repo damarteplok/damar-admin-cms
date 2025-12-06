@@ -77,6 +77,24 @@ func main() {
 		}
 	}()
 
+	go func() {
+		if err := eventConsumer.ConsumeProductCreated(ctx); err != nil {
+			logger.Fatal("Failed to consume product.created events", zap.Error(err))
+		}
+	}()
+
+	go func() {
+		if err := eventConsumer.ConsumeProductUpdated(ctx); err != nil {
+			logger.Fatal("Failed to consume product.updated events", zap.Error(err))
+		}
+	}()
+
+	go func() {
+		if err := eventConsumer.ConsumeProductDeleted(ctx); err != nil {
+			logger.Fatal("Failed to consume product.deleted events", zap.Error(err))
+		}
+	}()
+
 	logger.Info("Notification service started and consuming events")
 
 	// Graceful shutdown

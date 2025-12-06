@@ -11,6 +11,7 @@ import (
 	"github.com/damarteplok/damar-admin-cms/services/product-service/internal/infrastructure/grpc"
 	"github.com/damarteplok/damar-admin-cms/services/product-service/internal/infrastructure/repository"
 	"github.com/damarteplok/damar-admin-cms/services/product-service/internal/service"
+	"github.com/damarteplok/damar-admin-cms/shared/amqp"
 	"github.com/damarteplok/damar-admin-cms/shared/database"
 	"github.com/damarteplok/damar-admin-cms/shared/env"
 	"github.com/damarteplok/damar-admin-cms/shared/logger"
@@ -49,6 +50,21 @@ func main() {
 
 	logger.Info("Successfully connected to database")
 
+	// Connect to RabbitMQ
+	rabbitmqURL := env.GetString("RABBITMQ_URL", "amqp://guest:guest@localhost:5672/")
+	rabbitmqConn, err := amqp.NewConnection(rabbitmqURL)
+	if err != nil {
+		logger.Fatal("Failed to connect to RabbitMQ", zap.Error(err))
+	}
+	defer rabbitmqConn.Close()
+
+	// Initialize AMQP publisher
+	publisher, err := amqp.NewPublisher(rabbitmqConn, "damar.exchange")
+	if err != nil {
+		logger.Fatal("Failed to create AMQP publisher", zap.Error(err))
+	}
+	logger.Info("Successfully initialized AMQP publisher")
+
 	// Initialize repositories
 	productRepo := repository.NewProductRepository(pool)
 	planRepo := repository.NewPlanRepository(pool)
@@ -64,7 +80,7 @@ func main() {
 	discountPaymentProviderDataRepo := repository.NewDiscountPaymentProviderDataRepository(pool)
 
 	// Initialize services
-	productService := service.NewProductService(productRepo)
+	productService := service.NewProductService(productRepo, publisher)
 	planService := service.NewPlanService(planRepo, productRepo)
 	planPriceService := service.NewPlanPriceService(planPriceRepo, planRepo)
 	planMeterService := service.NewPlanMeterService(planMeterRepo)

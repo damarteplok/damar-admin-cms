@@ -174,3 +174,132 @@ func (ec *EventConsumer) ConsumeVerificationRequested(ctx context.Context) error
 		return nil
 	})
 }
+
+// ConsumeProductCreated consumes product.event.created events
+func (ec *EventConsumer) ConsumeProductCreated(ctx context.Context) error {
+	consumer, err := amqp.NewConsumer(
+		ec.conn,
+		"notification.product.created",
+		"damar.exchange",
+		contracts.ProductEventCreated,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to create consumer: %w", err)
+	}
+
+	logger.Info("Started consuming product.created events")
+
+	return consumer.Consume(func(body []byte) error {
+		var message contracts.AmqpMessage
+		if err := json.Unmarshal(body, &message); err != nil {
+			logger.Error("Failed to unmarshal product.created message", zap.Error(err))
+			return err
+		}
+
+		var eventData map[string]interface{}
+		if err := json.Unmarshal(message.Data, &eventData); err != nil {
+			logger.Error("Failed to unmarshal event data", zap.Error(err))
+			return err
+		}
+
+		productID := message.OwnerID
+		productName, _ := eventData["name"].(string)
+		productSlug, _ := eventData["slug"].(string)
+
+		logger.Info("Product created event received",
+			zap.String("product_id", productID),
+			zap.String("name", productName),
+			zap.String("slug", productSlug))
+
+		// TODO: Send notification to admin about new product
+		// For now, just log the event
+
+		return nil
+	})
+}
+
+// ConsumeProductUpdated consumes product.event.updated events
+func (ec *EventConsumer) ConsumeProductUpdated(ctx context.Context) error {
+	consumer, err := amqp.NewConsumer(
+		ec.conn,
+		"notification.product.updated",
+		"damar.exchange",
+		contracts.ProductEventUpdated,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to create consumer: %w", err)
+	}
+
+	logger.Info("Started consuming product.updated events")
+
+	return consumer.Consume(func(body []byte) error {
+		var message contracts.AmqpMessage
+		if err := json.Unmarshal(body, &message); err != nil {
+			logger.Error("Failed to unmarshal product.updated message", zap.Error(err))
+			return err
+		}
+
+		var eventData map[string]interface{}
+		if err := json.Unmarshal(message.Data, &eventData); err != nil {
+			logger.Error("Failed to unmarshal event data", zap.Error(err))
+			return err
+		}
+
+		productID := message.OwnerID
+		productName, _ := eventData["name"].(string)
+		productSlug, _ := eventData["slug"].(string)
+
+		logger.Info("Product updated event received",
+			zap.String("product_id", productID),
+			zap.String("name", productName),
+			zap.String("slug", productSlug))
+
+		// TODO: Send notification to admin about product update
+		// For now, just log the event
+
+		return nil
+	})
+}
+
+// ConsumeProductDeleted consumes product.event.deleted events
+func (ec *EventConsumer) ConsumeProductDeleted(ctx context.Context) error {
+	consumer, err := amqp.NewConsumer(
+		ec.conn,
+		"notification.product.deleted",
+		"damar.exchange",
+		contracts.ProductEventDeleted,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to create consumer: %w", err)
+	}
+
+	logger.Info("Started consuming product.deleted events")
+
+	return consumer.Consume(func(body []byte) error {
+		var message contracts.AmqpMessage
+		if err := json.Unmarshal(body, &message); err != nil {
+			logger.Error("Failed to unmarshal product.deleted message", zap.Error(err))
+			return err
+		}
+
+		var eventData map[string]interface{}
+		if err := json.Unmarshal(message.Data, &eventData); err != nil {
+			logger.Error("Failed to unmarshal event data", zap.Error(err))
+			return err
+		}
+
+		productID := message.OwnerID
+		productName, _ := eventData["name"].(string)
+		productSlug, _ := eventData["slug"].(string)
+
+		logger.Info("Product deleted event received",
+			zap.String("product_id", productID),
+			zap.String("name", productName),
+			zap.String("slug", productSlug))
+
+		// TODO: Send notification to admin about product deletion
+		// For now, just log the event
+
+		return nil
+	})
+}
