@@ -58,3 +58,4 @@ kubeconfig
 # Local development
 .tilt/
 .tilt.dev.json
+.vscode/
