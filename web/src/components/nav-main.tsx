@@ -1,5 +1,5 @@
 import { ChevronRight, type LucideIcon } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 
 import {
   Collapsible,
@@ -32,7 +32,10 @@ export function NavMain({
     }[]
   }[]
 }) {
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
+  const location = useLocation()
+  const pathname =
+    location?.pathname ??
+    (typeof window !== 'undefined' ? window.location.pathname : '')
 
   return (
     <SidebarGroup>
