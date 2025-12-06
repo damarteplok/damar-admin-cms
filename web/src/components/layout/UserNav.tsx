@@ -56,7 +56,9 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {user.isAdmin && (
-          <DropdownMenuItem onClick={handleAdminClick}>Admin</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleAdminClick}>
+            Admin Panel
+          </DropdownMenuItem>
         )}
         <DropdownMenuItem onClick={handleLogout}>Sign out</DropdownMenuItem>
       </DropdownMenuContent>

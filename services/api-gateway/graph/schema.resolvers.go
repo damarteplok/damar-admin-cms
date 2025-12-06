@@ -2329,7 +2329,7 @@ func (r *queryResolver) TenantBySlug(ctx context.Context, slug string) (*model.T
 }
 
 // Tenants is the resolver for the tenants field.
-func (r *queryResolver) Tenants(ctx context.Context, page *int32, perPage *int32) (*model.TenantListResponse, error) {
+func (r *queryResolver) Tenants(ctx context.Context, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) (*model.TenantListResponse, error) {
 	// Check if user is admin
 	userClaims, err := middleware.GetUserFromContext(ctx)
 	if err != nil || userClaims == nil || !userClaims.IsAdmin {
@@ -2349,10 +2349,29 @@ func (r *queryResolver) Tenants(ctx context.Context, page *int32, perPage *int32
 		perPageValue = *perPage
 	}
 
+	// Extract optional search and sort params
+	searchStr := ""
+	if search != nil {
+		searchStr = *search
+	}
+
+	sortByStr := ""
+	if sortBy != nil {
+		sortByStr = *sortBy
+	}
+
+	sortOrderStr := ""
+	if sortOrder != nil {
+		sortOrderStr = *sortOrder
+	}
+
 	// Call tenant-service via gRPC
 	resp, err := r.TenantClient.GetAllTenants(ctx, &tenantPb.GetAllTenantsRequest{
-		Page:    pageValue,
-		PerPage: perPageValue,
+		Page:      pageValue,
+		PerPage:   perPageValue,
+		Search:    searchStr,
+		SortBy:    sortByStr,
+		SortOrder: sortOrderStr,
 	})
 	if err != nil {
 		return &model.TenantListResponse{

@@ -20,6 +20,7 @@ import { Route as LayoutPricingRouteImport } from './routes/_layout/pricing'
 import { Route as LayoutFeaturesRouteImport } from './routes/_layout/features'
 import { Route as LayoutContactRouteImport } from './routes/_layout/contact'
 import { Route as LayoutBlogRouteImport } from './routes/_layout/blog'
+import { Route as AdminWorkspacesIndexRouteImport } from './routes/admin/workspaces/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 
 const SignupRoute = SignupRouteImport.update({
@@ -76,6 +77,11 @@ const LayoutBlogRoute = LayoutBlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => LayoutRoute,
 } as any)
+const AdminWorkspacesIndexRoute = AdminWorkspacesIndexRouteImport.update({
+  id: '/workspaces/',
+  path: '/workspaces/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
@@ -94,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/': typeof LayoutIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
+  '/admin/workspaces': typeof AdminWorkspacesIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -106,6 +113,7 @@ export interface FileRoutesByTo {
   '/': typeof LayoutIndexRoute
   '/admin': typeof AdminIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
+  '/admin/workspaces': typeof AdminWorkspacesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -121,6 +129,7 @@ export interface FileRoutesById {
   '/_layout/': typeof LayoutIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
+  '/admin/workspaces/': typeof AdminWorkspacesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/'
     | '/admin/users'
+    | '/admin/workspaces'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin/users'
+    | '/admin/workspaces'
   id:
     | '__root__'
     | '/_layout'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/_layout/'
     | '/admin/'
     | '/admin/users/'
+    | '/admin/workspaces/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -250,6 +262,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutBlogRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/admin/workspaces/': {
+      id: '/admin/workspaces/'
+      path: '/workspaces'
+      fullPath: '/admin/workspaces'
+      preLoaderRoute: typeof AdminWorkspacesIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/users/': {
       id: '/admin/users/'
       path: '/users'
@@ -284,11 +303,13 @@ const LayoutRouteWithChildren =
 interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
+  AdminWorkspacesIndexRoute: typeof AdminWorkspacesIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
+  AdminWorkspacesIndexRoute: AdminWorkspacesIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

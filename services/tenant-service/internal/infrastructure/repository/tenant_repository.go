@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/damarteplok/damar-admin-cms/services/tenant-service/internal/domain"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -196,28 +197,63 @@ func (r *TenantRepository) Delete(ctx context.Context, id int64) error {
 	return nil
 }
 
-func (r *TenantRepository) GetAll(ctx context.Context, page, perPage int) ([]*domain.Tenant, int64, error) {
+func (r *TenantRepository) GetAll(ctx context.Context, page, perPage int, search, sortBy, sortOrder string) ([]*domain.Tenant, int64, error) {
 	offset := (page - 1) * perPage
 
+	// Build WHERE clause with search
+	whereClause := "deleted_at IS NULL"
+	var args []interface{}
+	argIndex := 1
+
+	if search != "" {
+		searchPattern := "%" + search + "%"
+		whereClause += fmt.Sprintf(" AND (name ILIKE $%d OR slug ILIKE $%d OR domain ILIKE $%d)", argIndex, argIndex, argIndex)
+		args = append(args, searchPattern)
+		argIndex++
+	}
+
 	// Get total count
-	countQuery := `SELECT COUNT(*) FROM tenants WHERE deleted_at IS NULL`
+	countQuery := fmt.Sprintf("SELECT COUNT(*) FROM tenants WHERE %s", whereClause)
 	var total int64
-	err := r.db.QueryRow(ctx, countQuery).Scan(&total)
+	err := r.db.QueryRow(ctx, countQuery, args...).Scan(&total)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to count tenants: %w", err)
 	}
 
+	// Validate and build ORDER BY clause
+	if sortBy == "" {
+		sortBy = "created_at"
+	}
+
+	// Whitelist allowed sort fields (security: prevent SQL injection)
+	allowedSortFields := map[string]bool{
+		"id": true, "name": true, "slug": true,
+		"domain": true, "created_at": true, "updated_at": true,
+	}
+	if !allowedSortFields[sortBy] {
+		sortBy = "created_at"
+	}
+
+	// Validate sort order
+	if sortOrder != "asc" && sortOrder != "desc" {
+		sortOrder = "desc"
+	}
+
+	orderClause := fmt.Sprintf("%s %s", sortBy, strings.ToUpper(sortOrder))
+
 	// Get paginated results
-	query := `
+	query := fmt.Sprintf(`
 		SELECT id, uuid, name, slug, domain, is_name_auto_generated, 
 		       created_by, created_at, updated_at, deleted_at
 		FROM tenants
-		WHERE deleted_at IS NULL
-		ORDER BY created_at DESC
-		LIMIT $1 OFFSET $2
-	`
+		WHERE %s
+		ORDER BY %s
+		LIMIT $%d OFFSET $%d
+	`, whereClause, orderClause, argIndex, argIndex+1)
 
-	rows, err := r.db.Query(ctx, query, perPage, offset)
+	args = append(args, perPage, offset)
+
+	rows, err := r.db.Query(ctx, query, args...)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to get tenants: %w", err)
 	}

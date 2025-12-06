@@ -32,7 +32,6 @@ export function PublicLayout({ children }: { children?: React.ReactNode }) {
       )
     }
 
-    // After hydration, show appropriate UI
     if (isAuthenticated) {
       return <UserNav />
     }
@@ -51,7 +50,6 @@ export function PublicLayout({ children }: { children?: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Navbar */}
       <Navbar1
         logo={{
           url: '/',
@@ -64,12 +62,10 @@ export function PublicLayout({ children }: { children?: React.ReactNode }) {
         authComponent={renderAuthComponent()}
       />
 
-      {/* Main Content with Container */}
       <main className="flex-1">
         <div className="container mx-auto px-4">{children || <Outlet />}</div>
       </main>
 
-      {/* Footer */}
       <Footer1 />
     </div>
   )

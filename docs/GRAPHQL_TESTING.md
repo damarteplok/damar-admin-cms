@@ -533,11 +533,17 @@ mutation {
       user {
         id
         name
+        isAdmin
       }
     }
   }
 }
 ```
+
+**Note**: After successful login:
+
+- Regular users (isAdmin: false) will be redirected to `/` (homepage)
+- Admin users (isAdmin: true) can access `/admin` via the "Admin" menu item in their profile dropdown
 
 3. **Set Authorization header dengan accessToken**
 
@@ -551,6 +557,7 @@ query {
       id
       name
       email
+      isAdmin
     }
   }
 }
@@ -933,6 +940,91 @@ query GetAllTenants {
         domain
         createdBy
         createdAt
+      }
+      total
+      page
+      perPage
+    }
+  }
+}
+```
+
+**Optional Parameters:**
+
+- `search`: Search across tenant name, slug, and domain (case-insensitive)
+- `sortBy`: Field to sort by (`name`, `slug`, `domain`, `created_at`, `updated_at`)
+- `sortOrder`: Sort direction (`asc` or `desc`)
+
+**Query with Search & Sort:**
+
+```graphql
+query SearchAndSortTenants {
+  tenants(
+    page: 1
+    perPage: 10
+    search: "acme"
+    sortBy: "name"
+    sortOrder: "asc"
+  ) {
+    success
+    message
+    data {
+      tenants {
+        id
+        name
+        slug
+        domain
+        createdAt
+      }
+      total
+      page
+      perPage
+    }
+  }
+}
+```
+
+**Examples:**
+
+```graphql
+# Search only
+query SearchTenants {
+  tenants(search: "corp") {
+    data {
+      tenants {
+        name
+        slug
+      }
+      total
+    }
+  }
+}
+
+# Sort by created date (newest first)
+query RecentTenants {
+  tenants(sortBy: "created_at", sortOrder: "desc") {
+    data {
+      tenants {
+        name
+        createdAt
+      }
+    }
+  }
+}
+
+# Search + Sort + Pagination
+query SearchSortPaginate {
+  tenants(
+    page: 2
+    perPage: 20
+    search: "example.com"
+    sortBy: "name"
+    sortOrder: "asc"
+  ) {
+    data {
+      tenants {
+        name
+        domain
       }
       total
       page

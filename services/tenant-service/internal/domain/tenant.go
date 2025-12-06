@@ -52,7 +52,7 @@ type TenantRepository interface {
 	Create(ctx context.Context, tenant *Tenant) (*Tenant, error)
 	Update(ctx context.Context, tenant *Tenant) (*Tenant, error)
 	Delete(ctx context.Context, id int64) error
-	GetAll(ctx context.Context, page, perPage int) ([]*Tenant, int64, error)
+	GetAll(ctx context.Context, page, perPage int, search, sortBy, sortOrder string) ([]*Tenant, int64, error)
 
 	// TenantUser operations
 	AddUserToTenant(ctx context.Context, tenantUser *TenantUser) (*TenantUser, error)
@@ -80,7 +80,7 @@ type TenantService interface {
 	CreateTenant(ctx context.Context, tenant *Tenant) (*Tenant, error)
 	UpdateTenant(ctx context.Context, tenant *Tenant) (*Tenant, error)
 	DeleteTenant(ctx context.Context, id int64) error
-	GetAllTenants(ctx context.Context, page, perPage int) ([]*Tenant, int64, error)
+	GetAllTenants(ctx context.Context, page, perPage int, search, sortBy, sortOrder string) ([]*Tenant, int64, error)
 
 	// TenantUser operations
 	AddUserToTenant(ctx context.Context, tenantUser *TenantUser) (*TenantUser, error)

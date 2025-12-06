@@ -973,6 +973,9 @@ type GetAllTenantsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
 	PerPage       int32                  `protobuf:"varint,2,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
+	Search        string                 `protobuf:"bytes,3,opt,name=search,proto3" json:"search,omitempty"`
+	SortBy        string                 `protobuf:"bytes,4,opt,name=sort_by,json=sortBy,proto3" json:"sort_by,omitempty"`
+	SortOrder     string                 `protobuf:"bytes,5,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1019,6 +1022,27 @@ func (x *GetAllTenantsRequest) GetPerPage() int32 {
 		return x.PerPage
 	}
 	return 0
+}
+
+func (x *GetAllTenantsRequest) GetSearch() string {
+	if x != nil {
+		return x.Search
+	}
+	return ""
+}
+
+func (x *GetAllTenantsRequest) GetSortBy() string {
+	if x != nil {
+		return x.SortBy
+	}
+	return ""
+}
+
+func (x *GetAllTenantsRequest) GetSortOrder() string {
+	if x != nil {
+		return x.SortOrder
+	}
+	return ""
 }
 
 type GetAllTenantsData struct {
@@ -2333,10 +2357,14 @@ const file_tenant_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"J\n" +
 	"\x14DeleteTenantResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"E\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\x95\x01\n" +
 	"\x14GetAllTenantsRequest\x12\x12\n" +
 	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x19\n" +
-	"\bper_page\x18\x02 \x01(\x05R\aperPage\"\x82\x01\n" +
+	"\bper_page\x18\x02 \x01(\x05R\aperPage\x12\x16\n" +
+	"\x06search\x18\x03 \x01(\tR\x06search\x12\x17\n" +
+	"\asort_by\x18\x04 \x01(\tR\x06sortBy\x12\x1d\n" +
+	"\n" +
+	"sort_order\x18\x05 \x01(\tR\tsortOrder\"\x82\x01\n" +
 	"\x11GetAllTenantsData\x12(\n" +
 	"\atenants\x18\x01 \x03(\v2\x0e.tenant.TenantR\atenants\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\x12\x12\n" +

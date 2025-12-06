@@ -184,6 +184,9 @@ func (s *TenantGRPCServer) DeleteTenant(ctx context.Context, req *pb.DeleteTenan
 func (s *TenantGRPCServer) GetAllTenants(ctx context.Context, req *pb.GetAllTenantsRequest) (*pb.GetAllTenantsResponse, error) {
 	page := int(req.Page)
 	perPage := int(req.PerPage)
+	search := req.Search
+	sortBy := req.SortBy
+	sortOrder := req.SortOrder
 
 	if page < 1 {
 		page = 1
@@ -192,7 +195,7 @@ func (s *TenantGRPCServer) GetAllTenants(ctx context.Context, req *pb.GetAllTena
 		perPage = 10
 	}
 
-	tenants, total, err := s.service.GetAllTenants(ctx, page, perPage)
+	tenants, total, err := s.service.GetAllTenants(ctx, page, perPage, search, sortBy, sortOrder)
 	if err != nil {
 		return &pb.GetAllTenantsResponse{
 			Success: false,

@@ -130,6 +130,9 @@ message DeleteTenantResponse {
 message GetAllTenantsRequest {
   int32 page = 1;
   int32 per_page = 2;
+  string search = 3;
+  string sort_by = 4;
+  string sort_order = 5;
 }
 
 message GetAllTenantsData {

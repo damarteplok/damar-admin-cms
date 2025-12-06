@@ -526,7 +526,13 @@ type Query {
   # Tenant queries (admin only)
   tenant(id: ID!): TenantResponse!
   tenantBySlug(slug: String!): TenantResponse!
-  tenants(page: Int, perPage: Int): TenantListResponse!
+  tenants(
+    page: Int
+    perPage: Int
+    search: String
+    sortBy: String
+    sortOrder: String
+  ): TenantListResponse!
   tenantUsers(tenantId: ID!): TenantUsersResponse!
   userTenants(userId: ID!): TenantUsersResponse!
 

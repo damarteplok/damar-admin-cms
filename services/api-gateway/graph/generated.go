@@ -280,7 +280,7 @@ type ComplexityRoot struct {
 		TenantSetting    func(childComplexity int, tenantID string, key string) int
 		TenantSettings   func(childComplexity int, tenantID string) int
 		TenantUsers      func(childComplexity int, tenantID string) int
-		Tenants          func(childComplexity int, page *int32, perPage *int32) int
+		Tenants          func(childComplexity int, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) int
 		User             func(childComplexity int, id string) int
 		UserTenants      func(childComplexity int, userID string) int
 		Users            func(childComplexity int, page *int32, perPage *int32) int
@@ -470,7 +470,7 @@ type QueryResolver interface {
 	VerifyResetToken(ctx context.Context, token string) (*model.ForgotPasswordResponse, error)
 	Tenant(ctx context.Context, id string) (*model.TenantResponse, error)
 	TenantBySlug(ctx context.Context, slug string) (*model.TenantResponse, error)
-	Tenants(ctx context.Context, page *int32, perPage *int32) (*model.TenantListResponse, error)
+	Tenants(ctx context.Context, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) (*model.TenantListResponse, error)
 	TenantUsers(ctx context.Context, tenantID string) (*model.TenantUsersResponse, error)
 	UserTenants(ctx context.Context, userID string) (*model.TenantUsersResponse, error)
 	TenantSetting(ctx context.Context, tenantID string, key string) (*model.TenantSettingResponse, error)
@@ -1690,7 +1690,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.Tenants(childComplexity, args["page"].(*int32), args["perPage"].(*int32)), true
+		return e.complexity.Query.Tenants(childComplexity, args["page"].(*int32), args["perPage"].(*int32), args["search"].(*string), args["sortBy"].(*string), args["sortOrder"].(*string)), true
 	case "Query.user":
 		if e.complexity.Query.User == nil {
 			break
@@ -2963,6 +2963,21 @@ func (ec *executionContext) field_Query_tenants_args(ctx context.Context, rawArg
 		return nil, err
 	}
 	args["perPage"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "search", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["search"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "sortBy", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["sortBy"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "sortOrder", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["sortOrder"] = arg4
 	return args, nil
 }
 
@@ -8286,7 +8301,7 @@ func (ec *executionContext) _Query_tenants(ctx context.Context, field graphql.Co
 		ec.fieldContext_Query_tenants,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Query().Tenants(ctx, fc.Args["page"].(*int32), fc.Args["perPage"].(*int32))
+			return ec.resolvers.Query().Tenants(ctx, fc.Args["page"].(*int32), fc.Args["perPage"].(*int32), fc.Args["search"].(*string), fc.Args["sortBy"].(*string), fc.Args["sortOrder"].(*string))
 		},
 		nil,
 		ec.marshalNTenantListResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐTenantListResponse,

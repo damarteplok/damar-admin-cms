@@ -102,14 +102,14 @@ func (s *TenantService) DeleteTenant(ctx context.Context, id int64) error {
 	return s.repo.Delete(ctx, id)
 }
 
-func (s *TenantService) GetAllTenants(ctx context.Context, page, perPage int) ([]*domain.Tenant, int64, error) {
+func (s *TenantService) GetAllTenants(ctx context.Context, page, perPage int, search, sortBy, sortOrder string) ([]*domain.Tenant, int64, error) {
 	if page < 1 {
 		page = 1
 	}
 	if perPage < 1 || perPage > 100 {
 		perPage = 10
 	}
-	return s.repo.GetAll(ctx, page, perPage)
+	return s.repo.GetAll(ctx, page, perPage, search, sortBy, sortOrder)
 }
 
 // TenantUser operations
