@@ -60,6 +60,15 @@ export const LOGOUT_MUTATION = gql`
   }
 `
 
+export const FORGOT_PASSWORD_MUTATION = gql`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(email: $email) {
+      success
+      message
+    }
+  }
+`
+
 export interface LoginInput {
   email: string
   password: string
@@ -112,6 +121,13 @@ export interface MeResponse {
 
 export interface LogoutResponse {
   logout: {
+    success: boolean
+    message: string
+  }
+}
+
+export interface ForgotPasswordResponse {
+  forgotPassword: {
     success: boolean
     message: string
   }

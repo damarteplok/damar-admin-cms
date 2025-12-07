@@ -53,7 +53,7 @@ export function SignupForm({
       className={cn('flex flex-col gap-6 max-w-4xl mx-auto w-full', className)}
       {...props}
     >
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden !py-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <FieldGroup>
@@ -179,9 +179,10 @@ export function SignupForm({
           </form>
           <div className="bg-muted relative hidden md:block">
             <img
-              src="/placeholder.svg"
+              src="/gradient-blue.png"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              loading="lazy"
             />
           </div>
         </CardContent>

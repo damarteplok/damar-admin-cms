@@ -11,6 +11,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Link, useNavigate } from '@tanstack/react-router'
+// responsive image imports (vite-imagetools)
 import { useMutation } from 'urql'
 import { useForm } from '@tanstack/react-form'
 import { LOGIN_MUTATION, type LoginResponse } from '@/lib/graphql/auth.graphql'
@@ -95,7 +96,7 @@ export function LoginForm({
         </Alert>
       )}
 
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden !py-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form
             className="p-6 md:p-8"
@@ -159,12 +160,12 @@ export function LoginForm({
                   <Field>
                     <div className="flex items-center">
                       <FieldLabel htmlFor="password">Password</FieldLabel>
-                      <a
-                        href="#"
+                      <Link
+                        to="/forgot-password"
                         className="ml-auto text-sm underline-offset-2 hover:underline"
                       >
                         Forgot your password?
-                      </a>
+                      </Link>
                     </div>
                     <Input
                       id="password"
@@ -246,9 +247,10 @@ export function LoginForm({
           </form>
           <div className="bg-muted relative hidden md:block">
             <img
-              src="/placeholder.svg"
-              alt="Image"
+              src="/gradient-blue.png"
+              alt="Background"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              loading="lazy"
             />
           </div>
         </CardContent>
