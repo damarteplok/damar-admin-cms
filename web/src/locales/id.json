@@ -1,0 +1,78 @@
+{
+  "dashboard": {
+    "title": "Dasbor",
+    "mrr": "MRR",
+    "activeSubscriptions": "Langganan Aktif",
+    "totalRevenue": "Total pendapatan"
+  },
+  "nav": {
+    "dashboard": "Dasbor",
+    "workspaces": "Workspaces",
+    "subscription": "Langganan",
+    "packages": "Paket",
+    "plans": "Rencana",
+    "discounts": "Diskon",
+    "support": "Dukungan",
+    "feedback": "Masukan",
+    "language": "Bahasa"
+  },
+
+  "navbar": {
+    "home": "Beranda",
+    "products": {
+      "title": "Produk",
+      "blog": "Blog",
+      "blog_desc": "Berita industri terbaru, pembaruan, dan informasi",
+      "company": "Perusahaan",
+      "company_desc": "Misi kami adalah berinovasi dan memberdayakan dunia",
+      "careers": "Karir",
+      "careers_desc": "Telusuri lowongan pekerjaan dan temukan lingkungan kerja kami",
+      "support": "Dukungan",
+      "support_desc": "Hubungi tim dukungan kami atau kunjungi forum komunitas"
+    },
+    "resources": {
+      "title": "Sumber Daya",
+      "help_center": "Pusat Bantuan",
+      "help_center_desc": "Dapatkan semua jawaban yang Anda butuhkan di sini",
+      "contact_us": "Hubungi Kami",
+      "contact_us_desc": "Kami di sini untuk membantu Anda dengan pertanyaan apa pun",
+      "status": "Status",
+      "status_desc": "Periksa status layanan dan API kami saat ini",
+      "terms": "Ketentuan Layanan",
+      "terms_desc": "Syarat dan ketentuan penggunaan layanan kami"
+    },
+    "pricing": "Harga",
+    "features": "Fitur",
+    "contact": "Kontak",
+    "workspace": "Workspace",
+    "blog": "Blog",
+    "login": "Masuk",
+    "signup": "Daftar"
+  },
+
+  "auth": {
+    "verify_email_title": "Silakan verifikasi email Anda",
+    "verify_email_desc": "Kami telah mengirimkan tautan verifikasi ke email Anda — silakan periksa kotak masuk dan verifikasi alamat Anda untuk mengakses semua fitur."
+  },
+  "footer": {
+    "privacy": "Privasi",
+    "terms": "Ketentuan",
+    "support": "Dukungan"
+  },
+  "features": "Fitur",
+  "contact": "Kontak",
+  "workspace": "Workspace",
+
+  "filters": {
+    "startDate": "Tanggal Mulai",
+    "endDate": "Tanggal Akhir",
+    "period": "Periode"
+  },
+  "stats": {
+    "totalUserSubscriptionConversion": "Konversi langganan pengguna total",
+    "totalTransactions": "Total Transaksi",
+    "totalUsers": "Total Pengguna",
+    "averageConversion": "Rata-rata Konversi Langganan Pengguna",
+    "churnRate": "Gambaran tingkat churn"
+  }
+}

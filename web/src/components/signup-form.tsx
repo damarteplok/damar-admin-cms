@@ -71,13 +71,11 @@ export function SignupForm({
           return
         }
 
-        // Try to log the user in automatically
         const loginRes = await login({
           input: { email: value.email, password: value.password },
         })
 
         if (loginRes.error) {
-          // login failed; redirect to login page with a success notice
           setSuccessMessage('Account created successfully — please log in')
           setTimeout(() => navigate({ to: '/login' }), 1000)
           return
@@ -91,16 +89,20 @@ export function SignupForm({
 
         const { accessToken, refreshToken, user } = loginRes.data.login.data
 
-        // Persist auth and update context
-        auth.login(accessToken, refreshToken, {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          isAdmin: user.isAdmin,
-          emailVerified: user.emailVerified,
-        })
+        try {
+          await auth.login(accessToken, refreshToken, {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            emailVerified: user.emailVerified,
+          })
+        } catch (err) {
+          setSuccessMessage('Signed in — please log in')
+          setTimeout(() => navigate({ to: '/login' }), 1000)
+          return
+        }
 
-        // If the user hasn't verified email, set a persistent flag so other pages can show a banner
         if (!user.emailVerified) {
           setSuccessMessage(
             'Signed in — please verify your email (check your inbox). Redirecting...',

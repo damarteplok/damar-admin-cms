@@ -9,6 +9,7 @@ import { useAuth } from '@/lib/auth-hooks'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { useTranslation } from 'react-i18next'
 import { CheckCircle2Icon } from 'lucide-react'
 
 export const Route = createFileRoute('/verify-email')({
@@ -17,6 +18,7 @@ export const Route = createFileRoute('/verify-email')({
 
 function VerifyEmailPage() {
   const auth = useAuth()
+  const { t } = useTranslation()
   const [status, setStatus] = useState<
     'idle' | 'loading' | 'success' | 'error'
   >('idle')
@@ -110,7 +112,9 @@ function VerifyEmailPage() {
 
               <div className="mt-6 flex gap-3">
                 <Link to="/">
-                  <Button variant="outline">Home</Button>
+                  <Button variant="outline">
+                    {t('navbar.home', { defaultValue: 'Home' })}
+                  </Button>
                 </Link>
               </div>
             </CardContent>

@@ -9,6 +9,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import { Provider as UrqlProvider } from 'urql'
 import { urqlClient } from '../lib/urql'
 import { AuthProvider } from '../lib/auth-context'
+import '../i18n'
 
 import appCss from '../styles.css?url'
 
@@ -65,6 +66,20 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(() => {
+              try {
+                const theme = localStorage.getItem('theme');
+                if (theme === 'dark' || (!theme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (e) {}
+            })();`,
+          }}
+        />
         <HeadContent />
       </head>
       <body>

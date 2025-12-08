@@ -17,6 +17,9 @@ import {
 } from '@/components/ui/sidebar'
 import { useAuth } from '@/lib/auth-hooks'
 import { useNavigate } from '@tanstack/react-router'
+import LangSwitcher from '@/components/lang-switcher'
+import ThemeToggle from '@/components/theme-toggle'
+import { useTranslation } from 'react-i18next'
 
 export function NavUser() {
   const { isMobile } = useSidebar()
@@ -24,6 +27,7 @@ export function NavUser() {
   const navigate = useNavigate()
 
   if (!user) return null
+  const { t } = useTranslation()
 
   const getInitials = (name: string) => {
     return name
@@ -77,17 +81,27 @@ export function NavUser() {
                   <span className="truncate font-medium">{user.name}</span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
+                <div className="ml-auto">
+                  <ThemeToggle />
+                </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <div className="px-3 py-2">
+              <div className="text-xs text-muted-foreground mb-1">
+                {t('nav.language')}
+              </div>
+              <LangSwitcher className="w-full rounded-md border px-2 py-1 text-sm" />
+            </div>
+            <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Bell />
-              Notifications
+              {t('nav.notifications', 'Notifications')}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
-              Log out
+              {t('nav.logout', 'Log out')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

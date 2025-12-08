@@ -1,0 +1,78 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "mrr": "MRR",
+    "activeSubscriptions": "Active Subscriptions",
+    "totalRevenue": "Total revenue"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "workspaces": "Workspaces",
+    "subscription": "Subscription",
+    "packages": "Packages",
+    "plans": "Plans",
+    "discounts": "Discounts",
+    "support": "Support",
+    "feedback": "Feedback",
+    "language": "Language"
+  },
+
+  "navbar": {
+    "home": "Home",
+    "products": {
+      "title": "Products",
+      "blog": "Blog",
+      "blog_desc": "The latest industry news, updates, and info",
+      "company": "Company",
+      "company_desc": "Our mission is to innovate and empower the world",
+      "careers": "Careers",
+      "careers_desc": "Browse job listing and discover our workspace",
+      "support": "Support",
+      "support_desc": "Get in touch with our support team or visit our community forums"
+    },
+    "resources": {
+      "title": "Resources",
+      "help_center": "Help Center",
+      "help_center_desc": "Get all the answers you need right here",
+      "contact_us": "Contact Us",
+      "contact_us_desc": "We are here to help you with any questions you have",
+      "status": "Status",
+      "status_desc": "Check the current status of our services and APIs",
+      "terms": "Terms of Service",
+      "terms_desc": "Our terms and conditions for using our services"
+    },
+    "pricing": "Pricing",
+    "features": "Features",
+    "contact": "Contact",
+    "workspace": "Workspace",
+    "blog": "Blog",
+    "login": "Login",
+    "signup": "Sign up"
+  },
+
+  "auth": {
+    "verify_email_title": "Please verify your email",
+    "verify_email_desc": "We sent a verification link to your email — please check your inbox and verify your address to access all features."
+  },
+  "footer": {
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "support": "Support"
+  },
+  "features": "Features",
+  "contact": "Contact",
+  "workspace": "Workspace",
+
+  "filters": {
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "period": "Period"
+  },
+  "stats": {
+    "totalUserSubscriptionConversion": "Total user subscription conversion",
+    "totalTransactions": "Total Transactions",
+    "totalUsers": "Total Users",
+    "averageConversion": "Average User Subscription Conversion",
+    "churnRate": "Churn rate overview"
+  }
+}

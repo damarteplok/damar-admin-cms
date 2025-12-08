@@ -13,6 +13,7 @@ import {
 import { NavMain } from '@/components/nav-main'
 import { NavSecondary } from '@/components/nav-secondary'
 import { NavUser } from '@/components/nav-user'
+import { useTranslation } from 'react-i18next'
 import {
   Sidebar,
   SidebarContent,
@@ -23,63 +24,67 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 
-const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
-  navMain: [
-    {
-      title: 'Dashboard',
-      icon: TrendingUp,
-      url: '/admin',
-    },
-    {
-      title: 'Workspaces',
-      icon: Frame,
-      items: [
-        {
-          title: 'Workspaces',
-          url: '/admin/workspaces',
-        },
-      ],
-    },
-    {
-      title: 'Subscription',
-      icon: PieChart,
-      items: [
-        {
-          title: 'Packages',
-          url: '/admin/subscription/packages',
-        },
-        {
-          title: 'Plans',
-          url: '/admin/subscription/plans',
-        },
-        {
-          title: 'Discounts',
-          url: '/admin/subscription/discounts',
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: 'Support',
-      url: '#',
-      icon: LifeBuoy,
-    },
-    {
-      title: 'Feedback',
-      url: '#',
-      icon: Send,
-    },
-  ],
-  projects: [],
+const defaultUser = {
+  name: 'shadcn',
+  email: 'm@example.com',
+  avatar: '/avatars/shadcn.jpg',
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { t } = useTranslation()
+
+  const data = {
+    user: defaultUser,
+    navMain: [
+      {
+        title: t('nav.dashboard'),
+        icon: TrendingUp,
+        url: '/admin',
+      },
+      {
+        title: t('nav.workspaces'),
+        icon: Frame,
+        items: [
+          {
+            title: t('nav.workspaces'),
+            url: '/admin/workspaces',
+          },
+        ],
+      },
+      {
+        title: t('nav.subscription'),
+        icon: PieChart,
+        items: [
+          {
+            title: t('nav.packages'),
+            url: '/admin/subscription/packages',
+          },
+          {
+            title: t('nav.plans'),
+            url: '/admin/subscription/plans',
+          },
+          {
+            title: t('nav.discounts'),
+            url: '/admin/subscription/discounts',
+          },
+        ],
+      },
+    ],
+    navSecondary: [
+      {
+        title: t('nav.support'),
+        url: '#',
+        icon: LifeBuoy,
+      },
+      {
+        title: t('nav.feedback'),
+        url: '#',
+        icon: Send,
+      },
+    ],
+    projects: [],
+  }
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>

@@ -6,22 +6,40 @@ import { UserNav } from './UserNav'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
+import { useTranslation } from 'react-i18next'
+import { useEffect } from 'react'
+import i18n from '@/i18n'
 
 export function PublicLayout({ children }: { children?: React.ReactNode }) {
   const { isAuthenticated, isHydrated } = useAuth()
+  const { t } = useTranslation()
 
   const menuItems = [
-    { title: 'Home', url: '/' },
-    { title: 'Features', url: '/features' },
-    { title: 'Pricing', url: '/pricing' },
-    { title: 'Blog', url: '/blog' },
-    { title: 'Contact', url: '/contact' },
-    ...(isAuthenticated ? [{ title: 'Workspace', url: '/workspace' }] : []),
+    { title: 'Home', titleKey: 'navbar.home', url: '/' },
+    { title: 'Features', titleKey: 'navbar.features', url: '/features' },
+    { title: 'Pricing', titleKey: 'navbar.pricing', url: '/pricing' },
+    { title: 'Blog', titleKey: 'navbar.blog', url: '/blog' },
+    { title: 'Contact', titleKey: 'navbar.contact', url: '/contact' },
+    ...(isAuthenticated
+      ? [
+          {
+            title: 'Workspace',
+            titleKey: 'navbar.workspace',
+            url: '/workspace',
+          },
+        ]
+      : []),
   ]
 
   const authConfig = {
-    login: { title: 'Login', url: '/login' },
-    signup: { title: 'Sign Up', url: '/signup' },
+    login: {
+      title: t('navbar.login', { defaultValue: 'Login' }),
+      url: '/login',
+    },
+    signup: {
+      title: t('navbar.signup', { defaultValue: 'Sign Up' }),
+      url: '/signup',
+    },
   }
 
   const renderAuthComponent = () => {
@@ -40,14 +58,22 @@ export function PublicLayout({ children }: { children?: React.ReactNode }) {
     return (
       <>
         <Button asChild variant="outline" size="sm">
-          <a href="/login">Login</a>
+          <a href="/login">{authConfig.login.title}</a>
         </Button>
         <Button asChild size="sm">
-          <a href="/signup">Sign Up</a>
+          <a href="/signup">{authConfig.signup.title}</a>
         </Button>
       </>
     )
   }
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const stored = localStorage.getItem('i18nextLng')
+    if (stored && i18n.language !== stored) {
+      void i18n.changeLanguage(stored)
+    }
+  }, [])
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -73,11 +99,16 @@ export function PublicLayout({ children }: { children?: React.ReactNode }) {
                 return (
                   <div className="mb-4">
                     <Alert>
-                      <AlertTitle>Please verify your email</AlertTitle>
+                      <AlertTitle>
+                        {t('auth.verify_email_title', {
+                          defaultValue: 'Please verify your email',
+                        })}
+                      </AlertTitle>
                       <AlertDescription>
-                        We sent a verification link to your email — please check
-                        your inbox and verify your address to access all
-                        features.
+                        {t('auth.verify_email_desc', {
+                          defaultValue:
+                            'We sent a verification link to your email — please check your inbox and verify your address to access all features.',
+                        })}
                       </AlertDescription>
                     </Alert>
                   </div>

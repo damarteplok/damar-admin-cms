@@ -27,7 +27,11 @@ export interface AuthState {
 }
 
 export interface AuthContextType extends AuthState {
-  login: (accessToken: string, refreshToken: string, user: User) => void
+  login: (
+    accessToken: string,
+    refreshToken: string,
+    user: User,
+  ) => Promise<void>
   logout: () => Promise<void>
   updateUser: (user: User) => void
   refreshAuth: () => Promise<void>
@@ -112,7 +116,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     loadAuthState()
   }, [client])
 
-  const login = (accessToken: string, refreshToken: string, user: User) => {
+  const login = async (
+    accessToken: string,
+    refreshToken: string,
+    user: User,
+  ) => {
     setAccessTokenStorage(accessToken)
     setRefreshTokenStorage(refreshToken)
 
@@ -125,6 +133,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
       isLoading: false,
       isHydrated: true,
     })
+
+    // Fetch authoritative user data from server to ensure consistency
+    try {
+      await refreshAuth()
+    } catch (err) {
+      // If refresh fails, logout will be triggered inside refreshAuth
+      console.error('refreshAuth after login failed', err)
+    }
   }
 
   const logout = async () => {

@@ -38,7 +38,7 @@ export function LoginForm({
     },
     onSubmit: async ({ value }) => {
       try {
-        setLoginError(null) // Clear previous errors
+        setLoginError(null)
 
         const result = await loginMutation({
           input: {
@@ -47,7 +47,6 @@ export function LoginForm({
           },
         })
 
-        // Handle GraphQL transport errors (network, parsing, etc)
         if (result.error) {
           const errorMessage =
             result.error.graphQLErrors?.[0]?.message || result.error.message
@@ -55,26 +54,25 @@ export function LoginForm({
           return
         }
 
-        // Handle business logic errors (success: false)
         if (!result.data?.login.success) {
           setLoginError(result.data?.login.message || 'Login failed')
           return
         }
 
-        // Success case
         if (result.data.login.data) {
           const { accessToken, refreshToken, user } = result.data.login.data
 
-          // Update auth context
-          auth.login(accessToken, refreshToken, user)
+          try {
+            await auth.login(accessToken, refreshToken, user)
+          } catch (err) {
+            // login failed during refresh; auth.login will have handled logout
+          }
 
-          // Redirect to home page (not admin)
           navigate({ to: '/' })
         } else {
           setLoginError('Login response data is missing')
         }
       } catch (error) {
-        // Catch any unexpected errors
         setLoginError(
           error instanceof Error
             ? error.message
