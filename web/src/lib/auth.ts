@@ -3,9 +3,9 @@ export interface User {
   name: string
   email: string
   isAdmin: boolean
+  emailVerified?: boolean
 }
 
-// Helper to check if we're on client side
 const isClient = typeof window !== 'undefined'
 
 export const getAccessToken = (): string | null => {

@@ -69,6 +69,28 @@ export const FORGOT_PASSWORD_MUTATION = gql`
   }
 `
 
+export const CREATE_USER_MUTATION = gql`
+  mutation CreateUser($input: CreateUserInput!) {
+    createUser(input: $input) {
+      success
+      message
+      data {
+        id
+        email
+      }
+    }
+  }
+`
+
+export const VERIFY_EMAIL_MUTATION = gql`
+  mutation VerifyEmail($token: String!) {
+    verifyEmail(token: $token) {
+      success
+      message
+    }
+  }
+`
+
 export interface LoginInput {
   email: string
   password: string
@@ -130,5 +152,23 @@ export interface ForgotPasswordResponse {
   forgotPassword: {
     success: boolean
     message: string
+  }
+}
+
+export interface CreateUserResponse {
+  createUser: {
+    success: boolean
+    message?: string
+    data?: {
+      id: string
+      email: string
+    }
+  }
+}
+
+export interface VerifyEmailResponse {
+  verifyEmail: {
+    success: boolean
+    message?: string
   }
 }

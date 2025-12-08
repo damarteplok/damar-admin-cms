@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/auth-hooks'
 import { UserNav } from './UserNav'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 
 export function PublicLayout({ children }: { children?: React.ReactNode }) {
   const { isAuthenticated, isHydrated } = useAuth()
@@ -63,7 +64,29 @@ export function PublicLayout({ children }: { children?: React.ReactNode }) {
       />
 
       <main className="flex-1">
-        <div className="container mx-auto px-4">{children || <Outlet />}</div>
+        <div className="container mx-auto px-4">
+          {isHydrated &&
+            isAuthenticated &&
+            (() => {
+              const { user } = useAuth()
+              if (user && user.emailVerified === false) {
+                return (
+                  <div className="mb-4">
+                    <Alert>
+                      <AlertTitle>Please verify your email</AlertTitle>
+                      <AlertDescription>
+                        We sent a verification link to your email — please check
+                        your inbox and verify your address to access all
+                        features.
+                      </AlertDescription>
+                    </Alert>
+                  </div>
+                )
+              }
+              return null
+            })()}
+          {children || <Outlet />}
+        </div>
       </main>
 
       <Footer1 />

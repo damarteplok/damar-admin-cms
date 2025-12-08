@@ -42,14 +42,17 @@ export function NavMain({
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
-          const subActive = !!item.items?.some((s) =>
-            pathname.startsWith(s.url),
-          )
-          const hasOwnActive = Boolean(
-            item.url && pathname.startsWith(item.url),
-          )
-          const itemActive = hasOwnActive
-          const defaultOpen = subActive || hasOwnActive
+          const normalize = (p: string) =>
+            p.endsWith('/') && p.length > 1 ? p.slice(0, -1) : p
+          const pathNorm = normalize(pathname)
+          const itemUrlNorm = item.url ? normalize(item.url) : null
+
+          const subActive = !!item.items?.some((s) => {
+            const sNorm = normalize(s.url)
+            return pathNorm === sNorm || pathNorm.startsWith(sNorm + '/')
+          })
+          const itemActive = itemUrlNorm === pathNorm
+          const defaultOpen = true || subActive
 
           return (
             <Collapsible key={item.title} asChild defaultOpen={defaultOpen}>

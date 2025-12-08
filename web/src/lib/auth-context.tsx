@@ -70,6 +70,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
               name: result.data.me.data.name,
               email: result.data.me.data.email,
               isAdmin: result.data.me.data.isAdmin,
+              emailVerified: result.data.me.data.emailVerified,
             }
 
             setState({
@@ -91,7 +92,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
             }))
           }
         } catch (error) {
-          // Token verification failed, clear storage
           removeAccessToken()
           removeRefreshToken()
           setState((prev) => ({
@@ -187,6 +187,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           name: result.data.me.data.name,
           email: result.data.me.data.email,
           isAdmin: result.data.me.data.isAdmin,
+          emailVerified: result.data.me.data.emailVerified,
         }
 
         setState((prev) => ({

@@ -1,7 +1,14 @@
 'use client'
 
 import * as React from 'react'
-import { Command, Frame, LifeBuoy, PieChart, Send } from 'lucide-react'
+import {
+  Command,
+  Frame,
+  LifeBuoy,
+  PieChart,
+  Send,
+  TrendingUp,
+} from 'lucide-react'
 
 import { NavMain } from '@/components/nav-main'
 import { NavSecondary } from '@/components/nav-secondary'
@@ -23,6 +30,11 @@ const data = {
     avatar: '/avatars/shadcn.jpg',
   },
   navMain: [
+    {
+      title: 'Dashboard',
+      icon: TrendingUp,
+      url: '/admin',
+    },
     {
       title: 'Workspaces',
       icon: Frame,

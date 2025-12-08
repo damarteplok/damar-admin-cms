@@ -15,6 +15,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { useAuth } from '@/lib/auth-hooks'
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import { useEffect } from 'react'
 import { AdminLayoutSkeleton } from './AdminLayoutSkeleton'
 import { StatusPage } from './StatusPage'
@@ -80,6 +81,18 @@ export function AdminLayout({ children }: { children?: React.ReactNode }) {
             </BreadcrumbList>
           </Breadcrumb>
         </header>
+
+        {auth.user && auth.user.emailVerified === false && (
+          <div className="p-4">
+            <Alert>
+              <AlertTitle>Please verify your email</AlertTitle>
+              <AlertDescription>
+                Your email is not verified. Check your inbox for the
+                verification link to unlock full access.
+              </AlertDescription>
+            </Alert>
+          </div>
+        )}
 
         <main className="flex-1 overflow-auto">
           <div className="container mx-auto p-6">{children || <Outlet />}</div>

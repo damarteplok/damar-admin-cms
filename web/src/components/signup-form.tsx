@@ -12,40 +12,136 @@ import { Input } from '@/components/ui/input'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useMutation } from 'urql'
 import { useState } from 'react'
-import { SIGNUP_MUTATION } from '@/lib/graphql/mutations/auth'
+import { useForm } from '@tanstack/react-form'
+import {
+  CREATE_USER_MUTATION,
+  type CreateUserResponse,
+} from '@/lib/graphql/auth.graphql'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { AlertCircle } from 'lucide-react'
+import { useAuth } from '@/lib/auth-hooks'
+import { LOGIN_MUTATION, type LoginResponse } from '@/lib/graphql/auth.graphql'
+import { useEffect } from 'react'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState('')
   const navigate = useNavigate()
-  const [signupResult, signup] = useMutation(SIGNUP_MUTATION)
+  const [serverError, setServerError] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
+  const [createResult, createUser] =
+    useMutation<CreateUserResponse>(CREATE_USER_MUTATION)
+  const [, login] = useMutation<LoginResponse>(LOGIN_MUTATION)
+  const auth = useAuth()
+  const form = useForm({
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+    onSubmit: async ({ value }) => {
+      setServerError(null)
+      try {
+        if (value.password !== value.confirmPassword) {
+          setServerError('Passwords do not match')
+          return
+        }
 
-    if (password !== confirmPassword) {
-      setError('Passwords do not match')
-      return
+        const result = await createUser({
+          input: {
+            name: value.name,
+            email: value.email,
+            password: value.password,
+          },
+        })
+
+        if (result.error) {
+          setServerError(result.error.message)
+          return
+        }
+
+        if (!result.data?.createUser?.success) {
+          setServerError(
+            result.data?.createUser?.message || 'Registration failed',
+          )
+          return
+        }
+
+        // Try to log the user in automatically
+        const loginRes = await login({
+          input: { email: value.email, password: value.password },
+        })
+
+        if (loginRes.error) {
+          // login failed; redirect to login page with a success notice
+          setSuccessMessage('Account created successfully — please log in')
+          setTimeout(() => navigate({ to: '/login' }), 1000)
+          return
+        }
+
+        if (!loginRes.data?.login?.success || !loginRes.data?.login?.data) {
+          setSuccessMessage('Account created successfully — please log in')
+          setTimeout(() => navigate({ to: '/login' }), 1000)
+          return
+        }
+
+        const { accessToken, refreshToken, user } = loginRes.data.login.data
+
+        // Persist auth and update context
+        auth.login(accessToken, refreshToken, {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          emailVerified: user.emailVerified,
+        })
+
+        // If the user hasn't verified email, set a persistent flag so other pages can show a banner
+        if (!user.emailVerified) {
+          setSuccessMessage(
+            'Signed in — please verify your email (check your inbox). Redirecting...',
+          )
+        } else {
+          setSuccessMessage('Signed in — redirecting...')
+        }
+
+        setTimeout(() => navigate({ to: '/' }), 1000)
+      } catch (err) {
+        setServerError(err instanceof Error ? err.message : String(err))
+      }
+    },
+  })
+
+  useEffect(() => {
+    if (auth.isHydrated && auth.isAuthenticated) {
+      navigate({ to: '/' })
     }
+  }, [auth.isHydrated, auth.isAuthenticated, navigate])
 
-    const result = await signup({ name, email, password })
-
-    if (result.error) {
-      setError(result.error.message)
-      return
-    }
-
-    if (result.data?.signup) {
-      localStorage.setItem('token', result.data.signup.token)
-      navigate({ to: '/admin' })
-    }
+  if (!auth.isHydrated) {
+    return (
+      <div className="flex min-h-screen items-center justify-center py-12">
+        <div className="container px-4">
+          <div className="max-w-4xl mx-auto w-full">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="hidden md:block">
+                <Skeleton className="h-64 w-full" />
+              </div>
+              <div>
+                <Skeleton className="h-8 w-1/3 mb-4" />
+                <Skeleton className="h-12 w-full mb-2" />
+                <Skeleton className="h-12 w-full mb-2" />
+                <Skeleton className="h-12 w-full" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -55,7 +151,14 @@ export function SignupForm({
     >
       <Card className="overflow-hidden !py-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8" onSubmit={handleSubmit}>
+          <form
+            className="p-6 md:p-8"
+            onSubmit={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              form.handleSubmit()
+            }}
+          >
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Create your account</h1>
@@ -63,44 +166,126 @@ export function SignupForm({
                   Enter your details below to create your account
                 </p>
               </div>
-              <Field>
-                <FieldLabel htmlFor="name">Full Name</FieldLabel>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="John Doe"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <FieldDescription>
-                  We&apos;ll use this to contact you. We will not share your
-                  email with anyone else.
-                </FieldDescription>
-              </Field>
-              <Field>
-                <Field className="grid grid-cols-2 gap-4">
+
+              {serverError && (
+                <Alert variant="destructive" className="mb-4">
+                  <AlertCircle />
+                  <AlertTitle>Registration Failed</AlertTitle>
+                  <AlertDescription>{serverError}</AlertDescription>
+                </Alert>
+              )}
+
+              {successMessage && (
+                <Alert className="mb-4">
+                  <AlertTitle>Success</AlertTitle>
+                  <AlertDescription>{successMessage}</AlertDescription>
+                </Alert>
+              )}
+
+              <form.Field
+                name="name"
+                validators={{
+                  onChange: ({ value }) => {
+                    if (!value) return 'Name is required'
+                    return undefined
+                  },
+                }}
+              >
+                {(field) => (
+                  <Field>
+                    <FieldLabel htmlFor="name">Full Name</FieldLabel>
+                    <Input
+                      id="name"
+                      type="text"
+                      placeholder="John Doe"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                    {field.state.meta.errors.length > 0 && (
+                      <div className="text-sm text-red-600">
+                        {String(field.state.meta.errors[0])}
+                      </div>
+                    )}
+                  </Field>
+                )}
+              </form.Field>
+
+              <form.Field
+                name="email"
+                validators={{
+                  onChange: ({ value }) => {
+                    if (!value) return 'Email is required'
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+                      return 'Invalid email address'
+                    return undefined
+                  },
+                }}
+              >
+                {(field) => (
+                  <Field>
+                    <FieldLabel htmlFor="email">Email</FieldLabel>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="m@example.com"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                    <FieldDescription>
+                      We&apos;ll use this to contact you. We will not share your
+                      email with anyone else.
+                    </FieldDescription>
+                    {field.state.meta.errors.length > 0 && (
+                      <div className="text-sm text-red-600">
+                        {String(field.state.meta.errors[0])}
+                      </div>
+                    )}
+                  </Field>
+                )}
+              </form.Field>
+
+              <form.Field
+                name="password"
+                validators={{
+                  onChange: ({ value }) => {
+                    if (!value) return 'Password is required'
+                    if (value.length < 8)
+                      return 'Password must be at least 8 characters'
+                    return undefined
+                  },
+                }}
+              >
+                {(field) => (
                   <Field>
                     <FieldLabel htmlFor="password">Password</FieldLabel>
                     <Input
                       id="password"
                       type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
                     />
+                    {field.state.meta.errors.length > 0 && (
+                      <div className="text-sm text-red-600">
+                        {String(field.state.meta.errors[0])}
+                      </div>
+                    )}
                   </Field>
+                )}
+              </form.Field>
+
+              <form.Field
+                name="confirmPassword"
+                validators={{
+                  onChange: ({ value }) => {
+                    if (!value) return 'Please confirm your password'
+                    return undefined
+                  },
+                }}
+              >
+                {(field) => (
                   <Field>
                     <FieldLabel htmlFor="confirm-password">
                       Confirm Password
@@ -108,31 +293,35 @@ export function SignupForm({
                     <Input
                       id="confirm-password"
                       type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
                     />
+                    {field.state.meta.errors.length > 0 && (
+                      <div className="text-sm text-red-600">
+                        {String(field.state.meta.errors[0])}
+                      </div>
+                    )}
                   </Field>
-                </Field>
-                <FieldDescription>
-                  Must be at least 8 characters long.
-                </FieldDescription>
-              </Field>
-              {error && (
-                <div className="text-sm text-red-600 bg-red-50 p-2 rounded">
-                  {error}
-                </div>
-              )}
+                )}
+              </form.Field>
+
               <Field>
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={signupResult.fetching}
-                >
-                  {signupResult.fetching
-                    ? 'Creating account...'
-                    : 'Create Account'}
-                </Button>
+                <form.Subscribe selector={(s) => [s.canSubmit, s.isSubmitting]}>
+                  {([canSubmit, isSubmitting]) => (
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      disabled={
+                        !canSubmit || isSubmitting || createResult.fetching
+                      }
+                    >
+                      {isSubmitting || createResult.fetching
+                        ? 'Creating account...'
+                        : 'Create Account'}
+                    </Button>
+                  )}
+                </form.Subscribe>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with

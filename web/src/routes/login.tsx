@@ -1,15 +1,15 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
+import { getAccessToken } from '@/lib/auth'
 import { LoginForm } from '@/components/login-form'
 
 export const Route = createFileRoute('/login')({
   beforeLoad: async () => {
+    // Run only in the browser: if there's an access token we treat user as authenticated
     if (typeof window !== 'undefined') {
-      const accessToken = localStorage.getItem('token')
+      const accessToken = getAccessToken()
 
       if (accessToken) {
-        throw redirect({
-          to: '/',
-        })
+        throw redirect({ to: '/' })
       }
     }
   },

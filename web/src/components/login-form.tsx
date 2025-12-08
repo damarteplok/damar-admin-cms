@@ -18,6 +18,8 @@ import { LOGIN_MUTATION, type LoginResponse } from '@/lib/graphql/auth.graphql'
 import { useAuth } from '@/lib/auth-hooks'
 import { AlertCircle } from 'lucide-react'
 import { useState } from 'react'
+import { useEffect } from 'react'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function LoginForm({
   className,
@@ -82,12 +84,39 @@ export function LoginForm({
     },
   })
 
+  useEffect(() => {
+    if (auth.isHydrated && auth.isAuthenticated) {
+      navigate({ to: '/' })
+    }
+  }, [auth.isHydrated, auth.isAuthenticated, navigate])
+
+  if (!auth.isHydrated) {
+    return (
+      <div className="flex min-h-screen items-center justify-center py-12">
+        <div className="container px-4">
+          <div className="max-w-4xl mx-auto w-full">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="hidden md:block">
+                <Skeleton className="h-64 w-full" />
+              </div>
+              <div>
+                <Skeleton className="h-8 w-1/3 mb-4" />
+                <Skeleton className="h-12 w-full mb-2" />
+                <Skeleton className="h-12 w-full mb-2" />
+                <Skeleton className="h-12 w-full" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div
       className={cn('flex flex-col gap-6 max-w-4xl mx-auto w-full', className)}
       {...props}
     >
-      {/* Display submission errors at the top */}
       {loginError && (
         <Alert variant="destructive">
           <AlertCircle />
