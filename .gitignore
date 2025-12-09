@@ -38,6 +38,9 @@ build/
 # GitHub Actions workflows should be tracked, but not copilot instructions
 .github/copilot-instructions.md
 
+# AI Assistant workflows (internal only)
+.agent/
+
 # Temporary files
 *.tmp
 *.log

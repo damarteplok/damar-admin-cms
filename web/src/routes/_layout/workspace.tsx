@@ -1,10 +1,11 @@
-import { List2 } from '@/components/list2'
 import { createFileRoute } from '@tanstack/react-router'
+
+import { WorkspaceComponent } from '@/components/public/WorkspaceComponent'
 
 export const Route = createFileRoute('/_layout/workspace')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  return <List2 />
+  return <WorkspaceComponent />
 }

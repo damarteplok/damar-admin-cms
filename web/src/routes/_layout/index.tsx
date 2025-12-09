@@ -1,9 +1,10 @@
-import { Hero1 } from '@/components/hero1'
-import { Feature43 } from '@/components/feature43'
-import { Faq1 } from '@/components/faq1'
 import { createFileRoute } from '@tanstack/react-router'
-import { Logos8 } from '@/components/logos8'
-import { Stats8 } from '@/components/stats8'
+
+import { Feature43Component } from '@/components/public/Feature43Component'
+import { FaqComponent } from '@/components/public/FaqComponent'
+import { HeroComponent } from '@/components/public/HeroComponent'
+import { LogosComponent } from '@/components/public/LogosComponent'
+import { StatsComponent } from '@/components/public/StatsComponent'
 
 export const Route = createFileRoute('/_layout/')({
   component: RouteComponent,
@@ -12,11 +13,11 @@ export const Route = createFileRoute('/_layout/')({
 function RouteComponent() {
   return (
     <>
-      <Hero1 />
-      <Feature43 />
-      <Stats8 />
-      <Faq1 />
-      <Logos8 />
+      <HeroComponent />
+      <Feature43Component />
+      <StatsComponent />
+      <FaqComponent />
+      <LogosComponent />
     </>
   )
 }
