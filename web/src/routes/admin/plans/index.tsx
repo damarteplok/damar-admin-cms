@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useQuery, useMutation } from 'urql'
 import { useTranslation } from 'react-i18next'
 
@@ -27,6 +27,8 @@ function PlansPage() {
   const [page, setPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
   const [search, setSearch] = useState('')
+  const [sortBy, setSortBy] = useState<string>('created_at')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [planToDelete, setPlanToDelete] = useState<Plan | null>(null)
 
@@ -37,6 +39,9 @@ function PlansPage() {
       perPage,
       activeOnly: false,
       visibleOnly: false,
+      search: search || undefined,
+      sortBy: sortBy || undefined,
+      sortOrder: sortOrder || undefined,
     },
     requestPolicy: 'cache-and-network',
   })
@@ -46,6 +51,11 @@ function PlansPage() {
 
   const { data: queryData, fetching, error } = result
   const isInitialLoad = fetching && !queryData
+
+  // Reset page to 1 when search or sort changes
+  useEffect(() => {
+    setPage(1)
+  }, [search, sortBy, sortOrder])
 
   const handleAddPlan = () => {
     navigate({ to: '/admin/plans/create' })
@@ -83,6 +93,11 @@ function PlansPage() {
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
+  }
+
+  const handleSortChange = (columnId: string, order: 'asc' | 'desc') => {
+    setSortBy(columnId)
+    setSortOrder(order)
   }
 
   const columns = useMemo(
@@ -175,6 +190,7 @@ function PlansPage() {
         totalItems={queryData?.plans.data.total}
         totalPages={totalPages}
         onPageChange={handlePageChange}
+        onSortChange={handleSortChange}
       />
 
       <ConfirmDialog

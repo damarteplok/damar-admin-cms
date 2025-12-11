@@ -35,10 +35,13 @@ function EditPlanPage() {
   const { data, fetching, error } = result
 
   const handleUpdate = async (updateData: UpdatePlanInput) => {
+    // Remove productId from update data as it's not editable
+    const { productId, ...dataWithoutProduct } = updateData as any
+
     const result = await updatePlanMutation({
       input: {
         id,
-        ...updateData,
+        ...dataWithoutProduct,
       },
     })
 
@@ -137,6 +140,7 @@ function EditPlanPage() {
             onSubmit={handleUpdate}
             onCancel={handleCancel}
             submitLabel={t('plans.form.save', { defaultValue: 'Save' })}
+            isEditMode={true}
           />
         </CardContent>
       </Card>

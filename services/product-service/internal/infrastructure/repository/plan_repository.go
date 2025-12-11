@@ -226,7 +226,7 @@ func (r *PlanRepository) Delete(ctx context.Context, id int64) error {
 	return nil
 }
 
-func (r *PlanRepository) GetAll(ctx context.Context, page, perPage int, activeOnly, visibleOnly bool) ([]*domain.Plan, int, error) {
+func (r *PlanRepository) GetAll(ctx context.Context, page, perPage int, search, sortBy, sortOrder string, activeOnly, visibleOnly bool) ([]*domain.Plan, int, error) {
 	offset := (page - 1) * perPage
 
 	// Build query with filters
@@ -239,6 +239,18 @@ func (r *PlanRepository) GetAll(ctx context.Context, page, perPage int, activeOn
 		WHERE 1=1
 	`
 
+	args := []interface{}{}
+	argCounter := 1
+
+	// Add search filter
+	if search != "" {
+		searchPattern := "%" + search + "%"
+		countQuery += fmt.Sprintf(` AND (name ILIKE $%d OR slug ILIKE $%d OR description ILIKE $%d)`, argCounter, argCounter, argCounter)
+		query += fmt.Sprintf(` AND (name ILIKE $%d OR slug ILIKE $%d OR description ILIKE $%d)`, argCounter, argCounter, argCounter)
+		args = append(args, searchPattern)
+		argCounter++
+	}
+
 	if activeOnly {
 		countQuery += ` AND is_active = true`
 		query += ` AND is_active = true`
@@ -250,15 +262,42 @@ func (r *PlanRepository) GetAll(ctx context.Context, page, perPage int, activeOn
 
 	// Get total count
 	var total int
-	err := r.db.QueryRow(ctx, countQuery).Scan(&total)
+	var err error
+	if len(args) > 0 {
+		err = r.db.QueryRow(ctx, countQuery, args...).Scan(&total)
+	} else {
+		err = r.db.QueryRow(ctx, countQuery).Scan(&total)
+	}
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to count plans: %w", err)
 	}
 
-	// Get plans
-	query += ` ORDER BY created_at DESC LIMIT $1 OFFSET $2`
+	// Add sorting
+	validSortColumns := map[string]bool{
+		"id":         true,
+		"name":       true,
+		"slug":       true,
+		"created_at": true,
+		"updated_at": true,
+		"is_active":  true,
+		"is_visible": true,
+	}
 
-	rows, err := r.db.Query(ctx, query, perPage, offset)
+	orderBy := "created_at"
+	if sortBy != "" && validSortColumns[sortBy] {
+		orderBy = sortBy
+	}
+
+	order := "DESC"
+	if sortOrder == "asc" || sortOrder == "ASC" {
+		order = "ASC"
+	}
+
+	query += fmt.Sprintf(` ORDER BY %s %s LIMIT $%d OFFSET $%d`, orderBy, order, argCounter, argCounter+1)
+	args = append(args, perPage, offset)
+
+	// Get plans
+	rows, err := r.db.Query(ctx, query, args...)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to get plans: %w", err)
 	}

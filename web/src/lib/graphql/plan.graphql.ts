@@ -1,17 +1,33 @@
 import { gql } from 'urql'
 
+export const GET_INTERVALS_QUERY = gql`
+  query GetIntervals {
+    intervals {
+      id
+      name
+      slug
+    }
+  }
+`
+
 export const GET_PLANS_QUERY = gql`
   query GetPlans(
     $page: Int
     $perPage: Int
     $activeOnly: Boolean
     $visibleOnly: Boolean
+    $search: String
+    $sortBy: String
+    $sortOrder: String
   ) {
     plans(
       page: $page
       perPage: $perPage
       activeOnly: $activeOnly
       visibleOnly: $visibleOnly
+      search: $search
+      sortBy: $sortBy
+      sortOrder: $sortOrder
     ) {
       success
       message

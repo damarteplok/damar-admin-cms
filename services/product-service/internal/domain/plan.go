@@ -32,7 +32,7 @@ type PlanRepository interface {
 	Create(ctx context.Context, plan *Plan) error
 	Update(ctx context.Context, plan *Plan) error
 	Delete(ctx context.Context, id int64) error
-	GetAll(ctx context.Context, page, perPage int, activeOnly, visibleOnly bool) ([]*Plan, int, error)
+	GetAll(ctx context.Context, page, perPage int, search, sortBy, sortOrder string, activeOnly, visibleOnly bool) ([]*Plan, int, error)
 }
 
 type PlanService interface {
@@ -42,5 +42,5 @@ type PlanService interface {
 	Create(ctx context.Context, plan *Plan) error
 	Update(ctx context.Context, plan *Plan) error
 	Delete(ctx context.Context, id int64) error
-	GetAll(ctx context.Context, page, perPage int, activeOnly, visibleOnly bool) ([]*Plan, int, error)
+	GetAll(ctx context.Context, page, perPage int, search, sortBy, sortOrder string, activeOnly, visibleOnly bool) ([]*Plan, int, error)
 }

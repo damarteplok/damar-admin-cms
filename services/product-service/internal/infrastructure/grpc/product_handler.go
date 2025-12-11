@@ -373,7 +373,11 @@ func (h *ProductHandler) GetAllPlans(ctx context.Context, req *pb.GetAllPlansReq
 		perPage = 10
 	}
 
-	plans, total, err := h.planService.GetAll(ctx, page, perPage, req.ActiveOnly, req.VisibleOnly)
+	search := req.Search
+	sortBy := req.SortBy
+	sortOrder := req.SortOrder
+
+	plans, total, err := h.planService.GetAll(ctx, page, perPage, search, sortBy, sortOrder, req.ActiveOnly, req.VisibleOnly)
 	if err != nil {
 		return &pb.GetAllPlansResponse{
 			Success: false,

@@ -110,7 +110,7 @@ func (s *planService) Delete(ctx context.Context, id int64) error {
 	return s.repo.Delete(ctx, id)
 }
 
-func (s *planService) GetAll(ctx context.Context, page, perPage int, activeOnly, visibleOnly bool) ([]*domain.Plan, int, error) {
+func (s *planService) GetAll(ctx context.Context, page, perPage int, search, sortBy, sortOrder string, activeOnly, visibleOnly bool) ([]*domain.Plan, int, error) {
 	if page < 1 {
 		page = 1
 	}
@@ -120,5 +120,5 @@ func (s *planService) GetAll(ctx context.Context, page, perPage int, activeOnly,
 	if perPage > 100 {
 		perPage = 100
 	}
-	return s.repo.GetAll(ctx, page, perPage, activeOnly, visibleOnly)
+	return s.repo.GetAll(ctx, page, perPage, search, sortBy, sortOrder, activeOnly, visibleOnly)
 }

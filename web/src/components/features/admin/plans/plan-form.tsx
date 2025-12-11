@@ -5,10 +5,22 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { RichTextEditor } from '@/components/ui/rich-text-editor'
+import { Label } from '@/components/ui/label'
+import { SearchSelect } from '@/components/common/search-select'
 import { Loader2 } from 'lucide-react'
 import { CreatePlanInput, UpdatePlanInput } from '@/types'
+import { GET_PRODUCTS_QUERY } from '@/lib/graphql/product.graphql'
+
+// Static intervals data matching database
+const INTERVALS = [
+  { id: '4', name: 'Daily', slug: 'daily' },
+  { id: '3', name: 'Weekly', slug: 'weekly' },
+  { id: '1', name: 'Monthly', slug: 'monthly' },
+  { id: '2', name: 'Yearly', slug: 'yearly' },
+]
 
 interface PlanFormValues extends Omit<
   CreatePlanInput,
@@ -28,6 +40,7 @@ interface PlanFormProps {
   onCancel: () => void
   submitLabel?: string
   showCreateAnother?: boolean
+  isEditMode?: boolean
 }
 
 export function PlanForm({
@@ -36,6 +49,7 @@ export function PlanForm({
   onCancel,
   submitLabel = 'Save',
   showCreateAnother = false,
+  isEditMode = false,
 }: PlanFormProps) {
   const { t } = useTranslation()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -203,26 +217,58 @@ export function PlanForm({
           }}
         >
           {(field) => (
-            <Field>
-              <FieldLabel htmlFor={field.name}>
-                {t('plans.form.type', { defaultValue: 'Type' })}
+            <Field className="col-span-2">
+              <FieldLabel>
+                {t('plans.form.type', { defaultValue: 'Plan Type' })}
               </FieldLabel>
-              <Input
-                id={field.name}
-                name={field.name}
+              <RadioGroup
                 value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-                placeholder={t('plans.form.type_placeholder', {
-                  defaultValue: 'subscription',
-                })}
-              />
-              <FieldDescription>
-                {t('plans.form.type_description', {
-                  defaultValue:
-                    'The type of plan (e.g., subscription, one-time).',
-                })}
-              </FieldDescription>
+                onValueChange={(value: string) => field.handleChange(value)}
+                className="grid gap-4 pt-2"
+              >
+                <div className="flex items-start space-x-3 space-y-0">
+                  <RadioGroupItem value="flat_rate" id="flat_rate" />
+                  <div className="space-y-1 leading-none">
+                    <Label
+                      htmlFor="flat_rate"
+                      className="font-medium cursor-pointer"
+                    >
+                      Flat Rate
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Fixed price per billing cycle.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3 space-y-0">
+                  <RadioGroupItem value="per_unit" id="per_unit" />
+                  <div className="space-y-1 leading-none">
+                    <Label
+                      htmlFor="per_unit"
+                      className="font-medium cursor-pointer"
+                    >
+                      Seat-Based
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Charge per seat/user for each billing cycle.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3 space-y-0">
+                  <RadioGroupItem value="tiered" id="tiered" />
+                  <div className="space-y-1 leading-none">
+                    <Label
+                      htmlFor="tiered"
+                      className="font-medium cursor-pointer"
+                    >
+                      Usage-Based
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Price per unit with optional tiers.
+                    </p>
+                  </div>
+                </div>
+              </RadioGroup>
               {field.state.meta.errors.length > 0 && (
                 <p className="text-sm text-destructive">
                   {field.state.meta.errors.join(', ')}
@@ -232,14 +278,14 @@ export function PlanForm({
           )}
         </form.Field>
 
-        {/* Product ID */}
+        {/* Product */}
         <form.Field
           name="productId"
           validators={{
             onChange: ({ value }) => {
               if (!value || value.trim().length === 0) {
-                return t('plans.form.product_id_required', {
-                  defaultValue: 'Product ID is required',
+                return t('plans.form.product_required', {
+                  defaultValue: 'Product is required',
                 })
               }
               return undefined
@@ -248,23 +294,38 @@ export function PlanForm({
         >
           {(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>
-                {t('plans.form.product_id', { defaultValue: 'Product ID' })}
+              <FieldLabel>
+                {t('plans.form.product', { defaultValue: 'Product' })}
               </FieldLabel>
-              <Input
-                id={field.name}
-                name={field.name}
+              <SearchSelect
                 value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-                placeholder={t('plans.form.product_id_placeholder', {
-                  defaultValue: '1',
+                onChange={(value) => field.handleChange(value)}
+                query={GET_PRODUCTS_QUERY}
+                queryKey="products"
+                placeholder={t('plans.form.product_placeholder', {
+                  defaultValue: 'Select a product...',
+                })}
+                searchPlaceholder={t('plans.form.product_search', {
+                  defaultValue: 'Search products...',
+                })}
+                emptyText={t('plans.form.product_empty', {
+                  defaultValue: 'No products found.',
+                })}
+                disabled={isEditMode}
+                formatOption={(product: any) => ({
+                  value: product.id,
+                  label: product.name,
                 })}
               />
               <FieldDescription>
-                {t('plans.form.product_id_description', {
-                  defaultValue: 'The product this plan belongs to.',
-                })}
+                {isEditMode
+                  ? t('plans.form.product_description_readonly', {
+                      defaultValue:
+                        'Product cannot be changed after plan creation.',
+                    })
+                  : t('plans.form.product_description', {
+                      defaultValue: 'The product this plan belongs to.',
+                    })}
               </FieldDescription>
               {field.state.meta.errors.length > 0 && (
                 <p className="text-sm text-destructive">
@@ -275,14 +336,14 @@ export function PlanForm({
           )}
         </form.Field>
 
-        {/* Interval ID */}
+        {/* Billing Interval */}
         <form.Field
           name="intervalId"
           validators={{
             onChange: ({ value }) => {
               if (!value || value.trim().length === 0) {
                 return t('plans.form.interval_id_required', {
-                  defaultValue: 'Interval ID is required',
+                  defaultValue: 'Billing interval is required',
                 })
               }
               return undefined
@@ -291,22 +352,26 @@ export function PlanForm({
         >
           {(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>
-                {t('plans.form.interval_id', { defaultValue: 'Interval ID' })}
+              <FieldLabel>
+                {t('plans.form.billing_interval', {
+                  defaultValue: 'Billing Interval',
+                })}
               </FieldLabel>
-              <Input
-                id={field.name}
-                name={field.name}
+              <SearchSelect
                 value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-                placeholder={t('plans.form.interval_id_placeholder', {
-                  defaultValue: '1',
+                onChange={(value) => field.handleChange(value)}
+                staticData={INTERVALS}
+                placeholder={t('plans.form.interval_placeholder', {
+                  defaultValue: 'Select interval...',
+                })}
+                formatOption={(interval: any) => ({
+                  value: interval.id,
+                  label: interval.name,
                 })}
               />
               <FieldDescription>
-                {t('plans.form.interval_id_description', {
-                  defaultValue: 'The billing interval (e.g., monthly, yearly).',
+                {t('plans.form.interval_description', {
+                  defaultValue: 'How often customers will be billed.',
                 })}
               </FieldDescription>
               {field.state.meta.errors.length > 0 && (
@@ -396,54 +461,55 @@ export function PlanForm({
           )}
         </form.Field>
 
-        {/* Meter ID */}
-        <form.Field name="meterId">
-          {(field) => (
-            <Field>
-              <FieldLabel htmlFor={field.name}>
-                {t('plans.form.meter_id', { defaultValue: 'Meter ID' })}
-              </FieldLabel>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-                placeholder={t('plans.form.meter_id_placeholder', {
-                  defaultValue: 'Optional',
-                })}
-              />
-              <FieldDescription>
-                {t('plans.form.meter_id_description', {
-                  defaultValue: 'Meter ID for usage-based billing (optional).',
-                })}
-              </FieldDescription>
-            </Field>
-          )}
-        </form.Field>
+        {/* Meter ID - Only show for usage-based plans */}
+        <form.Subscribe selector={(state) => state.values.type}>
+          {(planType) =>
+            (planType === 'per_unit' || planType === 'tiered') && (
+              <form.Field name="meterId">
+                {(field) => (
+                  <Field>
+                    <FieldLabel htmlFor={field.name}>
+                      {t('plans.form.meter_id', { defaultValue: 'Meter ID' })}
+                    </FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder={t('plans.form.meter_id_placeholder', {
+                        defaultValue: 'Optional',
+                      })}
+                    />
+                    <FieldDescription>
+                      {t('plans.form.meter_id_description', {
+                        defaultValue:
+                          'Meter ID for usage-based billing (optional).',
+                      })}
+                    </FieldDescription>
+                  </Field>
+                )}
+              </form.Field>
+            )
+          }
+        </form.Subscribe>
       </div>
 
       {/* Description - Full width */}
       <form.Field name="description">
         {(field) => (
           <Field>
-            <FieldLabel htmlFor={field.name}>
+            <FieldLabel>
               {t('plans.form.description', { defaultValue: 'Description' })}
             </FieldLabel>
-            <Textarea
-              id={field.name}
-              name={field.name}
+            <RichTextEditor
               value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              placeholder={t('plans.form.description_placeholder', {
-                defaultValue: 'Plan description...',
-              })}
-              rows={4}
+              onChange={(value) => field.handleChange(value)}
             />
             <FieldDescription>
               {t('plans.form.description_description', {
-                defaultValue: 'A brief description of the plan.',
+                defaultValue:
+                  'A detailed description of the plan features and benefits.',
               })}
             </FieldDescription>
           </Field>
@@ -468,78 +534,92 @@ export function PlanForm({
                     onCheckedChange={(checked) => field.handleChange(!!checked)}
                   />
                   <FieldLabel htmlFor={field.name} className="cursor-pointer">
-                    {t('plans.form.has_trial', { defaultValue: 'Has Trial' })}
+                    {t('plans.form.has_trial', {
+                      defaultValue: 'Enable Trial Period',
+                    })}
                   </FieldLabel>
                 </div>
                 <FieldDescription>
                   {t('plans.form.has_trial_description', {
-                    defaultValue: 'Enable trial period for this plan.',
-                  })}
-                </FieldDescription>
-              </Field>
-            )}
-          </form.Field>
-
-          {/* Trial Interval ID */}
-          <form.Field name="trialIntervalId">
-            {(field) => (
-              <Field>
-                <FieldLabel htmlFor={field.name}>
-                  {t('plans.form.trial_interval_id', {
-                    defaultValue: 'Trial Interval ID',
-                  })}
-                </FieldLabel>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  placeholder={t('plans.form.trial_interval_id_placeholder', {
-                    defaultValue: 'Optional',
-                  })}
-                  disabled={!form.state.values.hasTrial}
-                />
-                <FieldDescription>
-                  {t('plans.form.trial_interval_id_description', {
-                    defaultValue: 'Interval for trial period.',
-                  })}
-                </FieldDescription>
-              </Field>
-            )}
-          </form.Field>
-
-          {/* Trial Interval Count */}
-          <form.Field name="trialIntervalCount">
-            {(field) => (
-              <Field>
-                <FieldLabel htmlFor={field.name}>
-                  {t('plans.form.trial_interval_count', {
-                    defaultValue: 'Trial Interval Count',
-                  })}
-                </FieldLabel>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  type="number"
-                  min="0"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) =>
-                    field.handleChange(parseInt(e.target.value, 10))
-                  }
-                  placeholder="0"
-                  disabled={!form.state.values.hasTrial}
-                />
-                <FieldDescription>
-                  {t('plans.form.trial_interval_count_description', {
-                    defaultValue: 'Number of intervals for trial period.',
+                    defaultValue: 'Allow customers to try this plan for free.',
                   })}
                 </FieldDescription>
               </Field>
             )}
           </form.Field>
         </div>
+
+        {/* Trial Interval and Count - Only show when hasTrial is true */}
+        <form.Subscribe selector={(state) => state.values.hasTrial}>
+          {(hasTrial) =>
+            hasTrial && (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 mt-6">
+                {/* Trial Interval ID */}
+                <form.Field name="trialIntervalId">
+                  {(field) => (
+                    <Field>
+                      <FieldLabel>
+                        {t('plans.form.trial_interval_id', {
+                          defaultValue: 'Trial Interval',
+                        })}
+                      </FieldLabel>
+                      <SearchSelect
+                        value={field.state.value}
+                        onChange={(value) => field.handleChange(value)}
+                        staticData={INTERVALS}
+                        placeholder={t(
+                          'plans.form.trial_interval_placeholder',
+                          {
+                            defaultValue: 'Select trial interval...',
+                          },
+                        )}
+                        formatOption={(interval: any) => ({
+                          value: interval.id,
+                          label: interval.name,
+                        })}
+                      />
+                      <FieldDescription>
+                        {t('plans.form.trial_interval_description', {
+                          defaultValue: 'Duration unit for trial period.',
+                        })}
+                      </FieldDescription>
+                    </Field>
+                  )}
+                </form.Field>
+
+                {/* Trial Interval Count */}
+                <form.Field name="trialIntervalCount">
+                  {(field) => (
+                    <Field>
+                      <FieldLabel htmlFor={field.name}>
+                        {t('plans.form.trial_interval_count', {
+                          defaultValue: 'Trial Duration',
+                        })}
+                      </FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="number"
+                        min="0"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) =>
+                          field.handleChange(parseInt(e.target.value, 10))
+                        }
+                        placeholder="0"
+                      />
+                      <FieldDescription>
+                        {t('plans.form.trial_interval_count_description', {
+                          defaultValue: 'Number of intervals for trial period.',
+                        })}
+                      </FieldDescription>
+                    </Field>
+                  )}
+                </form.Field>
+              </div>
+            )
+          }
+        </form.Subscribe>
       </div>
 
       {/* Status Checkboxes */}

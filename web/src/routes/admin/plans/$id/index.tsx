@@ -121,78 +121,120 @@ function PlanDetailsPage() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="space-y-6">
+        {/* Plan Information */}
         <Card>
           <CardHeader>
             <CardTitle>
-              {t('plans.view_title', { defaultValue: 'Plan Details' })}
+              {t('plans.view_title', { defaultValue: 'Plan Information' })}
             </CardTitle>
             <CardDescription>
               {t('plans.view_description', {
-                defaultValue: 'View plan details',
+                defaultValue: 'Detailed information about this plan',
               })}
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                {t('plans.form.description', { defaultValue: 'Description' })}
+          <CardContent className="space-y-4">
+            {/* Description */}
+            {plan.description && (
+              <div className="space-y-2">
+                <h3 className="text-sm font-medium text-muted-foreground">
+                  {t('plans.form.description', { defaultValue: 'Description' })}
+                </h3>
+                <div
+                  className="prose prose-sm max-w-none dark:prose-invert"
+                  dangerouslySetInnerHTML={{ __html: plan.description }}
+                />
+              </div>
+            )}
+
+            {/* Type */}
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium text-muted-foreground">
+                {t('plans.form.type', { defaultValue: 'Plan Type' })}
               </h3>
-              <p className="text-sm">{plan.description || '-'}</p>
+              <Badge variant="outline" className="capitalize">
+                {plan.type === 'flat_rate' && 'Flat Rate'}
+                {plan.type === 'per_unit' && 'Seat-Based'}
+                {plan.type === 'tiered' && 'Usage-Based'}
+              </Badge>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  {t('plans.form.type', { defaultValue: 'Type' })}
-                </h3>
-                <Badge variant="outline">{plan.type}</Badge>
-              </div>
-
-              <div className="space-y-1">
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  {t('plans.form.interval_count', {
-                    defaultValue: 'Interval Count',
-                  })}
-                </h3>
-                <p className="text-sm">{plan.intervalCount}</p>
-              </div>
+            {/* Product */}
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium text-muted-foreground">
+                {t('plans.form.product', { defaultValue: 'Product' })}
+              </h3>
+              <Link
+                to="/admin/products/$id"
+                params={{ id: plan.productId }}
+                className="text-sm font-medium text-primary hover:underline inline-flex items-center"
+              >
+                Product #{plan.productId}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-3 w-3 ml-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+              </Link>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  {t('plans.form.product_id', { defaultValue: 'Product ID' })}
-                </h3>
-                <p className="text-sm font-mono">{plan.productId}</p>
-              </div>
-
-              <div className="space-y-1">
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  {t('plans.form.interval_id', { defaultValue: 'Interval ID' })}
-                </h3>
-                <p className="text-sm font-mono">{plan.intervalId}</p>
-              </div>
+            {/* Billing Interval */}
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium text-muted-foreground">
+                {t('plans.form.billing_interval', {
+                  defaultValue: 'Billing Interval',
+                })}
+              </h3>
+              <p className="text-sm">
+                Every {plan.intervalCount}{' '}
+                {plan.intervalId === '1' &&
+                  (plan.intervalCount > 1 ? 'months' : 'month')}
+                {plan.intervalId === '2' &&
+                  (plan.intervalCount > 1 ? 'years' : 'year')}
+                {plan.intervalId === '3' &&
+                  (plan.intervalCount > 1 ? 'weeks' : 'week')}
+                {plan.intervalId === '4' &&
+                  (plan.intervalCount > 1 ? 'days' : 'day')}
+              </p>
             </div>
 
-            {plan.maxUsersPerTenant !== null &&
-              plan.maxUsersPerTenant !== undefined && (
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                    {t('plans.form.max_users_per_tenant', {
-                      defaultValue: 'Max Users Per Tenant',
-                    })}
-                  </h3>
-                  <p className="text-sm">
-                    {plan.maxUsersPerTenant === 0
-                      ? 'Unlimited'
-                      : plan.maxUsersPerTenant}
-                  </p>
-                </div>
-              )}
+            {/* Max Users Per Tenant */}
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium text-muted-foreground">
+                {t('plans.form.max_users_per_tenant', {
+                  defaultValue: 'Max Users Per Tenant',
+                })}
+              </h3>
+              <p className="text-sm">
+                {plan.maxUsersPerTenant === 0
+                  ? 'Unlimited'
+                  : plan.maxUsersPerTenant}
+              </p>
+            </div>
+
+            {/* Meter ID - Only show if exists */}
+            {plan.meterId && (
+              <div className="space-y-2">
+                <h3 className="text-sm font-medium text-muted-foreground">
+                  {t('plans.form.meter_id', { defaultValue: 'Meter ID' })}
+                </h3>
+                <p className="text-sm font-mono">{plan.meterId}</p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
+        {/* Status & Settings */}
         <Card>
           <CardHeader>
             <CardTitle>
@@ -200,116 +242,124 @@ function PlanDetailsPage() {
             </CardTitle>
             <CardDescription>
               {t('plans.status_description', {
-                defaultValue: 'Plan status and configuration',
+                defaultValue: 'Plan status and visibility settings',
               })}
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  {t('plans.form.is_active', { defaultValue: 'Active' })}
-                </h3>
-                <div className="flex items-center">
-                  {plan.isActive ? (
-                    <>
-                      <Check className="h-4 w-4 text-green-500 mr-2" />
-                      <span className="text-sm">Active</span>
-                    </>
-                  ) : (
-                    <>
-                      <X className="h-4 w-4 text-muted-foreground mr-2" />
-                      <span className="text-sm text-muted-foreground">
-                        Inactive
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  {t('plans.form.is_visible', { defaultValue: 'Visible' })}
-                </h3>
-                <div className="flex items-center">
-                  {plan.isVisible ? (
-                    <>
-                      <Check className="h-4 w-4 text-green-500 mr-2" />
-                      <span className="text-sm">Visible</span>
-                    </>
-                  ) : (
-                    <>
-                      <X className="h-4 w-4 text-muted-foreground mr-2" />
-                      <span className="text-sm text-muted-foreground">
-                        Hidden
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="border-t pt-4">
-              <h3 className="text-sm font-medium mb-3">
-                {t('plans.trial_title', { defaultValue: 'Trial Information' })}
+          <CardContent className="space-y-4">
+            {/* Active Status */}
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium text-muted-foreground">
+                {t('plans.form.is_active', { defaultValue: 'Active Status' })}
               </h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    {t('plans.form.has_trial', { defaultValue: 'Has Trial' })}
-                  </span>
-                  {plan.hasTrial ? (
-                    <Badge variant="default">Yes</Badge>
-                  ) : (
-                    <Badge variant="secondary">No</Badge>
-                  )}
-                </div>
-
-                {plan.hasTrial && (
+              <div className="flex items-center">
+                {plan.isActive ? (
                   <>
-                    {plan.trialIntervalId && (
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-muted-foreground">
-                          {t('plans.form.trial_interval_id', {
-                            defaultValue: 'Trial Interval ID',
-                          })}
-                        </span>
-                        <span className="text-sm font-mono">
-                          {plan.trialIntervalId}
-                        </span>
-                      </div>
-                    )}
-                    {plan.trialIntervalCount !== null &&
-                      plan.trialIntervalCount !== undefined && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-muted-foreground">
-                            {t('plans.form.trial_interval_count', {
-                              defaultValue: 'Trial Interval Count',
-                            })}
-                          </span>
-                          <span className="text-sm">
-                            {plan.trialIntervalCount}
-                          </span>
-                        </div>
-                      )}
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    <span className="text-sm">Active</span>
+                  </>
+                ) : (
+                  <>
+                    <X className="h-4 w-4 text-muted-foreground mr-2" />
+                    <span className="text-sm text-muted-foreground">
+                      Inactive
+                    </span>
                   </>
                 )}
               </div>
             </div>
 
-            <div className="border-t pt-4">
-              <div className="flex items-center text-sm text-muted-foreground">
+            {/* Visible Status */}
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium text-muted-foreground">
+                {t('plans.form.is_visible', { defaultValue: 'Visibility' })}
+              </h3>
+              <div className="flex items-center">
+                {plan.isVisible ? (
+                  <>
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    <span className="text-sm">Visible to customers</span>
+                  </>
+                ) : (
+                  <>
+                    <X className="h-4 w-4 text-muted-foreground mr-2" />
+                    <span className="text-sm text-muted-foreground">
+                      Hidden from customers
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Trial Information - Only show if has trial */}
+        {plan.hasTrial && (
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {t('plans.trial_title', { defaultValue: 'Trial Information' })}
+              </CardTitle>
+              <CardDescription>Free trial period configuration</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Trial Enabled Badge */}
+              <div className="space-y-2">
+                <h3 className="text-sm font-medium text-muted-foreground">
+                  {t('plans.form.has_trial', { defaultValue: 'Trial Period' })}
+                </h3>
+                <Badge variant="default">Enabled</Badge>
+              </div>
+
+              {/* Trial Duration */}
+              {plan.trialIntervalId && plan.trialIntervalCount && (
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium text-muted-foreground">
+                    {t('plans.form.trial_interval_count', {
+                      defaultValue: 'Trial Duration',
+                    })}
+                  </h3>
+                  <p className="text-sm">
+                    {plan.trialIntervalCount}{' '}
+                    {plan.trialIntervalId === '1' &&
+                      (plan.trialIntervalCount > 1 ? 'months' : 'month')}
+                    {plan.trialIntervalId === '2' &&
+                      (plan.trialIntervalCount > 1 ? 'years' : 'year')}
+                    {plan.trialIntervalId === '3' &&
+                      (plan.trialIntervalCount > 1 ? 'weeks' : 'week')}
+                    {plan.trialIntervalId === '4' &&
+                      (plan.trialIntervalCount > 1 ? 'days' : 'day')}
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Timestamps */}
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <div className="flex items-center">
                 <Calendar className="mr-2 h-4 w-4" />
                 <span>
                   {t('plans.created_at', { defaultValue: 'Created' })}{' '}
-                  {new Date(plan.createdAt * 1000).toLocaleDateString()}
+                  {new Date(plan.createdAt * 1000).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
                 </span>
               </div>
-              <div className="flex items-center text-sm text-muted-foreground mt-2">
+              <div className="flex items-center">
                 <Calendar className="mr-2 h-4 w-4" />
                 <span>
                   {t('plans.updated_at', { defaultValue: 'Updated' })}{' '}
-                  {new Date(plan.updatedAt * 1000).toLocaleDateString()}
+                  {new Date(plan.updatedAt * 1000).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
                 </span>
               </div>
             </div>
