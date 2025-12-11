@@ -269,11 +269,11 @@ type ComplexityRoot struct {
 		Me               func(childComplexity int) int
 		Plan             func(childComplexity int, id string) int
 		PlanBySlug       func(childComplexity int, slug string) int
-		Plans            func(childComplexity int, page *int32, perPage *int32, activeOnly *bool, visibleOnly *bool) int
+		Plans            func(childComplexity int, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string, activeOnly *bool, visibleOnly *bool) int
 		PlansByProduct   func(childComplexity int, productID string) int
 		Product          func(childComplexity int, id string) int
 		ProductBySlug    func(childComplexity int, slug string) int
-		Products         func(childComplexity int, page *int32, perPage *int32) int
+		Products         func(childComplexity int, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) int
 		SearchUsers      func(childComplexity int, query string, page *int32, perPage *int32) int
 		Tenant           func(childComplexity int, id string) int
 		TenantBySlug     func(childComplexity int, slug string) int
@@ -477,10 +477,10 @@ type QueryResolver interface {
 	TenantSettings(ctx context.Context, tenantID string) (*model.TenantSettingsResponse, error)
 	Product(ctx context.Context, id string) (*model.ProductResponse, error)
 	ProductBySlug(ctx context.Context, slug string) (*model.ProductResponse, error)
-	Products(ctx context.Context, page *int32, perPage *int32) (*model.ProductListResponse, error)
+	Products(ctx context.Context, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) (*model.ProductListResponse, error)
 	Plan(ctx context.Context, id string) (*model.PlanResponse, error)
 	PlanBySlug(ctx context.Context, slug string) (*model.PlanResponse, error)
-	Plans(ctx context.Context, page *int32, perPage *int32, activeOnly *bool, visibleOnly *bool) (*model.PlanListResponse, error)
+	Plans(ctx context.Context, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string, activeOnly *bool, visibleOnly *bool) (*model.PlanListResponse, error)
 	PlansByProduct(ctx context.Context, productID string) (*model.PlansResponse, error)
 	Discount(ctx context.Context, id string) (*model.DiscountResponse, error)
 	Discounts(ctx context.Context, page *int32, perPage *int32, activeOnly *bool) (*model.DiscountListResponse, error)
@@ -1569,7 +1569,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.Plans(childComplexity, args["page"].(*int32), args["perPage"].(*int32), args["activeOnly"].(*bool), args["visibleOnly"].(*bool)), true
+		return e.complexity.Query.Plans(childComplexity, args["page"].(*int32), args["perPage"].(*int32), args["search"].(*string), args["sortBy"].(*string), args["sortOrder"].(*string), args["activeOnly"].(*bool), args["visibleOnly"].(*bool)), true
 	case "Query.plansByProduct":
 		if e.complexity.Query.PlansByProduct == nil {
 			break
@@ -1613,7 +1613,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.Products(childComplexity, args["page"].(*int32), args["perPage"].(*int32)), true
+		return e.complexity.Query.Products(childComplexity, args["page"].(*int32), args["perPage"].(*int32), args["search"].(*string), args["sortBy"].(*string), args["sortOrder"].(*string)), true
 	case "Query.searchUsers":
 		if e.complexity.Query.SearchUsers == nil {
 			break
@@ -2818,16 +2818,31 @@ func (ec *executionContext) field_Query_plans_args(ctx context.Context, rawArgs 
 		return nil, err
 	}
 	args["perPage"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "activeOnly", ec.unmarshalOBoolean2ᚖbool)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "search", ec.unmarshalOString2ᚖstring)
 	if err != nil {
 		return nil, err
 	}
-	args["activeOnly"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "visibleOnly", ec.unmarshalOBoolean2ᚖbool)
+	args["search"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "sortBy", ec.unmarshalOString2ᚖstring)
 	if err != nil {
 		return nil, err
 	}
-	args["visibleOnly"] = arg3
+	args["sortBy"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "sortOrder", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["sortOrder"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "activeOnly", ec.unmarshalOBoolean2ᚖbool)
+	if err != nil {
+		return nil, err
+	}
+	args["activeOnly"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "visibleOnly", ec.unmarshalOBoolean2ᚖbool)
+	if err != nil {
+		return nil, err
+	}
+	args["visibleOnly"] = arg6
 	return args, nil
 }
 
@@ -2866,6 +2881,21 @@ func (ec *executionContext) field_Query_products_args(ctx context.Context, rawAr
 		return nil, err
 	}
 	args["perPage"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "search", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["search"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "sortBy", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["sortBy"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "sortOrder", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["sortOrder"] = arg4
 	return args, nil
 }
 
@@ -8644,7 +8674,7 @@ func (ec *executionContext) _Query_products(ctx context.Context, field graphql.C
 		ec.fieldContext_Query_products,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Query().Products(ctx, fc.Args["page"].(*int32), fc.Args["perPage"].(*int32))
+			return ec.resolvers.Query().Products(ctx, fc.Args["page"].(*int32), fc.Args["perPage"].(*int32), fc.Args["search"].(*string), fc.Args["sortBy"].(*string), fc.Args["sortOrder"].(*string))
 		},
 		nil,
 		ec.marshalNProductListResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐProductListResponse,
@@ -8791,7 +8821,7 @@ func (ec *executionContext) _Query_plans(ctx context.Context, field graphql.Coll
 		ec.fieldContext_Query_plans,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Query().Plans(ctx, fc.Args["page"].(*int32), fc.Args["perPage"].(*int32), fc.Args["activeOnly"].(*bool), fc.Args["visibleOnly"].(*bool))
+			return ec.resolvers.Query().Plans(ctx, fc.Args["page"].(*int32), fc.Args["perPage"].(*int32), fc.Args["search"].(*string), fc.Args["sortBy"].(*string), fc.Args["sortOrder"].(*string), fc.Args["activeOnly"].(*bool), fc.Args["visibleOnly"].(*bool))
 		},
 		nil,
 		ec.marshalNPlanListResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐPlanListResponse,

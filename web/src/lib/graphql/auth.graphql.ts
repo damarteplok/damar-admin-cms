@@ -91,84 +91,93 @@ export const VERIFY_EMAIL_MUTATION = gql`
   }
 `
 
+export const GET_USERS_QUERY = gql`
+  query GetAllUsers($page: Int!, $perPage: Int!) {
+    users(page: $page, perPage: $perPage) {
+      success
+      message
+      data {
+        users {
+          id
+          name
+          email
+          isAdmin
+          isBlocked
+          emailVerified
+        }
+        total
+        page
+        perPage
+      }
+    }
+  }
+`
+
+export const SEARCH_USERS_QUERY = gql`
+  query SearchUsers($query: String!, $page: Int!, $perPage: Int!) {
+    searchUsers(query: $query, page: $page, perPage: $perPage) {
+      success
+      message
+      data {
+        users {
+          id
+          name
+          email
+          isAdmin
+          isBlocked
+          emailVerified
+        }
+        total
+        page
+        perPage
+      }
+    }
+  }
+`
+
+export const GET_USER_BY_ID_QUERY = gql`
+  query GetUserById($id: ID!) {
+    user(id: $id) {
+      success
+      message
+      data {
+        id
+        name
+        email
+        publicName
+        isAdmin
+        isBlocked
+        phoneNumber
+        position
+        emailVerified
+        emailVerifiedAt
+        lastLoginAt
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`
+
+/**
+ * GraphQL Input Types
+ * These are used for mutations
+ */
 export interface LoginInput {
   email: string
   password: string
 }
 
-export interface LoginResponse {
-  login: {
-    success: boolean
-    message: string
-    data: {
-      accessToken: string
-      refreshToken: string
-      user: {
-        id: string
-        name: string
-        email: string
-        isAdmin: boolean
-        emailVerified: boolean
-      }
-    }
-  }
-}
-
-export interface RefreshTokenResponse {
-  refreshToken: {
-    success: boolean
-    message: string
-    data: {
-      accessToken: string
-      refreshToken: string
-    }
-  }
-}
-
-export interface MeResponse {
-  me: {
-    success: boolean
-    message: string
-    data: {
-      id: string
-      name: string
-      email: string
-      isAdmin: boolean
-      emailVerified: boolean
-      createdAt: string
-      updatedAt: string
-    }
-  }
-}
-
-export interface LogoutResponse {
-  logout: {
-    success: boolean
-    message: string
-  }
-}
-
-export interface ForgotPasswordResponse {
-  forgotPassword: {
-    success: boolean
-    message: string
-  }
-}
-
-export interface CreateUserResponse {
-  createUser: {
-    success: boolean
-    message?: string
-    data?: {
-      id: string
-      email: string
-    }
-  }
-}
-
-export interface VerifyEmailResponse {
-  verifyEmail: {
-    success: boolean
-    message?: string
-  }
-}
+/**
+ * Note: Response types moved to @/types/api.ts
+ * Import from '@/types' instead of this file
+ *
+ * Available types:
+ * - LoginResponse
+ * - RefreshTokenResponse
+ * - MeResponse
+ * - LogoutResponse
+ * - ForgotPasswordResponse
+ * - CreateUserResponse
+ * - VerifyEmailResponse
+ */

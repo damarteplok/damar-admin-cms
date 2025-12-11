@@ -7,8 +7,10 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { Provider as UrqlProvider } from 'urql'
-import { urqlClient } from '../lib/urql'
-import { AuthProvider } from '../lib/auth-context'
+import { urqlClient } from '@/lib/graphql/client'
+import { AuthProvider } from '@/lib/auth-context'
+import { Toaster } from '@/components/ui/sonner'
+import { ErrorState } from '@/components/ui/error-state'
 import '../i18n'
 
 import appCss from '../styles.css?url'
@@ -39,16 +41,20 @@ export const Route = createRootRoute({
 
   notFoundComponent: () => {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">404 - Page Not Found</h1>
-          <p className="text-muted-foreground mb-4">
-            The page you're looking for doesn't exist.
-          </p>
-          <a href="/" className="text-primary hover:underline">
-            Go back home
-          </a>
-        </div>
+      <div className="flex min-h-screen items-center justify-center p-4">
+        <ErrorState
+          title="404 - Page Not Found"
+          description="The page you're looking for doesn't exist or has been moved."
+          variant="warning"
+          action={
+            <a
+              href="/"
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+            >
+              Go back home
+            </a>
+          }
+        />
       </div>
     )
   },
@@ -86,6 +92,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <UrqlProvider value={urqlClient}>
           <AuthProvider>
             {children}
+            <Toaster position="top-center" />
             <TanStackDevtools
               config={{
                 position: 'bottom-right',

@@ -17,7 +17,7 @@ import {
 import { useAuth } from '@/lib/auth-hooks'
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import { useEffect } from 'react'
-import { AdminLayoutSkeleton } from './AdminLayoutSkeleton'
+import { FullScreenLoading } from '@/components/common/full-screen-loading'
 import { StatusPage } from './StatusPage'
 
 export function AdminLayout({ children }: { children?: React.ReactNode }) {
@@ -44,7 +44,7 @@ export function AdminLayout({ children }: { children?: React.ReactNode }) {
   ])
 
   if (!auth.isHydrated || auth.isLoading) {
-    return <AdminLayoutSkeleton />
+    return <FullScreenLoading message="Loading admin panel..." />
   }
 
   if (!auth.isAdmin) {

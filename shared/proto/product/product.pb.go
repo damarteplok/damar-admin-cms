@@ -757,6 +757,9 @@ type GetAllProductsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
 	PerPage       int32                  `protobuf:"varint,2,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
+	Search        string                 `protobuf:"bytes,3,opt,name=search,proto3" json:"search,omitempty"`
+	SortBy        string                 `protobuf:"bytes,4,opt,name=sort_by,json=sortBy,proto3" json:"sort_by,omitempty"`
+	SortOrder     string                 `protobuf:"bytes,5,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -803,6 +806,27 @@ func (x *GetAllProductsRequest) GetPerPage() int32 {
 		return x.PerPage
 	}
 	return 0
+}
+
+func (x *GetAllProductsRequest) GetSearch() string {
+	if x != nil {
+		return x.Search
+	}
+	return ""
+}
+
+func (x *GetAllProductsRequest) GetSortBy() string {
+	if x != nil {
+		return x.SortBy
+	}
+	return ""
+}
+
+func (x *GetAllProductsRequest) GetSortOrder() string {
+	if x != nil {
+		return x.SortOrder
+	}
+	return ""
 }
 
 type GetAllProductsData struct {
@@ -1420,7 +1444,7 @@ func (x *GetPlansByProductResponse) GetData() []*Plan {
 type CreatePlanRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Name               string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Slug               string                 `protobuf:"bytes,2,opt,name=slug,proto3" json:"slug,omitempty"`
+	Slug               *string                `protobuf:"bytes,2,opt,name=slug,proto3,oneof" json:"slug,omitempty"`
 	IntervalId         int64                  `protobuf:"varint,3,opt,name=interval_id,json=intervalId,proto3" json:"interval_id,omitempty"`
 	ProductId          int64                  `protobuf:"varint,4,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	IsActive           bool                   `protobuf:"varint,5,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
@@ -1475,8 +1499,8 @@ func (x *CreatePlanRequest) GetName() string {
 }
 
 func (x *CreatePlanRequest) GetSlug() string {
-	if x != nil {
-		return x.Slug
+	if x != nil && x.Slug != nil {
+		return *x.Slug
 	}
 	return ""
 }
@@ -1933,8 +1957,11 @@ type GetAllPlansRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
 	PerPage       int32                  `protobuf:"varint,2,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
-	ActiveOnly    bool                   `protobuf:"varint,3,opt,name=active_only,json=activeOnly,proto3" json:"active_only,omitempty"`
-	VisibleOnly   bool                   `protobuf:"varint,4,opt,name=visible_only,json=visibleOnly,proto3" json:"visible_only,omitempty"`
+	Search        string                 `protobuf:"bytes,3,opt,name=search,proto3" json:"search,omitempty"`
+	SortBy        string                 `protobuf:"bytes,4,opt,name=sort_by,json=sortBy,proto3" json:"sort_by,omitempty"`
+	SortOrder     string                 `protobuf:"bytes,5,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	ActiveOnly    bool                   `protobuf:"varint,6,opt,name=active_only,json=activeOnly,proto3" json:"active_only,omitempty"`
+	VisibleOnly   bool                   `protobuf:"varint,7,opt,name=visible_only,json=visibleOnly,proto3" json:"visible_only,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1981,6 +2008,27 @@ func (x *GetAllPlansRequest) GetPerPage() int32 {
 		return x.PerPage
 	}
 	return 0
+}
+
+func (x *GetAllPlansRequest) GetSearch() string {
+	if x != nil {
+		return x.Search
+	}
+	return ""
+}
+
+func (x *GetAllPlansRequest) GetSortBy() string {
+	if x != nil {
+		return x.SortBy
+	}
+	return ""
+}
+
+func (x *GetAllPlansRequest) GetSortOrder() string {
+	if x != nil {
+		return x.SortOrder
+	}
+	return ""
 }
 
 func (x *GetAllPlansRequest) GetActiveOnly() bool {
@@ -2993,6 +3041,11 @@ type GetAllPlanMetersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
 	PerPage       int32                  `protobuf:"varint,2,opt,name=per_page,json=perPage,proto3" json:"per_page,omitempty"`
+	Search        string                 `protobuf:"bytes,3,opt,name=search,proto3" json:"search,omitempty"`
+	SortBy        string                 `protobuf:"bytes,4,opt,name=sort_by,json=sortBy,proto3" json:"sort_by,omitempty"`
+	SortOrder     string                 `protobuf:"bytes,5,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	ActiveOnly    bool                   `protobuf:"varint,6,opt,name=active_only,json=activeOnly,proto3" json:"active_only,omitempty"`
+	VisibleOnly   bool                   `protobuf:"varint,7,opt,name=visible_only,json=visibleOnly,proto3" json:"visible_only,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3039,6 +3092,41 @@ func (x *GetAllPlanMetersRequest) GetPerPage() int32 {
 		return x.PerPage
 	}
 	return 0
+}
+
+func (x *GetAllPlanMetersRequest) GetSearch() string {
+	if x != nil {
+		return x.Search
+	}
+	return ""
+}
+
+func (x *GetAllPlanMetersRequest) GetSortBy() string {
+	if x != nil {
+		return x.SortBy
+	}
+	return ""
+}
+
+func (x *GetAllPlanMetersRequest) GetSortOrder() string {
+	if x != nil {
+		return x.SortOrder
+	}
+	return ""
+}
+
+func (x *GetAllPlanMetersRequest) GetActiveOnly() bool {
+	if x != nil {
+		return x.ActiveOnly
+	}
+	return false
+}
+
+func (x *GetAllPlanMetersRequest) GetVisibleOnly() bool {
+	if x != nil {
+		return x.VisibleOnly
+	}
+	return false
 }
 
 type GetAllPlanMetersData struct {
@@ -7343,10 +7431,14 @@ const file_product_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"K\n" +
 	"\x15DeleteProductResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"F\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\x96\x01\n" +
 	"\x15GetAllProductsRequest\x12\x12\n" +
 	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x19\n" +
-	"\bper_page\x18\x02 \x01(\x05R\aperPage\"\x87\x01\n" +
+	"\bper_page\x18\x02 \x01(\x05R\aperPage\x12\x16\n" +
+	"\x06search\x18\x03 \x01(\tR\x06search\x12\x17\n" +
+	"\asort_by\x18\x04 \x01(\tR\x06sortBy\x12\x1d\n" +
+	"\n" +
+	"sort_order\x18\x05 \x01(\tR\tsortOrder\"\x87\x01\n" +
 	"\x12GetAllProductsData\x12,\n" +
 	"\bproducts\x18\x01 \x03(\v2\x10.product.ProductR\bproducts\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\x12\x12\n" +
@@ -7400,26 +7492,27 @@ const file_product_proto_rawDesc = "" +
 	"\x19GetPlansByProductResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12!\n" +
-	"\x04data\x18\x03 \x03(\v2\r.product.PlanR\x04data\"\x88\x04\n" +
+	"\x04data\x18\x03 \x03(\v2\r.product.PlanR\x04data\"\x96\x04\n" +
 	"\x11CreatePlanRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
-	"\x04slug\x18\x02 \x01(\tR\x04slug\x12\x1f\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x17\n" +
+	"\x04slug\x18\x02 \x01(\tH\x00R\x04slug\x88\x01\x01\x12\x1f\n" +
 	"\vinterval_id\x18\x03 \x01(\x03R\n" +
 	"intervalId\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\x04 \x01(\x03R\tproductId\x12\x1b\n" +
 	"\tis_active\x18\x05 \x01(\bR\bisActive\x12\x1b\n" +
 	"\thas_trial\x18\x06 \x01(\bR\bhasTrial\x12/\n" +
-	"\x11trial_interval_id\x18\a \x01(\x03H\x00R\x0ftrialIntervalId\x88\x01\x01\x12%\n" +
+	"\x11trial_interval_id\x18\a \x01(\x03H\x01R\x0ftrialIntervalId\x88\x01\x01\x12%\n" +
 	"\x0einterval_count\x18\b \x01(\x05R\rintervalCount\x120\n" +
 	"\x14trial_interval_count\x18\t \x01(\x05R\x12trialIntervalCount\x12 \n" +
 	"\vdescription\x18\n" +
 	" \x01(\tR\vdescription\x12\x12\n" +
 	"\x04type\x18\v \x01(\tR\x04type\x12/\n" +
 	"\x14max_users_per_tenant\x18\f \x01(\x05R\x11maxUsersPerTenant\x12\x1e\n" +
-	"\bmeter_id\x18\r \x01(\x03H\x01R\ameterId\x88\x01\x01\x12\x1d\n" +
+	"\bmeter_id\x18\r \x01(\x03H\x02R\ameterId\x88\x01\x01\x12\x1d\n" +
 	"\n" +
-	"is_visible\x18\x0e \x01(\bR\tisVisibleB\x14\n" +
+	"is_visible\x18\x0e \x01(\bR\tisVisibleB\a\n" +
+	"\x05_slugB\x14\n" +
 	"\x12_trial_interval_idB\v\n" +
 	"\t_meter_id\"k\n" +
 	"\x12CreatePlanResponse\x12\x18\n" +
@@ -7454,13 +7547,17 @@ const file_product_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"H\n" +
 	"\x12DeletePlanResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"\x87\x01\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\xd7\x01\n" +
 	"\x12GetAllPlansRequest\x12\x12\n" +
 	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x19\n" +
-	"\bper_page\x18\x02 \x01(\x05R\aperPage\x12\x1f\n" +
-	"\vactive_only\x18\x03 \x01(\bR\n" +
+	"\bper_page\x18\x02 \x01(\x05R\aperPage\x12\x16\n" +
+	"\x06search\x18\x03 \x01(\tR\x06search\x12\x17\n" +
+	"\asort_by\x18\x04 \x01(\tR\x06sortBy\x12\x1d\n" +
+	"\n" +
+	"sort_order\x18\x05 \x01(\tR\tsortOrder\x12\x1f\n" +
+	"\vactive_only\x18\x06 \x01(\bR\n" +
 	"activeOnly\x12!\n" +
-	"\fvisible_only\x18\x04 \x01(\bR\vvisibleOnly\"{\n" +
+	"\fvisible_only\x18\a \x01(\bR\vvisibleOnly\"{\n" +
 	"\x0fGetAllPlansData\x12#\n" +
 	"\x05plans\x18\x01 \x03(\v2\r.product.PlanR\x05plans\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\x12\x12\n" +
@@ -7534,10 +7631,17 @@ const file_product_proto_rawDesc = "" +
 	"\x18GetPlanMeterByIDResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12&\n" +
-	"\x04data\x18\x03 \x01(\v2\x12.product.PlanMeterR\x04data\"H\n" +
+	"\x04data\x18\x03 \x01(\v2\x12.product.PlanMeterR\x04data\"\xdc\x01\n" +
 	"\x17GetAllPlanMetersRequest\x12\x12\n" +
 	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x19\n" +
-	"\bper_page\x18\x02 \x01(\x05R\aperPage\"\x87\x01\n" +
+	"\bper_page\x18\x02 \x01(\x05R\aperPage\x12\x16\n" +
+	"\x06search\x18\x03 \x01(\tR\x06search\x12\x17\n" +
+	"\asort_by\x18\x04 \x01(\tR\x06sortBy\x12\x1d\n" +
+	"\n" +
+	"sort_order\x18\x05 \x01(\tR\tsortOrder\x12\x1f\n" +
+	"\vactive_only\x18\x06 \x01(\bR\n" +
+	"activeOnly\x12!\n" +
+	"\fvisible_only\x18\a \x01(\bR\vvisibleOnly\"\x87\x01\n" +
 	"\x14GetAllPlanMetersData\x12*\n" +
 	"\x06meters\x18\x01 \x03(\v2\x12.product.PlanMeterR\x06meters\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\x12\x12\n" +

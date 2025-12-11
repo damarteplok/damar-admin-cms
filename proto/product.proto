@@ -156,6 +156,9 @@ message DeleteProductResponse {
 message GetAllProductsRequest {
   int32 page = 1;
   int32 per_page = 2;
+  string search = 3;
+  string sort_by = 4;
+  string sort_order = 5;
 }
 
 message GetAllProductsData {
@@ -225,7 +228,7 @@ message GetPlansByProductResponse {
 
 message CreatePlanRequest {
   string name = 1;
-  string slug = 2;
+  optional string slug = 2;
   int64 interval_id = 3;
   int64 product_id = 4;
   bool is_active = 5;
@@ -281,8 +284,11 @@ message DeletePlanResponse {
 message GetAllPlansRequest {
   int32 page = 1;
   int32 per_page = 2;
-  bool active_only = 3;
-  bool visible_only = 4;
+  string search = 3;
+  string sort_by = 4;
+  string sort_order = 5;
+  bool active_only = 6;
+  bool visible_only = 7;
 }
 
 message GetAllPlansData {
@@ -391,8 +397,11 @@ message GetPlanMeterByIDResponse {
 
 message GetAllPlanMetersRequest {
   int32 page = 1;
-  int32 per_page = 2;
-}
+  int32 per_page = 2;  string search = 3;
+  string sort_by = 4;
+  string sort_order = 5;
+  bool active_only = 6;
+  bool visible_only = 7;}
 
 message GetAllPlanMetersData {
   repeated PlanMeter meters = 1;

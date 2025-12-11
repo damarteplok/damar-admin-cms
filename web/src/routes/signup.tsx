@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { SignupForm } from '@/components/signup-form'
+import { SignupForm } from '@/components/features/auth'
 import { getAccessToken } from '@/lib/auth'
 
 export const Route = createFileRoute('/signup')({

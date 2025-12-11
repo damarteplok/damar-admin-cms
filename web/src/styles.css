@@ -53,7 +53,7 @@ code {
   --font-sans: Inter, sans-serif;
   --font-serif: Source Serif 4, serif;
   --font-mono: IBM Plex Mono, monospace;
-  --radius: 1.3rem;
+  --radius: 1rem;
   --shadow-2xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
   --shadow-xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
   --shadow-sm:
@@ -70,9 +70,9 @@ code {
   --tracking-normal: 0em;
 }
 .dark {
-  --background: oklch(0.26 0.03 262.71);
+  --background: oklch(0.18 0.02 262.71);
   --foreground: oklch(0.93 0.01 264.6);
-  --card: oklch(0.3 0.03 261.75);
+  --card: oklch(0.22 0.02 261.75);
   --card-foreground: oklch(0.93 0.01 264.6);
   --popover: oklch(0.3 0.03 261.75);
   --popover-foreground: oklch(0.93 0.01 264.6);
@@ -105,7 +105,7 @@ code {
   --font-sans: Inter, sans-serif;
   --font-serif: Source Serif 4, serif;
   --font-mono: IBM Plex Mono, monospace;
-  --radius: 1.3rem;
+  --radius: 1rem;
   --shadow-2xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
   --shadow-xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
   --shadow-sm:

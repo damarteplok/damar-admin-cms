@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   ColumnDef,
   flexRender,
@@ -9,6 +10,7 @@ import {
   SortingState,
   getFilteredRowModel,
   ColumnFiltersState,
+  VisibilityState,
 } from '@tanstack/react-table'
 import {
   Table,
@@ -20,7 +22,21 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Plus, ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  Settings2,
+} from 'lucide-react'
 
 interface DataTableProps<TData, TValue> {
   title: string
@@ -42,6 +58,12 @@ interface DataTableProps<TData, TValue> {
   pageSize?: number
   onPageSizeChange?: (pageSize: number) => void
   pageSizeOptions?: number[]
+  // Server-side pagination props
+  totalItems?: number
+  totalPages?: number
+  onPageChange?: (page: number) => void
+  // Server-side sorting props
+  onSortChange?: (columnId: string, order: 'asc' | 'desc') => void
 }
 
 export function DataTable<TData, TValue>({
@@ -62,13 +84,26 @@ export function DataTable<TData, TValue>({
   pageSize = 10,
   onPageSizeChange,
   pageSizeOptions = [5, 10, 20, 50, 100],
+  totalItems,
+  totalPages,
+  onPageChange,
+  onSortChange, // TODO: Implement column header sorting
 }: DataTableProps<TData, TValue>) {
+  const { t } = useTranslation()
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   )
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({})
   const [searchInputValue, setSearchInputValue] = React.useState('')
   const [isDebouncing, setIsDebouncing] = React.useState(false)
+  const [currentSortColumn, setCurrentSortColumn] = React.useState<
+    string | null
+  >(null)
+  const [currentSortOrder, setCurrentSortOrder] = React.useState<
+    'asc' | 'desc'
+  >('asc')
 
   // Create row number column
   const rowNumberColumn: ColumnDef<TData, TValue> = {
@@ -114,9 +149,11 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: serverSideSearch ? undefined : getFilteredRowModel(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
       columnFilters,
+      columnVisibility,
     },
     // Manual pagination for server-side
     manualPagination: serverSideSearch,
@@ -133,6 +170,21 @@ export function DataTable<TData, TValue>({
     }
   }
 
+  const handleSort = (columnId: string) => {
+    if (!onSortChange) return
+
+    let newOrder: 'asc' | 'desc' = 'asc'
+
+    if (currentSortColumn === columnId) {
+      // Toggle order if clicking same column
+      newOrder = currentSortOrder === 'asc' ? 'desc' : 'asc'
+    }
+
+    setCurrentSortColumn(columnId)
+    setCurrentSortOrder(newOrder)
+    onSortChange(columnId, newOrder)
+  }
+
   return (
     <div className="space-y-4">
       {/* Header Section */}
@@ -143,12 +195,7 @@ export function DataTable<TData, TValue>({
             <p className="text-muted-foreground mt-1">{description}</p>
           )}
         </div>
-        {canAdd && (
-          <Button onClick={onAddClick}>
-            <Plus className="h-4 w-4" />
-            {addButtonTitle}
-          </Button>
-        )}
+        {canAdd && <Button onClick={onAddClick}>{addButtonTitle}</Button>}
       </div>
 
       {/* Search Section */}
@@ -163,29 +210,92 @@ export function DataTable<TData, TValue>({
             />
             {serverSideSearch && isDebouncing && searchInputValue && (
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-                Typing...
+                {t('datatable.typing', { defaultValue: 'Typing...' })}
               </span>
             )}
           </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="ml-auto">
+                <Settings2 className="h-4 w-4" />
+                {t('datatable.columns', { defaultValue: 'Columns' })}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[180px]">
+              {table
+                .getAllColumns()
+                .filter(
+                  (column) =>
+                    typeof column.accessorFn !== 'undefined' &&
+                    column.getCanHide(),
+                )
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  )
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       )}
 
       {/* Table Section */}
-      <div className={`rounded-md border ${isLoading ? 'opacity-50' : ''}`}>
+      <div
+        className={`rounded-md border bg-card ${isLoading ? 'opacity-50' : ''}`}
+      >
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
+                {headerGroup.headers.map((header) => {
+                  const canSort =
+                    serverSideSearch &&
+                    onSortChange &&
+                    header.id !== 'rowNumber' &&
+                    header.id !== 'actions'
+                  const isSorted = currentSortColumn === header.id
+
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder ? null : canSort ? (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="-ml-3 h-8 data-[state=open]:bg-accent"
+                          onClick={() => handleSort(header.id)}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                          {isSorted ? (
+                            currentSortOrder === 'asc' ? (
+                              <ArrowUp className="ml-2 h-4 w-4" />
+                            ) : (
+                              <ArrowDown className="ml-2 h-4 w-4" />
+                            )
+                          ) : (
+                            <ArrowUpDown className="ml-2 h-4 w-4" />
+                          )}
+                        </Button>
+                      ) : (
+                        flexRender(
                           header.column.columnDef.header,
                           header.getContext(),
-                        )}
-                  </TableHead>
-                ))}
+                        )
+                      )}
+                    </TableHead>
+                  )
+                })}
               </TableRow>
             ))}
           </TableHeader>
@@ -212,7 +322,9 @@ export function DataTable<TData, TValue>({
                   colSpan={allColumns.length}
                   className="h-24 text-center"
                 >
-                  No results found.
+                  {t('datatable.no_results', {
+                    defaultValue: 'No results found.',
+                  })}
                 </TableCell>
               </TableRow>
             )}
@@ -223,15 +335,30 @@ export function DataTable<TData, TValue>({
       {/* Pagination Section */}
       <div className="flex items-center justify-between">
         <div className="text-sm text-muted-foreground">
-          Showing {table.getState().pagination.pageIndex + 1} of{' '}
-          {table.getPageCount()} page(s)
+          {serverSideSearch && totalItems !== undefined ? (
+            <>
+              {t('datatable.showing', { defaultValue: 'Showing' })}{' '}
+              {data.length > 0 ? (currentPage - 1) * pageSize + 1 : 0}{' '}
+              {t('datatable.to', { defaultValue: 'to' })}{' '}
+              {Math.min(currentPage * pageSize, totalItems)}{' '}
+              {t('datatable.of', { defaultValue: 'of' })} {totalItems}{' '}
+              {t('datatable.results', { defaultValue: 'results' })}
+            </>
+          ) : (
+            <>
+              {t('datatable.showing', { defaultValue: 'Showing' })}{' '}
+              {table.getState().pagination.pageIndex + 1}{' '}
+              {t('datatable.of', { defaultValue: 'of' })} {table.getPageCount()}{' '}
+              {t('datatable.pages', { defaultValue: 'page(s)' })}
+            </>
+          )}
         </div>
 
         {/* Page Size Selector */}
         {onPageSizeChange && (
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">
-              Rows per page:
+              {t('datatable.rows_per_page', { defaultValue: 'Rows per page' })}:
             </span>
             <select
               value={pageSize}
@@ -252,19 +379,37 @@ export function DataTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => {
+              if (serverSideSearch && onPageChange) {
+                onPageChange(currentPage - 1)
+              } else {
+                table.previousPage()
+              }
+            }}
+            disabled={
+              serverSideSearch ? currentPage <= 1 : !table.getCanPreviousPage()
+            }
           >
             <ChevronLeft className="h-4 w-4" />
-            Previous
+            {t('datatable.previous', { defaultValue: 'Previous' })}
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => {
+              if (serverSideSearch && onPageChange) {
+                onPageChange(currentPage + 1)
+              } else {
+                table.nextPage()
+              }
+            }}
+            disabled={
+              serverSideSearch && totalPages
+                ? currentPage >= totalPages
+                : !table.getCanNextPage()
+            }
           >
-            Next
+            {t('datatable.next', { defaultValue: 'Next' })}
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>

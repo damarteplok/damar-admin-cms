@@ -543,7 +543,13 @@ type Query {
   # Product queries
   product(id: ID!): ProductResponse!
   productBySlug(slug: String!): ProductResponse!
-  products(page: Int, perPage: Int): ProductListResponse!
+  products(
+    page: Int
+    perPage: Int
+    search: String
+    sortBy: String
+    sortOrder: String
+  ): ProductListResponse!
 
   # Plan queries
   plan(id: ID!): PlanResponse!
@@ -551,6 +557,9 @@ type Query {
   plans(
     page: Int
     perPage: Int
+    search: String
+    sortBy: String
+    sortOrder: String
     activeOnly: Boolean
     visibleOnly: Boolean
   ): PlanListResponse!

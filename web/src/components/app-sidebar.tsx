@@ -57,11 +57,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         items: [
           {
             title: t('nav.packages'),
-            url: '/admin/subscription/packages',
+            url: '/admin/products',
           },
           {
             title: t('nav.plans'),
-            url: '/admin/subscription/plans',
+            url: '/admin/plans',
           },
           {
             title: t('nav.discounts'),

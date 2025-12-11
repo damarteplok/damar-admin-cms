@@ -5,11 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/damarteplok/damar-admin-cms/services/product-service/internal/domain"
 	"github.com/damarteplok/damar-admin-cms/shared/amqp"
 	"github.com/damarteplok/damar-admin-cms/shared/contracts"
 	"github.com/damarteplok/damar-admin-cms/shared/logger"
+	"github.com/google/uuid"
 	"go.uber.org/zap"
 )
 
@@ -46,8 +48,17 @@ func (s *productService) Create(ctx context.Context, product *domain.Product) er
 	if product.Name == "" {
 		return errors.New("product name is required")
 	}
+
+	// Generate slug from name if not provided
 	if product.Slug == "" {
-		return errors.New("product slug is required")
+		product.Slug = generateSlug(product.Name)
+	}
+
+	// Check if slug already exists and make it unique if needed
+	existing, _ := s.repo.GetBySlug(ctx, product.Slug)
+	if existing != nil {
+		// If slug exists, append random suffix for uniqueness
+		product.Slug = fmt.Sprintf("%s-%s", product.Slug, uuid.New().String()[:8])
 	}
 
 	err := s.repo.Create(ctx, product)
@@ -181,7 +192,7 @@ func (s *productService) Delete(ctx context.Context, id int64) error {
 	return nil
 }
 
-func (s *productService) GetAll(ctx context.Context, page, perPage int) ([]*domain.Product, int, error) {
+func (s *productService) GetAll(ctx context.Context, page, perPage int, search, sortBy, sortOrder string) ([]*domain.Product, int, error) {
 	if page < 1 {
 		page = 1
 	}
@@ -191,5 +202,19 @@ func (s *productService) GetAll(ctx context.Context, page, perPage int) ([]*doma
 	if perPage > 100 {
 		perPage = 100
 	}
-	return s.repo.GetAll(ctx, page, perPage)
+	return s.repo.GetAll(ctx, page, perPage, search, sortBy, sortOrder)
+}
+
+// Helper function to generate slug from name
+func generateSlug(name string) string {
+	slug := strings.ToLower(name)
+	slug = strings.ReplaceAll(slug, " ", "-")
+	// Remove special characters except hyphens
+	var result strings.Builder
+	for _, r := range slug {
+		if (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9') || r == '-' {
+			result.WriteRune(r)
+		}
+	}
+	return result.String()
 }

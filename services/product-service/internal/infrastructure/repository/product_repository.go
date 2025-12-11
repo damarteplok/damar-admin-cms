@@ -187,26 +187,62 @@ func (r *ProductRepository) Delete(ctx context.Context, id int64) error {
 	return nil
 }
 
-func (r *ProductRepository) GetAll(ctx context.Context, page, perPage int) ([]*domain.Product, int, error) {
+func (r *ProductRepository) GetAll(ctx context.Context, page, perPage int, search, sortBy, sortOrder string) ([]*domain.Product, int, error) {
 	offset := (page - 1) * perPage
+
+	// Build where clause for search
+	whereClause := ""
+	args := []interface{}{}
+	argIndex := 1
+
+	if search != "" {
+		whereClause = fmt.Sprintf(" WHERE name ILIKE $%d OR slug ILIKE $%d OR description ILIKE $%d", argIndex, argIndex, argIndex)
+		args = append(args, "%"+search+"%")
+		argIndex++
+	}
 
 	// Get total count
 	var total int
-	countQuery := `SELECT COUNT(*) FROM products`
-	err := r.db.QueryRow(ctx, countQuery).Scan(&total)
+	countQuery := fmt.Sprintf(`SELECT COUNT(*) FROM products%s`, whereClause)
+	var err error
+	if len(args) > 0 {
+		err = r.db.QueryRow(ctx, countQuery, args...).Scan(&total)
+	} else {
+		err = r.db.QueryRow(ctx, countQuery).Scan(&total)
+	}
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to count products: %w", err)
 	}
 
-	// Get products
-	query := `
-		SELECT id, name, slug, description, metadata, features, is_popular, is_default, created_at, updated_at
-		FROM products 
-		ORDER BY created_at DESC
-		LIMIT $1 OFFSET $2
-	`
+	// Build order by clause
+	orderClause := "ORDER BY created_at DESC"
+	if sortBy != "" {
+		// Validate sortBy to prevent SQL injection
+		validSortFields := map[string]bool{
+			"name":       true,
+			"slug":       true,
+			"created_at": true,
+			"updated_at": true,
+		}
+		if validSortFields[sortBy] {
+			direction := "DESC"
+			if sortOrder == "asc" || sortOrder == "ASC" {
+				direction = "ASC"
+			}
+			orderClause = fmt.Sprintf("ORDER BY %s %s", sortBy, direction)
+		}
+	}
 
-	rows, err := r.db.Query(ctx, query, perPage, offset)
+	// Get products
+	query := fmt.Sprintf(`
+		SELECT id, name, slug, description, metadata, features, is_popular, is_default, created_at, updated_at
+		FROM products%s
+		%s
+		LIMIT $%d OFFSET $%d
+	`, whereClause, orderClause, argIndex, argIndex+1)
+
+	args = append(args, perPage, offset)
+	rows, err := r.db.Query(ctx, query, args...)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to get products: %w", err)
 	}

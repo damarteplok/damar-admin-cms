@@ -181,7 +181,11 @@ func (h *ProductHandler) GetAllProducts(ctx context.Context, req *pb.GetAllProdu
 		perPage = 10
 	}
 
-	products, total, err := h.productService.GetAll(ctx, page, perPage)
+	search := req.Search
+	sortBy := req.SortBy
+	sortOrder := req.SortOrder
+
+	products, total, err := h.productService.GetAll(ctx, page, perPage, search, sortBy, sortOrder)
 	if err != nil {
 		return &pb.GetAllProductsResponse{
 			Success: false,
@@ -262,9 +266,15 @@ func (h *ProductHandler) GetPlansByProduct(ctx context.Context, req *pb.GetPlans
 }
 
 func (h *ProductHandler) CreatePlan(ctx context.Context, req *pb.CreatePlanRequest) (*pb.CreatePlanResponse, error) {
+	// Handle optional slug - empty string if not provided, service will generate it
+	slug := ""
+	if req.Slug != nil {
+		slug = *req.Slug
+	}
+
 	plan := &domain.Plan{
 		Name:               req.Name,
-		Slug:               req.Slug,
+		Slug:               slug,
 		IntervalID:         req.IntervalId,
 		ProductID:          req.ProductId,
 		IsActive:           req.IsActive,

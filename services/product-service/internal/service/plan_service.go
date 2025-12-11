@@ -56,8 +56,9 @@ func (s *planService) Create(ctx context.Context, plan *domain.Plan) error {
 	if plan.Name == "" {
 		return errors.New("plan name is required")
 	}
+	// Auto-generate slug from name if not provided
 	if plan.Slug == "" {
-		return errors.New("plan slug is required")
+		plan.Slug = generateSlug(plan.Name)
 	}
 	if plan.ProductID <= 0 {
 		return errors.New("product ID is required")

@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { ForgotPasswordForm } from '@/components/forgot-password-form'
+import { ForgotPasswordForm } from '@/components/features/auth'
 
 export const Route = createFileRoute('/forgot-password')({
   beforeLoad: async () => {

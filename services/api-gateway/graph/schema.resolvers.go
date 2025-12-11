@@ -1377,7 +1377,7 @@ func (r *mutationResolver) CreatePlan(ctx context.Context, input model.CreatePla
 	}
 
 	if input.Slug != nil {
-		req.Slug = *input.Slug
+		req.Slug = input.Slug
 	}
 	if input.IsActive != nil {
 		req.IsActive = *input.IsActive
@@ -2725,7 +2725,7 @@ func (r *queryResolver) ProductBySlug(ctx context.Context, slug string) (*model.
 }
 
 // Products is the resolver for the products field.
-func (r *queryResolver) Products(ctx context.Context, page *int32, perPage *int32) (*model.ProductListResponse, error) {
+func (r *queryResolver) Products(ctx context.Context, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) (*model.ProductListResponse, error) {
 	// Set default pagination
 	pageNum := int32(1)
 	pageSize := int32(10)
@@ -2736,10 +2736,27 @@ func (r *queryResolver) Products(ctx context.Context, page *int32, perPage *int3
 		pageSize = *perPage
 	}
 
+	// Extract optional search and sort params
+	searchStr := ""
+	sortByStr := ""
+	sortOrderStr := ""
+	if search != nil {
+		searchStr = *search
+	}
+	if sortBy != nil {
+		sortByStr = *sortBy
+	}
+	if sortOrder != nil {
+		sortOrderStr = *sortOrder
+	}
+
 	// Call product-service via gRPC
 	resp, err := r.ProductClient.GetAllProducts(ctx, &productPb.GetAllProductsRequest{
-		Page:    pageNum,
-		PerPage: pageSize,
+		Page:      pageNum,
+		PerPage:   pageSize,
+		Search:    searchStr,
+		SortBy:    sortByStr,
+		SortOrder: sortOrderStr,
 	})
 	if err != nil {
 		return &model.ProductListResponse{
@@ -2909,7 +2926,7 @@ func (r *queryResolver) PlanBySlug(ctx context.Context, slug string) (*model.Pla
 }
 
 // Plans is the resolver for the plans field.
-func (r *queryResolver) Plans(ctx context.Context, page *int32, perPage *int32, activeOnly *bool, visibleOnly *bool) (*model.PlanListResponse, error) {
+func (r *queryResolver) Plans(ctx context.Context, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string, activeOnly *bool, visibleOnly *bool) (*model.PlanListResponse, error) {
 	// Set default pagination
 	pageNum := int32(1)
 	pageSize := int32(10)
@@ -2924,6 +2941,15 @@ func (r *queryResolver) Plans(ctx context.Context, page *int32, perPage *int32, 
 	req := &productPb.GetAllPlansRequest{
 		Page:    pageNum,
 		PerPage: pageSize,
+	}
+	if search != nil {
+		req.Search = *search
+	}
+	if sortBy != nil {
+		req.SortBy = *sortBy
+	}
+	if sortOrder != nil {
+		req.SortOrder = *sortOrder
 	}
 	if activeOnly != nil {
 		req.ActiveOnly = *activeOnly

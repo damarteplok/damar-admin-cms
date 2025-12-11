@@ -39,7 +39,7 @@ build/
 .github/copilot-instructions.md
 
 # AI Assistant workflows (internal only)
-.agent/
+# .agent/*
 
 # Temporary files
 *.tmp

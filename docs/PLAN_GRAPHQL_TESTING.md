@@ -55,7 +55,15 @@ mutation Login {
 
 ```graphql
 query GetPlans {
-  plans(page: 1, perPage: 10) {
+  plans(
+    page: 1
+    perPage: 10
+    search: ""
+    sortBy: "name"
+    sortOrder: "asc"
+    activeOnly: true
+    visibleOnly: true
+  ) {
     success
     message
     data {
@@ -81,6 +89,46 @@ query GetPlans {
       total
       page
       perPage
+    }
+  }
+}
+```
+
+### Get Plans with Search
+
+```graphql
+query SearchPlans {
+  plans(page: 1, perPage: 10, search: "basic") {
+    success
+    message
+    data {
+      plans {
+        id
+        name
+        slug
+        type
+      }
+      total
+    }
+  }
+}
+```
+
+### Get Plans with Sorting
+
+```graphql
+query SortedPlans {
+  plans(page: 1, perPage: 10, sortBy: "created_at", sortOrder: "desc") {
+    success
+    message
+    data {
+      plans {
+        id
+        name
+        slug
+        createdAt
+      }
+      total
     }
   }
 }
@@ -172,12 +220,14 @@ query GetPlansByProduct {
 
 ### Create Plan
 
+**Important: Slug is now optional!** If you don't provide a slug, the backend will automatically generate one from the plan name.
+
 ```graphql
 mutation CreatePlan {
   createPlan(
     input: {
       name: "Basic Monthly"
-      slug: "basic-monthly"
+      # slug is optional - will auto-generate if not provided
       productId: "1"
       intervalId: "3"
       intervalCount: 1
@@ -212,7 +262,31 @@ mutation CreatePlan {
 }
 ```
 
-**Minimal Create (required fields only):**
+**With custom slug:**
+
+```graphql
+mutation CreatePlanWithSlug {
+  createPlan(
+    input: {
+      name: "Enterprise Plan"
+      slug: "custom-enterprise-slug"
+      productId: "1"
+      intervalId: "4"
+      intervalCount: 1
+      type: "per_unit"
+    }
+  ) {
+    success
+    data {
+      id
+      name
+      slug
+    }
+  }
+}
+```
+
+**Minimal Create (auto-generated slug):**
 
 ```graphql
 mutation CreateMinimalPlan {
@@ -280,6 +354,24 @@ mutation DeletePlan {
 ```
 
 ## Field Descriptions
+
+### Query Parameters
+
+**Pagination:**
+
+- **page**: Page number (default: 1)
+- **perPage**: Items per page (default: 10)
+
+**Search & Sort:**
+
+- **search**: Search by plan name, slug, or description
+- **sortBy**: Field to sort by (e.g., "name", "created_at", "interval_count")
+- **sortOrder**: Sort direction ("asc" or "desc", default: "asc")
+
+**Filters:**
+
+- **activeOnly**: Show only active plans
+- **visibleOnly**: Show only visible plans
 
 ### Plan Types
 
@@ -558,13 +650,15 @@ mutation {
 1. **Admin Authorization**: All mutations require `isAdmin: true` in JWT
 2. **Product Dependency**: Plans must reference an existing product
 3. **Interval Dependency**: intervalId must exist in your intervals table
-4. **Slug Auto-generation**: If slug not provided, auto-generated from name
+4. **Slug Auto-generation**: If slug not provided in createPlan, it's auto-generated from name (similar to products and tenants)
 5. **Default Values**:
    - `isActive`: defaults to `true`
    - `isVisible`: defaults to `true`
    - `hasTrial`: defaults to `false`
-6. **Filters**: Use `activeOnly` and `visibleOnly` to filter plan listings
-7. **Pagination**: Supports page and perPage parameters (default: page=1, perPage=10)
+6. **Search**: Searches across plan name, slug, and description fields
+7. **Sorting**: Supports sorting by any plan field (name, created_at, interval_count, etc.)
+8. **Filters**: Use `activeOnly` and `visibleOnly` to filter plan listings
+9. **Pagination**: Supports page and perPage parameters (default: page=1, perPage=10)
 
 ## Common Intervals Setup
 

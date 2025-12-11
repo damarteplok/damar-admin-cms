@@ -24,6 +24,17 @@ import { Route as LayoutContactRouteImport } from './routes/_layout/contact'
 import { Route as LayoutBlogRouteImport } from './routes/_layout/blog'
 import { Route as AdminWorkspacesIndexRouteImport } from './routes/admin/workspaces/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
+import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
+import { Route as AdminPlansIndexRouteImport } from './routes/admin/plans/index'
+import { Route as AdminWorkspacesCreateRouteImport } from './routes/admin/workspaces/create'
+import { Route as AdminProductsCreateRouteImport } from './routes/admin/products/create'
+import { Route as AdminPlansCreateRouteImport } from './routes/admin/plans/create'
+import { Route as AdminWorkspacesIdIndexRouteImport } from './routes/admin/workspaces/$id/index'
+import { Route as AdminProductsIdIndexRouteImport } from './routes/admin/products/$id/index'
+import { Route as AdminPlansIdIndexRouteImport } from './routes/admin/plans/$id/index'
+import { Route as AdminWorkspacesIdEditRouteImport } from './routes/admin/workspaces/$id/edit'
+import { Route as AdminProductsIdEditRouteImport } from './routes/admin/products/$id/edit'
+import { Route as AdminPlansIdEditRouteImport } from './routes/admin/plans/$id/edit'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -99,6 +110,61 @@ const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   path: '/users/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPlansIndexRoute = AdminPlansIndexRouteImport.update({
+  id: '/plans/',
+  path: '/plans/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminWorkspacesCreateRoute = AdminWorkspacesCreateRouteImport.update({
+  id: '/workspaces/create',
+  path: '/workspaces/create',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProductsCreateRoute = AdminProductsCreateRouteImport.update({
+  id: '/products/create',
+  path: '/products/create',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPlansCreateRoute = AdminPlansCreateRouteImport.update({
+  id: '/plans/create',
+  path: '/plans/create',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminWorkspacesIdIndexRoute = AdminWorkspacesIdIndexRouteImport.update({
+  id: '/workspaces/$id/',
+  path: '/workspaces/$id/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProductsIdIndexRoute = AdminProductsIdIndexRouteImport.update({
+  id: '/products/$id/',
+  path: '/products/$id/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPlansIdIndexRoute = AdminPlansIdIndexRouteImport.update({
+  id: '/plans/$id/',
+  path: '/plans/$id/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminWorkspacesIdEditRoute = AdminWorkspacesIdEditRouteImport.update({
+  id: '/workspaces/$id/edit',
+  path: '/workspaces/$id/edit',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProductsIdEditRoute = AdminProductsIdEditRouteImport.update({
+  id: '/products/$id/edit',
+  path: '/products/$id/edit',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPlansIdEditRoute = AdminPlansIdEditRouteImport.update({
+  id: '/plans/$id/edit',
+  path: '/plans/$id/edit',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
@@ -113,8 +179,19 @@ export interface FileRoutesByFullPath {
   '/workspace': typeof LayoutWorkspaceRoute
   '/': typeof LayoutIndexRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/plans/create': typeof AdminPlansCreateRoute
+  '/admin/products/create': typeof AdminProductsCreateRoute
+  '/admin/workspaces/create': typeof AdminWorkspacesCreateRoute
+  '/admin/plans': typeof AdminPlansIndexRoute
+  '/admin/products': typeof AdminProductsIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/admin/workspaces': typeof AdminWorkspacesIndexRoute
+  '/admin/plans/$id/edit': typeof AdminPlansIdEditRoute
+  '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
+  '/admin/workspaces/$id/edit': typeof AdminWorkspacesIdEditRoute
+  '/admin/plans/$id': typeof AdminPlansIdIndexRoute
+  '/admin/products/$id': typeof AdminProductsIdIndexRoute
+  '/admin/workspaces/$id': typeof AdminWorkspacesIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
@@ -128,8 +205,19 @@ export interface FileRoutesByTo {
   '/workspace': typeof LayoutWorkspaceRoute
   '/': typeof LayoutIndexRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/plans/create': typeof AdminPlansCreateRoute
+  '/admin/products/create': typeof AdminProductsCreateRoute
+  '/admin/workspaces/create': typeof AdminWorkspacesCreateRoute
+  '/admin/plans': typeof AdminPlansIndexRoute
+  '/admin/products': typeof AdminProductsIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/admin/workspaces': typeof AdminWorkspacesIndexRoute
+  '/admin/plans/$id/edit': typeof AdminPlansIdEditRoute
+  '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
+  '/admin/workspaces/$id/edit': typeof AdminWorkspacesIdEditRoute
+  '/admin/plans/$id': typeof AdminPlansIdIndexRoute
+  '/admin/products/$id': typeof AdminProductsIdIndexRoute
+  '/admin/workspaces/$id': typeof AdminWorkspacesIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -146,8 +234,19 @@ export interface FileRoutesById {
   '/_layout/workspace': typeof LayoutWorkspaceRoute
   '/_layout/': typeof LayoutIndexRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/plans/create': typeof AdminPlansCreateRoute
+  '/admin/products/create': typeof AdminProductsCreateRoute
+  '/admin/workspaces/create': typeof AdminWorkspacesCreateRoute
+  '/admin/plans/': typeof AdminPlansIndexRoute
+  '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/admin/workspaces/': typeof AdminWorkspacesIndexRoute
+  '/admin/plans/$id/edit': typeof AdminPlansIdEditRoute
+  '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
+  '/admin/workspaces/$id/edit': typeof AdminWorkspacesIdEditRoute
+  '/admin/plans/$id/': typeof AdminPlansIdIndexRoute
+  '/admin/products/$id/': typeof AdminProductsIdIndexRoute
+  '/admin/workspaces/$id/': typeof AdminWorkspacesIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -164,8 +263,19 @@ export interface FileRouteTypes {
     | '/workspace'
     | '/'
     | '/admin/'
+    | '/admin/plans/create'
+    | '/admin/products/create'
+    | '/admin/workspaces/create'
+    | '/admin/plans'
+    | '/admin/products'
     | '/admin/users'
     | '/admin/workspaces'
+    | '/admin/plans/$id/edit'
+    | '/admin/products/$id/edit'
+    | '/admin/workspaces/$id/edit'
+    | '/admin/plans/$id'
+    | '/admin/products/$id'
+    | '/admin/workspaces/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
@@ -179,8 +289,19 @@ export interface FileRouteTypes {
     | '/workspace'
     | '/'
     | '/admin'
+    | '/admin/plans/create'
+    | '/admin/products/create'
+    | '/admin/workspaces/create'
+    | '/admin/plans'
+    | '/admin/products'
     | '/admin/users'
     | '/admin/workspaces'
+    | '/admin/plans/$id/edit'
+    | '/admin/products/$id/edit'
+    | '/admin/workspaces/$id/edit'
+    | '/admin/plans/$id'
+    | '/admin/products/$id'
+    | '/admin/workspaces/$id'
   id:
     | '__root__'
     | '/_layout'
@@ -196,8 +317,19 @@ export interface FileRouteTypes {
     | '/_layout/workspace'
     | '/_layout/'
     | '/admin/'
+    | '/admin/plans/create'
+    | '/admin/products/create'
+    | '/admin/workspaces/create'
+    | '/admin/plans/'
+    | '/admin/products/'
     | '/admin/users/'
     | '/admin/workspaces/'
+    | '/admin/plans/$id/edit'
+    | '/admin/products/$id/edit'
+    | '/admin/workspaces/$id/edit'
+    | '/admin/plans/$id/'
+    | '/admin/products/$id/'
+    | '/admin/workspaces/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -316,6 +448,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/products/': {
+      id: '/admin/products/'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AdminProductsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/plans/': {
+      id: '/admin/plans/'
+      path: '/plans'
+      fullPath: '/admin/plans'
+      preLoaderRoute: typeof AdminPlansIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/workspaces/create': {
+      id: '/admin/workspaces/create'
+      path: '/workspaces/create'
+      fullPath: '/admin/workspaces/create'
+      preLoaderRoute: typeof AdminWorkspacesCreateRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/products/create': {
+      id: '/admin/products/create'
+      path: '/products/create'
+      fullPath: '/admin/products/create'
+      preLoaderRoute: typeof AdminProductsCreateRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/plans/create': {
+      id: '/admin/plans/create'
+      path: '/plans/create'
+      fullPath: '/admin/plans/create'
+      preLoaderRoute: typeof AdminPlansCreateRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/workspaces/$id/': {
+      id: '/admin/workspaces/$id/'
+      path: '/workspaces/$id'
+      fullPath: '/admin/workspaces/$id'
+      preLoaderRoute: typeof AdminWorkspacesIdIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/products/$id/': {
+      id: '/admin/products/$id/'
+      path: '/products/$id'
+      fullPath: '/admin/products/$id'
+      preLoaderRoute: typeof AdminProductsIdIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/plans/$id/': {
+      id: '/admin/plans/$id/'
+      path: '/plans/$id'
+      fullPath: '/admin/plans/$id'
+      preLoaderRoute: typeof AdminPlansIdIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/workspaces/$id/edit': {
+      id: '/admin/workspaces/$id/edit'
+      path: '/workspaces/$id/edit'
+      fullPath: '/admin/workspaces/$id/edit'
+      preLoaderRoute: typeof AdminWorkspacesIdEditRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/products/$id/edit': {
+      id: '/admin/products/$id/edit'
+      path: '/products/$id/edit'
+      fullPath: '/admin/products/$id/edit'
+      preLoaderRoute: typeof AdminProductsIdEditRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/plans/$id/edit': {
+      id: '/admin/plans/$id/edit'
+      path: '/plans/$id/edit'
+      fullPath: '/admin/plans/$id/edit'
+      preLoaderRoute: typeof AdminPlansIdEditRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
@@ -342,14 +551,36 @@ const LayoutRouteWithChildren =
 
 interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminPlansCreateRoute: typeof AdminPlansCreateRoute
+  AdminProductsCreateRoute: typeof AdminProductsCreateRoute
+  AdminWorkspacesCreateRoute: typeof AdminWorkspacesCreateRoute
+  AdminPlansIndexRoute: typeof AdminPlansIndexRoute
+  AdminProductsIndexRoute: typeof AdminProductsIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
   AdminWorkspacesIndexRoute: typeof AdminWorkspacesIndexRoute
+  AdminPlansIdEditRoute: typeof AdminPlansIdEditRoute
+  AdminProductsIdEditRoute: typeof AdminProductsIdEditRoute
+  AdminWorkspacesIdEditRoute: typeof AdminWorkspacesIdEditRoute
+  AdminPlansIdIndexRoute: typeof AdminPlansIdIndexRoute
+  AdminProductsIdIndexRoute: typeof AdminProductsIdIndexRoute
+  AdminWorkspacesIdIndexRoute: typeof AdminWorkspacesIdIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
+  AdminPlansCreateRoute: AdminPlansCreateRoute,
+  AdminProductsCreateRoute: AdminProductsCreateRoute,
+  AdminWorkspacesCreateRoute: AdminWorkspacesCreateRoute,
+  AdminPlansIndexRoute: AdminPlansIndexRoute,
+  AdminProductsIndexRoute: AdminProductsIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
   AdminWorkspacesIndexRoute: AdminWorkspacesIndexRoute,
+  AdminPlansIdEditRoute: AdminPlansIdEditRoute,
+  AdminProductsIdEditRoute: AdminProductsIdEditRoute,
+  AdminWorkspacesIdEditRoute: AdminWorkspacesIdEditRoute,
+  AdminPlansIdIndexRoute: AdminPlansIdIndexRoute,
+  AdminProductsIdIndexRoute: AdminProductsIdIndexRoute,
+  AdminWorkspacesIdIndexRoute: AdminWorkspacesIdIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

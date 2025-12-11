@@ -24,7 +24,7 @@ type ProductRepository interface {
 	Create(ctx context.Context, product *Product) error
 	Update(ctx context.Context, product *Product) error
 	Delete(ctx context.Context, id int64) error
-	GetAll(ctx context.Context, page, perPage int) ([]*Product, int, error)
+	GetAll(ctx context.Context, page, perPage int, search, sortBy, sortOrder string) ([]*Product, int, error)
 }
 
 type ProductService interface {
@@ -33,5 +33,5 @@ type ProductService interface {
 	Create(ctx context.Context, product *Product) error
 	Update(ctx context.Context, product *Product) error
 	Delete(ctx context.Context, id int64) error
-	GetAll(ctx context.Context, page, perPage int) ([]*Product, int, error)
+	GetAll(ctx context.Context, page, perPage int, search, sortBy, sortOrder string) ([]*Product, int, error)
 }
