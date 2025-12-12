@@ -8,15 +8,20 @@ package graph
 import (
 	"context"
 	"fmt"
+	"io"
+	"reflect"
 	"strconv"
 
 	"github.com/damarteplok/damar-admin-cms/services/api-gateway/graph/model"
 	"github.com/damarteplok/damar-admin-cms/services/api-gateway/internal/middleware"
+	"github.com/damarteplok/damar-admin-cms/shared/logger"
 	authPb "github.com/damarteplok/damar-admin-cms/shared/proto/auth"
+	mediaPb "github.com/damarteplok/damar-admin-cms/shared/proto/media"
 	productPb "github.com/damarteplok/damar-admin-cms/shared/proto/product"
 	tenantPb "github.com/damarteplok/damar-admin-cms/shared/proto/tenant"
 	userPb "github.com/damarteplok/damar-admin-cms/shared/proto/user"
 	"github.com/damarteplok/damar-admin-cms/shared/util"
+	"go.uber.org/zap"
 )
 
 // Login is the resolver for the login field.
@@ -1974,6 +1979,141 @@ func (r *mutationResolver) DeleteDiscount(ctx context.Context, id string) (*mode
 	}, nil
 }
 
+// UploadFile is the resolver for the uploadFile field.
+func (r *mutationResolver) UploadFile(ctx context.Context, input model.UploadFileInput) (*model.MediaResponse, error) {
+	// Convert model ID to int64
+	modelID, err := strconv.ParseInt(input.ModelID, 10, 64)
+	if err != nil {
+		return &model.MediaResponse{
+			Success: false,
+			Message: "Invalid model ID",
+		}, nil
+	}
+
+	// graphql.Upload struct - use reflection to access File field
+	v := reflect.ValueOf(input.Content)
+
+	// Get File field
+	fileField := v.FieldByName("File")
+	if !fileField.IsValid() {
+		return &model.MediaResponse{
+			Success: false,
+			Message: "Upload struct has no File field",
+		}, nil
+	}
+
+	// File field is io.Reader (transport.bytesReader internally)
+	reader, ok := fileField.Interface().(io.Reader)
+	if !ok {
+		return &model.MediaResponse{
+			Success: false,
+			Message: fmt.Sprintf("File field does not implement io.Reader. Type: %T", fileField.Interface()),
+		}, nil
+	}
+
+	// Read file content
+	fileContent, err := io.ReadAll(reader)
+	if err != nil {
+		return &model.MediaResponse{
+			Success: false,
+			Message: "Failed to read file content",
+		}, nil
+	}
+
+	// Handle optional name field
+	name := ""
+	if input.Name != nil {
+		name = *input.Name
+	}
+
+	// Delete existing media with same model_type, model_id, and collection_name
+	// This ensures only one avatar exists per user
+	existingMediaResp, err := r.Resolver.MediaClient.GetFilesByModel(ctx, &mediaPb.GetFilesByModelRequest{
+		ModelType:      input.ModelType,
+		ModelId:        modelID,
+		CollectionName: input.CollectionName,
+		Page:           1,
+		PerPage:        100, // Get all existing media
+	})
+	if err == nil && existingMediaResp.Success && existingMediaResp.Data != nil {
+		// Delete each existing media
+		for _, media := range existingMediaResp.Data.Media {
+			_, _ = r.Resolver.MediaClient.DeleteFile(ctx, &mediaPb.DeleteFileRequest{
+				Id: media.Id,
+			})
+		}
+	}
+
+	// Call media-service via gRPC
+	uploadResp, err := r.Resolver.MediaClient.UploadFile(ctx, &mediaPb.UploadFileRequest{
+		Content:        fileContent,
+		FileName:       input.FileName,
+		MimeType:       input.MimeType,
+		Size:           int64(len(fileContent)),
+		ModelType:      input.ModelType,
+		ModelId:        modelID,
+		CollectionName: input.CollectionName,
+		Name:           name,
+		Disk:           input.Disk,
+	})
+	if err != nil {
+		return &model.MediaResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to upload file: %v", err),
+		}, nil
+	}
+
+	if !uploadResp.Success {
+		return &model.MediaResponse{
+			Success: false,
+			Message: uploadResp.Message,
+		}, nil
+	}
+
+	media := pbMediaToModel(uploadResp.Data)
+
+	// Invalidate media cache for this model
+	if r.Resolver.MediaCache != nil {
+		_ = r.Resolver.MediaCache.InvalidateModelMedia(ctx, input.ModelType, input.ModelID, input.CollectionName)
+		// Also invalidate user avatar cache if this is a user avatar
+		if input.ModelType == "user" && input.CollectionName == "avatar" {
+			_ = r.Resolver.MediaCache.InvalidateUserAvatar(ctx, input.ModelID)
+		}
+	}
+
+	return &model.MediaResponse{
+		Success: true,
+		Message: "File uploaded successfully",
+		Data:    media,
+	}, nil
+}
+
+// DeleteMedia is the resolver for the deleteMedia field.
+func (r *mutationResolver) DeleteMedia(ctx context.Context, id string) (*model.DeleteMediaResponse, error) {
+	mediaID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.DeleteMediaResponse{
+			Success: false,
+			Message: "Invalid media ID",
+		}, nil
+	}
+
+	resp, err := r.MediaClient.DeleteFile(ctx, &mediaPb.DeleteFileRequest{
+		Id: mediaID,
+	})
+	if err != nil {
+		return &model.DeleteMediaResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to delete media: %v", err),
+		}, nil
+	}
+
+	return &model.DeleteMediaResponse{
+		Success: resp.Success,
+		Message: resp.Message,
+	}, nil
+}
+
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.UserResponse, error) {
 	userID, err := strconv.ParseInt(id, 10, 64)
@@ -2086,6 +2226,231 @@ func (r *queryResolver) Users(ctx context.Context, page *int32, perPage *int32) 
 	}, nil
 }
 
+// Media is the resolver for the media field.
+func (r *queryResolver) Media(ctx context.Context, id string) (*model.MediaResponse, error) {
+	mediaID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.MediaResponse{
+			Success: false,
+			Message: "Invalid media ID",
+		}, nil
+	}
+
+	resp, err := r.MediaClient.GetFileByID(ctx, &mediaPb.GetFileByIDRequest{
+		Id: mediaID,
+	})
+	if err != nil {
+		return &model.MediaResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get media: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.MediaResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.MediaResponse{
+		Success: true,
+		Message: resp.Message,
+		Data:    pbMediaToModel(resp.Data),
+	}, nil
+}
+
+// MediaByUUID is the resolver for the mediaByUUID field.
+func (r *queryResolver) MediaByUUID(ctx context.Context, uuid string) (*model.MediaResponse, error) {
+	resp, err := r.MediaClient.GetFileByUUID(ctx, &mediaPb.GetFileByUUIDRequest{
+		Uuid: uuid,
+	})
+	if err != nil {
+		return &model.MediaResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get media: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.MediaResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.MediaResponse{
+		Success: true,
+		Message: resp.Message,
+		Data:    pbMediaToModel(resp.Data),
+	}, nil
+}
+
+// MediaByModel is the resolver for the mediaByModel field.
+func (r *queryResolver) MediaByModel(ctx context.Context, input model.GetFilesByModelInput) (*model.MediaListResponse, error) {
+	page := int32(1)
+	if input.Page != nil {
+		page = int32(*input.Page)
+	}
+
+	perPage := int32(20)
+	if input.PerPage != nil {
+		perPage = int32(*input.PerPage)
+	}
+
+	modelID, err := strconv.ParseInt(input.ModelID, 10, 64)
+	if err != nil {
+		return &model.MediaListResponse{
+			Success: false,
+			Message: "Invalid model ID",
+		}, nil
+	}
+
+	collectionName := ""
+	if input.CollectionName != nil {
+		collectionName = *input.CollectionName
+	}
+
+	resp, err := r.MediaClient.GetFilesByModel(ctx, &mediaPb.GetFilesByModelRequest{
+		ModelType:      input.ModelType,
+		ModelId:        modelID,
+		CollectionName: collectionName,
+		Page:           page,
+		PerPage:        perPage,
+	})
+	if err != nil {
+		return &model.MediaListResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get media: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.MediaListResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	mediaList := make([]*model.Media, len(resp.Data.Media))
+	for i, m := range resp.Data.Media {
+		mediaList[i] = pbMediaToModel(m)
+	}
+
+	return &model.MediaListResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.MediaListData{
+			Media:   mediaList,
+			Total:   resp.Data.Total,
+			Page:    resp.Data.Page,
+			PerPage: resp.Data.PerPage,
+		},
+	}, nil
+}
+
+// AllMedia is the resolver for the allMedia field.
+func (r *queryResolver) AllMedia(ctx context.Context, input *model.GetAllMediaInput) (*model.MediaListResponse, error) {
+	page := int32(1)
+	perPage := int32(20)
+	modelType := ""
+	collectionName := ""
+
+	if input != nil {
+		if input.Page != nil {
+			page = int32(*input.Page)
+		}
+		if input.PerPage != nil {
+			perPage = int32(*input.PerPage)
+		}
+		if input.ModelType != nil {
+			modelType = *input.ModelType
+		}
+		if input.CollectionName != nil {
+			collectionName = *input.CollectionName
+		}
+	}
+
+	resp, err := r.MediaClient.GetAllMedia(ctx, &mediaPb.GetAllMediaRequest{
+		Page:           page,
+		PerPage:        perPage,
+		ModelType:      modelType,
+		CollectionName: collectionName,
+	})
+	if err != nil {
+		return &model.MediaListResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get media: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.MediaListResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	mediaList := make([]*model.Media, len(resp.Data.Media))
+	for i, m := range resp.Data.Media {
+		mediaList[i] = pbMediaToModel(m)
+	}
+
+	return &model.MediaListResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.MediaListData{
+			Media:   mediaList,
+			Total:   resp.Data.Total,
+			Page:    resp.Data.Page,
+			PerPage: resp.Data.PerPage,
+		},
+	}, nil
+}
+
+// MediaURL is the resolver for the mediaURL field.
+func (r *queryResolver) MediaURL(ctx context.Context, id string, expirySeconds *int32) (*model.MediaURLResponse, error) {
+	mediaID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.MediaURLResponse{
+			Success: false,
+			Message: "Invalid media ID",
+		}, nil
+	}
+
+	expiry := int32(900) // Default 15 minutes
+	if expirySeconds != nil {
+		expiry = *expirySeconds
+	}
+
+	resp, err := r.MediaClient.GetFileURL(ctx, &mediaPb.GetFileURLRequest{
+		Id:            mediaID,
+		ExpirySeconds: expiry,
+	})
+	if err != nil {
+		return &model.MediaURLResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get media URL: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.MediaURLResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.MediaURLResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.MediaURLData{
+			URL:       resp.Data.Url,
+			ExpiresAt: int32(resp.Data.ExpiresAt),
+		},
+	}, nil
+}
+
 // SearchUsers is the resolver for the searchUsers field.
 func (r *queryResolver) SearchUsers(ctx context.Context, query string, page *int32, perPage *int32) (*model.UserListResponse, error) {
 	// Default pagination
@@ -2147,20 +2512,30 @@ func (r *queryResolver) SearchUsers(ctx context.Context, query string, page *int
 
 // Me is the resolver for the me field.
 func (r *queryResolver) Me(ctx context.Context) (*model.UserResponse, error) {
+	logger.Info("========== Me (GetMyProfile) query called ==========")
+
 	// Get authenticated user from context
 	currentUser, err := middleware.GetUserFromContext(ctx)
 	if err != nil {
+		logger.Error("Failed to get user from context", zap.Error(err))
 		return &model.UserResponse{
 			Success: false,
 			Message: err.Error(),
 		}, nil
 	}
 
+	logger.Info("Current user from context",
+		zap.Int64("user_id", currentUser.Id),
+		zap.String("email", currentUser.Email),
+	)
+
 	// Get user details from user-service
+	logger.Debug("Calling user-service GetUserByID", zap.Int64("user_id", currentUser.Id))
 	resp, err := r.UserClient.GetUserByID(ctx, &userPb.GetUserByIDRequest{
 		Id: currentUser.Id,
 	})
 	if err != nil {
+		logger.Error("user-service GetUserByID failed", zap.Error(err))
 		return &model.UserResponse{
 			Success: false,
 			Message: fmt.Sprintf("Get current user failed: %v", err),
@@ -2168,35 +2543,50 @@ func (r *queryResolver) Me(ctx context.Context) (*model.UserResponse, error) {
 	}
 
 	if !resp.Success {
+		logger.Warn("user-service returned unsuccessful", zap.String("message", resp.Message))
 		return &model.UserResponse{
 			Success: false,
 			Message: resp.Message,
 		}, nil
 	}
 
+	logger.Info("User data retrieved from user-service",
+		zap.Int64("user_id", resp.Data.Id),
+		zap.String("name", resp.Data.Name),
+		zap.String("email", resp.Data.Email),
+	)
+
 	emailVerifiedAt := int32(resp.Data.EmailVerifiedAt)
 	lastLoginAt := int32(resp.Data.LastLoginAt)
 	createdAt := int32(resp.Data.CreatedAt)
 	updatedAt := int32(resp.Data.UpdatedAt)
 
+	userModel := &model.User{
+		ID:              fmt.Sprintf("%d", resp.Data.Id),
+		Name:            resp.Data.Name,
+		Email:           resp.Data.Email,
+		PublicName:      &resp.Data.PublicName,
+		IsAdmin:         resp.Data.IsAdmin,
+		IsBlocked:       resp.Data.IsBlocked,
+		PhoneNumber:     &resp.Data.PhoneNumber,
+		Position:        &resp.Data.Position,
+		EmailVerified:   resp.Data.EmailVerified,
+		EmailVerifiedAt: &emailVerifiedAt,
+		LastLoginAt:     &lastLoginAt,
+		CreatedAt:       &createdAt,
+		UpdatedAt:       &updatedAt,
+	}
+
+	logger.Info("Returning user model",
+		zap.String("user_id", userModel.ID),
+		zap.String("name", userModel.Name),
+	)
+	logger.Info("========== Me query completed (Avatar resolver will be called next if requested) ==========")
+
 	return &model.UserResponse{
 		Success: true,
 		Message: "Current user retrieved successfully",
-		Data: &model.User{
-			ID:              fmt.Sprintf("%d", resp.Data.Id),
-			Name:            resp.Data.Name,
-			Email:           resp.Data.Email,
-			PublicName:      &resp.Data.PublicName,
-			IsAdmin:         resp.Data.IsAdmin,
-			IsBlocked:       resp.Data.IsBlocked,
-			PhoneNumber:     &resp.Data.PhoneNumber,
-			Position:        &resp.Data.Position,
-			EmailVerified:   resp.Data.EmailVerified,
-			EmailVerifiedAt: &emailVerifiedAt,
-			LastLoginAt:     &lastLoginAt,
-			CreatedAt:       &createdAt,
-			UpdatedAt:       &updatedAt,
-		},
+		Data:    userModel,
 	}, nil
 }
 
@@ -3195,7 +3585,7 @@ func (r *queryResolver) Discount(ctx context.Context, id string) (*model.Discoun
 }
 
 // Discounts is the resolver for the discounts field.
-func (r *queryResolver) Discounts(ctx context.Context, page *int32, perPage *int32, activeOnly *bool) (*model.DiscountListResponse, error) {
+func (r *queryResolver) Discounts(ctx context.Context, page *int32, perPage *int32, activeOnly *bool, search *string, sortBy *string, sortOrder *string) (*model.DiscountListResponse, error) {
 	// Set defaults
 	p := int32(1)
 	if page != nil {
@@ -3210,11 +3600,28 @@ func (r *queryResolver) Discounts(ctx context.Context, page *int32, perPage *int
 		ao = *activeOnly
 	}
 
+	// Handle optional search, sortBy, sortOrder
+	s := ""
+	if search != nil {
+		s = *search
+	}
+	sb := ""
+	if sortBy != nil {
+		sb = *sortBy
+	}
+	so := ""
+	if sortOrder != nil {
+		so = *sortOrder
+	}
+
 	// Call product-service via gRPC
 	resp, err := r.ProductClient.GetAllDiscounts(ctx, &productPb.GetAllDiscountsRequest{
 		Page:       p,
 		PerPage:    pp,
 		ActiveOnly: ao,
+		Search:     s,
+		SortBy:     sb,
+		SortOrder:  so,
 	})
 	if err != nil {
 		return &model.DiscountListResponse{
@@ -3311,13 +3718,57 @@ func (r *queryResolver) Discounts(ctx context.Context, page *int32, perPage *int
 	}, nil
 }
 
+// Avatar is the resolver for the avatar field.
+func (r *userResolver) Avatar(ctx context.Context, obj *model.User) (*model.Media, error) {
+	logger.Info("🔥🔥🔥 ========== AVATAR RESOLVER CALLED ========== 🔥🔥🔥",
+		zap.String("user_id", obj.ID),
+		zap.String("user_name", obj.Name),
+	)
+	fmt.Println("🔥🔥🔥 AVATAR RESOLVER CALLED FOR USER:", obj.ID, obj.Name)
+
+	if r.MediaCache == nil {
+		logger.Warn("⚠️ MediaCache is nil, cannot fetch avatar")
+		fmt.Println("⚠️ MediaCache is nil")
+		return nil, nil
+	}
+
+	avatar, err := r.MediaCache.GetUserAvatar(ctx, obj.ID)
+	if err != nil {
+		logger.Error("❌ Failed to get user avatar",
+			zap.Error(err),
+			zap.String("user_id", obj.ID),
+		)
+		fmt.Println("❌ Failed to get avatar:", err)
+		return nil, err
+	}
+
+	if avatar == nil {
+		logger.Debug("⚠️ No avatar found for user",
+			zap.String("user_id", obj.ID),
+		)
+		fmt.Println("⚠️ No avatar found for user:", obj.ID)
+	} else {
+		logger.Info("✅ Avatar resolved successfully",
+			zap.String("user_id", obj.ID),
+			zap.String("avatar_id", avatar.ID),
+		)
+		fmt.Println("✅ Avatar found:", avatar.ID, avatar.FileName)
+	}
+
+	return avatar, nil
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+// User returns UserResolver implementation.
+func (r *Resolver) User() UserResolver { return &userResolver{r} }
+
 type (
 	mutationResolver struct{ *Resolver }
 	queryResolver    struct{ *Resolver }
+	userResolver     struct{ *Resolver }
 )

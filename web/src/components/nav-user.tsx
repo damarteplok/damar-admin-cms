@@ -1,4 +1,4 @@
-import { Bell, ChevronsUpDown, LogOut } from 'lucide-react'
+import { ChevronsUpDown, LogOut } from 'lucide-react'
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
@@ -94,11 +94,7 @@ export function NavUser() {
               <LangSwitcher className="w-full rounded-md border px-2 py-1 text-sm" />
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Bell />
-              {t('nav.notifications', 'Notifications')}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               {t('nav.logout', 'Log out')}

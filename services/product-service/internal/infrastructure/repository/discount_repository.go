@@ -153,37 +153,73 @@ func (r *DiscountRepository) Delete(ctx context.Context, id int64) error {
 	return nil
 }
 
-func (r *DiscountRepository) GetAll(ctx context.Context, page, perPage int, activeOnly bool) ([]*domain.Discount, int, error) {
+func (r *DiscountRepository) GetAll(ctx context.Context, page, perPage int, activeOnly bool, search, sortBy, sortOrder string) ([]*domain.Discount, int, error) {
 	offset := (page - 1) * perPage
 
-	// Build query with filters
-	countQuery := `SELECT COUNT(*) FROM discounts WHERE 1=1`
-	query := `
+	// Build where clause with filters
+	whereClause := " WHERE 1=1"
+	args := []interface{}{}
+	argIndex := 1
+
+	if activeOnly {
+		whereClause += " AND is_active = true"
+	}
+
+	// Add search filter
+	if search != "" {
+		whereClause += fmt.Sprintf(" AND (name ILIKE $%d OR description ILIKE $%d)", argIndex, argIndex)
+		args = append(args, "%"+search+"%")
+		argIndex++
+	}
+
+	// Get total count
+	var total int
+	countQuery := fmt.Sprintf(`SELECT COUNT(*) FROM discounts%s`, whereClause)
+	var err error
+	if len(args) > 0 {
+		err = r.db.QueryRow(ctx, countQuery, args...).Scan(&total)
+	} else {
+		err = r.db.QueryRow(ctx, countQuery).Scan(&total)
+	}
+	if err != nil {
+		return nil, 0, fmt.Errorf("failed to count discounts: %w", err)
+	}
+
+	// Build order by clause
+	orderClause := "ORDER BY created_at DESC"
+	if sortBy != "" {
+		// Validate sortBy to prevent SQL injection
+		validSortFields := map[string]bool{
+			"name":       true,
+			"type":       true,
+			"amount":     true,
+			"is_active":  true,
+			"created_at": true,
+			"updated_at": true,
+		}
+		if validSortFields[sortBy] {
+			direction := "DESC"
+			if sortOrder == "asc" || sortOrder == "ASC" {
+				direction = "ASC"
+			}
+			orderClause = fmt.Sprintf("ORDER BY %s %s", sortBy, direction)
+		}
+	}
+
+	// Get discounts
+	query := fmt.Sprintf(`
 		SELECT id, name, type, amount, is_active, description, valid_until, action_type,
 		       max_redemptions, max_redemptions_per_user, redemptions, is_recurring,
 		       duration_in_months, maximum_recurring_intervals, redeem_type, bonus_days,
 		       is_enabled_for_all_plans, is_enabled_for_all_one_time_products,
 		       created_at, updated_at
-		FROM discounts 
-		WHERE 1=1
-	`
+		FROM discounts%s
+		%s
+		LIMIT $%d OFFSET $%d
+	`, whereClause, orderClause, argIndex, argIndex+1)
 
-	if activeOnly {
-		countQuery += ` AND is_active = true`
-		query += ` AND is_active = true`
-	}
-
-	// Get total count
-	var total int
-	err := r.db.QueryRow(ctx, countQuery).Scan(&total)
-	if err != nil {
-		return nil, 0, fmt.Errorf("failed to count discounts: %w", err)
-	}
-
-	// Get discounts
-	query += ` ORDER BY created_at DESC LIMIT $1 OFFSET $2`
-
-	rows, err := r.db.Query(ctx, query, perPage, offset)
+	args = append(args, perPage, offset)
+	rows, err := r.db.Query(ctx, query, args...)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to get discounts: %w", err)
 	}

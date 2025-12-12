@@ -54,4 +54,8 @@ const (
 	ProductEventUpdated      = "product.event.updated"
 	ProductEventDeleted      = "product.event.deleted"
 	ProductEventPriceChanged = "product.event.price_changed"
+
+	// Media events (media.event.*)
+	RoutingKeyMediaEventUploaded = "media.event.uploaded"
+	RoutingKeyMediaEventDeleted  = "media.event.deleted"
 )

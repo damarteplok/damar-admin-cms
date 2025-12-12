@@ -2,6 +2,10 @@
 
 package model
 
+import (
+	"github.com/99designs/gqlgen/graphql"
+)
+
 type AddUserToTenantInput struct {
 	UserID    string `json:"userId"`
 	TenantID  string `json:"tenantId"`
@@ -92,6 +96,11 @@ type DeleteDiscountResponse struct {
 	Message string `json:"message"`
 }
 
+type DeleteMediaResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
 type DeletePlanResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
@@ -164,6 +173,21 @@ type ForgotPasswordResponse struct {
 	Message string `json:"message"`
 }
 
+type GetAllMediaInput struct {
+	Page           *int32  `json:"page,omitempty"`
+	PerPage        *int32  `json:"perPage,omitempty"`
+	ModelType      *string `json:"modelType,omitempty"`
+	CollectionName *string `json:"collectionName,omitempty"`
+}
+
+type GetFilesByModelInput struct {
+	ModelType      string  `json:"modelType"`
+	ModelID        string  `json:"modelId"`
+	CollectionName *string `json:"collectionName,omitempty"`
+	Page           *int32  `json:"page,omitempty"`
+	PerPage        *int32  `json:"perPage,omitempty"`
+}
+
 type LoginData struct {
 	AccessToken  string `json:"accessToken"`
 	RefreshToken string `json:"refreshToken"`
@@ -184,6 +208,58 @@ type LoginResponse struct {
 type LogoutResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
+}
+
+type Media struct {
+	ID                   string  `json:"id"`
+	ModelType            string  `json:"modelType"`
+	ModelID              string  `json:"modelId"`
+	UUID                 string  `json:"uuid"`
+	CollectionName       string  `json:"collectionName"`
+	Name                 string  `json:"name"`
+	FileName             string  `json:"fileName"`
+	MimeType             *string `json:"mimeType,omitempty"`
+	Disk                 string  `json:"disk"`
+	ConversionsDisk      *string `json:"conversionsDisk,omitempty"`
+	Size                 int32   `json:"size"`
+	Manipulations        string  `json:"manipulations"`
+	CustomProperties     string  `json:"customProperties"`
+	GeneratedConversions string  `json:"generatedConversions"`
+	ResponsiveImages     string  `json:"responsiveImages"`
+	OrderColumn          *int32  `json:"orderColumn,omitempty"`
+	URL                  *string `json:"url,omitempty"`
+	CreatedAt            int32   `json:"createdAt"`
+	UpdatedAt            int32   `json:"updatedAt"`
+}
+
+type MediaListData struct {
+	Media   []*Media `json:"media"`
+	Total   int32    `json:"total"`
+	Page    int32    `json:"page"`
+	PerPage int32    `json:"perPage"`
+}
+
+type MediaListResponse struct {
+	Success bool           `json:"success"`
+	Message string         `json:"message"`
+	Data    *MediaListData `json:"data,omitempty"`
+}
+
+type MediaResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+	Data    *Media `json:"data,omitempty"`
+}
+
+type MediaURLData struct {
+	URL       string `json:"url"`
+	ExpiresAt int32  `json:"expiresAt"`
+}
+
+type MediaURLResponse struct {
+	Success bool          `json:"success"`
+	Message string        `json:"message"`
+	Data    *MediaURLData `json:"data,omitempty"`
 }
 
 type Mutation struct {
@@ -461,6 +537,17 @@ type UpdateUserRoleResponse struct {
 	Message string `json:"message"`
 }
 
+type UploadFileInput struct {
+	Content        graphql.Upload `json:"content"`
+	FileName       string         `json:"fileName"`
+	MimeType       string         `json:"mimeType"`
+	ModelType      string         `json:"modelType"`
+	ModelID        string         `json:"modelId"`
+	CollectionName string         `json:"collectionName"`
+	Name           *string        `json:"name,omitempty"`
+	Disk           string         `json:"disk"`
+}
+
 type User struct {
 	ID              string  `json:"id"`
 	Name            string  `json:"name"`
@@ -475,6 +562,7 @@ type User struct {
 	LastLoginAt     *int32  `json:"lastLoginAt,omitempty"`
 	CreatedAt       *int32  `json:"createdAt,omitempty"`
 	UpdatedAt       *int32  `json:"updatedAt,omitempty"`
+	Avatar          *Media  `json:"avatar,omitempty"`
 }
 
 type UserList struct {

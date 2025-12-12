@@ -3,6 +3,8 @@ package util
 import (
 	"fmt"
 	"time"
+
+	"github.com/damarteplok/damar-admin-cms/shared/env"
 )
 
 // GetRandomAvatar returns a random avatar URL from the randomuser.me API
@@ -32,4 +34,18 @@ func TimeToUnix(t *time.Time) int64 {
 		return 0
 	}
 	return t.Unix()
+}
+
+// ConstructMediaURL builds a complete MinIO URL from UUID and filename
+func ConstructMediaURL(uuid, filename string) string {
+	endpoint := env.GetString("MINIO_ENDPOINT", "localhost:9000")
+	bucketName := env.GetString("MINIO_BUCKET_NAME", "aos")
+	useSSL := env.GetBool("MINIO_USE_SSL", false)
+
+	protocol := "http"
+	if useSSL {
+		protocol = "https"
+	}
+
+	return fmt.Sprintf("%s://%s/%s/%s/%s", protocol, endpoint, bucketName, uuid, filename)
 }

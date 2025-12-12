@@ -555,6 +555,9 @@ message GetAllDiscountsRequest {
   int32 page = 1;
   int32 per_page = 2;
   bool active_only = 3;
+  string search = 4;
+  string sort_by = 5;
+  string sort_order = 6;
 }
 
 message GetAllDiscountsData {

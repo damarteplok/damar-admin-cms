@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package media;
+
+option go_package = "shared/proto/media;media";
+
+service MediaService {
+  rpc UploadFile(UploadFileRequest) returns (UploadFileResponse) {}
+  rpc GetFileByID(GetFileByIDRequest) returns (GetFileByIDResponse) {}
+  rpc GetFileByUUID(GetFileByUUIDRequest) returns (GetFileByUUIDResponse) {}
+  rpc GetFilesByModel(GetFilesByModelRequest) returns (GetFilesByModelResponse) {}
+  rpc DeleteFile(DeleteFileRequest) returns (DeleteFileResponse) {}
+  rpc GetFileURL(GetFileURLRequest) returns (GetFileURLResponse) {}
+  rpc GetAllMedia(GetAllMediaRequest) returns (GetAllMediaResponse) {}
+}
+
+message Media {
+  int64 id = 1;
+  string model_type = 2;
+  int64 model_id = 3;
+  string uuid = 4;
+  string collection_name = 5;
+  string name = 6;
+  string file_name = 7;
+  string mime_type = 8;
+  string disk = 9;
+  string conversions_disk = 10;
+  int64 size = 11;
+  string manipulations = 12; // JSON string
+  string custom_properties = 13; // JSON string
+  string generated_conversions = 14; // JSON string
+  string responsive_images = 15; // JSON string
+  int32 order_column = 16;
+  int64 created_at = 17;
+  int64 updated_at = 18;
+  string presigned_url = 19; // Generated pre-signed URL for accessing file
+}
+
+message UploadFileRequest {
+  bytes content = 1;
+  string file_name = 2;
+  string mime_type = 3;
+  int64 size = 4;
+  string model_type = 5;
+  int64 model_id = 6;
+  string collection_name = 7;
+  string name = 8; // Optional custom name
+  string disk = 9; // Storage disk identifier
+}
+
+message UploadFileResponse {
+  bool success = 1;
+  string message = 2;
+  Media data = 3;
+}
+
+message GetFileByIDRequest {
+  int64 id = 1;
+}
+
+message GetFileByIDResponse {
+  bool success = 1;
+  string message = 2;
+  Media data = 3;
+}
+
+message GetFileByUUIDRequest {
+  string uuid = 1;
+}
+
+message GetFileByUUIDResponse {
+  bool success = 1;
+  string message = 2;
+  Media data = 3;
+}
+
+message GetFilesByModelRequest {
+  string model_type = 1;
+  int64 model_id = 2;
+  string collection_name = 3; // Optional filter by collection
+  int32 page = 4;
+  int32 per_page = 5;
+}
+
+message GetFilesByModelResponse {
+  bool success = 1;
+  string message = 2;
+  GetFilesByModelData data = 3;
+}
+
+message GetFilesByModelData {
+  repeated Media media = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}
+
+message DeleteFileRequest {
+  int64 id = 1;
+}
+
+message DeleteFileResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetFileURLRequest {
+  int64 id = 1;
+  int32 expiry_seconds = 2; // Optional, default 900 (15 minutes)
+}
+
+message GetFileURLResponse {
+  bool success = 1;
+  string message = 2;
+  GetFileURLData data = 3;
+}
+
+message GetFileURLData {
+  string url = 1;
+  int64 expires_at = 2;
+}
+
+message GetAllMediaRequest {
+  int32 page = 1;
+  int32 per_page = 2;
+  string model_type = 3; // Optional filter
+  string collection_name = 4; // Optional filter
+}
+
+message GetAllMediaResponse {
+  bool success = 1;
+  string message = 2;
+  GetAllMediaData data = 3;
+}
+
+message GetAllMediaData {
+  repeated Media media = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 per_page = 4;
+}

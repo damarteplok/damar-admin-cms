@@ -169,7 +169,7 @@ func (h *ProductHandler) DeleteDiscount(ctx context.Context, req *pb.DeleteDisco
 
 // GetAllDiscounts retrieves all discounts with pagination
 func (h *ProductHandler) GetAllDiscounts(ctx context.Context, req *pb.GetAllDiscountsRequest) (*pb.GetAllDiscountsResponse, error) {
-	discounts, total, err := h.discountService.GetAll(ctx, int(req.Page), int(req.PerPage), req.ActiveOnly)
+	discounts, total, err := h.discountService.GetAll(ctx, int(req.Page), int(req.PerPage), req.ActiveOnly, req.Search, req.SortBy, req.SortOrder)
 	if err != nil {
 		return &pb.GetAllDiscountsResponse{
 			Success: false,

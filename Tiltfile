@@ -114,7 +114,7 @@ local_resource(
         tcp_socket=tcp_socket_action(8080)
     ),
     labels=['gateway'],
-    resource_deps=['auth-service', 'user-service', 'tenant-service', 'product-service'],
+    resource_deps=['auth-service', 'user-service', 'tenant-service', 'product-service', 'media-service'],
     links=[
         link('http://localhost:8080', 'GraphQL Playground'),
         link('http://localhost:8080/query', 'GraphQL API'),
@@ -198,18 +198,28 @@ local_resource(
     'media-service',
     serve_cmd='cd services/media-service && go run cmd/main.go',
     serve_dir='.',
-    env={'GRPC_PORT': '50056'},
+    env={
+        'GRPC_PORT': '50056',
+        'MINIO_ENDPOINT': 'localhost:9000',
+        'MINIO_ACCESS_KEY': 'minioadmin',
+        'MINIO_SECRET_KEY': 'minioadmin',
+        'MINIO_BUCKET_NAME': 'damar-cms',
+        'MINIO_USE_SSL': 'false',
+    },
     deps=[
         'services/media-service/cmd',
         'services/media-service/internal',
         'services/media-service/pkg',
+        'shared/proto/media',
     ],
     readiness_probe=probe(
         period_secs=3,
         tcp_socket=tcp_socket_action(50056)
     ),
-    labels=['events', 'optional'],
-    auto_init=False,
+    labels=['backend'],
+    links=[
+        link('http://localhost:50056', 'gRPC Endpoint'),
+    ],
 )
 
 #############################################
@@ -280,12 +290,12 @@ print("""
    - auth-service      : gRPC Port 50052
    - tenant-service    : gRPC Port 50053
    - product-service   : gRPC Port 50054
+   - media-service     : gRPC Port 50056
    - api-gateway       : HTTP Port 8080 (GraphQL Playground)
    - web-frontend      : HTTP Port 3000 (TanStack Start)
 
 🔧 Optional Services (manual start via Tilt UI):
    - billing-service      : gRPC Port 50055
-   - media-service        : gRPC Port 50056
 
 🛠️  Development Tools (manual trigger):
    - generate-proto    : Generate protobuf files

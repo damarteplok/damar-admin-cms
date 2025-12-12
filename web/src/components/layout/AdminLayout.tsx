@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from '@tanstack/react-router'
+import { Outlet, useNavigate, Link } from '@tanstack/react-router'
 import {
   SidebarProvider,
   SidebarInset,
@@ -19,10 +19,12 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import { useEffect } from 'react'
 import { FullScreenLoading } from '@/components/common/full-screen-loading'
 import { StatusPage } from './StatusPage'
+import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
 
 export function AdminLayout({ children }: { children?: React.ReactNode }) {
   const auth = useAuth()
   const navigate = useNavigate()
+  const breadcrumbs = useBreadcrumbs()
 
   useEffect(() => {
     if (auth.isHydrated && !auth.isLoading) {
@@ -71,13 +73,20 @@ export function AdminLayout({ children }: { children?: React.ReactNode }) {
           <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumb>
             <BreadcrumbList>
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Overview</BreadcrumbPage>
-              </BreadcrumbItem>
+              {breadcrumbs.map((crumb, index) => (
+                <div key={crumb.path || index} className="flex items-center">
+                  {index > 0 && <BreadcrumbSeparator />}
+                  <BreadcrumbItem>
+                    {index === breadcrumbs.length - 1 ? (
+                      <BreadcrumbPage>{crumb.title}</BreadcrumbPage>
+                    ) : (
+                      <BreadcrumbLink asChild>
+                        <Link to={crumb.path || '#'}>{crumb.title}</Link>
+                      </BreadcrumbLink>
+                    )}
+                  </BreadcrumbItem>
+                </div>
+              ))}
             </BreadcrumbList>
           </Breadcrumb>
         </header>

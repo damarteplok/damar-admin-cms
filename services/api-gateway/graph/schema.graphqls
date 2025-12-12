@@ -13,7 +13,11 @@ type User {
   lastLoginAt: Int
   createdAt: Int
   updatedAt: Int
+  avatar: Media
 }
+
+# Upload scalar for file uploads
+scalar Upload
 
 # Product type
 type Product {
@@ -83,6 +87,64 @@ type TenantSetting {
   value: String!
   createdAt: Int!
   updatedAt: Int!
+}
+
+# Media type
+type Media {
+  id: ID!
+  modelType: String!
+  modelId: ID!
+  uuid: String!
+  collectionName: String!
+  name: String!
+  fileName: String!
+  mimeType: String
+  disk: String!
+  conversionsDisk: String
+  size: Int!
+  manipulations: String!
+  customProperties: String!
+  generatedConversions: String!
+  responsiveImages: String!
+  orderColumn: Int
+  url: String
+  createdAt: Int!
+  updatedAt: Int!
+}
+
+type MediaListData {
+  media: [Media!]!
+  total: Int!
+  page: Int!
+  perPage: Int!
+}
+
+type MediaResponse {
+  success: Boolean!
+  message: String!
+  data: Media
+}
+
+type MediaListResponse {
+  success: Boolean!
+  message: String!
+  data: MediaListData
+}
+
+type DeleteMediaResponse {
+  success: Boolean!
+  message: String!
+}
+
+type MediaURLData {
+  url: String!
+  expiresAt: Int!
+}
+
+type MediaURLResponse {
+  success: Boolean!
+  message: String!
+  data: MediaURLData
 }
 
 # Auth types
@@ -433,6 +495,32 @@ input UpdateProductInput {
   isDefault: Boolean
 }
 
+input UploadFileInput {
+  content: Upload!
+  fileName: String!
+  mimeType: String!
+  modelType: String!
+  modelId: ID!
+  collectionName: String!
+  name: String
+  disk: String!
+}
+
+input GetFilesByModelInput {
+  modelType: String!
+  modelId: ID!
+  collectionName: String
+  page: Int
+  perPage: Int
+}
+
+input GetAllMediaInput {
+  page: Int
+  perPage: Int
+  modelType: String
+  collectionName: String
+}
+
 input CreatePlanInput {
   name: String!
   slug: String
@@ -514,6 +602,13 @@ type Query {
   # Get all users with pagination
   users(page: Int, perPage: Int): UserListResponse!
 
+  # Media queries
+  media(id: ID!): MediaResponse!
+  mediaByUUID(uuid: String!): MediaResponse!
+  mediaByModel(input: GetFilesByModelInput!): MediaListResponse!
+  allMedia(input: GetAllMediaInput): MediaListResponse!
+  mediaURL(id: ID!, expirySeconds: Int): MediaURLResponse!
+
   # Search users by name or email
   searchUsers(query: String!, page: Int, perPage: Int): UserListResponse!
 
@@ -567,7 +662,14 @@ type Query {
 
   # Discount queries
   discount(id: ID!): DiscountResponse!
-  discounts(page: Int, perPage: Int, activeOnly: Boolean): DiscountListResponse!
+  discounts(
+    page: Int
+    perPage: Int
+    activeOnly: Boolean
+    search: String
+    sortBy: String
+    sortOrder: String
+  ): DiscountListResponse!
 }
 
 # Mutations
@@ -618,4 +720,8 @@ type Mutation {
   createDiscount(input: CreateDiscountInput!): DiscountResponse!
   updateDiscount(input: UpdateDiscountInput!): DiscountResponse!
   deleteDiscount(id: ID!): DeleteDiscountResponse!
+
+  # Media mutations
+  uploadFile(input: UploadFileInput!): MediaResponse!
+  deleteMedia(id: ID!): DeleteMediaResponse!
 }

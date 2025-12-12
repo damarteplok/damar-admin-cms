@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"net/http"
 	"strings"
 	"time"
@@ -11,10 +12,13 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/damarteplok/damar-admin-cms/services/api-gateway/graph"
+	"github.com/damarteplok/damar-admin-cms/services/api-gateway/internal/cache"
 	"github.com/damarteplok/damar-admin-cms/services/api-gateway/internal/middleware"
+	"github.com/damarteplok/damar-admin-cms/shared/amqp"
 	"github.com/damarteplok/damar-admin-cms/shared/env"
 	"github.com/damarteplok/damar-admin-cms/shared/logger"
 	authPb "github.com/damarteplok/damar-admin-cms/shared/proto/auth"
+	mediaPb "github.com/damarteplok/damar-admin-cms/shared/proto/media"
 	productPb "github.com/damarteplok/damar-admin-cms/shared/proto/product"
 	tenantPb "github.com/damarteplok/damar-admin-cms/shared/proto/tenant"
 	userPb "github.com/damarteplok/damar-admin-cms/shared/proto/user"
@@ -62,6 +66,7 @@ func main() {
 	userAddr := env.GetString("USER_SERVICE_ADDR", "localhost:50051")
 	tenantAddr := env.GetString("TENANT_SERVICE_ADDR", "localhost:50053")
 	productAddr := env.GetString("PRODUCT_SERVICE_ADDR", "localhost:50054")
+	mediaAddr := env.GetString("MEDIA_SERVICE_ADDR", "localhost:50056")
 
 	authConn, err := grpc.NewClient(authAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
@@ -87,16 +92,34 @@ func main() {
 	}
 	defer productConn.Close()
 
+	mediaConn, err := grpc.NewClient(mediaAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger.Fatal("Failed to connect to media service", zap.Error(err))
+	}
+	defer mediaConn.Close()
+
 	authClient := authPb.NewAuthServiceClient(authConn)
 	userClient := userPb.NewUserServiceClient(userConn)
 	tenantClient := tenantPb.NewTenantServiceClient(tenantConn)
 	productClient := productPb.NewProductServiceClient(productConn)
+	mediaClient := mediaPb.NewMediaServiceClient(mediaConn)
+
+	// Initialize media cache service
+	var mediaCache *cache.MediaCacheService
+	if redisClient != nil {
+		mediaCache = cache.NewMediaCacheService(redisClient.Client, mediaClient, 1*time.Hour)
+		logger.Info("Media cache service initialized with 1 hour TTL")
+	} else {
+		logger.Warn("Media cache service disabled (no Redis connection)")
+	}
 
 	resolver := &graph.Resolver{
 		AuthClient:    authClient,
 		UserClient:    userClient,
 		TenantClient:  tenantClient,
 		ProductClient: productClient,
+		MediaClient:   mediaClient,
+		MediaCache:    mediaCache,
 	}
 
 	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
@@ -104,6 +127,10 @@ func main() {
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})
 	srv.AddTransport(transport.POST{})
+	srv.AddTransport(transport.MultipartForm{
+		MaxMemory:     32 << 20, // 32 MB
+		MaxUploadSize: 50 << 20, // 50 MB
+	})
 
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000))
 
@@ -183,6 +210,32 @@ func main() {
 	// GraphQL API endpoint with auth middleware
 	authMiddleware := middleware.AuthMiddleware(authClient)
 	router.Handle("/query", authMiddleware(srv))
+
+	// Start media event subscriber for cache invalidation (optional)
+	if redisClient != nil {
+		rabbitAddr := env.GetString("RABBITMQ_ADDR", "amqp://guest:guest@localhost:5672/")
+		amqpConn, err := amqp.NewConnection(rabbitAddr)
+		if err != nil {
+			logger.Warn("Failed to connect to RabbitMQ, cache invalidation disabled",
+				zap.Error(err),
+				zap.String("rabbitmq_addr", rabbitAddr),
+			)
+		} else {
+			defer amqpConn.Close()
+
+			// Declare exchange for media events
+			if err := amqpConn.DeclareExchange("damar.events", "topic"); err != nil {
+				logger.Warn("Failed to declare exchange", zap.Error(err))
+			} else {
+				subscriber := cache.NewMediaEventSubscriber(mediaCache, amqpConn)
+				if err := subscriber.Start(context.Background()); err != nil {
+					logger.Warn("Failed to start media event subscriber", zap.Error(err))
+				} else {
+					logger.Info("Media event subscriber started for cache invalidation")
+				}
+			}
+		}
+	}
 
 	logger.Info("╔═══════════════════════════════════════════════════════════╗")
 	logger.Info("║                                                           ║")

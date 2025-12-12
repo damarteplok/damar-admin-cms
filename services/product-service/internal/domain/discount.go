@@ -33,7 +33,7 @@ type DiscountRepository interface {
 	Create(ctx context.Context, discount *Discount) error
 	Update(ctx context.Context, discount *Discount) error
 	Delete(ctx context.Context, id int64) error
-	GetAll(ctx context.Context, page, perPage int, activeOnly bool) ([]*Discount, int, error)
+	GetAll(ctx context.Context, page, perPage int, activeOnly bool, search, sortBy, sortOrder string) ([]*Discount, int, error)
 }
 
 type DiscountService interface {
@@ -41,5 +41,5 @@ type DiscountService interface {
 	Create(ctx context.Context, discount *Discount) error
 	Update(ctx context.Context, discount *Discount) error
 	Delete(ctx context.Context, id int64) error
-	GetAll(ctx context.Context, page, perPage int, activeOnly bool) ([]*Discount, int, error)
+	GetAll(ctx context.Context, page, perPage int, activeOnly bool, search, sortBy, sortOrder string) ([]*Discount, int, error)
 }

@@ -64,12 +64,12 @@ func (s *discountService) Delete(ctx context.Context, id int64) error {
 	return s.repo.Delete(ctx, id)
 }
 
-func (s *discountService) GetAll(ctx context.Context, page, perPage int, activeOnly bool) ([]*domain.Discount, int, error) {
+func (s *discountService) GetAll(ctx context.Context, page, perPage int, activeOnly bool, search, sortBy, sortOrder string) ([]*domain.Discount, int, error) {
 	if page <= 0 {
 		page = 1
 	}
 	if perPage <= 0 {
 		perPage = 10
 	}
-	return s.repo.GetAll(ctx, page, perPage, activeOnly)
+	return s.repo.GetAll(ctx, page, perPage, activeOnly, search, sortBy, sortOrder)
 }

@@ -4,7 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { CREATE_PLAN_MUTATION } from '@/lib/graphql/plan.graphql'
-import type { CreatePlanResponse, CreatePlanInput } from '@/types'
+import type {
+  CreatePlanResponse,
+  CreatePlanInput,
+  UpdatePlanInput,
+} from '@/types'
 import { PlanForm } from '@/components/features/admin/plans'
 
 import { Button } from '@/components/ui/button'
@@ -23,10 +27,20 @@ function CreatePlanPage() {
     useMutation<CreatePlanResponse>(CREATE_PLAN_MUTATION)
 
   const handleCreate = async (
-    data: CreatePlanInput,
+    data: CreatePlanInput | UpdatePlanInput,
     createAnother: boolean = false,
   ) => {
-    const result = await createPlanMutation({ input: data })
+    // Type guard: in create mode, data should have productId
+    if (!('productId' in data) || !data.productId) {
+      toast.error(
+        t('plans.form.product_required', {
+          defaultValue: 'Product is required',
+        }),
+      )
+      return false
+    }
+
+    const result = await createPlanMutation({ input: data as CreatePlanInput })
 
     if (result.data?.createPlan.success) {
       toast.success(

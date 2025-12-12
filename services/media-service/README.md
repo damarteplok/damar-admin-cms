@@ -1,6 +1,36 @@
 # media service
 
-This service handles all media-related operations in the system.
+This service handles all media-related operations including file uploads, storage, and retrieval using MinIO object storage.
+
+## Prerequisites
+
+### MinIO Setup
+
+Media service requires MinIO for object storage. See [MINIO_SETUP.md](../../docs/MINIO_SETUP.md) for detailed setup instructions.
+
+Quick start:
+
+```bash
+docker run -d \
+  --name minio \
+  -p 9000:9000 \
+  -p 9001:9001 \
+  -e MINIO_ROOT_USER=minioadmin \
+  -e MINIO_ROOT_PASSWORD=minioadmin \
+  minio/minio server /data --console-address ":9001"
+```
+
+### Environment Variables
+
+Required environment variables:
+
+```bash
+MINIO_ENDPOINT=localhost:9000
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=minioadmin
+MINIO_BUCKET_NAME=damar-cms
+MINIO_USE_SSL=false
+```
 
 ## Architecture
 
@@ -26,16 +56,19 @@ services/media-service/
 ### Layer Responsibilities
 
 1. **Domain Layer** (`internal/domain/`)
+
    - Contains business domain interfaces
    - Defines contracts for repositories and services
    - Pure business logic, no implementation details
 
 2. **Service Layer** (`internal/service/`)
+
    - Implements business logic
    - Uses repository interfaces
    - Coordinates between different parts of the system
 
 3. **Infrastructure Layer** (`internal/infrastructure/`)
+
    - `repository/`: Implements data persistence
    - `events/`: Handles event publishing and consuming
    - `grpc/`: Handles gRPC communication

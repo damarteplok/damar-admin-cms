@@ -7,6 +7,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Check, X, Pencil, Trash2, Eye } from 'lucide-react'
 import type { TFunction } from 'i18next'
+import { formatDateTime } from '@/lib/utils/date'
 
 interface ColumnProps {
   onDelete: (id: string) => void
@@ -98,24 +99,7 @@ export const createPlanColumns = ({
     header: t('plans.columns.created_at', { defaultValue: 'Created At' }),
     cell: ({ row }) => {
       const timestamp = Number(row.getValue('createdAt'))
-      const date = new Date(timestamp * 1000)
-      return (
-        <div className="flex flex-col">
-          <span className="text-sm">
-            {date.toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-            })}
-          </span>
-          <span className="text-xs text-muted-foreground">
-            {date.toLocaleTimeString('en-US', {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </span>
-        </div>
-      )
+      return <span className="text-sm">{formatDateTime(timestamp)}</span>
     },
   },
   {
