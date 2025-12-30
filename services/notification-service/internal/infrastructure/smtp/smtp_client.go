@@ -197,4 +197,80 @@ var emailTemplates = map[string]string{
     </div>
 </body>
 </html>`,
+	"new_blog_post": `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #673AB7; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background-color: #f9f9f9; }
+        .blog-title { font-size: 24px; color: #673AB7; margin: 20px 0; }
+        .excerpt { background-color: #fff; padding: 15px; border-left: 4px solid #673AB7; margin: 20px 0; }
+        .button { display: inline-block; padding: 10px 20px; background-color: #673AB7; color: white; text-decoration: none; border-radius: 5px; }
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 New Blog Post Published!</h1>
+        </div>
+        <div class="content">
+            <p>Hello <strong>{{.Name}}</strong>,</p>
+            <p>A new blog post has been published that you might be interested in:</p>
+            <h2 class="blog-title">{{.Title}}</h2>
+            <div class="excerpt">
+                <p>{{.Excerpt}}</p>
+            </div>
+            <p style="text-align: center; margin: 30px 0;">
+                <a href="{{.BlogURL}}" class="button">Read Full Article</a>
+            </p>
+            <p>If the button doesn't work, copy and paste this link into your browser:</p>
+            <p style="word-break: break-all; color: #666;">{{.BlogURL}}</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 Damar Admin CMS. All rights reserved.</p>
+            <p><a href="#" style="color: #666;">Unsubscribe</a> from blog notifications</p>
+        </div>
+    </div>
+</body>
+</html>`,
+	"blog_post_deleted": `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #F44336; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background-color: #f9f9f9; }
+        .alert { background-color: #ffebee; border-left: 4px solid #f44336; padding: 15px; margin: 20px 0; }
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗑️ Blog Post Deleted</h1>
+        </div>
+        <div class="content">
+            <p>Hello Admin,</p>
+            <div class="alert">
+                <strong>⚠️ Deletion Notice</strong><br>
+                A blog post has been deleted from the system.
+            </div>
+            <p><strong>Deleted by:</strong> {{.AdminName}}</p>
+            <p><strong>Blog Post Title:</strong> {{.Title}}</p>
+            <p>This is a notification for audit purposes. If this action was unauthorized, please review your system access logs immediately.</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 Damar Admin CMS. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>`,
 }

@@ -106,7 +106,14 @@ function PlanDetailsPage() {
               <ArrowLeft className="h-4 w-4" />
             </Link>
           </Button>
-          <h1 className="text-2xl font-semibold tracking-tight">{plan.name}</h1>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">{plan.name}</h1>
+            <p className="text-sm text-muted-foreground">
+              {t('plans.view_description', {
+                defaultValue: 'Lihat detail paket',
+              })}
+            </p>
+          </div>
           <Badge variant="outline" className="font-mono">
             {plan.slug}
           </Badge>
@@ -338,7 +345,17 @@ function PlanDetailsPage() {
 
         {/* Timestamps */}
         <Card>
-          <CardContent className="pt-6">
+          <CardHeader>
+            <CardTitle>
+              {t('plans.timestamps_title', { defaultValue: 'Timestamps' })}
+            </CardTitle>
+            <CardDescription>
+              {t('plans.timestamps_description', {
+                defaultValue: 'Plan creation and update history',
+              })}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <div className="flex items-center">
                 <Calendar className="mr-2 h-4 w-4" />

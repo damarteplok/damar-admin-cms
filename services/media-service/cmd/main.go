@@ -60,12 +60,22 @@ func main() {
 
 	// Get bucket name from environment
 	bucketName := env.GetString("MINIO_BUCKET_NAME", "aos")
+	publicBucketName := env.GetString("MINIO_PUBLIC_BUCKET_NAME", "blog-images")
 
-	// Ensure bucket exists
+	// Ensure private bucket exists
 	if err := storage.EnsureBucket(ctx, minioClient, bucketName); err != nil {
 		logger.Fatal("Failed to ensure bucket exists", zap.String("bucket", bucketName), zap.Error(err))
 	}
 	logger.Info("MinIO bucket ready", zap.String("bucket", bucketName))
+
+	// Ensure public bucket exists and set it as public
+	if err := storage.EnsureBucket(ctx, minioClient, publicBucketName); err != nil {
+		logger.Fatal("Failed to ensure public bucket exists", zap.String("bucket", publicBucketName), zap.Error(err))
+	}
+	if err := storage.SetBucketPublic(ctx, minioClient, publicBucketName); err != nil {
+		logger.Warn("Failed to set bucket as public (may already be public)", zap.String("bucket", publicBucketName), zap.Error(err))
+	}
+	logger.Info("MinIO public bucket ready", zap.String("bucket", publicBucketName))
 
 	// Connect to RabbitMQ
 	rabbitmqURL := env.GetString("RABBITMQ_URL", "amqp://guest:guest@localhost:5672/")
@@ -83,7 +93,10 @@ func main() {
 	logger.Info("Successfully connected to RabbitMQ")
 
 	// Initialize layers (repository -> service -> handler)
-	mediaRepo := repository.NewMediaRepository(pool, minioClient, bucketName)
+	minioEndpoint := env.GetString("MINIO_ENDPOINT", "localhost:9000")
+	minioUseSSL := env.GetBool("MINIO_USE_SSL", false)
+
+	mediaRepo := repository.NewMediaRepository(pool, minioClient, bucketName, publicBucketName, minioEndpoint, minioUseSSL)
 	mediaService := service.NewMediaService(mediaRepo, publisher)
 	mediaHandler := grpc.NewMediaGRPCServer(mediaService)
 

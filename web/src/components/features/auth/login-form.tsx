@@ -69,7 +69,14 @@ export function LoginForm({
             // login failed during refresh; auth.login will have handled logout
           }
 
-          navigate({ to: '/' })
+          // Check if there's a redirect path stored (from 401 error)
+          const redirectPath = sessionStorage.getItem('redirectAfterLogin')
+          if (redirectPath) {
+            sessionStorage.removeItem('redirectAfterLogin')
+            navigate({ to: redirectPath })
+          } else {
+            navigate({ to: '/' })
+          }
         } else {
           setLoginError('Login response data is missing')
         }

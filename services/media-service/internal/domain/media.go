@@ -24,6 +24,8 @@ type Media struct {
 	GeneratedConversions map[string]interface{}
 	ResponsiveImages     map[string]interface{}
 	OrderColumn          *int32
+	IsPublic             bool
+	PublicURL            *string
 	CreatedAt            *time.Time
 	UpdatedAt            *time.Time
 }
@@ -39,6 +41,7 @@ type UploadRequest struct {
 	CollectionName string
 	Name           string
 	Disk           string
+	IsPublic       bool
 }
 
 // MediaRepository defines the interface for media data access

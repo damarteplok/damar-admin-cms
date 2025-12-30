@@ -64,3 +64,36 @@ func EnsureBucket(ctx context.Context, client *minio.Client, bucketName string) 
 
 	return nil
 }
+
+// SetBucketPublic sets a bucket policy to allow public read access
+// This should be used for public assets like blog images
+func SetBucketPublic(ctx context.Context, client *minio.Client, bucketName string) error {
+	// Define public read policy
+	policy := `{
+		"Version": "2012-10-17",
+		"Statement": [
+			{
+				"Effect": "Allow",
+				"Principal": {"AWS": ["*"]},
+				"Action": ["s3:GetObject"],
+				"Resource": ["arn:aws:s3:::` + bucketName + `/*"]
+			}
+		]
+	}`
+
+	err := client.SetBucketPolicy(ctx, bucketName, policy)
+	if err != nil {
+		return fmt.Errorf("failed to set bucket policy: %w", err)
+	}
+
+	return nil
+}
+
+// GetPublicURL returns the public URL for an object in a public bucket
+func GetPublicURL(endpoint, bucketName, objectPath string, useSSL bool) string {
+	protocol := "http"
+	if useSSL {
+		protocol = "https"
+	}
+	return fmt.Sprintf("%s://%s/%s/%s", protocol, endpoint, bucketName, objectPath)
+}

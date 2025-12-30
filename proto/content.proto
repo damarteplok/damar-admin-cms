@@ -1,0 +1,364 @@
+syntax = "proto3";
+
+package content;
+
+option go_package = "shared/proto/content;content";
+
+service ContentService {
+  // Blog Post operations
+  rpc GetBlogPostByID(GetBlogPostByIDRequest) returns (GetBlogPostByIDResponse) {}
+  rpc GetBlogPostBySlug(GetBlogPostBySlugRequest) returns (GetBlogPostBySlugResponse) {}
+  rpc GetAllBlogPosts(GetAllBlogPostsRequest) returns (GetAllBlogPostsResponse) {}
+  rpc CreateBlogPost(CreateBlogPostRequest) returns (CreateBlogPostResponse) {}
+  rpc UpdateBlogPost(UpdateBlogPostRequest) returns (UpdateBlogPostResponse) {}
+  rpc PublishBlogPost(PublishBlogPostRequest) returns (PublishBlogPostResponse) {}
+  rpc UnpublishBlogPost(UnpublishBlogPostRequest) returns (UnpublishBlogPostResponse) {}
+  rpc DeleteBlogPost(DeleteBlogPostRequest) returns (DeleteBlogPostResponse) {}
+  rpc SearchBlogPosts(SearchBlogPostsRequest) returns (SearchBlogPostsResponse) {}
+
+  // Category operations
+  rpc GetCategoryByID(GetCategoryByIDRequest) returns (GetCategoryByIDResponse) {}
+  rpc GetCategoryBySlug(GetCategoryBySlugRequest) returns (GetCategoryBySlugResponse) {}
+  rpc GetAllCategories(GetAllCategoriesRequest) returns (GetAllCategoriesResponse) {}
+  rpc CreateCategory(CreateCategoryRequest) returns (CreateCategoryResponse) {}
+  rpc UpdateCategory(UpdateCategoryRequest) returns (UpdateCategoryResponse) {}
+  rpc DeleteCategory(DeleteCategoryRequest) returns (DeleteCategoryResponse) {}
+
+  // Announcement operations
+  rpc GetAnnouncementByID(GetAnnouncementByIDRequest) returns (GetAnnouncementByIDResponse) {}
+  rpc GetAllAnnouncements(GetAllAnnouncementsRequest) returns (GetAllAnnouncementsResponse) {}
+  rpc CreateAnnouncement(CreateAnnouncementRequest) returns (CreateAnnouncementResponse) {}
+  rpc UpdateAnnouncement(UpdateAnnouncementRequest) returns (UpdateAnnouncementResponse) {}
+  rpc DeleteAnnouncement(DeleteAnnouncementRequest) returns (DeleteAnnouncementResponse) {}
+  rpc GetActiveAnnouncements(GetActiveAnnouncementsRequest) returns (GetActiveAnnouncementsResponse) {}
+}
+
+// Blog Post messages
+
+message BlogPost {
+  int64  id                    = 1;
+  string title                 = 2;
+  string slug                  = 3;
+  string body                  = 4;
+  bool   is_published          = 5;
+  int64  published_at          = 6;
+  int64  user_id               = 7;
+  int64  author_id             = 8;
+  int64  blog_post_category_id = 9;
+  string description           = 10;
+  int64  created_at            = 11;
+  int64  updated_at            = 12;
+}
+
+message GetBlogPostByIDRequest {
+  int64 id = 1;
+}
+
+message GetBlogPostByIDResponse {
+  bool     success = 1;
+  string   message = 2;
+  BlogPost data    = 3;
+}
+
+message GetBlogPostBySlugRequest {
+  string slug = 1;
+}
+
+message GetBlogPostBySlugResponse {
+  bool     success = 1;
+  string   message = 2;
+  BlogPost data    = 3;
+}
+
+message GetAllBlogPostsRequest {
+  int32  page           = 1;
+  int32  per_page       = 2;
+  string search         = 3;
+  string sort_by        = 4;
+  string sort_order     = 5;
+  bool   published_only = 6;
+  int64  category_id    = 7;
+}
+
+message GetAllBlogPostsData {
+  repeated BlogPost blog_posts = 1;
+  int32             total      = 2;
+  int32             page       = 3;
+  int32             per_page   = 4;
+}
+
+message GetAllBlogPostsResponse {
+  bool                success = 1;
+  string              message = 2;
+  GetAllBlogPostsData data    = 3;
+}
+
+message CreateBlogPostRequest {
+  string title                 = 1;
+  string slug                  = 2;
+  string body                  = 3;
+  string description           = 4;
+  int64  user_id               = 5;
+  int64  author_id             = 6;
+  int64  blog_post_category_id = 7;
+  bool   is_published          = 8;
+  int64  published_at          = 9;
+}
+
+message CreateBlogPostResponse {
+  bool     success = 1;
+  string   message = 2;
+  BlogPost data    = 3;
+}
+
+message UpdateBlogPostRequest {
+  int64  id                    = 1;
+  string title                 = 2;
+  string slug                  = 3;
+  string body                  = 4;
+  string description           = 5;
+  int64  author_id             = 6;
+  int64  blog_post_category_id = 7;
+  bool   is_published          = 8;
+  int64  published_at          = 9;
+}
+
+message UpdateBlogPostResponse {
+  bool     success = 1;
+  string   message = 2;
+  BlogPost data    = 3;
+}
+
+message PublishBlogPostRequest {
+  int64 id = 1;
+}
+
+message PublishBlogPostResponse {
+  bool     success = 1;
+  string   message = 2;
+  BlogPost data    = 3;
+}
+
+message UnpublishBlogPostRequest {
+  int64 id = 1;
+}
+
+message UnpublishBlogPostResponse {
+  bool     success = 1;
+  string   message = 2;
+  BlogPost data    = 3;
+}
+
+message DeleteBlogPostRequest {
+  int64 id = 1;
+}
+
+message DeleteBlogPostResponse {
+  bool   success = 1;
+  string message = 2;
+}
+
+message SearchBlogPostsRequest {
+  string query          = 1;
+  int32  page           = 2;
+  int32  per_page       = 3;
+  bool   published_only = 4;
+}
+
+message SearchBlogPostsResponse {
+  bool                success = 1;
+  string              message = 2;
+  GetAllBlogPostsData data    = 3;
+}
+
+// Category messages
+
+message Category {
+  int64  id          = 1;
+  string name        = 2;
+  string slug        = 3;
+  string description = 4;
+  int64  created_at  = 5;
+  int64  updated_at  = 6;
+}
+
+message GetCategoryByIDRequest {
+  int64 id = 1;
+}
+
+message GetCategoryByIDResponse {
+  bool     success = 1;
+  string   message = 2;
+  Category data    = 3;
+}
+
+message GetCategoryBySlugRequest {
+  string slug = 1;
+}
+
+message GetCategoryBySlugResponse {
+  bool     success = 1;
+  string   message = 2;
+  Category data    = 3;
+}
+
+message GetAllCategoriesRequest {
+  int32  page       = 1;
+  int32  per_page   = 2;
+  string search     = 3;
+  string sort_by    = 4;
+  string sort_order = 5;
+}
+
+message GetAllCategoriesData {
+  repeated Category categories = 1;
+  int32             total      = 2;
+  int32             page       = 3;
+  int32             per_page   = 4;
+}
+
+message GetAllCategoriesResponse {
+  bool                 success = 1;
+  string               message = 2;
+  GetAllCategoriesData data    = 3;
+}
+
+message CreateCategoryRequest {
+  string name        = 1;
+  string slug        = 2;
+  string description = 3;
+}
+
+message CreateCategoryResponse {
+  bool     success = 1;
+  string   message = 2;
+  Category data    = 3;
+}
+
+message UpdateCategoryRequest {
+  int64  id          = 1;
+  string name        = 2;
+  string slug        = 3;
+  string description = 4;
+}
+
+message UpdateCategoryResponse {
+  bool     success = 1;
+  string   message = 2;
+  Category data    = 3;
+}
+
+message DeleteCategoryRequest {
+  int64 id = 1;
+}
+
+message DeleteCategoryResponse {
+  bool   success = 1;
+  string message = 2;
+}
+
+// Announcement messages
+
+message Announcement {
+  int64  id                     = 1;
+  string title                  = 2;
+  string content                = 3;
+  int64  starts_at              = 4;
+  int64  ends_at                = 5;
+  bool   is_active              = 6;
+  bool   is_dismissible         = 7;
+  bool   show_for_customers     = 8;
+  bool   show_on_frontend       = 9;
+  bool   show_on_user_dashboard = 10;
+  int64  created_at             = 11;
+  int64  updated_at             = 12;
+}
+
+message GetAnnouncementByIDRequest {
+  int64 id = 1;
+}
+
+message GetAnnouncementByIDResponse {
+  bool         success = 1;
+  string       message = 2;
+  Announcement data    = 3;
+}
+
+message GetAllAnnouncementsRequest {
+  int32  page       = 1;
+  int32  per_page   = 2;
+  string search     = 3;
+  string sort_by    = 4;
+  string sort_order = 5;
+}
+
+message GetAllAnnouncementsData {
+  repeated Announcement announcements = 1;
+  int32                 total         = 2;
+  int32                 page          = 3;
+  int32                 per_page      = 4;
+}
+
+message GetAllAnnouncementsResponse {
+  bool                    success = 1;
+  string                  message = 2;
+  GetAllAnnouncementsData data    = 3;
+}
+
+message CreateAnnouncementRequest {
+  string title                  = 1;
+  string content                = 2;
+  int64  starts_at              = 3;
+  int64  ends_at                = 4;
+  bool   is_active              = 5;
+  bool   is_dismissible         = 6;
+  bool   show_for_customers     = 7;
+  bool   show_on_frontend       = 8;
+  bool   show_on_user_dashboard = 9;
+}
+
+message CreateAnnouncementResponse {
+  bool         success = 1;
+  string       message = 2;
+  Announcement data    = 3;
+}
+
+message UpdateAnnouncementRequest {
+  int64  id                     = 1;
+  string title                  = 2;
+  string content                = 3;
+  int64  starts_at              = 4;
+  int64  ends_at                = 5;
+  bool   is_active              = 6;
+  bool   is_dismissible         = 7;
+  bool   show_for_customers     = 8;
+  bool   show_on_frontend       = 9;
+  bool   show_on_user_dashboard = 10;
+}
+
+message UpdateAnnouncementResponse {
+  bool         success = 1;
+  string       message = 2;
+  Announcement data    = 3;
+}
+
+message DeleteAnnouncementRequest {
+  int64 id = 1;
+}
+
+message DeleteAnnouncementResponse {
+  bool   success = 1;
+  string message = 2;
+}
+
+message GetActiveAnnouncementsRequest {
+  bool for_customers      = 1;
+  bool for_frontend       = 2;
+  bool for_user_dashboard = 3;
+}
+
+message GetActiveAnnouncementsResponse {
+  bool                  success = 1;
+  string                message = 2;
+  repeated Announcement data    = 3;
+}

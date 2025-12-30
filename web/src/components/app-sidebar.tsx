@@ -1,7 +1,15 @@
 'use client'
 
 import * as React from 'react'
-import { Bell, Command, Frame, PieChart, TrendingUp, User } from 'lucide-react'
+import {
+  Bell,
+  BookOpen,
+  Command,
+  Frame,
+  PieChart,
+  TrendingUp,
+  User,
+} from 'lucide-react'
 
 import { NavMain } from '@/components/nav-main'
 import { NavSecondary } from '@/components/nav-secondary'
@@ -59,6 +67,30 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           {
             title: t('nav.discounts'),
             url: '/admin/discounts',
+          },
+        ],
+      },
+      {
+        title: t('nav.blogs'),
+        icon: BookOpen,
+        items: [
+          {
+            title: t('nav.blog_posts'),
+            url: '/admin/blog',
+          },
+          {
+            title: t('nav.blog_categories'),
+            url: '/admin/blog-categories',
+          },
+        ],
+      },
+      {
+        title: t('nav.announcements'),
+        icon: Bell,
+        items: [
+          {
+            title: t('nav.announcements'),
+            url: '/admin/announcements',
           },
         ],
       },

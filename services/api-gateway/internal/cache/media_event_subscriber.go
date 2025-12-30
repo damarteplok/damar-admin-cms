@@ -107,7 +107,7 @@ func (s *MediaEventSubscriber) onMediaUploaded(msg contracts.AmqpMessage) error 
 	}
 
 	collectionName := ""
-	if col, ok := data["collection"].(string); ok {
+	if col, ok := data["collection_name"].(string); ok {
 		collectionName = col
 	}
 
@@ -162,7 +162,7 @@ func (s *MediaEventSubscriber) onMediaDeleted(msg contracts.AmqpMessage) error {
 	}
 
 	collectionName := ""
-	if col, ok := data["collection"].(string); ok {
+	if col, ok := data["collection_name"].(string); ok {
 		collectionName = col
 	}
 

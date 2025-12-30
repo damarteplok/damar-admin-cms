@@ -39,6 +39,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	BlogPost() BlogPostResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
 	User() UserResolver
@@ -48,13 +49,133 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	ActiveAnnouncementsResponse struct {
+		Data    func(childComplexity int) int
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
+	Announcement struct {
+		Content             func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
+		EndsAt              func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		IsActive            func(childComplexity int) int
+		IsDismissible       func(childComplexity int) int
+		ShowForCustomers    func(childComplexity int) int
+		ShowOnFrontend      func(childComplexity int) int
+		ShowOnUserDashboard func(childComplexity int) int
+		StartsAt            func(childComplexity int) int
+		Title               func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
+	}
+
+	AnnouncementList struct {
+		Announcements func(childComplexity int) int
+		Page          func(childComplexity int) int
+		PerPage       func(childComplexity int) int
+		Total         func(childComplexity int) int
+	}
+
+	AnnouncementListResponse struct {
+		Data    func(childComplexity int) int
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
+	AnnouncementResponse struct {
+		Data    func(childComplexity int) int
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
+	BlogPost struct {
+		Author             func(childComplexity int) int
+		AuthorID           func(childComplexity int) int
+		BlogPostCategoryID func(childComplexity int) int
+		Body               func(childComplexity int) int
+		Category           func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		Description        func(childComplexity int) int
+		FeaturedImage      func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		IsPublished        func(childComplexity int) int
+		PublishedAt        func(childComplexity int) int
+		Slug               func(childComplexity int) int
+		Title              func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UserID             func(childComplexity int) int
+	}
+
+	BlogPostList struct {
+		BlogPosts func(childComplexity int) int
+		Page      func(childComplexity int) int
+		PerPage   func(childComplexity int) int
+		Total     func(childComplexity int) int
+	}
+
+	BlogPostListResponse struct {
+		Data    func(childComplexity int) int
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
+	BlogPostResponse struct {
+		Data    func(childComplexity int) int
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
 	BulkOperationResponse struct {
 		AffectedCount func(childComplexity int) int
 		Message       func(childComplexity int) int
 		Success       func(childComplexity int) int
 	}
 
+	Category struct {
+		CreatedAt   func(childComplexity int) int
+		Description func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Slug        func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+	}
+
+	CategoryList struct {
+		Categories func(childComplexity int) int
+		Page       func(childComplexity int) int
+		PerPage    func(childComplexity int) int
+		Total      func(childComplexity int) int
+	}
+
+	CategoryListResponse struct {
+		Data    func(childComplexity int) int
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
+	CategoryResponse struct {
+		Data    func(childComplexity int) int
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
 	ChangePasswordResponse struct {
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
+	DeleteAnnouncementResponse struct {
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
+	DeleteBlogPostResponse struct {
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+	}
+
+	DeleteCategoryResponse struct {
 		Message func(childComplexity int) int
 		Success func(childComplexity int) int
 	}
@@ -167,12 +288,14 @@ type ComplexityRoot struct {
 		FileName             func(childComplexity int) int
 		GeneratedConversions func(childComplexity int) int
 		ID                   func(childComplexity int) int
+		IsPublic             func(childComplexity int) int
 		Manipulations        func(childComplexity int) int
 		MimeType             func(childComplexity int) int
 		ModelID              func(childComplexity int) int
 		ModelType            func(childComplexity int) int
 		Name                 func(childComplexity int) int
 		OrderColumn          func(childComplexity int) int
+		PublicURL            func(childComplexity int) int
 		ResponsiveImages     func(childComplexity int) int
 		Size                 func(childComplexity int) int
 		URL                  func(childComplexity int) int
@@ -215,11 +338,17 @@ type ComplexityRoot struct {
 		BulkBlockUsers          func(childComplexity int, ids []string, isBlocked bool) int
 		BulkDeleteUsers         func(childComplexity int, ids []string) int
 		ChangePassword          func(childComplexity int, input model.ChangePasswordInput) int
+		CreateAnnouncement      func(childComplexity int, input model.CreateAnnouncementInput) int
+		CreateBlogPost          func(childComplexity int, input model.CreateBlogPostInput) int
+		CreateCategory          func(childComplexity int, input model.CreateCategoryInput) int
 		CreateDiscount          func(childComplexity int, input model.CreateDiscountInput) int
 		CreatePlan              func(childComplexity int, input model.CreatePlanInput) int
 		CreateProduct           func(childComplexity int, input model.CreateProductInput) int
 		CreateTenant            func(childComplexity int, input model.CreateTenantInput) int
 		CreateUser              func(childComplexity int, input model.CreateUserInput) int
+		DeleteAnnouncement      func(childComplexity int, id string) int
+		DeleteBlogPost          func(childComplexity int, id string) int
+		DeleteCategory          func(childComplexity int, id string) int
 		DeleteDiscount          func(childComplexity int, id string) int
 		DeleteMedia             func(childComplexity int, id string) int
 		DeletePlan              func(childComplexity int, id string) int
@@ -230,12 +359,17 @@ type ComplexityRoot struct {
 		ForgotPassword          func(childComplexity int, email string) int
 		Login                   func(childComplexity int, input model.LoginInput) int
 		Logout                  func(childComplexity int, refreshToken string) int
+		PublishBlogPost         func(childComplexity int, id string) int
 		RefreshToken            func(childComplexity int, input model.RefreshTokenInput) int
 		RemoveUserFromTenant    func(childComplexity int, userID string, tenantID string) int
 		ResendVerificationEmail func(childComplexity int) int
 		ResetPassword           func(childComplexity int, input model.ResetPasswordInput) int
 		SetDefaultTenant        func(childComplexity int, input model.SetDefaultTenantInput) int
 		SetTenantSetting        func(childComplexity int, input model.SetSettingInput) int
+		UnpublishBlogPost       func(childComplexity int, id string) int
+		UpdateAnnouncement      func(childComplexity int, input model.UpdateAnnouncementInput) int
+		UpdateBlogPost          func(childComplexity int, input model.UpdateBlogPostInput) int
+		UpdateCategory          func(childComplexity int, input model.UpdateCategoryInput) int
 		UpdateDiscount          func(childComplexity int, input model.UpdateDiscountInput) int
 		UpdatePlan              func(childComplexity int, input model.UpdatePlanInput) int
 		UpdateProduct           func(childComplexity int, input model.UpdateProductInput) int
@@ -324,32 +458,42 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		AllMedia         func(childComplexity int, input *model.GetAllMediaInput) int
-		Discount         func(childComplexity int, id string) int
-		Discounts        func(childComplexity int, page *int32, perPage *int32, activeOnly *bool, search *string, sortBy *string, sortOrder *string) int
-		Me               func(childComplexity int) int
-		Media            func(childComplexity int, id string) int
-		MediaByModel     func(childComplexity int, input model.GetFilesByModelInput) int
-		MediaByUUID      func(childComplexity int, uuid string) int
-		MediaURL         func(childComplexity int, id string, expirySeconds *int32) int
-		Plan             func(childComplexity int, id string) int
-		PlanBySlug       func(childComplexity int, slug string) int
-		Plans            func(childComplexity int, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string, activeOnly *bool, visibleOnly *bool) int
-		PlansByProduct   func(childComplexity int, productID string) int
-		Product          func(childComplexity int, id string) int
-		ProductBySlug    func(childComplexity int, slug string) int
-		Products         func(childComplexity int, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) int
-		SearchUsers      func(childComplexity int, query string, page *int32, perPage *int32) int
-		Tenant           func(childComplexity int, id string) int
-		TenantBySlug     func(childComplexity int, slug string) int
-		TenantSetting    func(childComplexity int, tenantID string, key string) int
-		TenantSettings   func(childComplexity int, tenantID string) int
-		TenantUsers      func(childComplexity int, tenantID string) int
-		Tenants          func(childComplexity int, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) int
-		User             func(childComplexity int, id string) int
-		UserTenants      func(childComplexity int, userID string) int
-		Users            func(childComplexity int, page *int32, perPage *int32) int
-		VerifyResetToken func(childComplexity int, token string) int
+		ActiveAnnouncements func(childComplexity int, forCustomers *bool, forFrontend *bool, forUserDashboard *bool) int
+		AllMedia            func(childComplexity int, input *model.GetAllMediaInput) int
+		Announcement        func(childComplexity int, id string) int
+		Announcements       func(childComplexity int, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) int
+		BlogPost            func(childComplexity int, id string) int
+		BlogPostBySlug      func(childComplexity int, slug string) int
+		BlogPosts           func(childComplexity int, page *int32, perPage *int32, search *string, publishedOnly *bool, categoryID *string, sortBy *string, sortOrder *string) int
+		Categories          func(childComplexity int, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) int
+		Category            func(childComplexity int, id string) int
+		CategoryBySlug      func(childComplexity int, slug string) int
+		Discount            func(childComplexity int, id string) int
+		Discounts           func(childComplexity int, page *int32, perPage *int32, activeOnly *bool, search *string, sortBy *string, sortOrder *string) int
+		Me                  func(childComplexity int) int
+		Media               func(childComplexity int, id string) int
+		MediaByModel        func(childComplexity int, input model.GetFilesByModelInput) int
+		MediaByUUID         func(childComplexity int, uuid string) int
+		MediaURL            func(childComplexity int, id string, expirySeconds *int32) int
+		Plan                func(childComplexity int, id string) int
+		PlanBySlug          func(childComplexity int, slug string) int
+		Plans               func(childComplexity int, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string, activeOnly *bool, visibleOnly *bool) int
+		PlansByProduct      func(childComplexity int, productID string) int
+		Product             func(childComplexity int, id string) int
+		ProductBySlug       func(childComplexity int, slug string) int
+		Products            func(childComplexity int, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) int
+		SearchBlogPosts     func(childComplexity int, query string, page *int32, perPage *int32, publishedOnly *bool) int
+		SearchUsers         func(childComplexity int, query string, page *int32, perPage *int32) int
+		Tenant              func(childComplexity int, id string) int
+		TenantBySlug        func(childComplexity int, slug string) int
+		TenantSetting       func(childComplexity int, tenantID string, key string) int
+		TenantSettings      func(childComplexity int, tenantID string) int
+		TenantUsers         func(childComplexity int, tenantID string) int
+		Tenants             func(childComplexity int, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) int
+		User                func(childComplexity int, id string) int
+		UserTenants         func(childComplexity int, userID string) int
+		Users               func(childComplexity int, page *int32, perPage *int32) int
+		VerifyResetToken    func(childComplexity int, token string) int
 	}
 
 	RefreshTokenData struct {
@@ -495,6 +639,9 @@ type ComplexityRoot struct {
 	}
 }
 
+type BlogPostResolver interface {
+	FeaturedImage(ctx context.Context, obj *model.BlogPost) (*model.Media, error)
+}
 type MutationResolver interface {
 	Login(ctx context.Context, input model.LoginInput) (*model.LoginResponse, error)
 	Logout(ctx context.Context, refreshToken string) (*model.LogoutResponse, error)
@@ -529,6 +676,17 @@ type MutationResolver interface {
 	DeleteDiscount(ctx context.Context, id string) (*model.DeleteDiscountResponse, error)
 	UploadFile(ctx context.Context, input model.UploadFileInput) (*model.MediaResponse, error)
 	DeleteMedia(ctx context.Context, id string) (*model.DeleteMediaResponse, error)
+	CreateBlogPost(ctx context.Context, input model.CreateBlogPostInput) (*model.BlogPostResponse, error)
+	UpdateBlogPost(ctx context.Context, input model.UpdateBlogPostInput) (*model.BlogPostResponse, error)
+	PublishBlogPost(ctx context.Context, id string) (*model.BlogPostResponse, error)
+	UnpublishBlogPost(ctx context.Context, id string) (*model.BlogPostResponse, error)
+	DeleteBlogPost(ctx context.Context, id string) (*model.DeleteBlogPostResponse, error)
+	CreateCategory(ctx context.Context, input model.CreateCategoryInput) (*model.CategoryResponse, error)
+	UpdateCategory(ctx context.Context, input model.UpdateCategoryInput) (*model.CategoryResponse, error)
+	DeleteCategory(ctx context.Context, id string) (*model.DeleteCategoryResponse, error)
+	CreateAnnouncement(ctx context.Context, input model.CreateAnnouncementInput) (*model.AnnouncementResponse, error)
+	UpdateAnnouncement(ctx context.Context, input model.UpdateAnnouncementInput) (*model.AnnouncementResponse, error)
+	DeleteAnnouncement(ctx context.Context, id string) (*model.DeleteAnnouncementResponse, error)
 }
 type QueryResolver interface {
 	User(ctx context.Context, id string) (*model.UserResponse, error)
@@ -557,6 +715,16 @@ type QueryResolver interface {
 	PlansByProduct(ctx context.Context, productID string) (*model.PlansResponse, error)
 	Discount(ctx context.Context, id string) (*model.DiscountResponse, error)
 	Discounts(ctx context.Context, page *int32, perPage *int32, activeOnly *bool, search *string, sortBy *string, sortOrder *string) (*model.DiscountListResponse, error)
+	BlogPost(ctx context.Context, id string) (*model.BlogPostResponse, error)
+	BlogPostBySlug(ctx context.Context, slug string) (*model.BlogPostResponse, error)
+	BlogPosts(ctx context.Context, page *int32, perPage *int32, search *string, publishedOnly *bool, categoryID *string, sortBy *string, sortOrder *string) (*model.BlogPostListResponse, error)
+	SearchBlogPosts(ctx context.Context, query string, page *int32, perPage *int32, publishedOnly *bool) (*model.BlogPostListResponse, error)
+	Category(ctx context.Context, id string) (*model.CategoryResponse, error)
+	CategoryBySlug(ctx context.Context, slug string) (*model.CategoryResponse, error)
+	Categories(ctx context.Context, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) (*model.CategoryListResponse, error)
+	Announcement(ctx context.Context, id string) (*model.AnnouncementResponse, error)
+	Announcements(ctx context.Context, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) (*model.AnnouncementListResponse, error)
+	ActiveAnnouncements(ctx context.Context, forCustomers *bool, forFrontend *bool, forUserDashboard *bool) (*model.ActiveAnnouncementsResponse, error)
 }
 type UserResolver interface {
 	Avatar(ctx context.Context, obj *model.User) (*model.Media, error)
@@ -581,6 +749,315 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	_ = ec
 	switch typeName + "." + field {
 
+	case "ActiveAnnouncementsResponse.data":
+		if e.complexity.ActiveAnnouncementsResponse.Data == nil {
+			break
+		}
+
+		return e.complexity.ActiveAnnouncementsResponse.Data(childComplexity), true
+	case "ActiveAnnouncementsResponse.message":
+		if e.complexity.ActiveAnnouncementsResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.ActiveAnnouncementsResponse.Message(childComplexity), true
+	case "ActiveAnnouncementsResponse.success":
+		if e.complexity.ActiveAnnouncementsResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.ActiveAnnouncementsResponse.Success(childComplexity), true
+
+	case "Announcement.content":
+		if e.complexity.Announcement.Content == nil {
+			break
+		}
+
+		return e.complexity.Announcement.Content(childComplexity), true
+	case "Announcement.createdAt":
+		if e.complexity.Announcement.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Announcement.CreatedAt(childComplexity), true
+	case "Announcement.endsAt":
+		if e.complexity.Announcement.EndsAt == nil {
+			break
+		}
+
+		return e.complexity.Announcement.EndsAt(childComplexity), true
+	case "Announcement.id":
+		if e.complexity.Announcement.ID == nil {
+			break
+		}
+
+		return e.complexity.Announcement.ID(childComplexity), true
+	case "Announcement.isActive":
+		if e.complexity.Announcement.IsActive == nil {
+			break
+		}
+
+		return e.complexity.Announcement.IsActive(childComplexity), true
+	case "Announcement.isDismissible":
+		if e.complexity.Announcement.IsDismissible == nil {
+			break
+		}
+
+		return e.complexity.Announcement.IsDismissible(childComplexity), true
+	case "Announcement.showForCustomers":
+		if e.complexity.Announcement.ShowForCustomers == nil {
+			break
+		}
+
+		return e.complexity.Announcement.ShowForCustomers(childComplexity), true
+	case "Announcement.showOnFrontend":
+		if e.complexity.Announcement.ShowOnFrontend == nil {
+			break
+		}
+
+		return e.complexity.Announcement.ShowOnFrontend(childComplexity), true
+	case "Announcement.showOnUserDashboard":
+		if e.complexity.Announcement.ShowOnUserDashboard == nil {
+			break
+		}
+
+		return e.complexity.Announcement.ShowOnUserDashboard(childComplexity), true
+	case "Announcement.startsAt":
+		if e.complexity.Announcement.StartsAt == nil {
+			break
+		}
+
+		return e.complexity.Announcement.StartsAt(childComplexity), true
+	case "Announcement.title":
+		if e.complexity.Announcement.Title == nil {
+			break
+		}
+
+		return e.complexity.Announcement.Title(childComplexity), true
+	case "Announcement.updatedAt":
+		if e.complexity.Announcement.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Announcement.UpdatedAt(childComplexity), true
+
+	case "AnnouncementList.announcements":
+		if e.complexity.AnnouncementList.Announcements == nil {
+			break
+		}
+
+		return e.complexity.AnnouncementList.Announcements(childComplexity), true
+	case "AnnouncementList.page":
+		if e.complexity.AnnouncementList.Page == nil {
+			break
+		}
+
+		return e.complexity.AnnouncementList.Page(childComplexity), true
+	case "AnnouncementList.perPage":
+		if e.complexity.AnnouncementList.PerPage == nil {
+			break
+		}
+
+		return e.complexity.AnnouncementList.PerPage(childComplexity), true
+	case "AnnouncementList.total":
+		if e.complexity.AnnouncementList.Total == nil {
+			break
+		}
+
+		return e.complexity.AnnouncementList.Total(childComplexity), true
+
+	case "AnnouncementListResponse.data":
+		if e.complexity.AnnouncementListResponse.Data == nil {
+			break
+		}
+
+		return e.complexity.AnnouncementListResponse.Data(childComplexity), true
+	case "AnnouncementListResponse.message":
+		if e.complexity.AnnouncementListResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.AnnouncementListResponse.Message(childComplexity), true
+	case "AnnouncementListResponse.success":
+		if e.complexity.AnnouncementListResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.AnnouncementListResponse.Success(childComplexity), true
+
+	case "AnnouncementResponse.data":
+		if e.complexity.AnnouncementResponse.Data == nil {
+			break
+		}
+
+		return e.complexity.AnnouncementResponse.Data(childComplexity), true
+	case "AnnouncementResponse.message":
+		if e.complexity.AnnouncementResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.AnnouncementResponse.Message(childComplexity), true
+	case "AnnouncementResponse.success":
+		if e.complexity.AnnouncementResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.AnnouncementResponse.Success(childComplexity), true
+
+	case "BlogPost.author":
+		if e.complexity.BlogPost.Author == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.Author(childComplexity), true
+	case "BlogPost.authorId":
+		if e.complexity.BlogPost.AuthorID == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.AuthorID(childComplexity), true
+	case "BlogPost.blogPostCategoryId":
+		if e.complexity.BlogPost.BlogPostCategoryID == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.BlogPostCategoryID(childComplexity), true
+	case "BlogPost.body":
+		if e.complexity.BlogPost.Body == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.Body(childComplexity), true
+	case "BlogPost.category":
+		if e.complexity.BlogPost.Category == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.Category(childComplexity), true
+	case "BlogPost.createdAt":
+		if e.complexity.BlogPost.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.CreatedAt(childComplexity), true
+	case "BlogPost.description":
+		if e.complexity.BlogPost.Description == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.Description(childComplexity), true
+	case "BlogPost.featuredImage":
+		if e.complexity.BlogPost.FeaturedImage == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.FeaturedImage(childComplexity), true
+	case "BlogPost.id":
+		if e.complexity.BlogPost.ID == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.ID(childComplexity), true
+	case "BlogPost.isPublished":
+		if e.complexity.BlogPost.IsPublished == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.IsPublished(childComplexity), true
+	case "BlogPost.publishedAt":
+		if e.complexity.BlogPost.PublishedAt == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.PublishedAt(childComplexity), true
+	case "BlogPost.slug":
+		if e.complexity.BlogPost.Slug == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.Slug(childComplexity), true
+	case "BlogPost.title":
+		if e.complexity.BlogPost.Title == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.Title(childComplexity), true
+	case "BlogPost.updatedAt":
+		if e.complexity.BlogPost.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.UpdatedAt(childComplexity), true
+	case "BlogPost.userId":
+		if e.complexity.BlogPost.UserID == nil {
+			break
+		}
+
+		return e.complexity.BlogPost.UserID(childComplexity), true
+
+	case "BlogPostList.blogPosts":
+		if e.complexity.BlogPostList.BlogPosts == nil {
+			break
+		}
+
+		return e.complexity.BlogPostList.BlogPosts(childComplexity), true
+	case "BlogPostList.page":
+		if e.complexity.BlogPostList.Page == nil {
+			break
+		}
+
+		return e.complexity.BlogPostList.Page(childComplexity), true
+	case "BlogPostList.perPage":
+		if e.complexity.BlogPostList.PerPage == nil {
+			break
+		}
+
+		return e.complexity.BlogPostList.PerPage(childComplexity), true
+	case "BlogPostList.total":
+		if e.complexity.BlogPostList.Total == nil {
+			break
+		}
+
+		return e.complexity.BlogPostList.Total(childComplexity), true
+
+	case "BlogPostListResponse.data":
+		if e.complexity.BlogPostListResponse.Data == nil {
+			break
+		}
+
+		return e.complexity.BlogPostListResponse.Data(childComplexity), true
+	case "BlogPostListResponse.message":
+		if e.complexity.BlogPostListResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.BlogPostListResponse.Message(childComplexity), true
+	case "BlogPostListResponse.success":
+		if e.complexity.BlogPostListResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.BlogPostListResponse.Success(childComplexity), true
+
+	case "BlogPostResponse.data":
+		if e.complexity.BlogPostResponse.Data == nil {
+			break
+		}
+
+		return e.complexity.BlogPostResponse.Data(childComplexity), true
+	case "BlogPostResponse.message":
+		if e.complexity.BlogPostResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.BlogPostResponse.Message(childComplexity), true
+	case "BlogPostResponse.success":
+		if e.complexity.BlogPostResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.BlogPostResponse.Success(childComplexity), true
+
 	case "BulkOperationResponse.affectedCount":
 		if e.complexity.BulkOperationResponse.AffectedCount == nil {
 			break
@@ -600,6 +1077,106 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.BulkOperationResponse.Success(childComplexity), true
 
+	case "Category.createdAt":
+		if e.complexity.Category.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Category.CreatedAt(childComplexity), true
+	case "Category.description":
+		if e.complexity.Category.Description == nil {
+			break
+		}
+
+		return e.complexity.Category.Description(childComplexity), true
+	case "Category.id":
+		if e.complexity.Category.ID == nil {
+			break
+		}
+
+		return e.complexity.Category.ID(childComplexity), true
+	case "Category.name":
+		if e.complexity.Category.Name == nil {
+			break
+		}
+
+		return e.complexity.Category.Name(childComplexity), true
+	case "Category.slug":
+		if e.complexity.Category.Slug == nil {
+			break
+		}
+
+		return e.complexity.Category.Slug(childComplexity), true
+	case "Category.updatedAt":
+		if e.complexity.Category.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Category.UpdatedAt(childComplexity), true
+
+	case "CategoryList.categories":
+		if e.complexity.CategoryList.Categories == nil {
+			break
+		}
+
+		return e.complexity.CategoryList.Categories(childComplexity), true
+	case "CategoryList.page":
+		if e.complexity.CategoryList.Page == nil {
+			break
+		}
+
+		return e.complexity.CategoryList.Page(childComplexity), true
+	case "CategoryList.perPage":
+		if e.complexity.CategoryList.PerPage == nil {
+			break
+		}
+
+		return e.complexity.CategoryList.PerPage(childComplexity), true
+	case "CategoryList.total":
+		if e.complexity.CategoryList.Total == nil {
+			break
+		}
+
+		return e.complexity.CategoryList.Total(childComplexity), true
+
+	case "CategoryListResponse.data":
+		if e.complexity.CategoryListResponse.Data == nil {
+			break
+		}
+
+		return e.complexity.CategoryListResponse.Data(childComplexity), true
+	case "CategoryListResponse.message":
+		if e.complexity.CategoryListResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.CategoryListResponse.Message(childComplexity), true
+	case "CategoryListResponse.success":
+		if e.complexity.CategoryListResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.CategoryListResponse.Success(childComplexity), true
+
+	case "CategoryResponse.data":
+		if e.complexity.CategoryResponse.Data == nil {
+			break
+		}
+
+		return e.complexity.CategoryResponse.Data(childComplexity), true
+	case "CategoryResponse.message":
+		if e.complexity.CategoryResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.CategoryResponse.Message(childComplexity), true
+	case "CategoryResponse.success":
+		if e.complexity.CategoryResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.CategoryResponse.Success(childComplexity), true
+
 	case "ChangePasswordResponse.message":
 		if e.complexity.ChangePasswordResponse.Message == nil {
 			break
@@ -612,6 +1189,45 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ChangePasswordResponse.Success(childComplexity), true
+
+	case "DeleteAnnouncementResponse.message":
+		if e.complexity.DeleteAnnouncementResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.DeleteAnnouncementResponse.Message(childComplexity), true
+	case "DeleteAnnouncementResponse.success":
+		if e.complexity.DeleteAnnouncementResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.DeleteAnnouncementResponse.Success(childComplexity), true
+
+	case "DeleteBlogPostResponse.message":
+		if e.complexity.DeleteBlogPostResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.DeleteBlogPostResponse.Message(childComplexity), true
+	case "DeleteBlogPostResponse.success":
+		if e.complexity.DeleteBlogPostResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.DeleteBlogPostResponse.Success(childComplexity), true
+
+	case "DeleteCategoryResponse.message":
+		if e.complexity.DeleteCategoryResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.DeleteCategoryResponse.Message(childComplexity), true
+	case "DeleteCategoryResponse.success":
+		if e.complexity.DeleteCategoryResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.DeleteCategoryResponse.Success(childComplexity), true
 
 	case "DeleteDiscountResponse.message":
 		if e.complexity.DeleteDiscountResponse.Message == nil {
@@ -1000,6 +1616,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Media.ID(childComplexity), true
+	case "Media.isPublic":
+		if e.complexity.Media.IsPublic == nil {
+			break
+		}
+
+		return e.complexity.Media.IsPublic(childComplexity), true
 	case "Media.manipulations":
 		if e.complexity.Media.Manipulations == nil {
 			break
@@ -1036,6 +1658,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Media.OrderColumn(childComplexity), true
+	case "Media.publicUrl":
+		if e.complexity.Media.PublicURL == nil {
+			break
+		}
+
+		return e.complexity.Media.PublicURL(childComplexity), true
 	case "Media.responsiveImages":
 		if e.complexity.Media.ResponsiveImages == nil {
 			break
@@ -1206,6 +1834,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.ChangePassword(childComplexity, args["input"].(model.ChangePasswordInput)), true
+	case "Mutation.createAnnouncement":
+		if e.complexity.Mutation.CreateAnnouncement == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createAnnouncement_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateAnnouncement(childComplexity, args["input"].(model.CreateAnnouncementInput)), true
+	case "Mutation.createBlogPost":
+		if e.complexity.Mutation.CreateBlogPost == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBlogPost_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBlogPost(childComplexity, args["input"].(model.CreateBlogPostInput)), true
+	case "Mutation.createCategory":
+		if e.complexity.Mutation.CreateCategory == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createCategory_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateCategory(childComplexity, args["input"].(model.CreateCategoryInput)), true
 	case "Mutation.createDiscount":
 		if e.complexity.Mutation.CreateDiscount == nil {
 			break
@@ -1261,6 +1922,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(model.CreateUserInput)), true
+	case "Mutation.deleteAnnouncement":
+		if e.complexity.Mutation.DeleteAnnouncement == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteAnnouncement_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteAnnouncement(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteBlogPost":
+		if e.complexity.Mutation.DeleteBlogPost == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBlogPost_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBlogPost(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteCategory":
+		if e.complexity.Mutation.DeleteCategory == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteCategory_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteCategory(childComplexity, args["id"].(string)), true
 	case "Mutation.deleteDiscount":
 		if e.complexity.Mutation.DeleteDiscount == nil {
 			break
@@ -1371,6 +2065,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.Logout(childComplexity, args["refreshToken"].(string)), true
+	case "Mutation.publishBlogPost":
+		if e.complexity.Mutation.PublishBlogPost == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_publishBlogPost_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.PublishBlogPost(childComplexity, args["id"].(string)), true
 	case "Mutation.refreshToken":
 		if e.complexity.Mutation.RefreshToken == nil {
 			break
@@ -1432,6 +2137,50 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.SetTenantSetting(childComplexity, args["input"].(model.SetSettingInput)), true
+	case "Mutation.unpublishBlogPost":
+		if e.complexity.Mutation.UnpublishBlogPost == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_unpublishBlogPost_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UnpublishBlogPost(childComplexity, args["id"].(string)), true
+	case "Mutation.updateAnnouncement":
+		if e.complexity.Mutation.UpdateAnnouncement == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateAnnouncement_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateAnnouncement(childComplexity, args["input"].(model.UpdateAnnouncementInput)), true
+	case "Mutation.updateBlogPost":
+		if e.complexity.Mutation.UpdateBlogPost == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBlogPost_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBlogPost(childComplexity, args["input"].(model.UpdateBlogPostInput)), true
+	case "Mutation.updateCategory":
+		if e.complexity.Mutation.UpdateCategory == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateCategory_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateCategory(childComplexity, args["input"].(model.UpdateCategoryInput)), true
 	case "Mutation.updateDiscount":
 		if e.complexity.Mutation.UpdateDiscount == nil {
 			break
@@ -1830,6 +2579,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProductResponse.Success(childComplexity), true
 
+	case "Query.activeAnnouncements":
+		if e.complexity.Query.ActiveAnnouncements == nil {
+			break
+		}
+
+		args, err := ec.field_Query_activeAnnouncements_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ActiveAnnouncements(childComplexity, args["forCustomers"].(*bool), args["forFrontend"].(*bool), args["forUserDashboard"].(*bool)), true
 	case "Query.allMedia":
 		if e.complexity.Query.AllMedia == nil {
 			break
@@ -1841,6 +2601,94 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.AllMedia(childComplexity, args["input"].(*model.GetAllMediaInput)), true
+	case "Query.announcement":
+		if e.complexity.Query.Announcement == nil {
+			break
+		}
+
+		args, err := ec.field_Query_announcement_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Announcement(childComplexity, args["id"].(string)), true
+	case "Query.announcements":
+		if e.complexity.Query.Announcements == nil {
+			break
+		}
+
+		args, err := ec.field_Query_announcements_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Announcements(childComplexity, args["page"].(*int32), args["perPage"].(*int32), args["search"].(*string), args["sortBy"].(*string), args["sortOrder"].(*string)), true
+	case "Query.blogPost":
+		if e.complexity.Query.BlogPost == nil {
+			break
+		}
+
+		args, err := ec.field_Query_blogPost_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.BlogPost(childComplexity, args["id"].(string)), true
+	case "Query.blogPostBySlug":
+		if e.complexity.Query.BlogPostBySlug == nil {
+			break
+		}
+
+		args, err := ec.field_Query_blogPostBySlug_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.BlogPostBySlug(childComplexity, args["slug"].(string)), true
+	case "Query.blogPosts":
+		if e.complexity.Query.BlogPosts == nil {
+			break
+		}
+
+		args, err := ec.field_Query_blogPosts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.BlogPosts(childComplexity, args["page"].(*int32), args["perPage"].(*int32), args["search"].(*string), args["publishedOnly"].(*bool), args["categoryId"].(*string), args["sortBy"].(*string), args["sortOrder"].(*string)), true
+	case "Query.categories":
+		if e.complexity.Query.Categories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_categories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Categories(childComplexity, args["page"].(*int32), args["perPage"].(*int32), args["search"].(*string), args["sortBy"].(*string), args["sortOrder"].(*string)), true
+	case "Query.category":
+		if e.complexity.Query.Category == nil {
+			break
+		}
+
+		args, err := ec.field_Query_category_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Category(childComplexity, args["id"].(string)), true
+	case "Query.categoryBySlug":
+		if e.complexity.Query.CategoryBySlug == nil {
+			break
+		}
+
+		args, err := ec.field_Query_categoryBySlug_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CategoryBySlug(childComplexity, args["slug"].(string)), true
 	case "Query.discount":
 		if e.complexity.Query.Discount == nil {
 			break
@@ -1990,6 +2838,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Products(childComplexity, args["page"].(*int32), args["perPage"].(*int32), args["search"].(*string), args["sortBy"].(*string), args["sortOrder"].(*string)), true
+	case "Query.searchBlogPosts":
+		if e.complexity.Query.SearchBlogPosts == nil {
+			break
+		}
+
+		args, err := ec.field_Query_searchBlogPosts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.SearchBlogPosts(childComplexity, args["query"].(string), args["page"].(*int32), args["perPage"].(*int32), args["publishedOnly"].(*bool)), true
 	case "Query.searchUsers":
 		if e.complexity.Query.SearchUsers == nil {
 			break
@@ -2634,6 +3493,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputAddUserToTenantInput,
 		ec.unmarshalInputChangePasswordInput,
+		ec.unmarshalInputCreateAnnouncementInput,
+		ec.unmarshalInputCreateBlogPostInput,
+		ec.unmarshalInputCreateCategoryInput,
 		ec.unmarshalInputCreateDiscountInput,
 		ec.unmarshalInputCreatePlanInput,
 		ec.unmarshalInputCreateProductInput,
@@ -2646,6 +3508,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputResetPasswordInput,
 		ec.unmarshalInputSetDefaultTenantInput,
 		ec.unmarshalInputSetSettingInput,
+		ec.unmarshalInputUpdateAnnouncementInput,
+		ec.unmarshalInputUpdateBlogPostInput,
+		ec.unmarshalInputUpdateCategoryInput,
 		ec.unmarshalInputUpdateDiscountInput,
 		ec.unmarshalInputUpdatePlanInput,
 		ec.unmarshalInputUpdateProductInput,
@@ -2818,6 +3683,39 @@ func (ec *executionContext) field_Mutation_changePassword_args(ctx context.Conte
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createAnnouncement_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAnnouncementInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCreateAnnouncementInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createBlogPost_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateBlogPostInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCreateBlogPostInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createCategory_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateCategoryInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCreateCategoryInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createDiscount_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -2870,6 +3768,39 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 		return nil, err
 	}
 	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteAnnouncement_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBlogPost_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteCategory_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -2988,6 +3919,17 @@ func (ec *executionContext) field_Mutation_logout_args(ctx context.Context, rawA
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_publishBlogPost_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_refreshToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -3041,6 +3983,50 @@ func (ec *executionContext) field_Mutation_setTenantSetting_args(ctx context.Con
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNSetSettingInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐSetSettingInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_unpublishBlogPost_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateAnnouncement_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateAnnouncementInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐUpdateAnnouncementInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateBlogPost_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateBlogPostInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐUpdateBlogPostInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateCategory_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateCategoryInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐUpdateCategoryInput)
 	if err != nil {
 		return nil, err
 	}
@@ -3147,6 +4133,27 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_activeAnnouncements_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "forCustomers", ec.unmarshalOBoolean2ᚖbool)
+	if err != nil {
+		return nil, err
+	}
+	args["forCustomers"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "forFrontend", ec.unmarshalOBoolean2ᚖbool)
+	if err != nil {
+		return nil, err
+	}
+	args["forFrontend"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "forUserDashboard", ec.unmarshalOBoolean2ᚖbool)
+	if err != nil {
+		return nil, err
+	}
+	args["forUserDashboard"] = arg2
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_allMedia_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -3155,6 +4162,164 @@ func (ec *executionContext) field_Query_allMedia_args(ctx context.Context, rawAr
 		return nil, err
 	}
 	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_announcement_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_announcements_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "page", ec.unmarshalOInt2ᚖint32)
+	if err != nil {
+		return nil, err
+	}
+	args["page"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "perPage", ec.unmarshalOInt2ᚖint32)
+	if err != nil {
+		return nil, err
+	}
+	args["perPage"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "search", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["search"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "sortBy", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["sortBy"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "sortOrder", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["sortOrder"] = arg4
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_blogPostBySlug_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "slug", ec.unmarshalNString2string)
+	if err != nil {
+		return nil, err
+	}
+	args["slug"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_blogPost_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_blogPosts_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "page", ec.unmarshalOInt2ᚖint32)
+	if err != nil {
+		return nil, err
+	}
+	args["page"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "perPage", ec.unmarshalOInt2ᚖint32)
+	if err != nil {
+		return nil, err
+	}
+	args["perPage"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "search", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["search"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "publishedOnly", ec.unmarshalOBoolean2ᚖbool)
+	if err != nil {
+		return nil, err
+	}
+	args["publishedOnly"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "categoryId", ec.unmarshalOID2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["categoryId"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "sortBy", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["sortBy"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "sortOrder", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["sortOrder"] = arg6
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_categories_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "page", ec.unmarshalOInt2ᚖint32)
+	if err != nil {
+		return nil, err
+	}
+	args["page"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "perPage", ec.unmarshalOInt2ᚖint32)
+	if err != nil {
+		return nil, err
+	}
+	args["perPage"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "search", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["search"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "sortBy", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["sortBy"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "sortOrder", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["sortOrder"] = arg4
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_categoryBySlug_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "slug", ec.unmarshalNString2string)
+	if err != nil {
+		return nil, err
+	}
+	args["slug"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_category_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -3381,6 +4546,32 @@ func (ec *executionContext) field_Query_products_args(ctx context.Context, rawAr
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_searchBlogPosts_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "query", ec.unmarshalNString2string)
+	if err != nil {
+		return nil, err
+	}
+	args["query"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "page", ec.unmarshalOInt2ᚖint32)
+	if err != nil {
+		return nil, err
+	}
+	args["page"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "perPage", ec.unmarshalOInt2ᚖint32)
+	if err != nil {
+		return nil, err
+	}
+	args["perPage"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "publishedOnly", ec.unmarshalOBoolean2ᚖbool)
+	if err != nil {
+		return nil, err
+	}
+	args["publishedOnly"] = arg3
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_searchUsers_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -3594,6 +4785,1706 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
+func (ec *executionContext) _ActiveAnnouncementsResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.ActiveAnnouncementsResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ActiveAnnouncementsResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ActiveAnnouncementsResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ActiveAnnouncementsResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ActiveAnnouncementsResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.ActiveAnnouncementsResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ActiveAnnouncementsResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ActiveAnnouncementsResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ActiveAnnouncementsResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ActiveAnnouncementsResponse_data(ctx context.Context, field graphql.CollectedField, obj *model.ActiveAnnouncementsResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ActiveAnnouncementsResponse_data,
+		func(ctx context.Context) (any, error) {
+			return obj.Data, nil
+		},
+		nil,
+		ec.marshalOAnnouncement2ᚕᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_ActiveAnnouncementsResponse_data(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ActiveAnnouncementsResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Announcement_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Announcement_title(ctx, field)
+			case "content":
+				return ec.fieldContext_Announcement_content(ctx, field)
+			case "startsAt":
+				return ec.fieldContext_Announcement_startsAt(ctx, field)
+			case "endsAt":
+				return ec.fieldContext_Announcement_endsAt(ctx, field)
+			case "isActive":
+				return ec.fieldContext_Announcement_isActive(ctx, field)
+			case "isDismissible":
+				return ec.fieldContext_Announcement_isDismissible(ctx, field)
+			case "showForCustomers":
+				return ec.fieldContext_Announcement_showForCustomers(ctx, field)
+			case "showOnFrontend":
+				return ec.fieldContext_Announcement_showOnFrontend(ctx, field)
+			case "showOnUserDashboard":
+				return ec.fieldContext_Announcement_showOnUserDashboard(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Announcement_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Announcement_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Announcement", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Announcement_id(ctx context.Context, field graphql.CollectedField, obj *model.Announcement) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Announcement_id,
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Announcement_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Announcement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Announcement_title(ctx context.Context, field graphql.CollectedField, obj *model.Announcement) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Announcement_title,
+		func(ctx context.Context) (any, error) {
+			return obj.Title, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Announcement_title(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Announcement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Announcement_content(ctx context.Context, field graphql.CollectedField, obj *model.Announcement) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Announcement_content,
+		func(ctx context.Context) (any, error) {
+			return obj.Content, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Announcement_content(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Announcement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Announcement_startsAt(ctx context.Context, field graphql.CollectedField, obj *model.Announcement) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Announcement_startsAt,
+		func(ctx context.Context) (any, error) {
+			return obj.StartsAt, nil
+		},
+		nil,
+		ec.marshalOInt2ᚖint32,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Announcement_startsAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Announcement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Announcement_endsAt(ctx context.Context, field graphql.CollectedField, obj *model.Announcement) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Announcement_endsAt,
+		func(ctx context.Context) (any, error) {
+			return obj.EndsAt, nil
+		},
+		nil,
+		ec.marshalOInt2ᚖint32,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Announcement_endsAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Announcement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Announcement_isActive(ctx context.Context, field graphql.CollectedField, obj *model.Announcement) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Announcement_isActive,
+		func(ctx context.Context) (any, error) {
+			return obj.IsActive, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Announcement_isActive(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Announcement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Announcement_isDismissible(ctx context.Context, field graphql.CollectedField, obj *model.Announcement) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Announcement_isDismissible,
+		func(ctx context.Context) (any, error) {
+			return obj.IsDismissible, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Announcement_isDismissible(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Announcement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Announcement_showForCustomers(ctx context.Context, field graphql.CollectedField, obj *model.Announcement) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Announcement_showForCustomers,
+		func(ctx context.Context) (any, error) {
+			return obj.ShowForCustomers, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Announcement_showForCustomers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Announcement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Announcement_showOnFrontend(ctx context.Context, field graphql.CollectedField, obj *model.Announcement) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Announcement_showOnFrontend,
+		func(ctx context.Context) (any, error) {
+			return obj.ShowOnFrontend, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Announcement_showOnFrontend(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Announcement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Announcement_showOnUserDashboard(ctx context.Context, field graphql.CollectedField, obj *model.Announcement) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Announcement_showOnUserDashboard,
+		func(ctx context.Context) (any, error) {
+			return obj.ShowOnUserDashboard, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Announcement_showOnUserDashboard(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Announcement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Announcement_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Announcement) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Announcement_createdAt,
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Announcement_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Announcement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Announcement_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Announcement) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Announcement_updatedAt,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Announcement_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Announcement",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnnouncementList_announcements(ctx context.Context, field graphql.CollectedField, obj *model.AnnouncementList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AnnouncementList_announcements,
+		func(ctx context.Context) (any, error) {
+			return obj.Announcements, nil
+		},
+		nil,
+		ec.marshalNAnnouncement2ᚕᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_AnnouncementList_announcements(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnnouncementList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Announcement_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Announcement_title(ctx, field)
+			case "content":
+				return ec.fieldContext_Announcement_content(ctx, field)
+			case "startsAt":
+				return ec.fieldContext_Announcement_startsAt(ctx, field)
+			case "endsAt":
+				return ec.fieldContext_Announcement_endsAt(ctx, field)
+			case "isActive":
+				return ec.fieldContext_Announcement_isActive(ctx, field)
+			case "isDismissible":
+				return ec.fieldContext_Announcement_isDismissible(ctx, field)
+			case "showForCustomers":
+				return ec.fieldContext_Announcement_showForCustomers(ctx, field)
+			case "showOnFrontend":
+				return ec.fieldContext_Announcement_showOnFrontend(ctx, field)
+			case "showOnUserDashboard":
+				return ec.fieldContext_Announcement_showOnUserDashboard(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Announcement_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Announcement_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Announcement", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnnouncementList_total(ctx context.Context, field graphql.CollectedField, obj *model.AnnouncementList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AnnouncementList_total,
+		func(ctx context.Context) (any, error) {
+			return obj.Total, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_AnnouncementList_total(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnnouncementList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnnouncementList_page(ctx context.Context, field graphql.CollectedField, obj *model.AnnouncementList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AnnouncementList_page,
+		func(ctx context.Context) (any, error) {
+			return obj.Page, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_AnnouncementList_page(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnnouncementList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnnouncementList_perPage(ctx context.Context, field graphql.CollectedField, obj *model.AnnouncementList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AnnouncementList_perPage,
+		func(ctx context.Context) (any, error) {
+			return obj.PerPage, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_AnnouncementList_perPage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnnouncementList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnnouncementListResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.AnnouncementListResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AnnouncementListResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_AnnouncementListResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnnouncementListResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnnouncementListResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.AnnouncementListResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AnnouncementListResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_AnnouncementListResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnnouncementListResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnnouncementListResponse_data(ctx context.Context, field graphql.CollectedField, obj *model.AnnouncementListResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AnnouncementListResponse_data,
+		func(ctx context.Context) (any, error) {
+			return obj.Data, nil
+		},
+		nil,
+		ec.marshalOAnnouncementList2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementList,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_AnnouncementListResponse_data(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnnouncementListResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "announcements":
+				return ec.fieldContext_AnnouncementList_announcements(ctx, field)
+			case "total":
+				return ec.fieldContext_AnnouncementList_total(ctx, field)
+			case "page":
+				return ec.fieldContext_AnnouncementList_page(ctx, field)
+			case "perPage":
+				return ec.fieldContext_AnnouncementList_perPage(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AnnouncementList", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnnouncementResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.AnnouncementResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AnnouncementResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_AnnouncementResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnnouncementResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnnouncementResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.AnnouncementResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AnnouncementResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_AnnouncementResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnnouncementResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnnouncementResponse_data(ctx context.Context, field graphql.CollectedField, obj *model.AnnouncementResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AnnouncementResponse_data,
+		func(ctx context.Context) (any, error) {
+			return obj.Data, nil
+		},
+		nil,
+		ec.marshalOAnnouncement2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncement,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_AnnouncementResponse_data(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnnouncementResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Announcement_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Announcement_title(ctx, field)
+			case "content":
+				return ec.fieldContext_Announcement_content(ctx, field)
+			case "startsAt":
+				return ec.fieldContext_Announcement_startsAt(ctx, field)
+			case "endsAt":
+				return ec.fieldContext_Announcement_endsAt(ctx, field)
+			case "isActive":
+				return ec.fieldContext_Announcement_isActive(ctx, field)
+			case "isDismissible":
+				return ec.fieldContext_Announcement_isDismissible(ctx, field)
+			case "showForCustomers":
+				return ec.fieldContext_Announcement_showForCustomers(ctx, field)
+			case "showOnFrontend":
+				return ec.fieldContext_Announcement_showOnFrontend(ctx, field)
+			case "showOnUserDashboard":
+				return ec.fieldContext_Announcement_showOnUserDashboard(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Announcement_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Announcement_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Announcement", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_id(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_id,
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_title(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_title,
+		func(ctx context.Context) (any, error) {
+			return obj.Title, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_title(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_slug(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_slug,
+		func(ctx context.Context) (any, error) {
+			return obj.Slug, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_slug(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_body(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_body,
+		func(ctx context.Context) (any, error) {
+			return obj.Body, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_body(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_isPublished(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_isPublished,
+		func(ctx context.Context) (any, error) {
+			return obj.IsPublished, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_isPublished(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_publishedAt(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_publishedAt,
+		func(ctx context.Context) (any, error) {
+			return obj.PublishedAt, nil
+		},
+		nil,
+		ec.marshalOInt2ᚖint32,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_publishedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_userId(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_userId,
+		func(ctx context.Context) (any, error) {
+			return obj.UserID, nil
+		},
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_userId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_authorId(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_authorId,
+		func(ctx context.Context) (any, error) {
+			return obj.AuthorID, nil
+		},
+		nil,
+		ec.marshalOID2ᚖstring,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_authorId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_blogPostCategoryId(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_blogPostCategoryId,
+		func(ctx context.Context) (any, error) {
+			return obj.BlogPostCategoryID, nil
+		},
+		nil,
+		ec.marshalOID2ᚖstring,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_blogPostCategoryId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_description(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_description,
+		func(ctx context.Context) (any, error) {
+			return obj.Description, nil
+		},
+		nil,
+		ec.marshalOString2ᚖstring,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_createdAt,
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_updatedAt,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_author(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_author,
+		func(ctx context.Context) (any, error) {
+			return obj.Author, nil
+		},
+		nil,
+		ec.marshalOUser2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐUser,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_author(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_User_id(ctx, field)
+			case "name":
+				return ec.fieldContext_User_name(ctx, field)
+			case "email":
+				return ec.fieldContext_User_email(ctx, field)
+			case "publicName":
+				return ec.fieldContext_User_publicName(ctx, field)
+			case "isAdmin":
+				return ec.fieldContext_User_isAdmin(ctx, field)
+			case "isBlocked":
+				return ec.fieldContext_User_isBlocked(ctx, field)
+			case "phoneNumber":
+				return ec.fieldContext_User_phoneNumber(ctx, field)
+			case "position":
+				return ec.fieldContext_User_position(ctx, field)
+			case "emailVerified":
+				return ec.fieldContext_User_emailVerified(ctx, field)
+			case "emailVerifiedAt":
+				return ec.fieldContext_User_emailVerifiedAt(ctx, field)
+			case "lastLoginAt":
+				return ec.fieldContext_User_lastLoginAt(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_User_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_User_updatedAt(ctx, field)
+			case "avatar":
+				return ec.fieldContext_User_avatar(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_category(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_category,
+		func(ctx context.Context) (any, error) {
+			return obj.Category, nil
+		},
+		nil,
+		ec.marshalOCategory2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategory,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_category(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Category_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Category_name(ctx, field)
+			case "slug":
+				return ec.fieldContext_Category_slug(ctx, field)
+			case "description":
+				return ec.fieldContext_Category_description(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Category_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Category_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Category", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPost_featuredImage(ctx context.Context, field graphql.CollectedField, obj *model.BlogPost) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPost_featuredImage,
+		func(ctx context.Context) (any, error) {
+			return ec.resolvers.BlogPost().FeaturedImage(ctx, obj)
+		},
+		nil,
+		ec.marshalOMedia2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐMedia,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPost_featuredImage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPost",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Media_id(ctx, field)
+			case "modelType":
+				return ec.fieldContext_Media_modelType(ctx, field)
+			case "modelId":
+				return ec.fieldContext_Media_modelId(ctx, field)
+			case "uuid":
+				return ec.fieldContext_Media_uuid(ctx, field)
+			case "collectionName":
+				return ec.fieldContext_Media_collectionName(ctx, field)
+			case "name":
+				return ec.fieldContext_Media_name(ctx, field)
+			case "fileName":
+				return ec.fieldContext_Media_fileName(ctx, field)
+			case "mimeType":
+				return ec.fieldContext_Media_mimeType(ctx, field)
+			case "disk":
+				return ec.fieldContext_Media_disk(ctx, field)
+			case "conversionsDisk":
+				return ec.fieldContext_Media_conversionsDisk(ctx, field)
+			case "size":
+				return ec.fieldContext_Media_size(ctx, field)
+			case "manipulations":
+				return ec.fieldContext_Media_manipulations(ctx, field)
+			case "customProperties":
+				return ec.fieldContext_Media_customProperties(ctx, field)
+			case "generatedConversions":
+				return ec.fieldContext_Media_generatedConversions(ctx, field)
+			case "responsiveImages":
+				return ec.fieldContext_Media_responsiveImages(ctx, field)
+			case "orderColumn":
+				return ec.fieldContext_Media_orderColumn(ctx, field)
+			case "isPublic":
+				return ec.fieldContext_Media_isPublic(ctx, field)
+			case "publicUrl":
+				return ec.fieldContext_Media_publicUrl(ctx, field)
+			case "url":
+				return ec.fieldContext_Media_url(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Media_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Media_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Media", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPostList_blogPosts(ctx context.Context, field graphql.CollectedField, obj *model.BlogPostList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPostList_blogPosts,
+		func(ctx context.Context) (any, error) {
+			return obj.BlogPosts, nil
+		},
+		nil,
+		ec.marshalNBlogPost2ᚕᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPostList_blogPosts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPostList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_BlogPost_id(ctx, field)
+			case "title":
+				return ec.fieldContext_BlogPost_title(ctx, field)
+			case "slug":
+				return ec.fieldContext_BlogPost_slug(ctx, field)
+			case "body":
+				return ec.fieldContext_BlogPost_body(ctx, field)
+			case "isPublished":
+				return ec.fieldContext_BlogPost_isPublished(ctx, field)
+			case "publishedAt":
+				return ec.fieldContext_BlogPost_publishedAt(ctx, field)
+			case "userId":
+				return ec.fieldContext_BlogPost_userId(ctx, field)
+			case "authorId":
+				return ec.fieldContext_BlogPost_authorId(ctx, field)
+			case "blogPostCategoryId":
+				return ec.fieldContext_BlogPost_blogPostCategoryId(ctx, field)
+			case "description":
+				return ec.fieldContext_BlogPost_description(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_BlogPost_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_BlogPost_updatedAt(ctx, field)
+			case "author":
+				return ec.fieldContext_BlogPost_author(ctx, field)
+			case "category":
+				return ec.fieldContext_BlogPost_category(ctx, field)
+			case "featuredImage":
+				return ec.fieldContext_BlogPost_featuredImage(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BlogPost", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPostList_total(ctx context.Context, field graphql.CollectedField, obj *model.BlogPostList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPostList_total,
+		func(ctx context.Context) (any, error) {
+			return obj.Total, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPostList_total(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPostList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPostList_page(ctx context.Context, field graphql.CollectedField, obj *model.BlogPostList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPostList_page,
+		func(ctx context.Context) (any, error) {
+			return obj.Page, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPostList_page(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPostList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPostList_perPage(ctx context.Context, field graphql.CollectedField, obj *model.BlogPostList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPostList_perPage,
+		func(ctx context.Context) (any, error) {
+			return obj.PerPage, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPostList_perPage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPostList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPostListResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.BlogPostListResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPostListResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPostListResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPostListResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPostListResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.BlogPostListResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPostListResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPostListResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPostListResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPostListResponse_data(ctx context.Context, field graphql.CollectedField, obj *model.BlogPostListResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPostListResponse_data,
+		func(ctx context.Context) (any, error) {
+			return obj.Data, nil
+		},
+		nil,
+		ec.marshalOBlogPostList2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostList,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPostListResponse_data(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPostListResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "blogPosts":
+				return ec.fieldContext_BlogPostList_blogPosts(ctx, field)
+			case "total":
+				return ec.fieldContext_BlogPostList_total(ctx, field)
+			case "page":
+				return ec.fieldContext_BlogPostList_page(ctx, field)
+			case "perPage":
+				return ec.fieldContext_BlogPostList_perPage(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BlogPostList", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPostResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.BlogPostResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPostResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPostResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPostResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPostResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.BlogPostResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPostResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPostResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPostResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlogPostResponse_data(ctx context.Context, field graphql.CollectedField, obj *model.BlogPostResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_BlogPostResponse_data,
+		func(ctx context.Context) (any, error) {
+			return obj.Data, nil
+		},
+		nil,
+		ec.marshalOBlogPost2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPost,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_BlogPostResponse_data(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlogPostResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_BlogPost_id(ctx, field)
+			case "title":
+				return ec.fieldContext_BlogPost_title(ctx, field)
+			case "slug":
+				return ec.fieldContext_BlogPost_slug(ctx, field)
+			case "body":
+				return ec.fieldContext_BlogPost_body(ctx, field)
+			case "isPublished":
+				return ec.fieldContext_BlogPost_isPublished(ctx, field)
+			case "publishedAt":
+				return ec.fieldContext_BlogPost_publishedAt(ctx, field)
+			case "userId":
+				return ec.fieldContext_BlogPost_userId(ctx, field)
+			case "authorId":
+				return ec.fieldContext_BlogPost_authorId(ctx, field)
+			case "blogPostCategoryId":
+				return ec.fieldContext_BlogPost_blogPostCategoryId(ctx, field)
+			case "description":
+				return ec.fieldContext_BlogPost_description(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_BlogPost_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_BlogPost_updatedAt(ctx, field)
+			case "author":
+				return ec.fieldContext_BlogPost_author(ctx, field)
+			case "category":
+				return ec.fieldContext_BlogPost_category(ctx, field)
+			case "featuredImage":
+				return ec.fieldContext_BlogPost_featuredImage(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BlogPost", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _BulkOperationResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.BulkOperationResponse) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -3681,6 +6572,508 @@ func (ec *executionContext) fieldContext_BulkOperationResponse_affectedCount(_ c
 	return fc, nil
 }
 
+func (ec *executionContext) _Category_id(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Category_id,
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		ec.marshalNID2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Category_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Category",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Category_name(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Category_name,
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Category_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Category",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Category_slug(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Category_slug,
+		func(ctx context.Context) (any, error) {
+			return obj.Slug, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Category_slug(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Category",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Category_description(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Category_description,
+		func(ctx context.Context) (any, error) {
+			return obj.Description, nil
+		},
+		nil,
+		ec.marshalOString2ᚖstring,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Category_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Category",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Category_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Category_createdAt,
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Category_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Category",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Category_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Category) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Category_updatedAt,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Category_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Category",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CategoryList_categories(ctx context.Context, field graphql.CollectedField, obj *model.CategoryList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_CategoryList_categories,
+		func(ctx context.Context) (any, error) {
+			return obj.Categories, nil
+		},
+		nil,
+		ec.marshalNCategory2ᚕᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_CategoryList_categories(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CategoryList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Category_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Category_name(ctx, field)
+			case "slug":
+				return ec.fieldContext_Category_slug(ctx, field)
+			case "description":
+				return ec.fieldContext_Category_description(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Category_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Category_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Category", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CategoryList_total(ctx context.Context, field graphql.CollectedField, obj *model.CategoryList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_CategoryList_total,
+		func(ctx context.Context) (any, error) {
+			return obj.Total, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_CategoryList_total(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CategoryList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CategoryList_page(ctx context.Context, field graphql.CollectedField, obj *model.CategoryList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_CategoryList_page,
+		func(ctx context.Context) (any, error) {
+			return obj.Page, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_CategoryList_page(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CategoryList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CategoryList_perPage(ctx context.Context, field graphql.CollectedField, obj *model.CategoryList) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_CategoryList_perPage,
+		func(ctx context.Context) (any, error) {
+			return obj.PerPage, nil
+		},
+		nil,
+		ec.marshalNInt2int32,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_CategoryList_perPage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CategoryList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CategoryListResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.CategoryListResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_CategoryListResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_CategoryListResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CategoryListResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CategoryListResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.CategoryListResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_CategoryListResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_CategoryListResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CategoryListResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CategoryListResponse_data(ctx context.Context, field graphql.CollectedField, obj *model.CategoryListResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_CategoryListResponse_data,
+		func(ctx context.Context) (any, error) {
+			return obj.Data, nil
+		},
+		nil,
+		ec.marshalOCategoryList2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryList,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_CategoryListResponse_data(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CategoryListResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "categories":
+				return ec.fieldContext_CategoryList_categories(ctx, field)
+			case "total":
+				return ec.fieldContext_CategoryList_total(ctx, field)
+			case "page":
+				return ec.fieldContext_CategoryList_page(ctx, field)
+			case "perPage":
+				return ec.fieldContext_CategoryList_perPage(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CategoryList", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CategoryResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.CategoryResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_CategoryResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_CategoryResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CategoryResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CategoryResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.CategoryResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_CategoryResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_CategoryResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CategoryResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CategoryResponse_data(ctx context.Context, field graphql.CollectedField, obj *model.CategoryResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_CategoryResponse_data,
+		func(ctx context.Context) (any, error) {
+			return obj.Data, nil
+		},
+		nil,
+		ec.marshalOCategory2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategory,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_CategoryResponse_data(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CategoryResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Category_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Category_name(ctx, field)
+			case "slug":
+				return ec.fieldContext_Category_slug(ctx, field)
+			case "description":
+				return ec.fieldContext_Category_description(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Category_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Category_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Category", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ChangePasswordResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.ChangePasswordResponse) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -3729,6 +7122,180 @@ func (ec *executionContext) _ChangePasswordResponse_message(ctx context.Context,
 func (ec *executionContext) fieldContext_ChangePasswordResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ChangePasswordResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeleteAnnouncementResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.DeleteAnnouncementResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DeleteAnnouncementResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DeleteAnnouncementResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeleteAnnouncementResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeleteAnnouncementResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.DeleteAnnouncementResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DeleteAnnouncementResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DeleteAnnouncementResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeleteAnnouncementResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeleteBlogPostResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.DeleteBlogPostResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DeleteBlogPostResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DeleteBlogPostResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeleteBlogPostResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeleteBlogPostResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.DeleteBlogPostResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DeleteBlogPostResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DeleteBlogPostResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeleteBlogPostResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeleteCategoryResponse_success(ctx context.Context, field graphql.CollectedField, obj *model.DeleteCategoryResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DeleteCategoryResponse_success,
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DeleteCategoryResponse_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeleteCategoryResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeleteCategoryResponse_message(ctx context.Context, field graphql.CollectedField, obj *model.DeleteCategoryResponse) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_DeleteCategoryResponse_message,
+		func(ctx context.Context) (any, error) {
+			return obj.Message, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_DeleteCategoryResponse_message(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeleteCategoryResponse",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -5901,6 +9468,64 @@ func (ec *executionContext) fieldContext_Media_orderColumn(_ context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Media_isPublic(ctx context.Context, field graphql.CollectedField, obj *model.Media) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Media_isPublic,
+		func(ctx context.Context) (any, error) {
+			return obj.IsPublic, nil
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Media_isPublic(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Media",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Media_publicUrl(ctx context.Context, field graphql.CollectedField, obj *model.Media) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Media_publicUrl,
+		func(ctx context.Context) (any, error) {
+			return obj.PublicURL, nil
+		},
+		nil,
+		ec.marshalOString2ᚖstring,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Media_publicUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Media",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Media_url(ctx context.Context, field graphql.CollectedField, obj *model.Media) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -6044,6 +9669,10 @@ func (ec *executionContext) fieldContext_MediaListData_media(_ context.Context, 
 				return ec.fieldContext_Media_responsiveImages(ctx, field)
 			case "orderColumn":
 				return ec.fieldContext_Media_orderColumn(ctx, field)
+			case "isPublic":
+				return ec.fieldContext_Media_isPublic(ctx, field)
+			case "publicUrl":
+				return ec.fieldContext_Media_publicUrl(ctx, field)
 			case "url":
 				return ec.fieldContext_Media_url(ctx, field)
 			case "createdAt":
@@ -6355,6 +9984,10 @@ func (ec *executionContext) fieldContext_MediaResponse_data(_ context.Context, f
 				return ec.fieldContext_Media_responsiveImages(ctx, field)
 			case "orderColumn":
 				return ec.fieldContext_Media_orderColumn(ctx, field)
+			case "isPublic":
+				return ec.fieldContext_Media_isPublic(ctx, field)
+			case "publicUrl":
+				return ec.fieldContext_Media_publicUrl(ctx, field)
 			case "url":
 				return ec.fieldContext_Media_url(ctx, field)
 			case "createdAt":
@@ -8086,6 +11719,539 @@ func (ec *executionContext) fieldContext_Mutation_deleteMedia(ctx context.Contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteMedia_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createBlogPost(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createBlogPost,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateBlogPost(ctx, fc.Args["input"].(model.CreateBlogPostInput))
+		},
+		nil,
+		ec.marshalNBlogPostResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createBlogPost(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_BlogPostResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_BlogPostResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_BlogPostResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BlogPostResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createBlogPost_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateBlogPost(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateBlogPost,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateBlogPost(ctx, fc.Args["input"].(model.UpdateBlogPostInput))
+		},
+		nil,
+		ec.marshalNBlogPostResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateBlogPost(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_BlogPostResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_BlogPostResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_BlogPostResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BlogPostResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateBlogPost_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_publishBlogPost(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_publishBlogPost,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().PublishBlogPost(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNBlogPostResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_publishBlogPost(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_BlogPostResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_BlogPostResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_BlogPostResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BlogPostResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_publishBlogPost_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_unpublishBlogPost(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_unpublishBlogPost,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UnpublishBlogPost(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNBlogPostResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_unpublishBlogPost(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_BlogPostResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_BlogPostResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_BlogPostResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BlogPostResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_unpublishBlogPost_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBlogPost(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBlogPost,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteBlogPost(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNDeleteBlogPostResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteBlogPostResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBlogPost(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_DeleteBlogPostResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_DeleteBlogPostResponse_message(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DeleteBlogPostResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBlogPost_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createCategory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createCategory,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateCategory(ctx, fc.Args["input"].(model.CreateCategoryInput))
+		},
+		nil,
+		ec.marshalNCategoryResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createCategory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_CategoryResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_CategoryResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_CategoryResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CategoryResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createCategory_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateCategory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateCategory,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateCategory(ctx, fc.Args["input"].(model.UpdateCategoryInput))
+		},
+		nil,
+		ec.marshalNCategoryResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateCategory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_CategoryResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_CategoryResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_CategoryResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CategoryResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateCategory_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteCategory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteCategory,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteCategory(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNDeleteCategoryResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteCategoryResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteCategory(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_DeleteCategoryResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_DeleteCategoryResponse_message(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DeleteCategoryResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteCategory_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createAnnouncement(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createAnnouncement,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateAnnouncement(ctx, fc.Args["input"].(model.CreateAnnouncementInput))
+		},
+		nil,
+		ec.marshalNAnnouncementResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createAnnouncement(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_AnnouncementResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_AnnouncementResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_AnnouncementResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AnnouncementResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createAnnouncement_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateAnnouncement(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateAnnouncement,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateAnnouncement(ctx, fc.Args["input"].(model.UpdateAnnouncementInput))
+		},
+		nil,
+		ec.marshalNAnnouncementResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateAnnouncement(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_AnnouncementResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_AnnouncementResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_AnnouncementResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AnnouncementResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateAnnouncement_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteAnnouncement(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteAnnouncement,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteAnnouncement(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNDeleteAnnouncementResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteAnnouncementResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteAnnouncement(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_DeleteAnnouncementResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_DeleteAnnouncementResponse_message(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DeleteAnnouncementResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteAnnouncement_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -10974,6 +15140,496 @@ func (ec *executionContext) fieldContext_Query_discounts(ctx context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_blogPost(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_blogPost,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().BlogPost(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNBlogPostResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_blogPost(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_BlogPostResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_BlogPostResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_BlogPostResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BlogPostResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_blogPost_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_blogPostBySlug(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_blogPostBySlug,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().BlogPostBySlug(ctx, fc.Args["slug"].(string))
+		},
+		nil,
+		ec.marshalNBlogPostResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_blogPostBySlug(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_BlogPostResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_BlogPostResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_BlogPostResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BlogPostResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_blogPostBySlug_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_blogPosts(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_blogPosts,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().BlogPosts(ctx, fc.Args["page"].(*int32), fc.Args["perPage"].(*int32), fc.Args["search"].(*string), fc.Args["publishedOnly"].(*bool), fc.Args["categoryId"].(*string), fc.Args["sortBy"].(*string), fc.Args["sortOrder"].(*string))
+		},
+		nil,
+		ec.marshalNBlogPostListResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostListResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_blogPosts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_BlogPostListResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_BlogPostListResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_BlogPostListResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BlogPostListResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_blogPosts_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_searchBlogPosts(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_searchBlogPosts,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().SearchBlogPosts(ctx, fc.Args["query"].(string), fc.Args["page"].(*int32), fc.Args["perPage"].(*int32), fc.Args["publishedOnly"].(*bool))
+		},
+		nil,
+		ec.marshalNBlogPostListResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostListResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_searchBlogPosts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_BlogPostListResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_BlogPostListResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_BlogPostListResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type BlogPostListResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_searchBlogPosts_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_category(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_category,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().Category(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNCategoryResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_category(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_CategoryResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_CategoryResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_CategoryResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CategoryResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_category_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_categoryBySlug(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_categoryBySlug,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().CategoryBySlug(ctx, fc.Args["slug"].(string))
+		},
+		nil,
+		ec.marshalNCategoryResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_categoryBySlug(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_CategoryResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_CategoryResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_CategoryResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CategoryResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_categoryBySlug_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_categories(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_categories,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().Categories(ctx, fc.Args["page"].(*int32), fc.Args["perPage"].(*int32), fc.Args["search"].(*string), fc.Args["sortBy"].(*string), fc.Args["sortOrder"].(*string))
+		},
+		nil,
+		ec.marshalNCategoryListResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryListResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_categories(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_CategoryListResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_CategoryListResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_CategoryListResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CategoryListResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_categories_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_announcement(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_announcement,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().Announcement(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNAnnouncementResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_announcement(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_AnnouncementResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_AnnouncementResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_AnnouncementResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AnnouncementResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_announcement_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_announcements(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_announcements,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().Announcements(ctx, fc.Args["page"].(*int32), fc.Args["perPage"].(*int32), fc.Args["search"].(*string), fc.Args["sortBy"].(*string), fc.Args["sortOrder"].(*string))
+		},
+		nil,
+		ec.marshalNAnnouncementListResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementListResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_announcements(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_AnnouncementListResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_AnnouncementListResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_AnnouncementListResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AnnouncementListResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_announcements_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_activeAnnouncements(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Query_activeAnnouncements,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Query().ActiveAnnouncements(ctx, fc.Args["forCustomers"].(*bool), fc.Args["forFrontend"].(*bool), fc.Args["forUserDashboard"].(*bool))
+		},
+		nil,
+		ec.marshalNActiveAnnouncementsResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐActiveAnnouncementsResponse,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Query_activeAnnouncements(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "success":
+				return ec.fieldContext_ActiveAnnouncementsResponse_success(ctx, field)
+			case "message":
+				return ec.fieldContext_ActiveAnnouncementsResponse_message(ctx, field)
+			case "data":
+				return ec.fieldContext_ActiveAnnouncementsResponse_data(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ActiveAnnouncementsResponse", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_activeAnnouncements_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -13259,6 +17915,10 @@ func (ec *executionContext) fieldContext_User_avatar(_ context.Context, field gr
 				return ec.fieldContext_Media_responsiveImages(ctx, field)
 			case "orderColumn":
 				return ec.fieldContext_Media_orderColumn(ctx, field)
+			case "isPublic":
+				return ec.fieldContext_Media_isPublic(ctx, field)
+			case "publicUrl":
+				return ec.fieldContext_Media_publicUrl(ctx, field)
 			case "url":
 				return ec.fieldContext_Media_url(ctx, field)
 			case "createdAt":
@@ -15218,6 +19878,213 @@ func (ec *executionContext) unmarshalInputChangePasswordInput(ctx context.Contex
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputCreateAnnouncementInput(ctx context.Context, obj any) (model.CreateAnnouncementInput, error) {
+	var it model.CreateAnnouncementInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"title", "content", "startsAt", "endsAt", "isActive", "isDismissible", "showForCustomers", "showOnFrontend", "showOnUserDashboard"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "content":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Content = data
+		case "startsAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("startsAt"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StartsAt = data
+		case "endsAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endsAt"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndsAt = data
+		case "isActive":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isActive"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsActive = data
+		case "isDismissible":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isDismissible"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsDismissible = data
+		case "showForCustomers":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("showForCustomers"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShowForCustomers = data
+		case "showOnFrontend":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("showOnFrontend"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShowOnFrontend = data
+		case "showOnUserDashboard":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("showOnUserDashboard"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShowOnUserDashboard = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateBlogPostInput(ctx context.Context, obj any) (model.CreateBlogPostInput, error) {
+	var it model.CreateBlogPostInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"title", "slug", "body", "description", "userId", "authorId", "blogPostCategoryId", "isPublished", "publishedAt"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "slug":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("slug"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Slug = data
+		case "body":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("body"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Body = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "userId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserID = data
+		case "authorId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("authorId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuthorID = data
+		case "blogPostCategoryId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("blogPostCategoryId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BlogPostCategoryID = data
+		case "isPublished":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isPublished"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsPublished = data
+		case "publishedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedAt"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PublishedAt = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateCategoryInput(ctx context.Context, obj any) (model.CreateCategoryInput, error) {
+	var it model.CreateCategoryInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "slug", "description"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "slug":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("slug"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Slug = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputCreateDiscountInput(ctx context.Context, obj any) (model.CreateDiscountInput, error) {
 	var it model.CreateDiscountInput
 	asMap := map[string]any{}
@@ -15920,6 +20787,227 @@ func (ec *executionContext) unmarshalInputSetSettingInput(ctx context.Context, o
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateAnnouncementInput(ctx context.Context, obj any) (model.UpdateAnnouncementInput, error) {
+	var it model.UpdateAnnouncementInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "title", "content", "startsAt", "endsAt", "isActive", "isDismissible", "showForCustomers", "showOnFrontend", "showOnUserDashboard"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "content":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Content = data
+		case "startsAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("startsAt"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StartsAt = data
+		case "endsAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endsAt"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndsAt = data
+		case "isActive":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isActive"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsActive = data
+		case "isDismissible":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isDismissible"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsDismissible = data
+		case "showForCustomers":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("showForCustomers"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShowForCustomers = data
+		case "showOnFrontend":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("showOnFrontend"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShowOnFrontend = data
+		case "showOnUserDashboard":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("showOnUserDashboard"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShowOnUserDashboard = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateBlogPostInput(ctx context.Context, obj any) (model.UpdateBlogPostInput, error) {
+	var it model.UpdateBlogPostInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "title", "slug", "body", "description", "authorId", "blogPostCategoryId", "isPublished", "publishedAt"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "slug":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("slug"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Slug = data
+		case "body":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("body"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Body = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "authorId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("authorId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuthorID = data
+		case "blogPostCategoryId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("blogPostCategoryId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BlogPostCategoryID = data
+		case "isPublished":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isPublished"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsPublished = data
+		case "publishedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedAt"))
+			data, err := ec.unmarshalOInt2ᚖint32(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PublishedAt = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateCategoryInput(ctx context.Context, obj any) (model.UpdateCategoryInput, error) {
+	var it model.UpdateCategoryInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "name", "slug", "description"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "slug":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("slug"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Slug = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdateDiscountInput(ctx context.Context, obj any) (model.UpdateDiscountInput, error) {
 	var it model.UpdateDiscountInput
 	asMap := map[string]any{}
@@ -16418,7 +21506,7 @@ func (ec *executionContext) unmarshalInputUploadFileInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"content", "fileName", "mimeType", "modelType", "modelId", "collectionName", "name", "disk"}
+	fieldsInOrder := [...]string{"content", "fileName", "mimeType", "modelType", "modelId", "collectionName", "name", "disk", "isPublic"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -16481,6 +21569,13 @@ func (ec *executionContext) unmarshalInputUploadFileInput(ctx context.Context, o
 				return it, err
 			}
 			it.Disk = data
+		case "isPublic":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isPublic"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsPublic = data
 		}
 	}
 
@@ -16494,6 +21589,551 @@ func (ec *executionContext) unmarshalInputUploadFileInput(ctx context.Context, o
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var activeAnnouncementsResponseImplementors = []string{"ActiveAnnouncementsResponse"}
+
+func (ec *executionContext) _ActiveAnnouncementsResponse(ctx context.Context, sel ast.SelectionSet, obj *model.ActiveAnnouncementsResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, activeAnnouncementsResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ActiveAnnouncementsResponse")
+		case "success":
+			out.Values[i] = ec._ActiveAnnouncementsResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._ActiveAnnouncementsResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "data":
+			out.Values[i] = ec._ActiveAnnouncementsResponse_data(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var announcementImplementors = []string{"Announcement"}
+
+func (ec *executionContext) _Announcement(ctx context.Context, sel ast.SelectionSet, obj *model.Announcement) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, announcementImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Announcement")
+		case "id":
+			out.Values[i] = ec._Announcement_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "title":
+			out.Values[i] = ec._Announcement_title(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "content":
+			out.Values[i] = ec._Announcement_content(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "startsAt":
+			out.Values[i] = ec._Announcement_startsAt(ctx, field, obj)
+		case "endsAt":
+			out.Values[i] = ec._Announcement_endsAt(ctx, field, obj)
+		case "isActive":
+			out.Values[i] = ec._Announcement_isActive(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isDismissible":
+			out.Values[i] = ec._Announcement_isDismissible(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "showForCustomers":
+			out.Values[i] = ec._Announcement_showForCustomers(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "showOnFrontend":
+			out.Values[i] = ec._Announcement_showOnFrontend(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "showOnUserDashboard":
+			out.Values[i] = ec._Announcement_showOnUserDashboard(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._Announcement_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Announcement_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var announcementListImplementors = []string{"AnnouncementList"}
+
+func (ec *executionContext) _AnnouncementList(ctx context.Context, sel ast.SelectionSet, obj *model.AnnouncementList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, announcementListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AnnouncementList")
+		case "announcements":
+			out.Values[i] = ec._AnnouncementList_announcements(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "total":
+			out.Values[i] = ec._AnnouncementList_total(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "page":
+			out.Values[i] = ec._AnnouncementList_page(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "perPage":
+			out.Values[i] = ec._AnnouncementList_perPage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var announcementListResponseImplementors = []string{"AnnouncementListResponse"}
+
+func (ec *executionContext) _AnnouncementListResponse(ctx context.Context, sel ast.SelectionSet, obj *model.AnnouncementListResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, announcementListResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AnnouncementListResponse")
+		case "success":
+			out.Values[i] = ec._AnnouncementListResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._AnnouncementListResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "data":
+			out.Values[i] = ec._AnnouncementListResponse_data(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var announcementResponseImplementors = []string{"AnnouncementResponse"}
+
+func (ec *executionContext) _AnnouncementResponse(ctx context.Context, sel ast.SelectionSet, obj *model.AnnouncementResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, announcementResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AnnouncementResponse")
+		case "success":
+			out.Values[i] = ec._AnnouncementResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._AnnouncementResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "data":
+			out.Values[i] = ec._AnnouncementResponse_data(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var blogPostImplementors = []string{"BlogPost"}
+
+func (ec *executionContext) _BlogPost(ctx context.Context, sel ast.SelectionSet, obj *model.BlogPost) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, blogPostImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("BlogPost")
+		case "id":
+			out.Values[i] = ec._BlogPost_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "title":
+			out.Values[i] = ec._BlogPost_title(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "slug":
+			out.Values[i] = ec._BlogPost_slug(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "body":
+			out.Values[i] = ec._BlogPost_body(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "isPublished":
+			out.Values[i] = ec._BlogPost_isPublished(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "publishedAt":
+			out.Values[i] = ec._BlogPost_publishedAt(ctx, field, obj)
+		case "userId":
+			out.Values[i] = ec._BlogPost_userId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "authorId":
+			out.Values[i] = ec._BlogPost_authorId(ctx, field, obj)
+		case "blogPostCategoryId":
+			out.Values[i] = ec._BlogPost_blogPostCategoryId(ctx, field, obj)
+		case "description":
+			out.Values[i] = ec._BlogPost_description(ctx, field, obj)
+		case "createdAt":
+			out.Values[i] = ec._BlogPost_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedAt":
+			out.Values[i] = ec._BlogPost_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "author":
+			out.Values[i] = ec._BlogPost_author(ctx, field, obj)
+		case "category":
+			out.Values[i] = ec._BlogPost_category(ctx, field, obj)
+		case "featuredImage":
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._BlogPost_featuredImage(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var blogPostListImplementors = []string{"BlogPostList"}
+
+func (ec *executionContext) _BlogPostList(ctx context.Context, sel ast.SelectionSet, obj *model.BlogPostList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, blogPostListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("BlogPostList")
+		case "blogPosts":
+			out.Values[i] = ec._BlogPostList_blogPosts(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "total":
+			out.Values[i] = ec._BlogPostList_total(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "page":
+			out.Values[i] = ec._BlogPostList_page(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "perPage":
+			out.Values[i] = ec._BlogPostList_perPage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var blogPostListResponseImplementors = []string{"BlogPostListResponse"}
+
+func (ec *executionContext) _BlogPostListResponse(ctx context.Context, sel ast.SelectionSet, obj *model.BlogPostListResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, blogPostListResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("BlogPostListResponse")
+		case "success":
+			out.Values[i] = ec._BlogPostListResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._BlogPostListResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "data":
+			out.Values[i] = ec._BlogPostListResponse_data(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var blogPostResponseImplementors = []string{"BlogPostResponse"}
+
+func (ec *executionContext) _BlogPostResponse(ctx context.Context, sel ast.SelectionSet, obj *model.BlogPostResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, blogPostResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("BlogPostResponse")
+		case "success":
+			out.Values[i] = ec._BlogPostResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._BlogPostResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "data":
+			out.Values[i] = ec._BlogPostResponse_data(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
 
 var bulkOperationResponseImplementors = []string{"BulkOperationResponse"}
 
@@ -16544,6 +22184,213 @@ func (ec *executionContext) _BulkOperationResponse(ctx context.Context, sel ast.
 	return out
 }
 
+var categoryImplementors = []string{"Category"}
+
+func (ec *executionContext) _Category(ctx context.Context, sel ast.SelectionSet, obj *model.Category) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, categoryImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Category")
+		case "id":
+			out.Values[i] = ec._Category_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._Category_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "slug":
+			out.Values[i] = ec._Category_slug(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "description":
+			out.Values[i] = ec._Category_description(ctx, field, obj)
+		case "createdAt":
+			out.Values[i] = ec._Category_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Category_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var categoryListImplementors = []string{"CategoryList"}
+
+func (ec *executionContext) _CategoryList(ctx context.Context, sel ast.SelectionSet, obj *model.CategoryList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, categoryListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CategoryList")
+		case "categories":
+			out.Values[i] = ec._CategoryList_categories(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "total":
+			out.Values[i] = ec._CategoryList_total(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "page":
+			out.Values[i] = ec._CategoryList_page(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "perPage":
+			out.Values[i] = ec._CategoryList_perPage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var categoryListResponseImplementors = []string{"CategoryListResponse"}
+
+func (ec *executionContext) _CategoryListResponse(ctx context.Context, sel ast.SelectionSet, obj *model.CategoryListResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, categoryListResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CategoryListResponse")
+		case "success":
+			out.Values[i] = ec._CategoryListResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._CategoryListResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "data":
+			out.Values[i] = ec._CategoryListResponse_data(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var categoryResponseImplementors = []string{"CategoryResponse"}
+
+func (ec *executionContext) _CategoryResponse(ctx context.Context, sel ast.SelectionSet, obj *model.CategoryResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, categoryResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CategoryResponse")
+		case "success":
+			out.Values[i] = ec._CategoryResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._CategoryResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "data":
+			out.Values[i] = ec._CategoryResponse_data(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var changePasswordResponseImplementors = []string{"ChangePasswordResponse"}
 
 func (ec *executionContext) _ChangePasswordResponse(ctx context.Context, sel ast.SelectionSet, obj *model.ChangePasswordResponse) graphql.Marshaler {
@@ -16562,6 +22409,138 @@ func (ec *executionContext) _ChangePasswordResponse(ctx context.Context, sel ast
 			}
 		case "message":
 			out.Values[i] = ec._ChangePasswordResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var deleteAnnouncementResponseImplementors = []string{"DeleteAnnouncementResponse"}
+
+func (ec *executionContext) _DeleteAnnouncementResponse(ctx context.Context, sel ast.SelectionSet, obj *model.DeleteAnnouncementResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, deleteAnnouncementResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DeleteAnnouncementResponse")
+		case "success":
+			out.Values[i] = ec._DeleteAnnouncementResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._DeleteAnnouncementResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var deleteBlogPostResponseImplementors = []string{"DeleteBlogPostResponse"}
+
+func (ec *executionContext) _DeleteBlogPostResponse(ctx context.Context, sel ast.SelectionSet, obj *model.DeleteBlogPostResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, deleteBlogPostResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DeleteBlogPostResponse")
+		case "success":
+			out.Values[i] = ec._DeleteBlogPostResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._DeleteBlogPostResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var deleteCategoryResponseImplementors = []string{"DeleteCategoryResponse"}
+
+func (ec *executionContext) _DeleteCategoryResponse(ctx context.Context, sel ast.SelectionSet, obj *model.DeleteCategoryResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, deleteCategoryResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DeleteCategoryResponse")
+		case "success":
+			out.Values[i] = ec._DeleteCategoryResponse_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "message":
+			out.Values[i] = ec._DeleteCategoryResponse_message(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -17414,6 +23393,13 @@ func (ec *executionContext) _Media(ctx context.Context, sel ast.SelectionSet, ob
 			}
 		case "orderColumn":
 			out.Values[i] = ec._Media_orderColumn(ctx, field, obj)
+		case "isPublic":
+			out.Values[i] = ec._Media_isPublic(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "publicUrl":
+			out.Values[i] = ec._Media_publicUrl(ctx, field, obj)
 		case "url":
 			out.Values[i] = ec._Media_url(ctx, field, obj)
 		case "createdAt":
@@ -17931,6 +23917,83 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteMedia":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteMedia(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createBlogPost":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createBlogPost(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateBlogPost":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateBlogPost(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "publishBlogPost":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_publishBlogPost(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "unpublishBlogPost":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_unpublishBlogPost(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBlogPost":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBlogPost(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createCategory":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createCategory(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateCategory":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateCategory(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteCategory":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteCategory(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createAnnouncement":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createAnnouncement(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateAnnouncement":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateAnnouncement(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteAnnouncement":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteAnnouncement(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -19054,6 +25117,226 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_discounts(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "blogPost":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_blogPost(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "blogPostBySlug":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_blogPostBySlug(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "blogPosts":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_blogPosts(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "searchBlogPosts":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_searchBlogPosts(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "category":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_category(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "categoryBySlug":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_categoryBySlug(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "categories":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_categories(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "announcement":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_announcement(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "announcements":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_announcements(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "activeAnnouncements":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_activeAnnouncements(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -20499,9 +26782,187 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) marshalNActiveAnnouncementsResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐActiveAnnouncementsResponse(ctx context.Context, sel ast.SelectionSet, v model.ActiveAnnouncementsResponse) graphql.Marshaler {
+	return ec._ActiveAnnouncementsResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNActiveAnnouncementsResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐActiveAnnouncementsResponse(ctx context.Context, sel ast.SelectionSet, v *model.ActiveAnnouncementsResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ActiveAnnouncementsResponse(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNAddUserToTenantInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAddUserToTenantInput(ctx context.Context, v any) (model.AddUserToTenantInput, error) {
 	res, err := ec.unmarshalInputAddUserToTenantInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAnnouncement2ᚕᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Announcement) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNAnnouncement2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncement(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNAnnouncement2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncement(ctx context.Context, sel ast.SelectionSet, v *model.Announcement) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Announcement(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNAnnouncementListResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementListResponse(ctx context.Context, sel ast.SelectionSet, v model.AnnouncementListResponse) graphql.Marshaler {
+	return ec._AnnouncementListResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNAnnouncementListResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementListResponse(ctx context.Context, sel ast.SelectionSet, v *model.AnnouncementListResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._AnnouncementListResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNAnnouncementResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementResponse(ctx context.Context, sel ast.SelectionSet, v model.AnnouncementResponse) graphql.Marshaler {
+	return ec._AnnouncementResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNAnnouncementResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementResponse(ctx context.Context, sel ast.SelectionSet, v *model.AnnouncementResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._AnnouncementResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNBlogPost2ᚕᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.BlogPost) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNBlogPost2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPost(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNBlogPost2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPost(ctx context.Context, sel ast.SelectionSet, v *model.BlogPost) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._BlogPost(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNBlogPostListResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostListResponse(ctx context.Context, sel ast.SelectionSet, v model.BlogPostListResponse) graphql.Marshaler {
+	return ec._BlogPostListResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNBlogPostListResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostListResponse(ctx context.Context, sel ast.SelectionSet, v *model.BlogPostListResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._BlogPostListResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNBlogPostResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostResponse(ctx context.Context, sel ast.SelectionSet, v model.BlogPostResponse) graphql.Marshaler {
+	return ec._BlogPostResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNBlogPostResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostResponse(ctx context.Context, sel ast.SelectionSet, v *model.BlogPostResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._BlogPostResponse(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v any) (bool, error) {
@@ -20534,6 +26995,88 @@ func (ec *executionContext) marshalNBulkOperationResponse2ᚖgithubᚗcomᚋdama
 	return ec._BulkOperationResponse(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNCategory2ᚕᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Category) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNCategory2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategory(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNCategory2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v *model.Category) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Category(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCategoryListResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryListResponse(ctx context.Context, sel ast.SelectionSet, v model.CategoryListResponse) graphql.Marshaler {
+	return ec._CategoryListResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCategoryListResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryListResponse(ctx context.Context, sel ast.SelectionSet, v *model.CategoryListResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CategoryListResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCategoryResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryResponse(ctx context.Context, sel ast.SelectionSet, v model.CategoryResponse) graphql.Marshaler {
+	return ec._CategoryResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCategoryResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryResponse(ctx context.Context, sel ast.SelectionSet, v *model.CategoryResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CategoryResponse(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNChangePasswordInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐChangePasswordInput(ctx context.Context, v any) (model.ChangePasswordInput, error) {
 	res, err := ec.unmarshalInputChangePasswordInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -20551,6 +27094,21 @@ func (ec *executionContext) marshalNChangePasswordResponse2ᚖgithubᚗcomᚋdam
 		return graphql.Null
 	}
 	return ec._ChangePasswordResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNCreateAnnouncementInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCreateAnnouncementInput(ctx context.Context, v any) (model.CreateAnnouncementInput, error) {
+	res, err := ec.unmarshalInputCreateAnnouncementInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateBlogPostInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCreateBlogPostInput(ctx context.Context, v any) (model.CreateBlogPostInput, error) {
+	res, err := ec.unmarshalInputCreateBlogPostInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateCategoryInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCreateCategoryInput(ctx context.Context, v any) (model.CreateCategoryInput, error) {
+	res, err := ec.unmarshalInputCreateCategoryInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNCreateDiscountInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCreateDiscountInput(ctx context.Context, v any) (model.CreateDiscountInput, error) {
@@ -20576,6 +27134,48 @@ func (ec *executionContext) unmarshalNCreateTenantInput2githubᚗcomᚋdamartepl
 func (ec *executionContext) unmarshalNCreateUserInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCreateUserInput(ctx context.Context, v any) (model.CreateUserInput, error) {
 	res, err := ec.unmarshalInputCreateUserInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNDeleteAnnouncementResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteAnnouncementResponse(ctx context.Context, sel ast.SelectionSet, v model.DeleteAnnouncementResponse) graphql.Marshaler {
+	return ec._DeleteAnnouncementResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDeleteAnnouncementResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteAnnouncementResponse(ctx context.Context, sel ast.SelectionSet, v *model.DeleteAnnouncementResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DeleteAnnouncementResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNDeleteBlogPostResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteBlogPostResponse(ctx context.Context, sel ast.SelectionSet, v model.DeleteBlogPostResponse) graphql.Marshaler {
+	return ec._DeleteBlogPostResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDeleteBlogPostResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteBlogPostResponse(ctx context.Context, sel ast.SelectionSet, v *model.DeleteBlogPostResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DeleteBlogPostResponse(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNDeleteCategoryResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteCategoryResponse(ctx context.Context, sel ast.SelectionSet, v model.DeleteCategoryResponse) graphql.Marshaler {
+	return ec._DeleteCategoryResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNDeleteCategoryResponse2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteCategoryResponse(ctx context.Context, sel ast.SelectionSet, v *model.DeleteCategoryResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._DeleteCategoryResponse(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNDeleteDiscountResponse2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDeleteDiscountResponse(ctx context.Context, sel ast.SelectionSet, v model.DeleteDiscountResponse) graphql.Marshaler {
@@ -21398,6 +27998,21 @@ func (ec *executionContext) marshalNTenantUsersResponse2ᚖgithubᚗcomᚋdamart
 	return ec._TenantUsersResponse(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalNUpdateAnnouncementInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐUpdateAnnouncementInput(ctx context.Context, v any) (model.UpdateAnnouncementInput, error) {
+	res, err := ec.unmarshalInputUpdateAnnouncementInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateBlogPostInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐUpdateBlogPostInput(ctx context.Context, v any) (model.UpdateBlogPostInput, error) {
+	res, err := ec.unmarshalInputUpdateBlogPostInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateCategoryInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐUpdateCategoryInput(ctx context.Context, v any) (model.UpdateCategoryInput, error) {
+	res, err := ec.unmarshalInputUpdateCategoryInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNUpdateDiscountInput2githubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐUpdateDiscountInput(ctx context.Context, v any) (model.UpdateDiscountInput, error) {
 	res, err := ec.unmarshalInputUpdateDiscountInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -21812,6 +28427,81 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
+func (ec *executionContext) marshalOAnnouncement2ᚕᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Announcement) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNAnnouncement2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncement(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalOAnnouncement2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncement(ctx context.Context, sel ast.SelectionSet, v *model.Announcement) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Announcement(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOAnnouncementList2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐAnnouncementList(ctx context.Context, sel ast.SelectionSet, v *model.AnnouncementList) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._AnnouncementList(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOBlogPost2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPost(ctx context.Context, sel ast.SelectionSet, v *model.BlogPost) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._BlogPost(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOBlogPostList2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐBlogPostList(ctx context.Context, sel ast.SelectionSet, v *model.BlogPostList) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._BlogPostList(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v any) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -21840,6 +28530,20 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	_ = ctx
 	res := graphql.MarshalBoolean(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOCategory2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v *model.Category) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Category(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOCategoryList2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐCategoryList(ctx context.Context, sel ast.SelectionSet, v *model.CategoryList) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._CategoryList(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalODiscount2ᚖgithubᚗcomᚋdamarteplokᚋdamarᚑadminᚑcmsᚋservicesᚋapiᚑgatewayᚋgraphᚋmodelᚐDiscount(ctx context.Context, sel ast.SelectionSet, v *model.Discount) graphql.Marshaler {

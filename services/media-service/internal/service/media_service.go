@@ -43,6 +43,7 @@ func (s *MediaService) UploadFile(ctx context.Context, req *domain.UploadRequest
 		MimeType:             &req.MimeType,
 		Disk:                 req.Disk,
 		Size:                 req.Size,
+		IsPublic:             req.IsPublic,
 		Manipulations:        make(map[string]interface{}),
 		CustomProperties:     make(map[string]interface{}),
 		GeneratedConversions: make(map[string]interface{}),
@@ -66,6 +67,7 @@ func (s *MediaService) UploadFile(ctx context.Context, req *domain.UploadRequest
 			"file_name":       uploadedMedia.FileName,
 			"mime_type":       uploadedMedia.MimeType,
 			"size":            uploadedMedia.Size,
+			"is_public":       uploadedMedia.IsPublic,
 		}
 		dataBytes, _ := json.Marshal(eventData)
 		message := contracts.AmqpMessage{

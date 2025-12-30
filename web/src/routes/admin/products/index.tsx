@@ -79,7 +79,6 @@ function ProductsPage() {
     if (result.data?.deleteProduct.success) {
       setDeleteDialogOpen(false)
       setProductToDelete(null)
-      // Refetch will happen automatically via URQL cache or page reload
       window.location.reload()
     } else {
       alert(result.data?.deleteProduct.message || 'Failed to delete product')

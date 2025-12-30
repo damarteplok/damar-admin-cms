@@ -6,6 +6,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
+type ActiveAnnouncementsResponse struct {
+	Success bool            `json:"success"`
+	Message string          `json:"message"`
+	Data    []*Announcement `json:"data,omitempty"`
+}
+
 type AddUserToTenantInput struct {
 	UserID    string `json:"userId"`
 	TenantID  string `json:"tenantId"`
@@ -13,10 +19,109 @@ type AddUserToTenantInput struct {
 	IsDefault *bool  `json:"isDefault,omitempty"`
 }
 
+type Announcement struct {
+	ID                  string `json:"id"`
+	Title               string `json:"title"`
+	Content             string `json:"content"`
+	StartsAt            *int32 `json:"startsAt,omitempty"`
+	EndsAt              *int32 `json:"endsAt,omitempty"`
+	IsActive            bool   `json:"isActive"`
+	IsDismissible       bool   `json:"isDismissible"`
+	ShowForCustomers    bool   `json:"showForCustomers"`
+	ShowOnFrontend      bool   `json:"showOnFrontend"`
+	ShowOnUserDashboard bool   `json:"showOnUserDashboard"`
+	CreatedAt           int32  `json:"createdAt"`
+	UpdatedAt           int32  `json:"updatedAt"`
+}
+
+type AnnouncementList struct {
+	Announcements []*Announcement `json:"announcements"`
+	Total         int32           `json:"total"`
+	Page          int32           `json:"page"`
+	PerPage       int32           `json:"perPage"`
+}
+
+type AnnouncementListResponse struct {
+	Success bool              `json:"success"`
+	Message string            `json:"message"`
+	Data    *AnnouncementList `json:"data,omitempty"`
+}
+
+type AnnouncementResponse struct {
+	Success bool          `json:"success"`
+	Message string        `json:"message"`
+	Data    *Announcement `json:"data,omitempty"`
+}
+
+type BlogPost struct {
+	ID                 string    `json:"id"`
+	Title              string    `json:"title"`
+	Slug               string    `json:"slug"`
+	Body               string    `json:"body"`
+	IsPublished        bool      `json:"isPublished"`
+	PublishedAt        *int32    `json:"publishedAt,omitempty"`
+	UserID             string    `json:"userId"`
+	AuthorID           *string   `json:"authorId,omitempty"`
+	BlogPostCategoryID *string   `json:"blogPostCategoryId,omitempty"`
+	Description        *string   `json:"description,omitempty"`
+	CreatedAt          int32     `json:"createdAt"`
+	UpdatedAt          int32     `json:"updatedAt"`
+	Author             *User     `json:"author,omitempty"`
+	Category           *Category `json:"category,omitempty"`
+	FeaturedImage      *Media    `json:"featuredImage,omitempty"`
+}
+
+type BlogPostList struct {
+	BlogPosts []*BlogPost `json:"blogPosts"`
+	Total     int32       `json:"total"`
+	Page      int32       `json:"page"`
+	PerPage   int32       `json:"perPage"`
+}
+
+type BlogPostListResponse struct {
+	Success bool          `json:"success"`
+	Message string        `json:"message"`
+	Data    *BlogPostList `json:"data,omitempty"`
+}
+
+type BlogPostResponse struct {
+	Success bool      `json:"success"`
+	Message string    `json:"message"`
+	Data    *BlogPost `json:"data,omitempty"`
+}
+
 type BulkOperationResponse struct {
 	Success       bool   `json:"success"`
 	Message       string `json:"message"`
 	AffectedCount int32  `json:"affectedCount"`
+}
+
+type Category struct {
+	ID          string  `json:"id"`
+	Name        string  `json:"name"`
+	Slug        string  `json:"slug"`
+	Description *string `json:"description,omitempty"`
+	CreatedAt   int32   `json:"createdAt"`
+	UpdatedAt   int32   `json:"updatedAt"`
+}
+
+type CategoryList struct {
+	Categories []*Category `json:"categories"`
+	Total      int32       `json:"total"`
+	Page       int32       `json:"page"`
+	PerPage    int32       `json:"perPage"`
+}
+
+type CategoryListResponse struct {
+	Success bool          `json:"success"`
+	Message string        `json:"message"`
+	Data    *CategoryList `json:"data,omitempty"`
+}
+
+type CategoryResponse struct {
+	Success bool      `json:"success"`
+	Message string    `json:"message"`
+	Data    *Category `json:"data,omitempty"`
 }
 
 type ChangePasswordInput struct {
@@ -27,6 +132,36 @@ type ChangePasswordInput struct {
 type ChangePasswordResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
+}
+
+type CreateAnnouncementInput struct {
+	Title               string `json:"title"`
+	Content             string `json:"content"`
+	StartsAt            *int32 `json:"startsAt,omitempty"`
+	EndsAt              *int32 `json:"endsAt,omitempty"`
+	IsActive            *bool  `json:"isActive,omitempty"`
+	IsDismissible       *bool  `json:"isDismissible,omitempty"`
+	ShowForCustomers    *bool  `json:"showForCustomers,omitempty"`
+	ShowOnFrontend      *bool  `json:"showOnFrontend,omitempty"`
+	ShowOnUserDashboard *bool  `json:"showOnUserDashboard,omitempty"`
+}
+
+type CreateBlogPostInput struct {
+	Title              string  `json:"title"`
+	Slug               *string `json:"slug,omitempty"`
+	Body               string  `json:"body"`
+	Description        *string `json:"description,omitempty"`
+	UserID             string  `json:"userId"`
+	AuthorID           *string `json:"authorId,omitempty"`
+	BlogPostCategoryID *string `json:"blogPostCategoryId,omitempty"`
+	IsPublished        *bool   `json:"isPublished,omitempty"`
+	PublishedAt        *int32  `json:"publishedAt,omitempty"`
+}
+
+type CreateCategoryInput struct {
+	Name        string  `json:"name"`
+	Slug        *string `json:"slug,omitempty"`
+	Description *string `json:"description,omitempty"`
 }
 
 type CreateDiscountInput struct {
@@ -89,6 +224,21 @@ type CreateUserInput struct {
 	PhoneNumber *string `json:"phoneNumber,omitempty"`
 	Position    *string `json:"position,omitempty"`
 	IsAdmin     *bool   `json:"isAdmin,omitempty"`
+}
+
+type DeleteAnnouncementResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+type DeleteBlogPostResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+type DeleteCategoryResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
 }
 
 type DeleteDiscountResponse struct {
@@ -227,6 +377,8 @@ type Media struct {
 	GeneratedConversions string  `json:"generatedConversions"`
 	ResponsiveImages     string  `json:"responsiveImages"`
 	OrderColumn          *int32  `json:"orderColumn,omitempty"`
+	IsPublic             bool    `json:"isPublic"`
+	PublicURL            *string `json:"publicUrl,omitempty"`
 	URL                  *string `json:"url,omitempty"`
 	CreatedAt            int32   `json:"createdAt"`
 	UpdatedAt            int32   `json:"updatedAt"`
@@ -461,6 +613,38 @@ type TenantUsersResponse struct {
 	Data    []*TenantUser `json:"data,omitempty"`
 }
 
+type UpdateAnnouncementInput struct {
+	ID                  string `json:"id"`
+	Title               string `json:"title"`
+	Content             string `json:"content"`
+	StartsAt            *int32 `json:"startsAt,omitempty"`
+	EndsAt              *int32 `json:"endsAt,omitempty"`
+	IsActive            *bool  `json:"isActive,omitempty"`
+	IsDismissible       *bool  `json:"isDismissible,omitempty"`
+	ShowForCustomers    *bool  `json:"showForCustomers,omitempty"`
+	ShowOnFrontend      *bool  `json:"showOnFrontend,omitempty"`
+	ShowOnUserDashboard *bool  `json:"showOnUserDashboard,omitempty"`
+}
+
+type UpdateBlogPostInput struct {
+	ID                 string  `json:"id"`
+	Title              string  `json:"title"`
+	Slug               string  `json:"slug"`
+	Body               string  `json:"body"`
+	Description        *string `json:"description,omitempty"`
+	AuthorID           *string `json:"authorId,omitempty"`
+	BlogPostCategoryID *string `json:"blogPostCategoryId,omitempty"`
+	IsPublished        *bool   `json:"isPublished,omitempty"`
+	PublishedAt        *int32  `json:"publishedAt,omitempty"`
+}
+
+type UpdateCategoryInput struct {
+	ID          string  `json:"id"`
+	Name        string  `json:"name"`
+	Slug        string  `json:"slug"`
+	Description *string `json:"description,omitempty"`
+}
+
 type UpdateDiscountInput struct {
 	ID                             string  `json:"id"`
 	Name                           string  `json:"name"`
@@ -546,6 +730,7 @@ type UploadFileInput struct {
 	CollectionName string         `json:"collectionName"`
 	Name           *string        `json:"name,omitempty"`
 	Disk           string         `json:"disk"`
+	IsPublic       *bool          `json:"isPublic,omitempty"`
 }
 
 type User struct {

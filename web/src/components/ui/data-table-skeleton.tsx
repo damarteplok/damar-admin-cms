@@ -22,7 +22,7 @@ interface DataTableSkeletonProps {
 export function DataTableSkeleton({
   showCreateButton = true,
   showSearch = true,
-  rows = 10,
+  rows = 5,
   columns = 5,
 }: DataTableSkeletonProps) {
   return (
@@ -49,7 +49,7 @@ export function DataTableSkeleton({
           <div className="border-b">
             <div className="flex items-center h-12 px-4 gap-4">
               {Array.from({ length: columns }).map((_, i) => (
-                <Skeleton key={`header-${i}`} className="h-4 flex-1" />
+                <Skeleton key={`header-${i}`} className="h-8 flex-1" />
               ))}
             </div>
           </div>
@@ -64,7 +64,7 @@ export function DataTableSkeleton({
                 {Array.from({ length: columns }).map((_, colIndex) => (
                   <Skeleton
                     key={`cell-${rowIndex}-${colIndex}`}
-                    className="h-4 flex-1"
+                    className="h-8 flex-1"
                   />
                 ))}
               </div>

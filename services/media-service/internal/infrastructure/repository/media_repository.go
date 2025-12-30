@@ -17,16 +17,22 @@ import (
 )
 
 type MediaRepository struct {
-	db         *pgxpool.Pool
-	minio      *minio.Client
-	bucketName string
+	db               *pgxpool.Pool
+	minio            *minio.Client
+	bucketName       string
+	publicBucketName string
+	minioEndpoint    string
+	minioUseSSL      bool
 }
 
-func NewMediaRepository(db *pgxpool.Pool, minioClient *minio.Client, bucketName string) domain.MediaRepository {
+func NewMediaRepository(db *pgxpool.Pool, minioClient *minio.Client, bucketName, publicBucketName, minioEndpoint string, useSSL bool) domain.MediaRepository {
 	return &MediaRepository{
-		db:         db,
-		minio:      minioClient,
-		bucketName: bucketName,
+		db:               db,
+		minio:            minioClient,
+		bucketName:       bucketName,
+		publicBucketName: publicBucketName,
+		minioEndpoint:    minioEndpoint,
+		minioUseSSL:      useSSL,
 	}
 }
 
@@ -40,10 +46,16 @@ func (r *MediaRepository) Upload(ctx context.Context, media *domain.Media, conte
 		return nil, fmt.Errorf("failed to read content: %w", err)
 	}
 
+	// Determine which bucket to use
+	targetBucket := r.bucketName
+	if media.IsPublic {
+		targetBucket = r.publicBucketName
+	}
+
 	// Upload to MinIO
 	_, err = r.minio.PutObject(
 		ctx,
-		r.bucketName,
+		targetBucket,
 		objectPath,
 		bytes.NewReader(contentBytes),
 		int64(len(contentBytes)),
@@ -58,6 +70,16 @@ func (r *MediaRepository) Upload(ctx context.Context, media *domain.Media, conte
 	// Store the object path in disk field
 	media.Disk = objectPath
 
+	// If public, generate public URL
+	if media.IsPublic {
+		protocol := "http"
+		if r.minioUseSSL {
+			protocol = "https"
+		}
+		publicURL := fmt.Sprintf("%s://%s/%s/%s", protocol, r.minioEndpoint, targetBucket, objectPath)
+		media.PublicURL = &publicURL
+	}
+
 	// Marshal JSON fields
 	manipulationsJSON, _ := json.Marshal(media.Manipulations)
 	customPropertiesJSON, _ := json.Marshal(media.CustomProperties)
@@ -70,9 +92,9 @@ func (r *MediaRepository) Upload(ctx context.Context, media *domain.Media, conte
 			model_type, model_id, uuid, collection_name, name, file_name, 
 			mime_type, disk, conversions_disk, size, manipulations, 
 			custom_properties, generated_conversions, responsive_images, 
-			order_column, created_at, updated_at
+			order_column, is_public, public_url, created_at, updated_at
 		)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, NOW(), NOW())
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, NOW(), NOW())
 		RETURNING id, created_at, updated_at
 	`
 
@@ -94,6 +116,8 @@ func (r *MediaRepository) Upload(ctx context.Context, media *domain.Media, conte
 		generatedConversionsJSON,
 		responsiveImagesJSON,
 		media.OrderColumn,
+		media.IsPublic,
+		media.PublicURL,
 	).Scan(&media.ID, &media.CreatedAt, &media.UpdatedAt)
 	if err != nil {
 		// Rollback: Delete from MinIO if database insert fails
@@ -101,7 +125,7 @@ func (r *MediaRepository) Upload(ctx context.Context, media *domain.Media, conte
 			zap.String("object_path", objectPath),
 			zap.Error(err))
 
-		removeErr := r.minio.RemoveObject(ctx, r.bucketName, objectPath, minio.RemoveObjectOptions{})
+		removeErr := r.minio.RemoveObject(ctx, targetBucket, objectPath, minio.RemoveObjectOptions{})
 		if removeErr != nil {
 			logger.Error("Failed to rollback MinIO upload",
 				zap.String("object_path", objectPath),
@@ -119,7 +143,7 @@ func (r *MediaRepository) GetByID(ctx context.Context, id int64) (*domain.Media,
 		SELECT id, model_type, model_id, uuid, collection_name, name, file_name,
 		       mime_type, disk, conversions_disk, size, manipulations,
 		       custom_properties, generated_conversions, responsive_images,
-		       order_column, created_at, updated_at
+		       order_column, is_public, public_url, created_at, updated_at
 		FROM media
 		WHERE id = $1
 	`
@@ -144,6 +168,8 @@ func (r *MediaRepository) GetByID(ctx context.Context, id int64) (*domain.Media,
 		&generatedConversionsJSON,
 		&responsiveImagesJSON,
 		&media.OrderColumn,
+		&media.IsPublic,
+		&media.PublicURL,
 		&media.CreatedAt,
 		&media.UpdatedAt,
 	)
@@ -168,7 +194,7 @@ func (r *MediaRepository) GetByUUID(ctx context.Context, uuid string) (*domain.M
 		SELECT id, model_type, model_id, uuid, collection_name, name, file_name,
 		       mime_type, disk, conversions_disk, size, manipulations,
 		       custom_properties, generated_conversions, responsive_images,
-		       order_column, created_at, updated_at
+		       order_column, is_public, public_url, created_at, updated_at
 		FROM media
 		WHERE uuid = $1
 	`
@@ -193,6 +219,8 @@ func (r *MediaRepository) GetByUUID(ctx context.Context, uuid string) (*domain.M
 		&generatedConversionsJSON,
 		&responsiveImagesJSON,
 		&media.OrderColumn,
+		&media.IsPublic,
+		&media.PublicURL,
 		&media.CreatedAt,
 		&media.UpdatedAt,
 	)
@@ -251,7 +279,7 @@ func (r *MediaRepository) GetByModel(ctx context.Context, modelType string, mode
 		SELECT id, model_type, model_id, uuid, collection_name, name, file_name,
 		       mime_type, disk, conversions_disk, size, manipulations,
 		       custom_properties, generated_conversions, responsive_images,
-		       order_column, created_at, updated_at
+		       order_column, is_public, public_url, created_at, updated_at
 		FROM media
 		%s
 		ORDER BY order_column ASC NULLS LAST, created_at DESC
@@ -294,6 +322,8 @@ func (r *MediaRepository) GetByModel(ctx context.Context, modelType string, mode
 			&generatedConversionsJSON,
 			&responsiveImagesJSON,
 			&media.OrderColumn,
+			&media.IsPublic,
+			&media.PublicURL,
 			&media.CreatedAt,
 			&media.UpdatedAt,
 		)
@@ -323,8 +353,14 @@ func (r *MediaRepository) HardDelete(ctx context.Context, id int64) error {
 		return fmt.Errorf("media not found")
 	}
 
+	// Determine which bucket to delete from
+	targetBucket := r.bucketName
+	if media.IsPublic {
+		targetBucket = r.publicBucketName
+	}
+
 	// Delete from MinIO first
-	err = r.minio.RemoveObject(ctx, r.bucketName, media.Disk, minio.RemoveObjectOptions{})
+	err = r.minio.RemoveObject(ctx, targetBucket, media.Disk, minio.RemoveObjectOptions{})
 	if err != nil {
 		return fmt.Errorf("failed to delete from MinIO: %w", err)
 	}

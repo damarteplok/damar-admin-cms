@@ -223,7 +223,32 @@ local_resource(
 )
 
 #############################################
-# 9. Frontend - Route Generator (TanStack Router)
+# 9. Content Service (gRPC - Port 50057)
+#############################################
+
+local_resource(
+    'content-service',
+    serve_cmd='cd services/content-service && go run cmd/main.go',
+    serve_dir='.',
+    env={'GRPC_PORT': '50057'},
+    deps=[
+        'services/content-service/cmd',
+        'services/content-service/internal',
+        'services/content-service/pkg',
+        'shared/proto/content',
+    ],
+    readiness_probe=probe(
+        period_secs=3,
+        tcp_socket=tcp_socket_action(50057)
+    ),
+    labels=['backend'],
+    links=[
+        link('http://localhost:50057', 'gRPC Endpoint'),
+    ],
+)
+
+#############################################
+# 10. Frontend - Route Generator (TanStack Router)
 #############################################
 
 local_resource(
@@ -236,16 +261,19 @@ local_resource(
 )
 
 #############################################
-# 10. Frontend Web (Vite Dev Server - Port 3000)
+# 11. Frontend Web (Vite Dev Server - Port 3000)
 #############################################
 
 local_resource(
     'web-frontend',
-    serve_cmd='cd web && pnpm exec vite dev --port 3000',
+    serve_cmd='cd web && pnpm run dev:tilt',
     serve_dir='.',
     deps=[
         'web/src',
         'web/package.json',
+    ],
+    ignore=[
+        'web/src/routeTree.gen.ts',
     ],
     readiness_probe=probe(
         period_secs=5,
@@ -291,6 +319,7 @@ print("""
    - tenant-service    : gRPC Port 50053
    - product-service   : gRPC Port 50054
    - media-service     : gRPC Port 50056
+   - content-service   : gRPC Port 50057
    - api-gateway       : HTTP Port 8080 (GraphQL Playground)
    - web-frontend      : HTTP Port 3000 (TanStack Start)
 

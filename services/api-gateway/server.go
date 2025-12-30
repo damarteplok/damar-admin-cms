@@ -18,6 +18,7 @@ import (
 	"github.com/damarteplok/damar-admin-cms/shared/env"
 	"github.com/damarteplok/damar-admin-cms/shared/logger"
 	authPb "github.com/damarteplok/damar-admin-cms/shared/proto/auth"
+	contentPb "github.com/damarteplok/damar-admin-cms/shared/proto/content"
 	mediaPb "github.com/damarteplok/damar-admin-cms/shared/proto/media"
 	productPb "github.com/damarteplok/damar-admin-cms/shared/proto/product"
 	tenantPb "github.com/damarteplok/damar-admin-cms/shared/proto/tenant"
@@ -67,6 +68,7 @@ func main() {
 	tenantAddr := env.GetString("TENANT_SERVICE_ADDR", "localhost:50053")
 	productAddr := env.GetString("PRODUCT_SERVICE_ADDR", "localhost:50054")
 	mediaAddr := env.GetString("MEDIA_SERVICE_ADDR", "localhost:50056")
+	contentAddr := env.GetString("CONTENT_SERVICE_ADDR", "localhost:50057")
 
 	authConn, err := grpc.NewClient(authAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
@@ -98,11 +100,18 @@ func main() {
 	}
 	defer mediaConn.Close()
 
+	contentConn, err := grpc.NewClient(contentAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger.Fatal("Failed to connect to content service", zap.Error(err))
+	}
+	defer contentConn.Close()
+
 	authClient := authPb.NewAuthServiceClient(authConn)
 	userClient := userPb.NewUserServiceClient(userConn)
 	tenantClient := tenantPb.NewTenantServiceClient(tenantConn)
 	productClient := productPb.NewProductServiceClient(productConn)
 	mediaClient := mediaPb.NewMediaServiceClient(mediaConn)
+	contentClient := contentPb.NewContentServiceClient(contentConn)
 
 	// Initialize media cache service
 	var mediaCache *cache.MediaCacheService
@@ -119,6 +128,7 @@ func main() {
 		TenantClient:  tenantClient,
 		ProductClient: productClient,
 		MediaClient:   mediaClient,
+		ContentClient: contentClient,
 		MediaCache:    mediaCache,
 	}
 

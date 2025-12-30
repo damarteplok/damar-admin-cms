@@ -95,6 +95,18 @@ func main() {
 		}
 	}()
 
+	go func() {
+		if err := eventConsumer.ConsumeContentPublished(ctx); err != nil {
+			logger.Fatal("Failed to consume content.published events", zap.Error(err))
+		}
+	}()
+
+	go func() {
+		if err := eventConsumer.ConsumeContentDeleted(ctx); err != nil {
+			logger.Fatal("Failed to consume content.deleted events", zap.Error(err))
+		}
+	}()
+
 	logger.Info("Notification service started and consuming events")
 
 	// Graceful shutdown

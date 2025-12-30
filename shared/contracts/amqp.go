@@ -58,4 +58,11 @@ const (
 	// Media events (media.event.*)
 	RoutingKeyMediaEventUploaded = "media.event.uploaded"
 	RoutingKeyMediaEventDeleted  = "media.event.deleted"
+
+	// Content events (content.event.*)
+	ContentEventDraftCreated = "content.event.draft_created"
+	ContentEventPublished    = "content.event.published"
+	ContentEventUnpublished  = "content.event.unpublished"
+	ContentEventDeleted      = "content.event.deleted"
+	ContentEventCommentAdded = "content.event.comment_added"
 )

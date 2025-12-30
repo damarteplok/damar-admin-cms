@@ -5,6 +5,7 @@ package graph
 import (
 	"github.com/damarteplok/damar-admin-cms/services/api-gateway/internal/cache"
 	authPb "github.com/damarteplok/damar-admin-cms/shared/proto/auth"
+	contentPb "github.com/damarteplok/damar-admin-cms/shared/proto/content"
 	mediaPb "github.com/damarteplok/damar-admin-cms/shared/proto/media"
 	productPb "github.com/damarteplok/damar-admin-cms/shared/proto/product"
 	tenantPb "github.com/damarteplok/damar-admin-cms/shared/proto/tenant"
@@ -22,6 +23,7 @@ type Resolver struct {
 	TenantClient  tenantPb.TenantServiceClient
 	ProductClient productPb.ProductServiceClient
 	MediaClient   mediaPb.MediaServiceClient
+	ContentClient contentPb.ContentServiceClient
 	MediaCache    *cache.MediaCacheService
 	MinIOEndpoint string
 	MinIOBucket   string

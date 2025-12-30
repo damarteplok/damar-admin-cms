@@ -303,3 +303,113 @@ func (ec *EventConsumer) ConsumeProductDeleted(ctx context.Context) error {
 		return nil
 	})
 }
+
+// ConsumeContentPublished consumes content.event.published events
+func (ec *EventConsumer) ConsumeContentPublished(ctx context.Context) error {
+	consumer, err := amqp.NewConsumer(
+		ec.conn,
+		"notification.content.published",
+		"damar.events",
+		contracts.ContentEventPublished,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to create consumer: %w", err)
+	}
+
+	logger.Info("Started consuming content.published events")
+
+	return consumer.Consume(func(body []byte) error {
+		var message contracts.AmqpMessage
+		if err := json.Unmarshal(body, &message); err != nil {
+			logger.Error("Failed to unmarshal content.published message", zap.Error(err))
+			return err
+		}
+
+		var eventData map[string]interface{}
+		if err := json.Unmarshal(message.Data, &eventData); err != nil {
+			logger.Error("Failed to unmarshal event data", zap.Error(err))
+			return err
+		}
+
+		postID := message.OwnerID
+		title, _ := eventData["title"].(string)
+		slug, _ := eventData["slug"].(string)
+		bodyStr, _ := eventData["body"].(string)
+
+		// Create excerpt (first 150 chars)
+		excerpt := bodyStr
+		if len(bodyStr) > 150 {
+			excerpt = bodyStr[:150] + "..."
+		}
+
+		logger.Info("Blog post published event received",
+			zap.String("post_id", postID),
+			zap.String("title", title),
+			zap.String("slug", slug))
+
+		// TODO: Get subscribers from database and send to each
+		// For now, send to admin email (from ENV or hardcoded)
+		adminEmail := "admin@example.com" // Replace with actual admin email
+		adminName := "Admin"
+
+		if err := ec.emailService.SendNewBlogPostNotification(adminEmail, adminName, title, slug, excerpt); err != nil {
+			logger.Error("Failed to send blog post notification",
+				zap.String("error", err.Error()),
+				zap.String("post_id", postID))
+			// Don't return error to avoid requeue - log only
+		}
+
+		return nil
+	})
+}
+
+// ConsumeContentDeleted consumes content.event.deleted events
+func (ec *EventConsumer) ConsumeContentDeleted(ctx context.Context) error {
+	consumer, err := amqp.NewConsumer(
+		ec.conn,
+		"notification.content.deleted",
+		"damar.events",
+		contracts.ContentEventDeleted,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to create consumer: %w", err)
+	}
+
+	logger.Info("Started consuming content.deleted events")
+
+	return consumer.Consume(func(body []byte) error {
+		var message contracts.AmqpMessage
+		if err := json.Unmarshal(body, &message); err != nil {
+			logger.Error("Failed to unmarshal content.deleted message", zap.Error(err))
+			return err
+		}
+
+		var eventData map[string]interface{}
+		if err := json.Unmarshal(message.Data, &eventData); err != nil {
+			logger.Error("Failed to unmarshal event data", zap.Error(err))
+			return err
+		}
+
+		postID := message.OwnerID
+		title, _ := eventData["title"].(string)
+		slug, _ := eventData["slug"].(string)
+
+		logger.Info("Blog post deleted event received",
+			zap.String("post_id", postID),
+			zap.String("title", title),
+			zap.String("slug", slug))
+
+		// Send notification to admin about blog post deletion
+		adminEmail := "admin@example.com" // Replace with actual admin email
+		adminName := "Admin"
+
+		if err := ec.emailService.SendBlogPostDeletedNotification(adminEmail, adminName, title); err != nil {
+			logger.Error("Failed to send blog deletion notification",
+				zap.String("error", err.Error()),
+				zap.String("post_id", postID))
+			// Don't return error to avoid requeue - log only
+		}
+
+		return nil
+	})
+}

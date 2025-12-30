@@ -1,0 +1,4 @@
+ALTER TABLE media ADD COLUMN IF NOT EXISTS is_public BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE media ADD COLUMN IF NOT EXISTS public_url TEXT NULL;
+
+CREATE INDEX IF NOT EXISTS media_is_public_index ON media USING btree (is_public);

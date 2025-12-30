@@ -163,3 +163,9 @@ models:
     fields:
       avatar:
         resolver: true
+
+  # Force BlogPost.featuredImage to use resolver
+  BlogPost:
+    fields:
+      featuredImage:
+        resolver: true

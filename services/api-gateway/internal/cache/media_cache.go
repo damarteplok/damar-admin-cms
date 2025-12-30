@@ -131,6 +131,39 @@ func (s *MediaCacheService) GetModelMedia(ctx context.Context, modelType string,
 	return mediaList, nil
 }
 
+// GetMediaByModel retrieves the first media for a model type with caching
+// This is useful for single media relations like featured images
+func (s *MediaCacheService) GetMediaByModel(ctx context.Context, modelType string, modelID string, collectionName string) (*model.Media, error) {
+	logger.Info("GetMediaByModel called",
+		zap.String("model_type", modelType),
+		zap.String("model_id", modelID),
+		zap.String("collection_name", collectionName),
+	)
+
+	mediaList, err := s.GetModelMedia(ctx, modelType, modelID, collectionName)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(mediaList) == 0 {
+		logger.Debug("No media found for model",
+			zap.String("model_type", modelType),
+			zap.String("model_id", modelID),
+			zap.String("collection_name", collectionName),
+		)
+		return nil, nil
+	}
+
+	logger.Debug("Media found for model",
+		zap.String("model_type", modelType),
+		zap.String("model_id", modelID),
+		zap.String("collection_name", collectionName),
+		zap.String("media_id", mediaList[0].ID),
+	)
+
+	return mediaList[0], nil
+}
+
 // InvalidateUserAvatar removes user avatar from cache
 func (s *MediaCacheService) InvalidateUserAvatar(ctx context.Context, userID string) error {
 	if s.redis == nil {
@@ -289,11 +322,16 @@ func pbMediaToModel(m *mediaPb.Media) *model.Media {
 		return nil
 	}
 
-	// Use presigned URL from proto if available, otherwise construct it
+	// Determine URL to use based on public/private status
 	var url string
-	if m.PresignedUrl != "" {
+	if m.IsPublic && m.PublicUrl != "" {
+		// For public media, use the direct public URL (no expiry)
+		url = m.PublicUrl
+	} else if m.PresignedUrl != "" {
+		// For private media, use presigned URL
 		url = m.PresignedUrl
 	} else {
+		// Fallback: construct URL
 		url = util.ConstructMediaURL(m.Uuid, m.FileName)
 	}
 
@@ -327,6 +365,13 @@ func pbMediaToModel(m *mediaPb.Media) *model.Media {
 			if m.OrderColumn != 0 {
 				v := int32(m.OrderColumn)
 				return &v
+			}
+			return nil
+		}(),
+		IsPublic: m.IsPublic,
+		PublicURL: func() *string {
+			if m.PublicUrl != "" {
+				return &m.PublicUrl
 			}
 			return nil
 		}(),

@@ -28,18 +28,32 @@ import { Route as AdminProfileIndexRouteImport } from './routes/admin/profile/in
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
 import { Route as AdminPlansIndexRouteImport } from './routes/admin/plans/index'
 import { Route as AdminDiscountsIndexRouteImport } from './routes/admin/discounts/index'
+import { Route as AdminBlogIndexRouteImport } from './routes/admin/blog/index'
+import { Route as AdminBlogCategoriesIndexRouteImport } from './routes/admin/blog-categories/index'
+import { Route as AdminAnnouncementsIndexRouteImport } from './routes/admin/announcements/index'
+import { Route as LayoutBlogIndexRouteImport } from './routes/_layout/blog/index'
 import { Route as AdminWorkspacesCreateRouteImport } from './routes/admin/workspaces/create'
 import { Route as AdminProductsCreateRouteImport } from './routes/admin/products/create'
 import { Route as AdminPlansCreateRouteImport } from './routes/admin/plans/create'
 import { Route as AdminDiscountsCreateRouteImport } from './routes/admin/discounts/create'
+import { Route as AdminBlogCreateRouteImport } from './routes/admin/blog/create'
+import { Route as AdminBlogCategoriesCreateRouteImport } from './routes/admin/blog-categories/create'
+import { Route as AdminAnnouncementsCreateRouteImport } from './routes/admin/announcements/create'
+import { Route as LayoutBlogSlugRouteImport } from './routes/_layout/blog/$slug'
 import { Route as AdminWorkspacesIdIndexRouteImport } from './routes/admin/workspaces/$id/index'
 import { Route as AdminProductsIdIndexRouteImport } from './routes/admin/products/$id/index'
 import { Route as AdminPlansIdIndexRouteImport } from './routes/admin/plans/$id/index'
 import { Route as AdminDiscountsIdIndexRouteImport } from './routes/admin/discounts/$id/index'
+import { Route as AdminBlogIdIndexRouteImport } from './routes/admin/blog/$id/index'
+import { Route as AdminBlogCategoriesIdIndexRouteImport } from './routes/admin/blog-categories/$id/index'
+import { Route as AdminAnnouncementsIdIndexRouteImport } from './routes/admin/announcements/$id/index'
 import { Route as AdminWorkspacesIdEditRouteImport } from './routes/admin/workspaces/$id/edit'
 import { Route as AdminProductsIdEditRouteImport } from './routes/admin/products/$id/edit'
 import { Route as AdminPlansIdEditRouteImport } from './routes/admin/plans/$id/edit'
 import { Route as AdminDiscountsIdEditRouteImport } from './routes/admin/discounts/$id/edit'
+import { Route as AdminBlogIdEditRouteImport } from './routes/admin/blog/$id/edit'
+import { Route as AdminBlogCategoriesIdEditRouteImport } from './routes/admin/blog-categories/$id/edit'
+import { Route as AdminAnnouncementsIdEditRouteImport } from './routes/admin/announcements/$id/edit'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -135,6 +149,27 @@ const AdminDiscountsIndexRoute = AdminDiscountsIndexRouteImport.update({
   path: '/discounts/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBlogIndexRoute = AdminBlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBlogCategoriesIndexRoute =
+  AdminBlogCategoriesIndexRouteImport.update({
+    id: '/blog-categories/',
+    path: '/blog-categories/',
+    getParentRoute: () => AdminRoute,
+  } as any)
+const AdminAnnouncementsIndexRoute = AdminAnnouncementsIndexRouteImport.update({
+  id: '/announcements/',
+  path: '/announcements/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const LayoutBlogIndexRoute = LayoutBlogIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutBlogRoute,
+} as any)
 const AdminWorkspacesCreateRoute = AdminWorkspacesCreateRouteImport.update({
   id: '/workspaces/create',
   path: '/workspaces/create',
@@ -154,6 +189,28 @@ const AdminDiscountsCreateRoute = AdminDiscountsCreateRouteImport.update({
   id: '/discounts/create',
   path: '/discounts/create',
   getParentRoute: () => AdminRoute,
+} as any)
+const AdminBlogCreateRoute = AdminBlogCreateRouteImport.update({
+  id: '/blog/create',
+  path: '/blog/create',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBlogCategoriesCreateRoute =
+  AdminBlogCategoriesCreateRouteImport.update({
+    id: '/blog-categories/create',
+    path: '/blog-categories/create',
+    getParentRoute: () => AdminRoute,
+  } as any)
+const AdminAnnouncementsCreateRoute =
+  AdminAnnouncementsCreateRouteImport.update({
+    id: '/announcements/create',
+    path: '/announcements/create',
+    getParentRoute: () => AdminRoute,
+  } as any)
+const LayoutBlogSlugRoute = LayoutBlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => LayoutBlogRoute,
 } as any)
 const AdminWorkspacesIdIndexRoute = AdminWorkspacesIdIndexRouteImport.update({
   id: '/workspaces/$id/',
@@ -175,6 +232,23 @@ const AdminDiscountsIdIndexRoute = AdminDiscountsIdIndexRouteImport.update({
   path: '/discounts/$id/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBlogIdIndexRoute = AdminBlogIdIndexRouteImport.update({
+  id: '/blog/$id/',
+  path: '/blog/$id/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBlogCategoriesIdIndexRoute =
+  AdminBlogCategoriesIdIndexRouteImport.update({
+    id: '/blog-categories/$id/',
+    path: '/blog-categories/$id/',
+    getParentRoute: () => AdminRoute,
+  } as any)
+const AdminAnnouncementsIdIndexRoute =
+  AdminAnnouncementsIdIndexRouteImport.update({
+    id: '/announcements/$id/',
+    path: '/announcements/$id/',
+    getParentRoute: () => AdminRoute,
+  } as any)
 const AdminWorkspacesIdEditRoute = AdminWorkspacesIdEditRouteImport.update({
   id: '/workspaces/$id/edit',
   path: '/workspaces/$id/edit',
@@ -195,6 +269,23 @@ const AdminDiscountsIdEditRoute = AdminDiscountsIdEditRouteImport.update({
   path: '/discounts/$id/edit',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBlogIdEditRoute = AdminBlogIdEditRouteImport.update({
+  id: '/blog/$id/edit',
+  path: '/blog/$id/edit',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBlogCategoriesIdEditRoute =
+  AdminBlogCategoriesIdEditRouteImport.update({
+    id: '/blog-categories/$id/edit',
+    path: '/blog-categories/$id/edit',
+    getParentRoute: () => AdminRoute,
+  } as any)
+const AdminAnnouncementsIdEditRoute =
+  AdminAnnouncementsIdEditRouteImport.update({
+    id: '/announcements/$id/edit',
+    path: '/announcements/$id/edit',
+    getParentRoute: () => AdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
@@ -202,27 +293,41 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
-  '/blog': typeof LayoutBlogRoute
+  '/blog': typeof LayoutBlogRouteWithChildren
   '/contact': typeof LayoutContactRoute
   '/features': typeof LayoutFeaturesRoute
   '/pricing': typeof LayoutPricingRoute
   '/workspace': typeof LayoutWorkspaceRoute
   '/': typeof LayoutIndexRoute
   '/admin/': typeof AdminIndexRoute
+  '/blog/$slug': typeof LayoutBlogSlugRoute
+  '/admin/announcements/create': typeof AdminAnnouncementsCreateRoute
+  '/admin/blog-categories/create': typeof AdminBlogCategoriesCreateRoute
+  '/admin/blog/create': typeof AdminBlogCreateRoute
   '/admin/discounts/create': typeof AdminDiscountsCreateRoute
   '/admin/plans/create': typeof AdminPlansCreateRoute
   '/admin/products/create': typeof AdminProductsCreateRoute
   '/admin/workspaces/create': typeof AdminWorkspacesCreateRoute
+  '/blog/': typeof LayoutBlogIndexRoute
+  '/admin/announcements': typeof AdminAnnouncementsIndexRoute
+  '/admin/blog-categories': typeof AdminBlogCategoriesIndexRoute
+  '/admin/blog': typeof AdminBlogIndexRoute
   '/admin/discounts': typeof AdminDiscountsIndexRoute
   '/admin/plans': typeof AdminPlansIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/profile': typeof AdminProfileIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/admin/workspaces': typeof AdminWorkspacesIndexRoute
+  '/admin/announcements/$id/edit': typeof AdminAnnouncementsIdEditRoute
+  '/admin/blog-categories/$id/edit': typeof AdminBlogCategoriesIdEditRoute
+  '/admin/blog/$id/edit': typeof AdminBlogIdEditRoute
   '/admin/discounts/$id/edit': typeof AdminDiscountsIdEditRoute
   '/admin/plans/$id/edit': typeof AdminPlansIdEditRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
   '/admin/workspaces/$id/edit': typeof AdminWorkspacesIdEditRoute
+  '/admin/announcements/$id': typeof AdminAnnouncementsIdIndexRoute
+  '/admin/blog-categories/$id': typeof AdminBlogCategoriesIdIndexRoute
+  '/admin/blog/$id': typeof AdminBlogIdIndexRoute
   '/admin/discounts/$id': typeof AdminDiscountsIdIndexRoute
   '/admin/plans/$id': typeof AdminPlansIdIndexRoute
   '/admin/products/$id': typeof AdminProductsIdIndexRoute
@@ -233,27 +338,40 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
-  '/blog': typeof LayoutBlogRoute
   '/contact': typeof LayoutContactRoute
   '/features': typeof LayoutFeaturesRoute
   '/pricing': typeof LayoutPricingRoute
   '/workspace': typeof LayoutWorkspaceRoute
   '/': typeof LayoutIndexRoute
   '/admin': typeof AdminIndexRoute
+  '/blog/$slug': typeof LayoutBlogSlugRoute
+  '/admin/announcements/create': typeof AdminAnnouncementsCreateRoute
+  '/admin/blog-categories/create': typeof AdminBlogCategoriesCreateRoute
+  '/admin/blog/create': typeof AdminBlogCreateRoute
   '/admin/discounts/create': typeof AdminDiscountsCreateRoute
   '/admin/plans/create': typeof AdminPlansCreateRoute
   '/admin/products/create': typeof AdminProductsCreateRoute
   '/admin/workspaces/create': typeof AdminWorkspacesCreateRoute
+  '/blog': typeof LayoutBlogIndexRoute
+  '/admin/announcements': typeof AdminAnnouncementsIndexRoute
+  '/admin/blog-categories': typeof AdminBlogCategoriesIndexRoute
+  '/admin/blog': typeof AdminBlogIndexRoute
   '/admin/discounts': typeof AdminDiscountsIndexRoute
   '/admin/plans': typeof AdminPlansIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/profile': typeof AdminProfileIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/admin/workspaces': typeof AdminWorkspacesIndexRoute
+  '/admin/announcements/$id/edit': typeof AdminAnnouncementsIdEditRoute
+  '/admin/blog-categories/$id/edit': typeof AdminBlogCategoriesIdEditRoute
+  '/admin/blog/$id/edit': typeof AdminBlogIdEditRoute
   '/admin/discounts/$id/edit': typeof AdminDiscountsIdEditRoute
   '/admin/plans/$id/edit': typeof AdminPlansIdEditRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
   '/admin/workspaces/$id/edit': typeof AdminWorkspacesIdEditRoute
+  '/admin/announcements/$id': typeof AdminAnnouncementsIdIndexRoute
+  '/admin/blog-categories/$id': typeof AdminBlogCategoriesIdIndexRoute
+  '/admin/blog/$id': typeof AdminBlogIdIndexRoute
   '/admin/discounts/$id': typeof AdminDiscountsIdIndexRoute
   '/admin/plans/$id': typeof AdminPlansIdIndexRoute
   '/admin/products/$id': typeof AdminProductsIdIndexRoute
@@ -267,27 +385,41 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
-  '/_layout/blog': typeof LayoutBlogRoute
+  '/_layout/blog': typeof LayoutBlogRouteWithChildren
   '/_layout/contact': typeof LayoutContactRoute
   '/_layout/features': typeof LayoutFeaturesRoute
   '/_layout/pricing': typeof LayoutPricingRoute
   '/_layout/workspace': typeof LayoutWorkspaceRoute
   '/_layout/': typeof LayoutIndexRoute
   '/admin/': typeof AdminIndexRoute
+  '/_layout/blog/$slug': typeof LayoutBlogSlugRoute
+  '/admin/announcements/create': typeof AdminAnnouncementsCreateRoute
+  '/admin/blog-categories/create': typeof AdminBlogCategoriesCreateRoute
+  '/admin/blog/create': typeof AdminBlogCreateRoute
   '/admin/discounts/create': typeof AdminDiscountsCreateRoute
   '/admin/plans/create': typeof AdminPlansCreateRoute
   '/admin/products/create': typeof AdminProductsCreateRoute
   '/admin/workspaces/create': typeof AdminWorkspacesCreateRoute
+  '/_layout/blog/': typeof LayoutBlogIndexRoute
+  '/admin/announcements/': typeof AdminAnnouncementsIndexRoute
+  '/admin/blog-categories/': typeof AdminBlogCategoriesIndexRoute
+  '/admin/blog/': typeof AdminBlogIndexRoute
   '/admin/discounts/': typeof AdminDiscountsIndexRoute
   '/admin/plans/': typeof AdminPlansIndexRoute
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/profile/': typeof AdminProfileIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/admin/workspaces/': typeof AdminWorkspacesIndexRoute
+  '/admin/announcements/$id/edit': typeof AdminAnnouncementsIdEditRoute
+  '/admin/blog-categories/$id/edit': typeof AdminBlogCategoriesIdEditRoute
+  '/admin/blog/$id/edit': typeof AdminBlogIdEditRoute
   '/admin/discounts/$id/edit': typeof AdminDiscountsIdEditRoute
   '/admin/plans/$id/edit': typeof AdminPlansIdEditRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
   '/admin/workspaces/$id/edit': typeof AdminWorkspacesIdEditRoute
+  '/admin/announcements/$id/': typeof AdminAnnouncementsIdIndexRoute
+  '/admin/blog-categories/$id/': typeof AdminBlogCategoriesIdIndexRoute
+  '/admin/blog/$id/': typeof AdminBlogIdIndexRoute
   '/admin/discounts/$id/': typeof AdminDiscountsIdIndexRoute
   '/admin/plans/$id/': typeof AdminPlansIdIndexRoute
   '/admin/products/$id/': typeof AdminProductsIdIndexRoute
@@ -308,20 +440,34 @@ export interface FileRouteTypes {
     | '/workspace'
     | '/'
     | '/admin/'
+    | '/blog/$slug'
+    | '/admin/announcements/create'
+    | '/admin/blog-categories/create'
+    | '/admin/blog/create'
     | '/admin/discounts/create'
     | '/admin/plans/create'
     | '/admin/products/create'
     | '/admin/workspaces/create'
+    | '/blog/'
+    | '/admin/announcements'
+    | '/admin/blog-categories'
+    | '/admin/blog'
     | '/admin/discounts'
     | '/admin/plans'
     | '/admin/products'
     | '/admin/profile'
     | '/admin/users'
     | '/admin/workspaces'
+    | '/admin/announcements/$id/edit'
+    | '/admin/blog-categories/$id/edit'
+    | '/admin/blog/$id/edit'
     | '/admin/discounts/$id/edit'
     | '/admin/plans/$id/edit'
     | '/admin/products/$id/edit'
     | '/admin/workspaces/$id/edit'
+    | '/admin/announcements/$id'
+    | '/admin/blog-categories/$id'
+    | '/admin/blog/$id'
     | '/admin/discounts/$id'
     | '/admin/plans/$id'
     | '/admin/products/$id'
@@ -332,27 +478,40 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/verify-email'
-    | '/blog'
     | '/contact'
     | '/features'
     | '/pricing'
     | '/workspace'
     | '/'
     | '/admin'
+    | '/blog/$slug'
+    | '/admin/announcements/create'
+    | '/admin/blog-categories/create'
+    | '/admin/blog/create'
     | '/admin/discounts/create'
     | '/admin/plans/create'
     | '/admin/products/create'
     | '/admin/workspaces/create'
+    | '/blog'
+    | '/admin/announcements'
+    | '/admin/blog-categories'
+    | '/admin/blog'
     | '/admin/discounts'
     | '/admin/plans'
     | '/admin/products'
     | '/admin/profile'
     | '/admin/users'
     | '/admin/workspaces'
+    | '/admin/announcements/$id/edit'
+    | '/admin/blog-categories/$id/edit'
+    | '/admin/blog/$id/edit'
     | '/admin/discounts/$id/edit'
     | '/admin/plans/$id/edit'
     | '/admin/products/$id/edit'
     | '/admin/workspaces/$id/edit'
+    | '/admin/announcements/$id'
+    | '/admin/blog-categories/$id'
+    | '/admin/blog/$id'
     | '/admin/discounts/$id'
     | '/admin/plans/$id'
     | '/admin/products/$id'
@@ -372,20 +531,34 @@ export interface FileRouteTypes {
     | '/_layout/workspace'
     | '/_layout/'
     | '/admin/'
+    | '/_layout/blog/$slug'
+    | '/admin/announcements/create'
+    | '/admin/blog-categories/create'
+    | '/admin/blog/create'
     | '/admin/discounts/create'
     | '/admin/plans/create'
     | '/admin/products/create'
     | '/admin/workspaces/create'
+    | '/_layout/blog/'
+    | '/admin/announcements/'
+    | '/admin/blog-categories/'
+    | '/admin/blog/'
     | '/admin/discounts/'
     | '/admin/plans/'
     | '/admin/products/'
     | '/admin/profile/'
     | '/admin/users/'
     | '/admin/workspaces/'
+    | '/admin/announcements/$id/edit'
+    | '/admin/blog-categories/$id/edit'
+    | '/admin/blog/$id/edit'
     | '/admin/discounts/$id/edit'
     | '/admin/plans/$id/edit'
     | '/admin/products/$id/edit'
     | '/admin/workspaces/$id/edit'
+    | '/admin/announcements/$id/'
+    | '/admin/blog-categories/$id/'
+    | '/admin/blog/$id/'
     | '/admin/discounts/$id/'
     | '/admin/plans/$id/'
     | '/admin/products/$id/'
@@ -536,6 +709,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDiscountsIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/blog/': {
+      id: '/admin/blog/'
+      path: '/blog'
+      fullPath: '/admin/blog'
+      preLoaderRoute: typeof AdminBlogIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/blog-categories/': {
+      id: '/admin/blog-categories/'
+      path: '/blog-categories'
+      fullPath: '/admin/blog-categories'
+      preLoaderRoute: typeof AdminBlogCategoriesIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/announcements/': {
+      id: '/admin/announcements/'
+      path: '/announcements'
+      fullPath: '/admin/announcements'
+      preLoaderRoute: typeof AdminAnnouncementsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_layout/blog/': {
+      id: '/_layout/blog/'
+      path: '/'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof LayoutBlogIndexRouteImport
+      parentRoute: typeof LayoutBlogRoute
+    }
     '/admin/workspaces/create': {
       id: '/admin/workspaces/create'
       path: '/workspaces/create'
@@ -564,6 +765,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDiscountsCreateRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/blog/create': {
+      id: '/admin/blog/create'
+      path: '/blog/create'
+      fullPath: '/admin/blog/create'
+      preLoaderRoute: typeof AdminBlogCreateRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/blog-categories/create': {
+      id: '/admin/blog-categories/create'
+      path: '/blog-categories/create'
+      fullPath: '/admin/blog-categories/create'
+      preLoaderRoute: typeof AdminBlogCategoriesCreateRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/announcements/create': {
+      id: '/admin/announcements/create'
+      path: '/announcements/create'
+      fullPath: '/admin/announcements/create'
+      preLoaderRoute: typeof AdminAnnouncementsCreateRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_layout/blog/$slug': {
+      id: '/_layout/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof LayoutBlogSlugRouteImport
+      parentRoute: typeof LayoutBlogRoute
+    }
     '/admin/workspaces/$id/': {
       id: '/admin/workspaces/$id/'
       path: '/workspaces/$id'
@@ -590,6 +819,27 @@ declare module '@tanstack/react-router' {
       path: '/discounts/$id'
       fullPath: '/admin/discounts/$id'
       preLoaderRoute: typeof AdminDiscountsIdIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/blog/$id/': {
+      id: '/admin/blog/$id/'
+      path: '/blog/$id'
+      fullPath: '/admin/blog/$id'
+      preLoaderRoute: typeof AdminBlogIdIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/blog-categories/$id/': {
+      id: '/admin/blog-categories/$id/'
+      path: '/blog-categories/$id'
+      fullPath: '/admin/blog-categories/$id'
+      preLoaderRoute: typeof AdminBlogCategoriesIdIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/announcements/$id/': {
+      id: '/admin/announcements/$id/'
+      path: '/announcements/$id'
+      fullPath: '/admin/announcements/$id'
+      preLoaderRoute: typeof AdminAnnouncementsIdIndexRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/workspaces/$id/edit': {
@@ -620,11 +870,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDiscountsIdEditRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/blog/$id/edit': {
+      id: '/admin/blog/$id/edit'
+      path: '/blog/$id/edit'
+      fullPath: '/admin/blog/$id/edit'
+      preLoaderRoute: typeof AdminBlogIdEditRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/blog-categories/$id/edit': {
+      id: '/admin/blog-categories/$id/edit'
+      path: '/blog-categories/$id/edit'
+      fullPath: '/admin/blog-categories/$id/edit'
+      preLoaderRoute: typeof AdminBlogCategoriesIdEditRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/announcements/$id/edit': {
+      id: '/admin/announcements/$id/edit'
+      path: '/announcements/$id/edit'
+      fullPath: '/admin/announcements/$id/edit'
+      preLoaderRoute: typeof AdminAnnouncementsIdEditRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface LayoutBlogRouteChildren {
+  LayoutBlogSlugRoute: typeof LayoutBlogSlugRoute
+  LayoutBlogIndexRoute: typeof LayoutBlogIndexRoute
+}
+
+const LayoutBlogRouteChildren: LayoutBlogRouteChildren = {
+  LayoutBlogSlugRoute: LayoutBlogSlugRoute,
+  LayoutBlogIndexRoute: LayoutBlogIndexRoute,
+}
+
+const LayoutBlogRouteWithChildren = LayoutBlogRoute._addFileChildren(
+  LayoutBlogRouteChildren,
+)
+
 interface LayoutRouteChildren {
-  LayoutBlogRoute: typeof LayoutBlogRoute
+  LayoutBlogRoute: typeof LayoutBlogRouteWithChildren
   LayoutContactRoute: typeof LayoutContactRoute
   LayoutFeaturesRoute: typeof LayoutFeaturesRoute
   LayoutPricingRoute: typeof LayoutPricingRoute
@@ -633,7 +918,7 @@ interface LayoutRouteChildren {
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutBlogRoute: LayoutBlogRoute,
+  LayoutBlogRoute: LayoutBlogRouteWithChildren,
   LayoutContactRoute: LayoutContactRoute,
   LayoutFeaturesRoute: LayoutFeaturesRoute,
   LayoutPricingRoute: LayoutPricingRoute,
@@ -646,20 +931,32 @@ const LayoutRouteWithChildren =
 
 interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminAnnouncementsCreateRoute: typeof AdminAnnouncementsCreateRoute
+  AdminBlogCategoriesCreateRoute: typeof AdminBlogCategoriesCreateRoute
+  AdminBlogCreateRoute: typeof AdminBlogCreateRoute
   AdminDiscountsCreateRoute: typeof AdminDiscountsCreateRoute
   AdminPlansCreateRoute: typeof AdminPlansCreateRoute
   AdminProductsCreateRoute: typeof AdminProductsCreateRoute
   AdminWorkspacesCreateRoute: typeof AdminWorkspacesCreateRoute
+  AdminAnnouncementsIndexRoute: typeof AdminAnnouncementsIndexRoute
+  AdminBlogCategoriesIndexRoute: typeof AdminBlogCategoriesIndexRoute
+  AdminBlogIndexRoute: typeof AdminBlogIndexRoute
   AdminDiscountsIndexRoute: typeof AdminDiscountsIndexRoute
   AdminPlansIndexRoute: typeof AdminPlansIndexRoute
   AdminProductsIndexRoute: typeof AdminProductsIndexRoute
   AdminProfileIndexRoute: typeof AdminProfileIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
   AdminWorkspacesIndexRoute: typeof AdminWorkspacesIndexRoute
+  AdminAnnouncementsIdEditRoute: typeof AdminAnnouncementsIdEditRoute
+  AdminBlogCategoriesIdEditRoute: typeof AdminBlogCategoriesIdEditRoute
+  AdminBlogIdEditRoute: typeof AdminBlogIdEditRoute
   AdminDiscountsIdEditRoute: typeof AdminDiscountsIdEditRoute
   AdminPlansIdEditRoute: typeof AdminPlansIdEditRoute
   AdminProductsIdEditRoute: typeof AdminProductsIdEditRoute
   AdminWorkspacesIdEditRoute: typeof AdminWorkspacesIdEditRoute
+  AdminAnnouncementsIdIndexRoute: typeof AdminAnnouncementsIdIndexRoute
+  AdminBlogCategoriesIdIndexRoute: typeof AdminBlogCategoriesIdIndexRoute
+  AdminBlogIdIndexRoute: typeof AdminBlogIdIndexRoute
   AdminDiscountsIdIndexRoute: typeof AdminDiscountsIdIndexRoute
   AdminPlansIdIndexRoute: typeof AdminPlansIdIndexRoute
   AdminProductsIdIndexRoute: typeof AdminProductsIdIndexRoute
@@ -668,20 +965,32 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
+  AdminAnnouncementsCreateRoute: AdminAnnouncementsCreateRoute,
+  AdminBlogCategoriesCreateRoute: AdminBlogCategoriesCreateRoute,
+  AdminBlogCreateRoute: AdminBlogCreateRoute,
   AdminDiscountsCreateRoute: AdminDiscountsCreateRoute,
   AdminPlansCreateRoute: AdminPlansCreateRoute,
   AdminProductsCreateRoute: AdminProductsCreateRoute,
   AdminWorkspacesCreateRoute: AdminWorkspacesCreateRoute,
+  AdminAnnouncementsIndexRoute: AdminAnnouncementsIndexRoute,
+  AdminBlogCategoriesIndexRoute: AdminBlogCategoriesIndexRoute,
+  AdminBlogIndexRoute: AdminBlogIndexRoute,
   AdminDiscountsIndexRoute: AdminDiscountsIndexRoute,
   AdminPlansIndexRoute: AdminPlansIndexRoute,
   AdminProductsIndexRoute: AdminProductsIndexRoute,
   AdminProfileIndexRoute: AdminProfileIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
   AdminWorkspacesIndexRoute: AdminWorkspacesIndexRoute,
+  AdminAnnouncementsIdEditRoute: AdminAnnouncementsIdEditRoute,
+  AdminBlogCategoriesIdEditRoute: AdminBlogCategoriesIdEditRoute,
+  AdminBlogIdEditRoute: AdminBlogIdEditRoute,
   AdminDiscountsIdEditRoute: AdminDiscountsIdEditRoute,
   AdminPlansIdEditRoute: AdminPlansIdEditRoute,
   AdminProductsIdEditRoute: AdminProductsIdEditRoute,
   AdminWorkspacesIdEditRoute: AdminWorkspacesIdEditRoute,
+  AdminAnnouncementsIdIndexRoute: AdminAnnouncementsIdIndexRoute,
+  AdminBlogCategoriesIdIndexRoute: AdminBlogCategoriesIdIndexRoute,
+  AdminBlogIdIndexRoute: AdminBlogIdIndexRoute,
   AdminDiscountsIdIndexRoute: AdminDiscountsIdIndexRoute,
   AdminPlansIdIndexRoute: AdminPlansIdIndexRoute,
   AdminProductsIdIndexRoute: AdminProductsIdIndexRoute,

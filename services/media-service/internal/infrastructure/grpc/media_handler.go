@@ -49,6 +49,7 @@ func (s *MediaGRPCServer) UploadFile(ctx context.Context, req *pb.UploadFileRequ
 		CollectionName: req.CollectionName,
 		Name:           req.Name,
 		Disk:           req.Disk,
+		IsPublic:       req.IsPublic,
 	}
 
 	// Upload file
@@ -329,6 +330,11 @@ func domainMediaToPb(media *domain.Media) *pb.Media {
 		updatedAt = media.UpdatedAt.Unix()
 	}
 
+	publicURL := ""
+	if media.PublicURL != nil {
+		publicURL = *media.PublicURL
+	}
+
 	return &pb.Media{
 		Id:                   media.ID,
 		ModelType:            media.ModelType,
@@ -346,6 +352,8 @@ func domainMediaToPb(media *domain.Media) *pb.Media {
 		GeneratedConversions: string(generatedConversions),
 		ResponsiveImages:     string(responsiveImages),
 		OrderColumn:          orderColumn,
+		IsPublic:             media.IsPublic,
+		PublicUrl:            publicURL,
 		CreatedAt:            createdAt,
 		UpdatedAt:            updatedAt,
 		PresignedUrl:         "",

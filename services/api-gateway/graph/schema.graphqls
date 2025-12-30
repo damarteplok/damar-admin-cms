@@ -107,6 +107,8 @@ type Media {
   generatedConversions: String!
   responsiveImages: String!
   orderColumn: Int
+  isPublic: Boolean!
+  publicUrl: String
   url: String
   createdAt: Int!
   updatedAt: Int!
@@ -145,6 +147,135 @@ type MediaURLResponse {
   success: Boolean!
   message: String!
   data: MediaURLData
+}
+
+# Blog Post type
+type BlogPost {
+  id: ID!
+  title: String!
+  slug: String!
+  body: String!
+  isPublished: Boolean!
+  publishedAt: Int
+  userId: ID!
+  authorId: ID
+  blogPostCategoryId: ID
+  description: String
+  createdAt: Int!
+  updatedAt: Int!
+  author: User
+  category: Category
+  featuredImage: Media
+}
+
+# Category type
+type Category {
+  id: ID!
+  name: String!
+  slug: String!
+  description: String
+  createdAt: Int!
+  updatedAt: Int!
+}
+
+# Blog Post list response
+type BlogPostList {
+  blogPosts: [BlogPost!]!
+  total: Int!
+  page: Int!
+  perPage: Int!
+}
+
+# Category list response
+type CategoryList {
+  categories: [Category!]!
+  total: Int!
+  page: Int!
+  perPage: Int!
+}
+
+# Blog Post response wrappers
+type BlogPostResponse {
+  success: Boolean!
+  message: String!
+  data: BlogPost
+}
+
+type BlogPostListResponse {
+  success: Boolean!
+  message: String!
+  data: BlogPostList
+}
+
+type DeleteBlogPostResponse {
+  success: Boolean!
+  message: String!
+}
+
+# Category response wrappers
+type CategoryResponse {
+  success: Boolean!
+  message: String!
+  data: Category
+}
+
+type CategoryListResponse {
+  success: Boolean!
+  message: String!
+  data: CategoryList
+}
+
+type DeleteCategoryResponse {
+  success: Boolean!
+  message: String!
+}
+
+# Announcement type
+type Announcement {
+  id: ID!
+  title: String!
+  content: String!
+  startsAt: Int
+  endsAt: Int
+  isActive: Boolean!
+  isDismissible: Boolean!
+  showForCustomers: Boolean!
+  showOnFrontend: Boolean!
+  showOnUserDashboard: Boolean!
+  createdAt: Int!
+  updatedAt: Int!
+}
+
+# Announcement list response
+type AnnouncementList {
+  announcements: [Announcement!]!
+  total: Int!
+  page: Int!
+  perPage: Int!
+}
+
+# Announcement response wrappers
+type AnnouncementResponse {
+  success: Boolean!
+  message: String!
+  data: Announcement
+}
+
+type AnnouncementListResponse {
+  success: Boolean!
+  message: String!
+  data: AnnouncementList
+}
+
+type DeleteAnnouncementResponse {
+  success: Boolean!
+  message: String!
+}
+
+type ActiveAnnouncementsResponse {
+  success: Boolean!
+  message: String!
+  data: [Announcement!]
 }
 
 # Auth types
@@ -504,6 +635,7 @@ input UploadFileInput {
   collectionName: String!
   name: String
   disk: String!
+  isPublic: Boolean
 }
 
 input GetFilesByModelInput {
@@ -594,6 +726,71 @@ input UpdateDiscountInput {
   isEnabledForAllOneTimeProducts: Boolean
 }
 
+# Blog Post inputs
+input CreateBlogPostInput {
+  title: String!
+  slug: String
+  body: String!
+  description: String
+  userId: ID!
+  authorId: ID
+  blogPostCategoryId: ID
+  isPublished: Boolean
+  publishedAt: Int
+}
+
+input UpdateBlogPostInput {
+  id: ID!
+  title: String!
+  slug: String!
+  body: String!
+  description: String
+  authorId: ID
+  blogPostCategoryId: ID
+  isPublished: Boolean
+  publishedAt: Int
+}
+
+# Category inputs
+input CreateCategoryInput {
+  name: String!
+  slug: String
+  description: String
+}
+
+input UpdateCategoryInput {
+  id: ID!
+  name: String!
+  slug: String!
+  description: String
+}
+
+# Announcement inputs
+input CreateAnnouncementInput {
+  title: String!
+  content: String!
+  startsAt: Int
+  endsAt: Int
+  isActive: Boolean
+  isDismissible: Boolean
+  showForCustomers: Boolean
+  showOnFrontend: Boolean
+  showOnUserDashboard: Boolean
+}
+
+input UpdateAnnouncementInput {
+  id: ID!
+  title: String!
+  content: String!
+  startsAt: Int
+  endsAt: Int
+  isActive: Boolean
+  isDismissible: Boolean
+  showForCustomers: Boolean
+  showOnFrontend: Boolean
+  showOnUserDashboard: Boolean
+}
+
 # Queries
 type Query {
   # Get user by ID
@@ -670,6 +867,51 @@ type Query {
     sortBy: String
     sortOrder: String
   ): DiscountListResponse!
+
+  # Blog Post queries
+  blogPost(id: ID!): BlogPostResponse!
+  blogPostBySlug(slug: String!): BlogPostResponse!
+  blogPosts(
+    page: Int
+    perPage: Int
+    search: String
+    publishedOnly: Boolean
+    categoryId: ID
+    sortBy: String
+    sortOrder: String
+  ): BlogPostListResponse!
+  searchBlogPosts(
+    query: String!
+    page: Int
+    perPage: Int
+    publishedOnly: Boolean
+  ): BlogPostListResponse!
+
+  # Category queries
+  category(id: ID!): CategoryResponse!
+  categoryBySlug(slug: String!): CategoryResponse!
+  categories(
+    page: Int
+    perPage: Int
+    search: String
+    sortBy: String
+    sortOrder: String
+  ): CategoryListResponse!
+
+  # Announcement queries
+  announcement(id: ID!): AnnouncementResponse!
+  announcements(
+    page: Int
+    perPage: Int
+    search: String
+    sortBy: String
+    sortOrder: String
+  ): AnnouncementListResponse!
+  activeAnnouncements(
+    forCustomers: Boolean
+    forFrontend: Boolean
+    forUserDashboard: Boolean
+  ): ActiveAnnouncementsResponse!
 }
 
 # Mutations
@@ -724,4 +966,21 @@ type Mutation {
   # Media mutations
   uploadFile(input: UploadFileInput!): MediaResponse!
   deleteMedia(id: ID!): DeleteMediaResponse!
+
+  # Blog Post mutations
+  createBlogPost(input: CreateBlogPostInput!): BlogPostResponse!
+  updateBlogPost(input: UpdateBlogPostInput!): BlogPostResponse!
+  publishBlogPost(id: ID!): BlogPostResponse!
+  unpublishBlogPost(id: ID!): BlogPostResponse!
+  deleteBlogPost(id: ID!): DeleteBlogPostResponse!
+
+  # Category mutations
+  createCategory(input: CreateCategoryInput!): CategoryResponse!
+  updateCategory(input: UpdateCategoryInput!): CategoryResponse!
+  deleteCategory(id: ID!): DeleteCategoryResponse!
+
+  # Announcement mutations
+  createAnnouncement(input: CreateAnnouncementInput!): AnnouncementResponse!
+  updateAnnouncement(input: UpdateAnnouncementInput!): AnnouncementResponse!
+  deleteAnnouncement(id: ID!): DeleteAnnouncementResponse!
 }

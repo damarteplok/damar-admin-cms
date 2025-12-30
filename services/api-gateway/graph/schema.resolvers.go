@@ -16,13 +16,73 @@ import (
 	"github.com/damarteplok/damar-admin-cms/services/api-gateway/internal/middleware"
 	"github.com/damarteplok/damar-admin-cms/shared/logger"
 	authPb "github.com/damarteplok/damar-admin-cms/shared/proto/auth"
+	contentPb "github.com/damarteplok/damar-admin-cms/shared/proto/content"
 	mediaPb "github.com/damarteplok/damar-admin-cms/shared/proto/media"
 	productPb "github.com/damarteplok/damar-admin-cms/shared/proto/product"
 	tenantPb "github.com/damarteplok/damar-admin-cms/shared/proto/tenant"
 	userPb "github.com/damarteplok/damar-admin-cms/shared/proto/user"
 	"github.com/damarteplok/damar-admin-cms/shared/util"
 	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
+
+// FeaturedImage is the resolver for the featuredImage field.
+func (r *blogPostResolver) FeaturedImage(ctx context.Context, obj *model.BlogPost) (*model.Media, error) {
+	logger.Info("🖼️ ========== FEATURED IMAGE RESOLVER CALLED ==========",
+		zap.String("blog_post_id", obj.ID),
+		zap.String("blog_post_title", obj.Title),
+	)
+
+	if r.MediaCache == nil {
+		logger.Warn("⚠️ MediaCache is nil, cannot fetch featured image")
+		return nil, nil
+	}
+
+	// Try with "BlogPost" first (new format)
+	logger.Info("🔍 Searching for featured image with parameters:",
+		zap.String("modelType", "BlogPost"),
+		zap.String("modelId", obj.ID),
+		zap.String("collectionName", "featured_image"),
+	)
+
+	featuredImage, err := r.MediaCache.GetMediaByModel(ctx, "BlogPost", obj.ID, "featured_image")
+	if err != nil {
+		logger.Error("❌ Failed to get featured image for blog post",
+			zap.Error(err),
+			zap.String("blog_post_id", obj.ID),
+		)
+		return nil, err
+	}
+
+	// If not found, try with "blog_post" (legacy format for backward compatibility)
+	if featuredImage == nil {
+		logger.Info("🔍 Trying legacy format: blog_post",
+			zap.String("modelId", obj.ID),
+		)
+		featuredImage, err = r.MediaCache.GetMediaByModel(ctx, "blog_post", obj.ID, "featured_image")
+		if err != nil {
+			logger.Error("❌ Failed to get featured image with legacy format",
+				zap.Error(err),
+			)
+			return nil, err
+		}
+	}
+
+	if featuredImage == nil {
+		logger.Info("⚠️ No featured image found for blog post",
+			zap.String("blog_post_id", obj.ID),
+			zap.String("tried_formats", "BlogPost, blog_post"),
+		)
+	} else {
+		logger.Info("✅ Featured image resolved successfully",
+			zap.String("blog_post_id", obj.ID),
+			zap.String("media_id", featuredImage.ID),
+		)
+	}
+
+	return featuredImage, nil
+}
 
 // Login is the resolver for the login field.
 func (r *mutationResolver) Login(ctx context.Context, input model.LoginInput) (*model.LoginResponse, error) {
@@ -2026,6 +2086,12 @@ func (r *mutationResolver) UploadFile(ctx context.Context, input model.UploadFil
 		name = *input.Name
 	}
 
+	// Handle optional isPublic field
+	isPublic := false
+	if input.IsPublic != nil {
+		isPublic = *input.IsPublic
+	}
+
 	// Delete existing media with same model_type, model_id, and collection_name
 	// This ensures only one avatar exists per user
 	existingMediaResp, err := r.Resolver.MediaClient.GetFilesByModel(ctx, &mediaPb.GetFilesByModelRequest{
@@ -2055,6 +2121,7 @@ func (r *mutationResolver) UploadFile(ctx context.Context, input model.UploadFil
 		CollectionName: input.CollectionName,
 		Name:           name,
 		Disk:           input.Disk,
+		IsPublic:       isPublic,
 	})
 	if err != nil {
 		return &model.MediaResponse{
@@ -2111,6 +2178,753 @@ func (r *mutationResolver) DeleteMedia(ctx context.Context, id string) (*model.D
 	return &model.DeleteMediaResponse{
 		Success: resp.Success,
 		Message: resp.Message,
+	}, nil
+}
+
+// CreateBlogPost is the resolver for the createBlogPost field.
+func (r *mutationResolver) CreateBlogPost(ctx context.Context, input model.CreateBlogPostInput) (*model.BlogPostResponse, error) {
+	// Check if user is admin
+	user, err := middleware.GetUserFromContext(ctx)
+	if err != nil || user == nil {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Unauthorized: authentication required",
+		}, nil
+	}
+
+	if !user.IsAdmin {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Forbidden: admin access required",
+		}, nil
+	}
+
+	userID, err := strconv.ParseInt(input.UserID, 10, 64)
+	if err != nil {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Invalid user ID",
+		}, nil
+	}
+
+	req := &contentPb.CreateBlogPostRequest{
+		Title:  input.Title,
+		Body:   input.Body,
+		UserId: userID,
+	}
+
+	if input.Slug != nil {
+		req.Slug = *input.Slug
+	}
+
+	if input.Description != nil {
+		req.Description = *input.Description
+	}
+
+	if input.AuthorID != nil {
+		authorID, err := strconv.ParseInt(*input.AuthorID, 10, 64)
+		if err != nil {
+			return &model.BlogPostResponse{
+				Success: false,
+				Message: "Invalid author ID",
+			}, nil
+		}
+		req.AuthorId = authorID
+	}
+
+	if input.BlogPostCategoryID != nil {
+		categoryID, err := strconv.ParseInt(*input.BlogPostCategoryID, 10, 64)
+		if err != nil {
+			return &model.BlogPostResponse{
+				Success: false,
+				Message: "Invalid category ID",
+			}, nil
+		}
+		req.BlogPostCategoryId = categoryID
+	}
+
+	if input.IsPublished != nil {
+		req.IsPublished = *input.IsPublished
+	}
+
+	if input.PublishedAt != nil {
+		req.PublishedAt = int64(*input.PublishedAt)
+	}
+
+	resp, err := r.ContentClient.CreateBlogPost(ctx, req)
+	if err != nil {
+		logger.Error("Failed to create blog post", zap.Error(err))
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to create blog post: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	blogPost := convertPbBlogPostToModel(resp.Data)
+
+	return &model.BlogPostResponse{
+		Success: true,
+		Message: "Blog post created successfully",
+		Data:    blogPost,
+	}, nil
+}
+
+// UpdateBlogPost is the resolver for the updateBlogPost field.
+func (r *mutationResolver) UpdateBlogPost(ctx context.Context, input model.UpdateBlogPostInput) (*model.BlogPostResponse, error) {
+	// Check if user is admin
+	user, err := middleware.GetUserFromContext(ctx)
+	if err != nil || user == nil {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Unauthorized: authentication required",
+		}, nil
+	}
+
+	if !user.IsAdmin {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Forbidden: admin access required",
+		}, nil
+	}
+
+	id, err := strconv.ParseInt(input.ID, 10, 64)
+	if err != nil {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Invalid blog post ID",
+		}, nil
+	}
+
+	req := &contentPb.UpdateBlogPostRequest{
+		Id:    id,
+		Title: input.Title,
+		Slug:  input.Slug,
+		Body:  input.Body,
+	}
+
+	if input.Description != nil {
+		req.Description = *input.Description
+	}
+
+	if input.AuthorID != nil {
+		authorID, err := strconv.ParseInt(*input.AuthorID, 10, 64)
+		if err != nil {
+			return &model.BlogPostResponse{
+				Success: false,
+				Message: "Invalid author ID",
+			}, nil
+		}
+		req.AuthorId = authorID
+	}
+
+	if input.BlogPostCategoryID != nil {
+		categoryID, err := strconv.ParseInt(*input.BlogPostCategoryID, 10, 64)
+		if err != nil {
+			return &model.BlogPostResponse{
+				Success: false,
+				Message: "Invalid category ID",
+			}, nil
+		}
+		req.BlogPostCategoryId = categoryID
+	}
+
+	if input.IsPublished != nil {
+		req.IsPublished = *input.IsPublished
+	}
+
+	if input.PublishedAt != nil {
+		req.PublishedAt = int64(*input.PublishedAt)
+	}
+
+	resp, err := r.ContentClient.UpdateBlogPost(ctx, req)
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.BlogPostResponse{
+				Success: false,
+				Message: "Blog post not found",
+			}, nil
+		}
+		logger.Error("Failed to update blog post", zap.Error(err))
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to update blog post: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	blogPost := convertPbBlogPostToModel(resp.Data)
+
+	return &model.BlogPostResponse{
+		Success: true,
+		Message: "Blog post updated successfully",
+		Data:    blogPost,
+	}, nil
+}
+
+// PublishBlogPost is the resolver for the publishBlogPost field.
+func (r *mutationResolver) PublishBlogPost(ctx context.Context, id string) (*model.BlogPostResponse, error) {
+	// Check if user is admin
+	user, err := middleware.GetUserFromContext(ctx)
+	if err != nil || user == nil {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Unauthorized: authentication required",
+		}, nil
+	}
+
+	if !user.IsAdmin {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Forbidden: admin access required",
+		}, nil
+	}
+
+	blogID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Invalid blog post ID",
+		}, nil
+	}
+
+	resp, err := r.ContentClient.PublishBlogPost(ctx, &contentPb.PublishBlogPostRequest{
+		Id: blogID,
+	})
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.BlogPostResponse{
+				Success: false,
+				Message: "Blog post not found",
+			}, nil
+		}
+		logger.Error("Failed to publish blog post", zap.Error(err))
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to publish blog post: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	blogPost := convertPbBlogPostToModel(resp.Data)
+
+	return &model.BlogPostResponse{
+		Success: true,
+		Message: "Blog post published successfully",
+		Data:    blogPost,
+	}, nil
+}
+
+// UnpublishBlogPost is the resolver for the unpublishBlogPost field.
+func (r *mutationResolver) UnpublishBlogPost(ctx context.Context, id string) (*model.BlogPostResponse, error) {
+	// Check if user is admin
+	user, err := middleware.GetUserFromContext(ctx)
+	if err != nil || user == nil {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Unauthorized: authentication required",
+		}, nil
+	}
+
+	if !user.IsAdmin {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Forbidden: admin access required",
+		}, nil
+	}
+
+	blogID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Invalid blog post ID",
+		}, nil
+	}
+
+	resp, err := r.ContentClient.UnpublishBlogPost(ctx, &contentPb.UnpublishBlogPostRequest{
+		Id: blogID,
+	})
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.BlogPostResponse{
+				Success: false,
+				Message: "Blog post not found",
+			}, nil
+		}
+		logger.Error("Failed to unpublish blog post", zap.Error(err))
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to unpublish blog post: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	blogPost := convertPbBlogPostToModel(resp.Data)
+
+	return &model.BlogPostResponse{
+		Success: true,
+		Message: "Blog post unpublished successfully",
+		Data:    blogPost,
+	}, nil
+}
+
+// DeleteBlogPost is the resolver for the deleteBlogPost field.
+func (r *mutationResolver) DeleteBlogPost(ctx context.Context, id string) (*model.DeleteBlogPostResponse, error) {
+	// Check if user is admin
+	user, err := middleware.GetUserFromContext(ctx)
+	if err != nil || user == nil {
+		return &model.DeleteBlogPostResponse{
+			Success: false,
+			Message: "Unauthorized: authentication required",
+		}, nil
+	}
+
+	if !user.IsAdmin {
+		return &model.DeleteBlogPostResponse{
+			Success: false,
+			Message: "Forbidden: admin access required",
+		}, nil
+	}
+
+	blogID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.DeleteBlogPostResponse{
+			Success: false,
+			Message: "Invalid blog post ID",
+		}, nil
+	}
+
+	// First, cleanup associated media files
+	mediaResp, err := r.MediaClient.GetFilesByModel(ctx, &mediaPb.GetFilesByModelRequest{
+		ModelType: "blog_post",
+		ModelId:   blogID,
+	})
+	if err == nil && mediaResp.Success && mediaResp.Data != nil && len(mediaResp.Data.Media) > 0 {
+		// Delete all associated media files
+		for _, media := range mediaResp.Data.Media {
+			_, _ = r.MediaClient.DeleteFile(ctx, &mediaPb.DeleteFileRequest{
+				Id: media.Id,
+			})
+		}
+	}
+
+	// Then delete the blog post
+	resp, err := r.ContentClient.DeleteBlogPost(ctx, &contentPb.DeleteBlogPostRequest{
+		Id: blogID,
+	})
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.DeleteBlogPostResponse{
+				Success: false,
+				Message: "Blog post not found",
+			}, nil
+		}
+		logger.Error("Failed to delete blog post", zap.Error(err))
+		return &model.DeleteBlogPostResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to delete blog post: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.DeleteBlogPostResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.DeleteBlogPostResponse{
+		Success: true,
+		Message: "Blog post deleted successfully",
+	}, nil
+}
+
+// CreateCategory is the resolver for the createCategory field.
+func (r *mutationResolver) CreateCategory(ctx context.Context, input model.CreateCategoryInput) (*model.CategoryResponse, error) {
+	// Check if user is admin
+	user, err := middleware.GetUserFromContext(ctx)
+	if err != nil || user == nil {
+		return &model.CategoryResponse{
+			Success: false,
+			Message: "Unauthorized: authentication required",
+		}, nil
+	}
+
+	if !user.IsAdmin {
+		return &model.CategoryResponse{
+			Success: false,
+			Message: "Forbidden: admin access required",
+		}, nil
+	}
+
+	req := &contentPb.CreateCategoryRequest{
+		Name: input.Name,
+	}
+
+	if input.Slug != nil {
+		req.Slug = *input.Slug
+	}
+
+	if input.Description != nil {
+		req.Description = *input.Description
+	}
+
+	resp, err := r.ContentClient.CreateCategory(ctx, req)
+	if err != nil {
+		logger.Error("Failed to create category", zap.Error(err))
+		return &model.CategoryResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to create category: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.CategoryResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	category := convertPbCategoryToModel(resp.Data)
+
+	return &model.CategoryResponse{
+		Success: true,
+		Message: "Category created successfully",
+		Data:    category,
+	}, nil
+}
+
+// UpdateCategory is the resolver for the updateCategory field.
+func (r *mutationResolver) UpdateCategory(ctx context.Context, input model.UpdateCategoryInput) (*model.CategoryResponse, error) {
+	// Check if user is admin
+	user, err := middleware.GetUserFromContext(ctx)
+	if err != nil || user == nil {
+		return &model.CategoryResponse{
+			Success: false,
+			Message: "Unauthorized: authentication required",
+		}, nil
+	}
+
+	if !user.IsAdmin {
+		return &model.CategoryResponse{
+			Success: false,
+			Message: "Forbidden: admin access required",
+		}, nil
+	}
+
+	id, err := strconv.ParseInt(input.ID, 10, 64)
+	if err != nil {
+		return &model.CategoryResponse{
+			Success: false,
+			Message: "Invalid category ID",
+		}, nil
+	}
+
+	req := &contentPb.UpdateCategoryRequest{
+		Id:   id,
+		Name: input.Name,
+		Slug: input.Slug,
+	}
+
+	if input.Description != nil {
+		req.Description = *input.Description
+	}
+
+	resp, err := r.ContentClient.UpdateCategory(ctx, req)
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.CategoryResponse{
+				Success: false,
+				Message: "Category not found",
+			}, nil
+		}
+		logger.Error("Failed to update category", zap.Error(err))
+		return &model.CategoryResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to update category: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.CategoryResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	category := convertPbCategoryToModel(resp.Data)
+
+	return &model.CategoryResponse{
+		Success: true,
+		Message: "Category updated successfully",
+		Data:    category,
+	}, nil
+}
+
+// DeleteCategory is the resolver for the deleteCategory field.
+func (r *mutationResolver) DeleteCategory(ctx context.Context, id string) (*model.DeleteCategoryResponse, error) {
+	// Check if user is admin
+	user, err := middleware.GetUserFromContext(ctx)
+	if err != nil || user == nil {
+		return &model.DeleteCategoryResponse{
+			Success: false,
+			Message: "Unauthorized: authentication required",
+		}, nil
+	}
+
+	if !user.IsAdmin {
+		return &model.DeleteCategoryResponse{
+			Success: false,
+			Message: "Forbidden: admin access required",
+		}, nil
+	}
+
+	categoryID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.DeleteCategoryResponse{
+			Success: false,
+			Message: "Invalid category ID",
+		}, nil
+	}
+
+	resp, err := r.ContentClient.DeleteCategory(ctx, &contentPb.DeleteCategoryRequest{
+		Id: categoryID,
+	})
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.DeleteCategoryResponse{
+				Success: false,
+				Message: "Category not found",
+			}, nil
+		}
+		logger.Error("Failed to delete category", zap.Error(err))
+		return &model.DeleteCategoryResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to delete category: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.DeleteCategoryResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.DeleteCategoryResponse{
+		Success: true,
+		Message: "Category deleted successfully",
+	}, nil
+}
+
+// CreateAnnouncement is the resolver for the createAnnouncement field.
+func (r *mutationResolver) CreateAnnouncement(ctx context.Context, input model.CreateAnnouncementInput) (*model.AnnouncementResponse, error) {
+	// Check if user is admin
+	user, err := middleware.GetUserFromContext(ctx)
+	if err != nil || user == nil {
+		return &model.AnnouncementResponse{
+			Success: false,
+			Message: "Unauthorized: authentication required",
+		}, nil
+	}
+
+	if !user.IsAdmin {
+		return &model.AnnouncementResponse{
+			Success: false,
+			Message: "Forbidden: admin access required",
+		}, nil
+	}
+
+	req := &contentPb.CreateAnnouncementRequest{
+		Title:               input.Title,
+		Content:             input.Content,
+		IsActive:            input.IsActive != nil && *input.IsActive,
+		IsDismissible:       input.IsDismissible != nil && *input.IsDismissible,
+		ShowForCustomers:    input.ShowForCustomers != nil && *input.ShowForCustomers,
+		ShowOnFrontend:      input.ShowOnFrontend != nil && *input.ShowOnFrontend,
+		ShowOnUserDashboard: input.ShowOnUserDashboard != nil && *input.ShowOnUserDashboard,
+	}
+
+	if input.StartsAt != nil {
+		req.StartsAt = int64(*input.StartsAt)
+	}
+	if input.EndsAt != nil {
+		req.EndsAt = int64(*input.EndsAt)
+	}
+
+	resp, err := r.ContentClient.CreateAnnouncement(ctx, req)
+	if err != nil {
+		logger.Error("Failed to create announcement", zap.Error(err))
+		return &model.AnnouncementResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to create announcement: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.AnnouncementResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.AnnouncementResponse{
+		Success: true,
+		Message: "Announcement created successfully",
+		Data:    pbAnnouncementToModel(resp.Data),
+	}, nil
+}
+
+// UpdateAnnouncement is the resolver for the updateAnnouncement field.
+func (r *mutationResolver) UpdateAnnouncement(ctx context.Context, input model.UpdateAnnouncementInput) (*model.AnnouncementResponse, error) {
+	// Check if user is admin
+	user, err := middleware.GetUserFromContext(ctx)
+	if err != nil || user == nil {
+		return &model.AnnouncementResponse{
+			Success: false,
+			Message: "Unauthorized: authentication required",
+		}, nil
+	}
+
+	if !user.IsAdmin {
+		return &model.AnnouncementResponse{
+			Success: false,
+			Message: "Forbidden: admin access required",
+		}, nil
+	}
+
+	announcementID, err := strconv.ParseInt(input.ID, 10, 64)
+	if err != nil {
+		return &model.AnnouncementResponse{
+			Success: false,
+			Message: "Invalid announcement ID",
+		}, nil
+	}
+
+	req := &contentPb.UpdateAnnouncementRequest{
+		Id:                  announcementID,
+		Title:               input.Title,
+		Content:             input.Content,
+		IsActive:            input.IsActive != nil && *input.IsActive,
+		IsDismissible:       input.IsDismissible != nil && *input.IsDismissible,
+		ShowForCustomers:    input.ShowForCustomers != nil && *input.ShowForCustomers,
+		ShowOnFrontend:      input.ShowOnFrontend != nil && *input.ShowOnFrontend,
+		ShowOnUserDashboard: input.ShowOnUserDashboard != nil && *input.ShowOnUserDashboard,
+	}
+
+	if input.StartsAt != nil {
+		req.StartsAt = int64(*input.StartsAt)
+	}
+	if input.EndsAt != nil {
+		req.EndsAt = int64(*input.EndsAt)
+	}
+
+	resp, err := r.ContentClient.UpdateAnnouncement(ctx, req)
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.AnnouncementResponse{
+				Success: false,
+				Message: "Announcement not found",
+			}, nil
+		}
+		logger.Error("Failed to update announcement", zap.Error(err))
+		return &model.AnnouncementResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to update announcement: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.AnnouncementResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.AnnouncementResponse{
+		Success: true,
+		Message: "Announcement updated successfully",
+		Data:    pbAnnouncementToModel(resp.Data),
+	}, nil
+}
+
+// DeleteAnnouncement is the resolver for the deleteAnnouncement field.
+func (r *mutationResolver) DeleteAnnouncement(ctx context.Context, id string) (*model.DeleteAnnouncementResponse, error) {
+	// Check if user is admin
+	user, err := middleware.GetUserFromContext(ctx)
+	if err != nil || user == nil {
+		return &model.DeleteAnnouncementResponse{
+			Success: false,
+			Message: "Unauthorized: authentication required",
+		}, nil
+	}
+
+	if !user.IsAdmin {
+		return &model.DeleteAnnouncementResponse{
+			Success: false,
+			Message: "Forbidden: admin access required",
+		}, nil
+	}
+
+	announcementID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.DeleteAnnouncementResponse{
+			Success: false,
+			Message: "Invalid announcement ID",
+		}, nil
+	}
+
+	resp, err := r.ContentClient.DeleteAnnouncement(ctx, &contentPb.DeleteAnnouncementRequest{
+		Id: announcementID,
+	})
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.DeleteAnnouncementResponse{
+				Success: false,
+				Message: "Announcement not found",
+			}, nil
+		}
+		logger.Error("Failed to delete announcement", zap.Error(err))
+		return &model.DeleteAnnouncementResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to delete announcement: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.DeleteAnnouncementResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.DeleteAnnouncementResponse{
+		Success: true,
+		Message: "Announcement deleted successfully",
 	}, nil
 }
 
@@ -3718,6 +4532,579 @@ func (r *queryResolver) Discounts(ctx context.Context, page *int32, perPage *int
 	}, nil
 }
 
+// BlogPost is the resolver for the blogPost field.
+func (r *queryResolver) BlogPost(ctx context.Context, id string) (*model.BlogPostResponse, error) {
+	blogID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: "Invalid blog post ID",
+		}, nil
+	}
+
+	resp, err := r.ContentClient.GetBlogPostByID(ctx, &contentPb.GetBlogPostByIDRequest{
+		Id: blogID,
+	})
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.BlogPostResponse{
+				Success: false,
+				Message: "Blog post not found",
+			}, nil
+		}
+		logger.Error("Failed to get blog post", zap.Error(err))
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get blog post: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	blogPost := convertPbBlogPostToModel(resp.Data)
+
+	// Fetch author if authorId is set
+	if blogPost.AuthorID != nil {
+		author, err := r.getUserByID(ctx, *blogPost.AuthorID)
+		if err == nil {
+			blogPost.Author = author
+		}
+	}
+
+	// Fetch category if categoryId is set
+	if blogPost.BlogPostCategoryID != nil {
+		category, err := r.getCategoryByID(ctx, *blogPost.BlogPostCategoryID)
+		if err == nil {
+			blogPost.Category = category
+		}
+	}
+
+	return &model.BlogPostResponse{
+		Success: true,
+		Message: "Blog post retrieved successfully",
+		Data:    blogPost,
+	}, nil
+}
+
+// BlogPostBySlug is the resolver for the blogPostBySlug field.
+func (r *queryResolver) BlogPostBySlug(ctx context.Context, slug string) (*model.BlogPostResponse, error) {
+	resp, err := r.ContentClient.GetBlogPostBySlug(ctx, &contentPb.GetBlogPostBySlugRequest{
+		Slug: slug,
+	})
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.BlogPostResponse{
+				Success: false,
+				Message: "Blog post not found",
+			}, nil
+		}
+		logger.Error("Failed to get blog post by slug", zap.Error(err))
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get blog post: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.BlogPostResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	blogPost := convertPbBlogPostToModel(resp.Data)
+
+	// Fetch author if authorId is set
+	if blogPost.AuthorID != nil {
+		author, err := r.getUserByID(ctx, *blogPost.AuthorID)
+		if err == nil {
+			blogPost.Author = author
+		}
+	}
+
+	// Fetch category if categoryId is set
+	if blogPost.BlogPostCategoryID != nil {
+		category, err := r.getCategoryByID(ctx, *blogPost.BlogPostCategoryID)
+		if err == nil {
+			blogPost.Category = category
+		}
+	}
+
+	return &model.BlogPostResponse{
+		Success: true,
+		Message: "Blog post retrieved successfully",
+		Data:    blogPost,
+	}, nil
+}
+
+// BlogPosts is the resolver for the blogPosts field.
+func (r *queryResolver) BlogPosts(ctx context.Context, page *int32, perPage *int32, search *string, publishedOnly *bool, categoryID *string, sortBy *string, sortOrder *string) (*model.BlogPostListResponse, error) {
+	reqPage := int32(1)
+	if page != nil {
+		reqPage = *page
+	}
+
+	reqPerPage := int32(10)
+	if perPage != nil {
+		reqPerPage = *perPage
+	}
+
+	reqPublishedOnly := false
+	if publishedOnly != nil {
+		reqPublishedOnly = *publishedOnly
+	}
+
+	reqSortBy := "created_at"
+	if sortBy != nil {
+		reqSortBy = *sortBy
+	}
+
+	reqSortOrder := "desc"
+	if sortOrder != nil {
+		reqSortOrder = *sortOrder
+	}
+
+	req := &contentPb.GetAllBlogPostsRequest{
+		Page:          reqPage,
+		PerPage:       reqPerPage,
+		PublishedOnly: reqPublishedOnly,
+		SortBy:        reqSortBy,
+		SortOrder:     reqSortOrder,
+	}
+
+	if search != nil {
+		req.Search = *search
+	}
+
+	if categoryID != nil {
+		catID, err := strconv.ParseInt(*categoryID, 10, 64)
+		if err == nil {
+			req.CategoryId = catID
+		}
+	}
+
+	resp, err := r.ContentClient.GetAllBlogPosts(ctx, req)
+	if err != nil {
+		logger.Error("Failed to get blog posts", zap.Error(err))
+		return &model.BlogPostListResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get blog posts: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.BlogPostListResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	blogPosts := make([]*model.BlogPost, len(resp.Data.BlogPosts))
+	for i, pb := range resp.Data.BlogPosts {
+		blogPosts[i] = convertPbBlogPostToModel(pb)
+
+		// Fetch author if authorId is set
+		if blogPosts[i].AuthorID != nil {
+			author, err := r.getUserByID(ctx, *blogPosts[i].AuthorID)
+			if err == nil {
+				blogPosts[i].Author = author
+			}
+		}
+
+		// Fetch category if categoryId is set
+		if blogPosts[i].BlogPostCategoryID != nil {
+			category, err := r.getCategoryByID(ctx, *blogPosts[i].BlogPostCategoryID)
+			if err == nil {
+				blogPosts[i].Category = category
+			}
+		}
+	}
+
+	return &model.BlogPostListResponse{
+		Success: true,
+		Message: "Blog posts retrieved successfully",
+		Data: &model.BlogPostList{
+			BlogPosts: blogPosts,
+			Total:     int32(resp.Data.Total),
+			Page:      int32(resp.Data.Page),
+			PerPage:   int32(resp.Data.PerPage),
+		},
+	}, nil
+}
+
+// SearchBlogPosts is the resolver for the searchBlogPosts field.
+func (r *queryResolver) SearchBlogPosts(ctx context.Context, query string, page *int32, perPage *int32, publishedOnly *bool) (*model.BlogPostListResponse, error) {
+	reqPage := int32(1)
+	if page != nil {
+		reqPage = *page
+	}
+
+	reqPerPage := int32(10)
+	if perPage != nil {
+		reqPerPage = *perPage
+	}
+
+	reqPublishedOnly := false
+	if publishedOnly != nil {
+		reqPublishedOnly = *publishedOnly
+	}
+
+	resp, err := r.ContentClient.SearchBlogPosts(ctx, &contentPb.SearchBlogPostsRequest{
+		Query:         query,
+		Page:          reqPage,
+		PerPage:       reqPerPage,
+		PublishedOnly: reqPublishedOnly,
+	})
+	if err != nil {
+		logger.Error("Failed to search blog posts", zap.Error(err))
+		return &model.BlogPostListResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to search blog posts: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.BlogPostListResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	blogPosts := make([]*model.BlogPost, len(resp.Data.BlogPosts))
+	for i, pb := range resp.Data.BlogPosts {
+		blogPosts[i] = convertPbBlogPostToModel(pb)
+
+		// Fetch author if authorId is set
+		if blogPosts[i].AuthorID != nil {
+			author, err := r.getUserByID(ctx, *blogPosts[i].AuthorID)
+			if err == nil {
+				blogPosts[i].Author = author
+			}
+		}
+
+		// Fetch category if categoryId is set
+		if blogPosts[i].BlogPostCategoryID != nil {
+			category, err := r.getCategoryByID(ctx, *blogPosts[i].BlogPostCategoryID)
+			if err == nil {
+				blogPosts[i].Category = category
+			}
+		}
+	}
+
+	return &model.BlogPostListResponse{
+		Success: true,
+		Message: "Blog posts search results retrieved successfully",
+		Data: &model.BlogPostList{
+			BlogPosts: blogPosts,
+			Total:     int32(resp.Data.Total),
+			Page:      int32(resp.Data.Page),
+			PerPage:   int32(resp.Data.PerPage),
+		},
+	}, nil
+}
+
+// Category is the resolver for the category field.
+func (r *queryResolver) Category(ctx context.Context, id string) (*model.CategoryResponse, error) {
+	categoryID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.CategoryResponse{
+			Success: false,
+			Message: "Invalid category ID",
+		}, nil
+	}
+
+	resp, err := r.ContentClient.GetCategoryByID(ctx, &contentPb.GetCategoryByIDRequest{
+		Id: categoryID,
+	})
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.CategoryResponse{
+				Success: false,
+				Message: "Category not found",
+			}, nil
+		}
+		logger.Error("Failed to get category", zap.Error(err))
+		return &model.CategoryResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get category: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.CategoryResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	category := convertPbCategoryToModel(resp.Data)
+
+	return &model.CategoryResponse{
+		Success: true,
+		Message: "Category retrieved successfully",
+		Data:    category,
+	}, nil
+}
+
+// CategoryBySlug is the resolver for the categoryBySlug field.
+func (r *queryResolver) CategoryBySlug(ctx context.Context, slug string) (*model.CategoryResponse, error) {
+	resp, err := r.ContentClient.GetCategoryBySlug(ctx, &contentPb.GetCategoryBySlugRequest{
+		Slug: slug,
+	})
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.CategoryResponse{
+				Success: false,
+				Message: "Category not found",
+			}, nil
+		}
+		logger.Error("Failed to get category by slug", zap.Error(err))
+		return &model.CategoryResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get category: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.CategoryResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	category := convertPbCategoryToModel(resp.Data)
+
+	return &model.CategoryResponse{
+		Success: true,
+		Message: "Category retrieved successfully",
+		Data:    category,
+	}, nil
+}
+
+// Categories is the resolver for the categories field.
+func (r *queryResolver) Categories(ctx context.Context, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) (*model.CategoryListResponse, error) {
+	reqPage := int32(1)
+	if page != nil {
+		reqPage = *page
+	}
+
+	reqPerPage := int32(10)
+	if perPage != nil {
+		reqPerPage = *perPage
+	}
+
+	reqSortBy := "name"
+	if sortBy != nil {
+		reqSortBy = *sortBy
+	}
+
+	reqSortOrder := "asc"
+	if sortOrder != nil {
+		reqSortOrder = *sortOrder
+	}
+
+	req := &contentPb.GetAllCategoriesRequest{
+		Page:      reqPage,
+		PerPage:   reqPerPage,
+		SortBy:    reqSortBy,
+		SortOrder: reqSortOrder,
+	}
+
+	if search != nil {
+		req.Search = *search
+	}
+
+	resp, err := r.ContentClient.GetAllCategories(ctx, req)
+	if err != nil {
+		logger.Error("Failed to get categories", zap.Error(err))
+		return &model.CategoryListResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get categories: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.CategoryListResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	categories := make([]*model.Category, len(resp.Data.Categories))
+	for i, pb := range resp.Data.Categories {
+		categories[i] = convertPbCategoryToModel(pb)
+	}
+
+	return &model.CategoryListResponse{
+		Success: true,
+		Message: "Categories retrieved successfully",
+		Data: &model.CategoryList{
+			Categories: categories,
+			Total:      int32(resp.Data.Total),
+			Page:       int32(resp.Data.Page),
+			PerPage:    int32(resp.Data.PerPage),
+		},
+	}, nil
+}
+
+// Announcement is the resolver for the announcement field.
+func (r *queryResolver) Announcement(ctx context.Context, id string) (*model.AnnouncementResponse, error) {
+	announcementID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.AnnouncementResponse{
+			Success: false,
+			Message: "Invalid announcement ID",
+		}, nil
+	}
+
+	resp, err := r.ContentClient.GetAnnouncementByID(ctx, &contentPb.GetAnnouncementByIDRequest{
+		Id: announcementID,
+	})
+	if err != nil {
+		if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
+			return &model.AnnouncementResponse{
+				Success: false,
+				Message: "Announcement not found",
+			}, nil
+		}
+		return &model.AnnouncementResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get announcement: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.AnnouncementResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.AnnouncementResponse{
+		Success: true,
+		Message: "Announcement retrieved successfully",
+		Data:    pbAnnouncementToModel(resp.Data),
+	}, nil
+}
+
+// Announcements is the resolver for the announcements field.
+func (r *queryResolver) Announcements(ctx context.Context, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string) (*model.AnnouncementListResponse, error) {
+	pageVal := int32(1)
+	if page != nil {
+		pageVal = *page
+	}
+
+	perPageVal := int32(10)
+	if perPage != nil {
+		perPageVal = *perPage
+	}
+
+	searchVal := ""
+	if search != nil {
+		searchVal = *search
+	}
+
+	sortByVal := "created_at"
+	if sortBy != nil {
+		sortByVal = *sortBy
+	}
+
+	sortOrderVal := "desc"
+	if sortOrder != nil {
+		sortOrderVal = *sortOrder
+	}
+
+	resp, err := r.ContentClient.GetAllAnnouncements(ctx, &contentPb.GetAllAnnouncementsRequest{
+		Page:      pageVal,
+		PerPage:   perPageVal,
+		Search:    searchVal,
+		SortBy:    sortByVal,
+		SortOrder: sortOrderVal,
+	})
+	if err != nil {
+		return &model.AnnouncementListResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get announcements: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.AnnouncementListResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	announcements := make([]*model.Announcement, len(resp.Data.Announcements))
+	for i, announcement := range resp.Data.Announcements {
+		announcements[i] = pbAnnouncementToModel(announcement)
+	}
+
+	return &model.AnnouncementListResponse{
+		Success: true,
+		Message: "Announcements retrieved successfully",
+		Data: &model.AnnouncementList{
+			Announcements: announcements,
+			Total:         int32(resp.Data.Total),
+			Page:          int32(resp.Data.Page),
+			PerPage:       int32(resp.Data.PerPage),
+		},
+	}, nil
+}
+
+// ActiveAnnouncements is the resolver for the activeAnnouncements field.
+func (r *queryResolver) ActiveAnnouncements(ctx context.Context, forCustomers *bool, forFrontend *bool, forUserDashboard *bool) (*model.ActiveAnnouncementsResponse, error) {
+	forCustomersVal := false
+	if forCustomers != nil {
+		forCustomersVal = *forCustomers
+	}
+
+	forFrontendVal := false
+	if forFrontend != nil {
+		forFrontendVal = *forFrontend
+	}
+
+	forUserDashboardVal := false
+	if forUserDashboard != nil {
+		forUserDashboardVal = *forUserDashboard
+	}
+
+	resp, err := r.ContentClient.GetActiveAnnouncements(ctx, &contentPb.GetActiveAnnouncementsRequest{
+		ForCustomers:     forCustomersVal,
+		ForFrontend:      forFrontendVal,
+		ForUserDashboard: forUserDashboardVal,
+	})
+	if err != nil {
+		return &model.ActiveAnnouncementsResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get active announcements: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.ActiveAnnouncementsResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	announcements := make([]*model.Announcement, len(resp.Data))
+	for i, announcement := range resp.Data {
+		announcements[i] = pbAnnouncementToModel(announcement)
+	}
+
+	return &model.ActiveAnnouncementsResponse{
+		Success: true,
+		Message: "Active announcements retrieved successfully",
+		Data:    announcements,
+	}, nil
+}
+
 // Avatar is the resolver for the avatar field.
 func (r *userResolver) Avatar(ctx context.Context, obj *model.User) (*model.Media, error) {
 	logger.Info("🔥🔥🔥 ========== AVATAR RESOLVER CALLED ========== 🔥🔥🔥",
@@ -3758,6 +5145,9 @@ func (r *userResolver) Avatar(ctx context.Context, obj *model.User) (*model.Medi
 	return avatar, nil
 }
 
+// BlogPost returns BlogPostResolver implementation.
+func (r *Resolver) BlogPost() BlogPostResolver { return &blogPostResolver{r} }
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
@@ -3768,6 +5158,7 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 func (r *Resolver) User() UserResolver { return &userResolver{r} }
 
 type (
+	blogPostResolver struct{ *Resolver }
 	mutationResolver struct{ *Resolver }
 	queryResolver    struct{ *Resolver }
 	userResolver     struct{ *Resolver }

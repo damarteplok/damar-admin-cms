@@ -70,3 +70,35 @@ func (s *EmailService) SendEmailVerification(email, name, verificationToken stri
 		data,
 	)
 }
+
+func (s *EmailService) SendNewBlogPostNotification(email, name, title, slug, excerpt string) error {
+	blogURL := fmt.Sprintf("%s/blog/%s", s.frontendURL, slug)
+
+	data := map[string]string{
+		"Name":    name,
+		"Title":   title,
+		"Excerpt": excerpt,
+		"BlogURL": blogURL,
+	}
+
+	return s.smtpClient.SendTemplateEmail(
+		email,
+		fmt.Sprintf("New Blog Post: %s - Damar Admin CMS", title),
+		"new_blog_post",
+		data,
+	)
+}
+
+func (s *EmailService) SendBlogPostDeletedNotification(email, adminName, title string) error {
+	data := map[string]string{
+		"AdminName": adminName,
+		"Title":     title,
+	}
+
+	return s.smtpClient.SendTemplateEmail(
+		email,
+		"Blog Post Deleted - Damar Admin CMS",
+		"blog_post_deleted",
+		data,
+	)
+}

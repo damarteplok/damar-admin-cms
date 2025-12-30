@@ -62,3 +62,7 @@ kubeconfig
 .tilt/
 .tilt.dev.json
 .vscode/
+
+# MinIO data folder (should not be in repo)
+Documents/
+minio-data/
