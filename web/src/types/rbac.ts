@@ -8,7 +8,7 @@ export interface Permission {
 }
 
 export interface PermissionList {
-  permissions: Permission[]
+  permissions: Array<Permission>
   total: number
   page: number
   perPage: number
@@ -77,13 +77,13 @@ export interface RoleWithPermissions {
   id: string
   name: string
   guardName: string
-  permissions: Permission[]
+  permissions: Array<Permission>
   createdAt: number
   updatedAt: number
 }
 
 export interface RoleList {
-  roles: Role[]
+  roles: Array<Role>
   total: number
   page: number
   perPage: number
@@ -149,7 +149,7 @@ export interface DeleteRoleResponse {
 
 export interface SyncRolePermissionsInput {
   roleId: string
-  permissionIds: string[]
+  permissionIds: Array<string>
 }
 
 export interface SyncRolePermissionsResponse {
@@ -165,7 +165,7 @@ export interface UserRolesResponse {
   userRoles: {
     success: boolean
     message: string
-    roles: Role[]
+    roles: Array<Role>
   }
 }
 
@@ -173,7 +173,7 @@ export interface UserPermissionsResponse {
   userPermissions: {
     success: boolean
     message: string
-    permissions: Permission[]
+    permissions: Array<Permission>
   }
 }
 
@@ -204,7 +204,7 @@ export interface RevokeRoleFromUserInput {
 
 export interface SyncUserRolesInput {
   userId: string
-  roleIds: string[]
+  roleIds: Array<string>
   modelType?: string
 }
 
@@ -212,7 +212,7 @@ export interface AssignRoleToUserResponse {
   assignRoleToUser: {
     success: boolean
     message: string
-    roles: Role[]
+    roles: Array<Role>
   }
 }
 
@@ -220,7 +220,7 @@ export interface RevokeRoleFromUserResponse {
   revokeRoleFromUser: {
     success: boolean
     message: string
-    roles: Role[]
+    roles: Array<Role>
   }
 }
 
@@ -228,7 +228,7 @@ export interface SyncUserRolesResponse {
   syncUserRoles: {
     success: boolean
     message: string
-    roles: Role[]
+    roles: Array<Role>
   }
 }
 
@@ -247,7 +247,7 @@ export interface RevokePermissionFromUserInput {
 
 export interface SyncUserPermissionsInput {
   userId: string
-  permissionIds: string[]
+  permissionIds: Array<string>
   modelType?: string
 }
 
@@ -255,7 +255,7 @@ export interface AssignPermissionToUserResponse {
   assignPermissionToUser: {
     success: boolean
     message: string
-    permissions: Permission[]
+    permissions: Array<Permission>
   }
 }
 
@@ -263,7 +263,7 @@ export interface RevokePermissionFromUserResponse {
   revokePermissionFromUser: {
     success: boolean
     message: string
-    permissions: Permission[]
+    permissions: Array<Permission>
   }
 }
 
@@ -271,6 +271,6 @@ export interface SyncUserPermissionsResponse {
   syncUserPermissions: {
     success: boolean
     message: string
-    permissions: Permission[]
+    permissions: Array<Permission>
   }
 }

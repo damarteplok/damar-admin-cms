@@ -9,10 +9,10 @@ interface Logo {
 interface LogosComponentProps {
   title?: string
   subtitle?: string
-  logos?: Logo[]
+  logos?: Array<Logo>
 }
 
-const defaultLogos: Logo[] = [
+const defaultLogos: Array<Logo> = [
   {
     name: 'Vercel',
     logo: 'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/vercel-wordmark.svg',

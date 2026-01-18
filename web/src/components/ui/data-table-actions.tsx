@@ -1,3 +1,5 @@
+import { MoreHorizontal } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { MoreHorizontal, LucideIcon } from 'lucide-react'
 
 export type DataTableAction<T = any> =
   | {
@@ -27,7 +28,7 @@ export type DataTableAction<T = any> =
 
 interface DataTableActionsProps<T = any> {
   item: T
-  actions: DataTableAction<T>[]
+  actions: Array<DataTableAction<T>>
   label?: string
 }
 

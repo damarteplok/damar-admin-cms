@@ -1,12 +1,13 @@
-import { ColumnDef } from '@tanstack/react-table'
+import { Check, Eye, Globe, Lock, Pencil, Trash2, X } from 'lucide-react'
+import type { ColumnDef } from '@tanstack/react-table'
 import type { BlogPost } from '@/types'
+import type {
+  DataTableAction} from '@/components/ui/data-table-actions';
+import type { TFunction } from 'i18next'
 import {
-  DataTableActions,
-  DataTableAction,
+  DataTableActions
 } from '@/components/ui/data-table-actions'
 import { Badge } from '@/components/ui/badge'
-import { Check, X, Pencil, Trash2, Eye, Globe, Lock } from 'lucide-react'
-import type { TFunction } from 'i18next'
 import { formatDateTime } from '@/lib/utils/date'
 
 interface ColumnProps {
@@ -25,7 +26,7 @@ export const createBlogPostColumns = ({
   onPublish,
   onUnpublish,
   t,
-}: ColumnProps): ColumnDef<BlogPost>[] => [
+}: ColumnProps): Array<ColumnDef<BlogPost>> => [
   {
     accessorKey: 'title',
     header: t('blog.columns.title', { defaultValue: 'Title' }),
@@ -92,7 +93,7 @@ export const createBlogPostColumns = ({
     accessorKey: 'publishedAt',
     header: t('blog.columns.published_at', { defaultValue: 'Published' }),
     cell: ({ row }) => {
-      const publishedAt = row.getValue('publishedAt') as number | undefined
+      const publishedAt = row.getValue('publishedAt')
       return publishedAt ? (
         <span className="text-sm">{formatDateTime(publishedAt)}</span>
       ) : (
@@ -118,7 +119,7 @@ export const createBlogPostColumns = ({
     cell: ({ row }) => {
       const blogPost = row.original
 
-      const actions: DataTableAction<BlogPost>[] = [
+      const actions: Array<DataTableAction<BlogPost>> = [
         {
           label: t('blog.actions.view_details', {
             defaultValue: 'View Details',

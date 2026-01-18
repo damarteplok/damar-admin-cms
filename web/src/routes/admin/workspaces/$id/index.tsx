@@ -1,16 +1,16 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useQuery, useMutation } from 'urql'
-import { ArrowLeft, AlertCircle } from 'lucide-react'
+import { useMutation, useQuery } from 'urql'
+import { AlertCircle, ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import type { DeleteTenantResponse, TenantResponse } from '@/types'
 import { formatDateTime } from '@/lib/utils/date'
 
 import {
-  GET_TENANT_QUERY,
   DELETE_TENANT_MUTATION,
+  GET_TENANT_QUERY,
 } from '@/lib/graphql/tenant.graphql'
-import type { TenantResponse, DeleteTenantResponse } from '@/types'
 
 import { WorkspaceUsersTable } from '@/components/features/admin/workspaces/workspace-users-table'
 import { Button } from '@/components/ui/button'

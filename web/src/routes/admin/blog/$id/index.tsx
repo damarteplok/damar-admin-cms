@@ -4,21 +4,21 @@ import { useMutation, useQuery } from 'urql'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import {
-  Loader2,
   ArrowLeft,
   Calendar,
-  User,
-  Tag,
-  Globe,
-  Lock,
   Clock,
+  Globe,
+  Loader2,
+  Lock,
+  Tag,
+  User,
 } from 'lucide-react'
 
+import type { DeleteBlogPostResponse, GetBlogPostResponse } from '@/types'
 import {
-  GET_BLOG_POST_QUERY,
   DELETE_BLOG_POST_MUTATION,
+  GET_BLOG_POST_QUERY,
 } from '@/lib/graphql/blog.graphql'
-import type { GetBlogPostResponse, DeleteBlogPostResponse } from '@/types'
 
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'

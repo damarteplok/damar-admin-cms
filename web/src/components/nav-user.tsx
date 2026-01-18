@@ -1,5 +1,7 @@
 import { ChevronsUpDown, LogOut } from 'lucide-react'
 
+import { useNavigate } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
   DropdownMenu,
@@ -16,10 +18,8 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { useAuth } from '@/lib/auth-hooks'
-import { useNavigate } from '@tanstack/react-router'
 import LangSwitcher from '@/components/lang-switcher'
 import ThemeToggle from '@/components/theme-toggle'
-import { useTranslation } from 'react-i18next'
 
 export function NavUser() {
   const { isMobile } = useSidebar()

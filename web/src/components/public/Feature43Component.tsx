@@ -15,10 +15,10 @@ interface Feature {
 
 interface Feature43ComponentProps {
   title?: string
-  features?: Feature[]
+  features?: Array<Feature>
 }
 
-const defaultFeatures: Feature[] = [
+const defaultFeatures: Array<Feature> = [
   {
     heading: 'Multi-Tenancy',
     description:

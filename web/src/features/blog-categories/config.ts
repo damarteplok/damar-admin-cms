@@ -1,16 +1,14 @@
-import type { CrudConfig, CrudTranslations } from '@/types'
-import type {
-  Category,
-  CreateCategoryInput,
-  UpdateCategoryInput,
-} from '@/types'
+import type { Category, CreateCategoryInput,
+  CrudConfig,
+  CrudTranslations,
+  UpdateCategoryInput } from '@/types'
 
 import {
+  CREATE_CATEGORY_MUTATION,
+  DELETE_CATEGORY_MUTATION,
   GET_CATEGORIES_QUERY,
   GET_CATEGORY_QUERY,
-  CREATE_CATEGORY_MUTATION,
   UPDATE_CATEGORY_MUTATION,
-  DELETE_CATEGORY_MUTATION,
 } from '@/lib/graphql/blog.graphql'
 
 import { createCategoryColumns } from '@/components/features/admin/blog/category-columns'

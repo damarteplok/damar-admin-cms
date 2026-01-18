@@ -16,7 +16,7 @@ export interface CrudApiResponse<T> {
  * Paginated list response from GraphQL queries
  */
 export interface CrudPaginatedData<T> {
-  items: T[]
+  items: Array<T>
   total: number
   page: number
   perPage: number
@@ -32,7 +32,7 @@ export interface ColumnFactoryProps {
   t: TFunction
 }
 
-export type ColumnFactory<T> = (props: ColumnFactoryProps) => ColumnDef<T>[]
+export type ColumnFactory<T> = (props: ColumnFactoryProps) => Array<ColumnDef<T>>
 
 /**
  * Form component props interface for create/edit forms
@@ -204,7 +204,7 @@ export interface UseCrudTableReturn<TModel extends { id: string }> {
   sortOrder: 'asc' | 'desc'
 
   // Data
-  data: TModel[]
+  data: Array<TModel>
   total: number
   totalPages: number
   fetching: boolean

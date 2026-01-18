@@ -1,19 +1,19 @@
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
-import { useQuery, useMutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { ArrowLeft, Check, X } from 'lucide-react'
+import { useState } from 'react'
+import type { DeleteDiscountResponse, DiscountResponse } from '@/types'
 import {
-  GET_DISCOUNT_QUERY,
   DELETE_DISCOUNT_MUTATION,
+  GET_DISCOUNT_QUERY,
 } from '@/lib/graphql/discount.graphql'
-import type { DiscountResponse, DeleteDiscountResponse } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { ArrowLeft, Check, X } from 'lucide-react'
 import { ErrorState } from '@/components/ui/error-state'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
-import { useState } from 'react'
 import { DataTableSkeleton } from '@/components/ui/data-table-skeleton'
 import { formatDateTime } from '@/lib/utils/date'
 

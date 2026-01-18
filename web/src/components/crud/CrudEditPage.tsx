@@ -1,15 +1,15 @@
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { useQuery, useMutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 
+import type { CrudConfig } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { ErrorState } from '@/components/ui/error-state'
 
-import type { CrudConfig } from '@/types'
 
 interface CrudEditPageProps<
   TModel extends { id: string },

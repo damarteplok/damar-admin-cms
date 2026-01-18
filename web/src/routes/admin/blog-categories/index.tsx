@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { CrudListPage } from '@/components/crud'
-import { blogCategoriesConfig } from '@/features/blog-categories'
 import type {
   Category,
   CreateCategoryInput,
   UpdateCategoryInput,
 } from '@/types'
+import { CrudListPage } from '@/components/crud'
+import { blogCategoriesConfig } from '@/features/blog-categories'
 
 export const Route = createFileRoute('/admin/blog-categories/')({
   component: BlogCategoriesPage,

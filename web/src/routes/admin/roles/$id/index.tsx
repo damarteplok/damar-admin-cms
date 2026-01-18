@@ -1,22 +1,22 @@
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
-import { useQuery, useMutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { ArrowLeft, Calendar, Loader2 } from 'lucide-react'
+import { useState } from 'react'
+import type { DeleteRoleResponse, RoleWithPermissionsResponse } from '@/types'
 import {
-  GET_ROLE_WITH_PERMISSIONS_QUERY,
   DELETE_ROLE_MUTATION,
+  GET_ROLE_WITH_PERMISSIONS_QUERY,
 } from '@/lib/graphql/rbac.graphql'
-import type { RoleWithPermissionsResponse, DeleteRoleResponse } from '@/types'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { ArrowLeft, Loader2, Calendar } from 'lucide-react'
 import { ErrorState } from '@/components/ui/error-state'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { formatDateTime } from '@/lib/utils/date'
-import { useState } from 'react'
 
 export const Route = createFileRoute('/admin/roles/$id/')({
   component: RoleDetailPage,

@@ -20,10 +20,10 @@ interface FeatureComponentProps {
   heading?: string
   subheading?: string
   previewImage?: string
-  features?: Feature[]
+  features?: Array<Feature>
 }
 
-const defaultFeatures: Feature[] = [
+const defaultFeatures: Array<Feature> = [
   {
     id: '1',
     icon: <Zap className="size-5" />,

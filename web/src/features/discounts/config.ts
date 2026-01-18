@@ -1,16 +1,14 @@
-import type { CrudConfig, CrudTranslations } from '@/types'
-import type {
+import type { CreateDiscountInput, CrudConfig,
+  CrudTranslations,
   Discount,
-  CreateDiscountInput,
-  UpdateDiscountInput,
-} from '@/types'
+  UpdateDiscountInput } from '@/types'
 
 import {
+  CREATE_DISCOUNT_MUTATION,
+  DELETE_DISCOUNT_MUTATION,
   GET_DISCOUNTS_QUERY,
   GET_DISCOUNT_QUERY,
-  CREATE_DISCOUNT_MUTATION,
   UPDATE_DISCOUNT_MUTATION,
-  DELETE_DISCOUNT_MUTATION,
 } from '@/lib/graphql/discount.graphql'
 
 import { createDiscountColumns } from '@/components/features/admin/discounts/discount-columns'

@@ -1,17 +1,17 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
-import { useQuery, useMutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import { useTranslation } from 'react-i18next'
 
-import {
-  GET_PERMISSIONS_QUERY,
-  DELETE_PERMISSION_MUTATION,
-} from '@/lib/graphql/rbac.graphql'
 import type {
-  PermissionsResponse,
   DeletePermissionResponse,
   Permission,
+  PermissionsResponse,
 } from '@/types'
+import {
+  DELETE_PERMISSION_MUTATION,
+  GET_PERMISSIONS_QUERY,
+} from '@/lib/graphql/rbac.graphql'
 
 import { DataTable } from '@/components/data-table'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'

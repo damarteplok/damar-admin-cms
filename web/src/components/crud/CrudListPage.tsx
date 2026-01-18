@@ -2,13 +2,13 @@ import { useMemo } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
+import type { ColumnFactoryProps, CrudConfig } from '@/types'
 import { useCrudTable } from '@/hooks/crud'
 import { DataTable } from '@/components/data-table'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { DataTableSkeleton } from '@/components/ui/data-table-skeleton'
 import { ErrorState } from '@/components/ui/error-state'
 
-import type { CrudConfig, ColumnFactoryProps } from '@/types'
 
 interface CrudListPageProps<
   TModel extends { id: string; name?: string },

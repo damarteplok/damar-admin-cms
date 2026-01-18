@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
 
+import { Loader2 } from 'lucide-react'
+import type { CreatePlanInput, UpdatePlanInput } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
@@ -10,8 +12,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { RichTextEditor } from '@/components/ui/rich-text-editor'
 import { Label } from '@/components/ui/label'
 import { SearchSelect } from '@/components/common/search-select'
-import { Loader2 } from 'lucide-react'
-import { CreatePlanInput, UpdatePlanInput } from '@/types'
 import { GET_PRODUCTS_QUERY } from '@/lib/graphql/product.graphql'
 
 // Static intervals data matching database

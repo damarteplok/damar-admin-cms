@@ -1,6 +1,6 @@
-import { ColumnDef } from '@tanstack/react-table'
 import { MoreHorizontal, Pencil, Trash } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
+import type { ColumnDef } from '@tanstack/react-table'
 import type { TFunction } from 'i18next'
 
 import type { Category } from '@/types'
@@ -23,7 +23,7 @@ interface CategoryColumnsProps {
 export function createCategoryColumns({
   onDelete,
   t,
-}: CategoryColumnsProps): ColumnDef<Category>[] {
+}: CategoryColumnsProps): Array<ColumnDef<Category>> {
   return [
     {
       accessorKey: 'name',

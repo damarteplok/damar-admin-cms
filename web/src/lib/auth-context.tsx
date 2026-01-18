@@ -6,15 +6,17 @@ import {
   removeAccessToken,
   removeRefreshToken,
   setAccessToken as setAccessTokenStorage,
-  setRefreshToken as setRefreshTokenStorage,
-  User,
+  setRefreshToken as setRefreshTokenStorage
 } from './auth'
 import {
-  ME_QUERY,
-  MeResponse,
   LOGOUT_MUTATION,
-  LogoutResponse,
+  ME_QUERY
 } from './graphql/auth.graphql'
+import type {
+  User} from './auth';
+import type {
+  LogoutResponse,
+  MeResponse} from './graphql/auth.graphql';
 
 export interface AuthState {
   user: User | null

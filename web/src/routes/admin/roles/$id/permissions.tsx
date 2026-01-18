@@ -1,30 +1,30 @@
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
-import { useQuery, useMutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
+import { ArrowLeft, Check, Loader2, Search, Shield, X } from 'lucide-react'
+import type {
+  Permission,
+  PermissionsResponse,
+  RoleWithPermissionsResponse,
+  SyncRolePermissionsResponse,
+} from '@/types'
 import {
-  GET_ROLE_WITH_PERMISSIONS_QUERY,
   GET_PERMISSIONS_QUERY,
+  GET_ROLE_WITH_PERMISSIONS_QUERY,
   SYNC_ROLE_PERMISSIONS_MUTATION,
 } from '@/lib/graphql/rbac.graphql'
-import type {
-  RoleWithPermissionsResponse,
-  PermissionsResponse,
-  SyncRolePermissionsResponse,
-  Permission,
-} from '@/types'
 
-import { ArrowLeft, Loader2, Shield, Check, X, Search } from 'lucide-react'
 import { ErrorState } from '@/components/ui/error-state'
 import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -41,7 +41,7 @@ function ManageRolePermissionsPage() {
   const { t } = useTranslation()
 
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedPermissionIds, setSelectedPermissionIds] = useState<string[]>(
+  const [selectedPermissionIds, setSelectedPermissionIds] = useState<Array<string>>(
     [],
   )
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -189,7 +189,7 @@ function ManageRolePermissionsPage() {
 
   // Group permissions by prefix (e.g., "users.", "products.", etc.)
   const groupedPermissions = filteredPermissions.reduce<
-    Record<string, Permission[]>
+    Record<string, Array<Permission>>
   >((acc, permission) => {
     const parts = permission.name.split('.')
     const group = parts.length > 1 ? parts[0] : 'general'

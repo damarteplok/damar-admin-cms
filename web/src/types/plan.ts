@@ -23,7 +23,7 @@ export interface PlansResponse {
     success: boolean
     message: string
     data: {
-      plans: Plan[]
+      plans: Array<Plan>
       total: number
       page: number
       perPage: number

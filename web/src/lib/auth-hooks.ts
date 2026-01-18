@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import { AuthContext, AuthContextType } from './auth-context'
+import { AuthContext } from './auth-context'
+import type { AuthContextType } from './auth-context';
 
 export function useAuth(): AuthContextType {
   const context = useContext(AuthContext)

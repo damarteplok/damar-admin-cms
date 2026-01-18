@@ -1,12 +1,11 @@
-import type { CrudConfig, CrudTranslations } from '@/types'
-import type { Plan, CreatePlanInput, UpdatePlanInput } from '@/types'
+import type { CreatePlanInput, CrudConfig, CrudTranslations, Plan, UpdatePlanInput  } from '@/types'
 
 import {
+  CREATE_PLAN_MUTATION,
+  DELETE_PLAN_MUTATION,
   GET_PLANS_QUERY,
   GET_PLAN_QUERY,
-  CREATE_PLAN_MUTATION,
   UPDATE_PLAN_MUTATION,
-  DELETE_PLAN_MUTATION,
 } from '@/lib/graphql/plan.graphql'
 
 import { createPlanColumns } from '@/components/features/admin/plans/plan-columns'

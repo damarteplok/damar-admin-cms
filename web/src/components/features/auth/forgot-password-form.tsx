@@ -3,9 +3,9 @@ import { Link } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { useMutation } from 'urql'
 
+import type { ForgotPasswordResponse } from '@/types'
 import { cn } from '@/lib/utils'
 import { FORGOT_PASSWORD_MUTATION } from '@/lib/graphql/auth.graphql'
-import type { ForgotPasswordResponse } from '@/types'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'

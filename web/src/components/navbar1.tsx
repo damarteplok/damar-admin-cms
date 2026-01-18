@@ -32,7 +32,7 @@ interface MenuItem {
   url: string
   description?: string
   icon?: React.ReactNode
-  items?: MenuItem[]
+  items?: Array<MenuItem>
   // optional i18n keys
   titleKey?: string
   descriptionKey?: string
@@ -45,7 +45,7 @@ interface Navbar1Props {
     alt: string
     title: string
   }
-  menu?: MenuItem[]
+  menu?: Array<MenuItem>
   auth?: {
     login: {
       title: string
@@ -76,7 +76,7 @@ const Navbar1 = ({
   const { t } = useTranslation()
 
   // If no menu provided, build a default menu with i18n keys
-  const resolvedMenu: MenuItem[] =
+  const resolvedMenu: Array<MenuItem> =
     menu && menu.length
       ? menu
       : [

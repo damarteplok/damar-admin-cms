@@ -1,12 +1,13 @@
-import { ColumnDef } from '@tanstack/react-table'
+import { Eye, Pencil, Trash2 } from 'lucide-react'
+import type { ColumnDef } from '@tanstack/react-table'
 import type { Permission } from '@/types'
+import type {
+  DataTableAction} from '@/components/ui/data-table-actions';
+import type { TFunction } from 'i18next'
 import {
-  DataTableActions,
-  DataTableAction,
+  DataTableActions
 } from '@/components/ui/data-table-actions'
 import { Badge } from '@/components/ui/badge'
-import { Pencil, Trash2, Eye } from 'lucide-react'
-import type { TFunction } from 'i18next'
 import { formatDateTime } from '@/lib/utils/date'
 
 interface ColumnProps {
@@ -21,7 +22,7 @@ export const createPermissionColumns = ({
   onEdit,
   onView,
   t,
-}: ColumnProps): ColumnDef<Permission>[] => [
+}: ColumnProps): Array<ColumnDef<Permission>> => [
   {
     accessorKey: 'name',
     header: t('permissions.columns.name', { defaultValue: 'Name' }),
@@ -62,7 +63,7 @@ export const createPermissionColumns = ({
     cell: ({ row }) => {
       const permission = row.original
 
-      const actions: DataTableAction<Permission>[] = [
+      const actions: Array<DataTableAction<Permission>> = [
         {
           label: t('permissions.actions.view_details', {
             defaultValue: 'View Details',

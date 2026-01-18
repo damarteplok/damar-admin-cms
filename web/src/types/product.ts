@@ -16,7 +16,7 @@ export interface ProductsResponse {
     success: boolean
     message: string
     data: {
-      products: Product[]
+      products: Array<Product>
       total: number
       page: number
       perPage: number

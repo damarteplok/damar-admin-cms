@@ -2,11 +2,11 @@ import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { ArrowLeft } from 'lucide-react'
 
+import type { CrudConfig } from '@/types'
 import { useCrudForm } from '@/hooks/crud'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
-import type { CrudConfig } from '@/types'
 
 interface CrudCreatePageProps<
   TModel extends { id: string },

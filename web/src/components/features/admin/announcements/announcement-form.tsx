@@ -2,14 +2,14 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
 
+import { Loader2 } from 'lucide-react'
+import type { CreateAnnouncementInput, UpdateAnnouncementInput } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { RichTextEditor } from '@/components/ui/rich-text-editor'
-import { Loader2 } from 'lucide-react'
-import { CreateAnnouncementInput, UpdateAnnouncementInput } from '@/types'
 
 interface AnnouncementFormValues extends Omit<
   CreateAnnouncementInput,

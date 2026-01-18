@@ -1,12 +1,13 @@
-import { ColumnDef } from '@tanstack/react-table'
+import { Check, Eye, Pencil, Trash2, X } from 'lucide-react'
+import type { ColumnDef } from '@tanstack/react-table'
 import type { Plan } from '@/types'
+import type {
+  DataTableAction} from '@/components/ui/data-table-actions';
+import type { TFunction } from 'i18next'
 import {
-  DataTableActions,
-  DataTableAction,
+  DataTableActions
 } from '@/components/ui/data-table-actions'
 import { Badge } from '@/components/ui/badge'
-import { Check, X, Pencil, Trash2, Eye } from 'lucide-react'
-import type { TFunction } from 'i18next'
 import { formatDateTime } from '@/lib/utils/date'
 
 interface ColumnProps {
@@ -21,7 +22,7 @@ export const createPlanColumns = ({
   onEdit,
   onView,
   t,
-}: ColumnProps): ColumnDef<Plan>[] => [
+}: ColumnProps): Array<ColumnDef<Plan>> => [
   {
     accessorKey: 'name',
     header: t('plans.columns.name', { defaultValue: 'Name' }),
@@ -112,7 +113,7 @@ export const createPlanColumns = ({
     cell: ({ row }) => {
       const plan = row.original
 
-      const actions: DataTableAction<Plan>[] = [
+      const actions: Array<DataTableAction<Plan>> = [
         {
           label: t('plans.actions.view_details', {
             defaultValue: 'View Details',

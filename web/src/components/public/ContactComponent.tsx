@@ -20,13 +20,13 @@ interface EmailContact {
 interface ContactComponentProps {
   heading?: string
   subheading?: string
-  offices?: Office[]
-  emailContacts?: EmailContact[]
+  offices?: Array<Office>
+  emailContacts?: Array<EmailContact>
   formHeading?: string
   formSubheading?: string
 }
 
-const defaultOffices: Office[] = [
+const defaultOffices: Array<Office> = [
   {
     name: 'California',
     address: '300 Market St, San Francisco, California 94105',
@@ -41,7 +41,7 @@ const defaultOffices: Office[] = [
   },
 ]
 
-const defaultEmailContacts: EmailContact[] = [
+const defaultEmailContacts: Array<EmailContact> = [
   {
     department: 'Sales',
     email: 'sales@domain.com',

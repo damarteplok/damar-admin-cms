@@ -1,13 +1,13 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'urql'
-import { Search, X, Loader2 } from 'lucide-react'
+import { Loader2, Search, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import type { BlogPostsResponse, CategoriesResponse } from '@/types/blog'
 import {
   GET_BLOG_POSTS_QUERY,
   GET_CATEGORIES_QUERY,
 } from '@/lib/graphql/blog.graphql'
-import type { BlogPostsResponse, CategoriesResponse } from '@/types/blog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'

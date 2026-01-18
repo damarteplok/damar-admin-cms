@@ -26,7 +26,7 @@ export interface DiscountsResponse {
     success: boolean
     message: string
     data: {
-      discounts: Discount[]
+      discounts: Array<Discount>
       total: number
       page: number
       perPage: number

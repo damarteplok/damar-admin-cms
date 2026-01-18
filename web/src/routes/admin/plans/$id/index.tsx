@@ -1,29 +1,29 @@
 import {
+  Link,
   createFileRoute,
   useNavigate,
   useParams,
-  Link,
 } from '@tanstack/react-router'
-import { useQuery, useMutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import { useTranslation } from 'react-i18next'
+import { ArrowLeft, Calendar, Check, X } from 'lucide-react'
+import { useState } from 'react'
+import type { DeletePlanResponse, PlanResponse } from '@/types'
 import {
-  GET_PLAN_QUERY,
   DELETE_PLAN_MUTATION,
+  GET_PLAN_QUERY,
 } from '@/lib/graphql/plan.graphql'
-import type { PlanResponse, DeletePlanResponse } from '@/types'
 import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { ArrowLeft, Calendar, Check, X } from 'lucide-react'
 import { ErrorState } from '@/components/ui/error-state'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
-import { useState } from 'react'
 import { DataTableSkeleton } from '@/components/ui/data-table-skeleton'
 
 export const Route = createFileRoute('/admin/plans/$id/')({

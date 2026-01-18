@@ -4,10 +4,10 @@ import { useForm } from '@tanstack/react-form'
 import { useMutation } from 'urql'
 import { AlertCircle } from 'lucide-react'
 
+import type { LoginResponse } from '@/types'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/lib/auth-hooks'
 import { LOGIN_MUTATION } from '@/lib/graphql/auth.graphql'
-import type { LoginResponse } from '@/types'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'

@@ -1,5 +1,5 @@
-import LangSwitcher from '@/components/lang-switcher'
 import { useTranslation } from 'react-i18next'
+import LangSwitcher from '@/components/lang-switcher'
 
 interface FooterLink {
   title?: string
@@ -9,7 +9,7 @@ interface FooterLink {
 
 interface Footer1Props {
   copyright?: string
-  links?: FooterLink[]
+  links?: Array<FooterLink>
 }
 
 export function Footer1({

@@ -1,12 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from '@/components/ui/card'
-import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/admin/')({
   component: AdminDashboard,

@@ -1,25 +1,27 @@
-import { useState, useMemo } from 'react'
-import { useQuery, useMutation } from 'urql'
-import { ColumnDef } from '@tanstack/react-table'
+import { useMemo, useState } from 'react'
+import { useMutation, useQuery } from 'urql'
 import { useTranslation } from 'react-i18next'
-import { formatDateTime } from '@/lib/utils/date'
-
-import {
-  GET_TENANT_USERS_QUERY,
-  ADD_USER_TO_TENANT_MUTATION,
-  REMOVE_USER_FROM_TENANT_MUTATION,
-  UPDATE_USER_ROLE_MUTATION,
-} from '@/lib/graphql/tenant.graphql'
-import {
-  SEARCH_USERS_QUERY,
-  ME_QUERY,
-  GET_USER_BY_ID_QUERY,
-} from '@/lib/graphql/auth.graphql'
+import { Edit, Eye, Loader2, Trash2, UserPlus } from 'lucide-react'
+import { toast } from 'sonner'
+import type { ColumnDef } from '@tanstack/react-table'
 import type {
   AddUserToTenantInput,
   UpdateUserRoleInput,
 } from '@/lib/graphql/tenant.graphql'
 import type { UserByIdResponse } from '@/types'
+import { formatDateTime } from '@/lib/utils/date'
+
+import {
+  ADD_USER_TO_TENANT_MUTATION,
+  GET_TENANT_USERS_QUERY,
+  REMOVE_USER_FROM_TENANT_MUTATION,
+  UPDATE_USER_ROLE_MUTATION,
+} from '@/lib/graphql/tenant.graphql'
+import {
+  GET_USER_BY_ID_QUERY,
+  ME_QUERY,
+  SEARCH_USERS_QUERY,
+} from '@/lib/graphql/auth.graphql'
 
 import { Button } from '@/components/ui/button'
 import { DataTableClient } from '@/components/data-table-client'
@@ -51,8 +53,6 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '@/components/ui/drawer'
-import { UserPlus, Trash2, Edit, Eye, Loader2 } from 'lucide-react'
-import { toast } from 'sonner'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 interface TenantUser {
@@ -260,7 +260,7 @@ export function WorkspaceUsersTable({
     setViewDrawerOpen(true)
   }
 
-  const columns: ColumnDef<TenantUser>[] = useMemo(
+  const columns: Array<ColumnDef<TenantUser>> = useMemo(
     () => [
       {
         accessorKey: 'email',

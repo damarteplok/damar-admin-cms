@@ -1,14 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { CrudEditPage } from '@/components/crud'
-import {
-  announcementsConfig,
-  transformAnnouncementToFormData,
-} from '@/features/announcements'
 import type {
   Announcement,
   CreateAnnouncementInput,
   UpdateAnnouncementInput,
 } from '@/types'
+import { CrudEditPage } from '@/components/crud'
+import {
+  announcementsConfig,
+  transformAnnouncementToFormData,
+} from '@/features/announcements'
 
 export const Route = createFileRoute('/admin/announcements/$id/edit')({
   component: EditAnnouncementPage,

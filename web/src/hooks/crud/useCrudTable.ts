@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react'
-import { useQuery, useMutation } from 'urql'
+import { useCallback, useState } from 'react'
+import { useMutation, useQuery } from 'urql'
 import type { DocumentNode } from 'graphql'
 
 export interface UseCrudTableOptions<TModel extends { id: string }> {
@@ -37,7 +37,7 @@ export interface UseCrudTableReturn<TModel extends { id: string }> {
   setSortOrder: (order: 'asc' | 'desc') => void
 
   // Data
-  data: TModel[]
+  data: Array<TModel>
   total: number
   totalPages: number
   fetching: boolean
@@ -195,7 +195,7 @@ export function useCrudTable<TModel extends { id: string }>(
     setSortOrder,
 
     // Data
-    data: items as TModel[],
+    data: items as Array<TModel>,
     total,
     totalPages,
     fetching: result.fetching,

@@ -22,7 +22,7 @@ export interface PaginationParams {
 }
 
 export interface PaginatedResponse<T> {
-  data: T[]
+  data: Array<T>
   pagination: {
     page: number
     limit: number
@@ -34,7 +34,7 @@ export interface PaginatedResponse<T> {
 // GraphQL-specific types
 export interface GraphQLError {
   message: string
-  path?: string[]
+  path?: Array<string>
   extensions?: Record<string, unknown>
 }
 
@@ -130,7 +130,7 @@ export interface Tenant {
 }
 
 export interface TenantsData {
-  tenants: Tenant[]
+  tenants: Array<Tenant>
   total: number
   page: number
   perPage: number
@@ -189,7 +189,7 @@ export interface TenantUsersResponse {
   tenantUsers: {
     success: boolean
     message: string
-    data: TenantUser[]
+    data: Array<TenantUser>
   }
 }
 

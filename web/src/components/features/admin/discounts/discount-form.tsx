@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
 
+import { Loader2 } from 'lucide-react'
+import type { CreateDiscountInput, UpdateDiscountInput } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
@@ -9,8 +11,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
-import { Loader2 } from 'lucide-react'
-import { CreateDiscountInput, UpdateDiscountInput } from '@/types'
 
 interface DiscountFormValues extends Omit<
   CreateDiscountInput,

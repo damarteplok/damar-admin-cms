@@ -1,40 +1,40 @@
-import { useEditor, EditorContent } from '@tiptap/react'
+import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
 import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
-import { cn } from '@/lib/utils'
 import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
   Bold,
-  Italic,
-  List,
-  ListOrdered,
+  Code,
+  Code2,
   Heading2,
   Heading3,
-  Undo,
-  Redo,
-  Code,
-  Quote,
   ImageIcon,
+  Italic,
   Link2,
-  Minus,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  Underline as UnderlineIcon,
-  Strikethrough,
-  Code2,
+  List,
+  ListOrdered,
   Loader2,
+  Minus,
+  Quote,
+  Redo,
+  Strikethrough,
+  Underline as UnderlineIcon,
+  Undo,
   X,
 } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useMutation } from 'urql'
+import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useState, useCallback, useEffect, useRef } from 'react'
-import { useMutation } from 'urql'
 import { UPLOAD_FILE_MUTATION } from '@/lib/graphql/media.graphql'
-import { toast } from 'sonner'
 
 interface RichTextEditorProps {
   value: string

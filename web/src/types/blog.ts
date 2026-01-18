@@ -1,5 +1,5 @@
-import { UserProfile } from './user'
-import { Media } from './media'
+import type { UserProfile } from './user'
+import type { Media } from './media'
 
 export interface BlogPost {
   id: string
@@ -33,7 +33,7 @@ export interface BlogPostsResponse {
     success: boolean
     message: string
     data: {
-      blogPosts: BlogPost[]
+      blogPosts: Array<BlogPost>
       total: number
       page: number
       perPage: number
@@ -86,7 +86,7 @@ export interface CategoriesResponse {
     success: boolean
     message: string
     data: {
-      categories: Category[]
+      categories: Array<Category>
       total: number
       page: number
       perPage: number

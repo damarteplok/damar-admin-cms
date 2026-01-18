@@ -1,28 +1,28 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { useQuery, useMutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-import {
-  GET_MY_PROFILE_QUERY,
-  UPDATE_PROFILE_MUTATION,
-  CHANGE_PASSWORD_MUTATION,
-  UPLOAD_AVATAR_MUTATION,
-} from '@/lib/graphql/user.graphql'
 import type {
-  ProfileMeResponse,
-  UpdateProfileResponse,
-  ChangePasswordResponse,
-  UpdateProfileInput,
   ChangePasswordInput,
+  ChangePasswordResponse,
+  ProfileMeResponse,
+  UpdateProfileInput,
+  UpdateProfileResponse,
   UploadAvatarResponse,
 } from '@/types'
+import {
+  CHANGE_PASSWORD_MUTATION,
+  GET_MY_PROFILE_QUERY,
+  UPDATE_PROFILE_MUTATION,
+  UPLOAD_AVATAR_MUTATION,
+} from '@/lib/graphql/user.graphql'
 
 import {
-  ProfileForm,
-  ChangePasswordForm,
   AvatarUpload,
+  ChangePasswordForm,
+  ProfileForm,
 } from '@/components/features/profile'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'

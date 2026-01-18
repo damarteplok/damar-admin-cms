@@ -1,12 +1,13 @@
-import { ColumnDef } from '@tanstack/react-table'
+import { AlertCircle, Check, Eye, Pencil, Trash2, X } from 'lucide-react'
+import type { ColumnDef } from '@tanstack/react-table'
 import type { Announcement } from '@/types'
+import type {
+  DataTableAction} from '@/components/ui/data-table-actions';
+import type { TFunction } from 'i18next'
 import {
-  DataTableActions,
-  DataTableAction,
+  DataTableActions
 } from '@/components/ui/data-table-actions'
 import { Badge } from '@/components/ui/badge'
-import { Check, X, Pencil, Trash2, Eye, AlertCircle } from 'lucide-react'
-import type { TFunction } from 'i18next'
 import { formatDateTime } from '@/lib/utils/date'
 
 interface ColumnProps {
@@ -21,7 +22,7 @@ export const createAnnouncementColumns = ({
   onEdit,
   onView,
   t,
-}: ColumnProps): ColumnDef<Announcement>[] => [
+}: ColumnProps): Array<ColumnDef<Announcement>> => [
   {
     accessorKey: 'title',
     header: t('announcements.columns.title', { defaultValue: 'Title' }),
@@ -153,7 +154,7 @@ export const createAnnouncementColumns = ({
     cell: ({ row }) => {
       const announcement = row.original
 
-      const actions: DataTableAction<Announcement>[] = [
+      const actions: Array<DataTableAction<Announcement>> = [
         {
           label: t('announcements.actions.view_details', {
             defaultValue: 'View Details',

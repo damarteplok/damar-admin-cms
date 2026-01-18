@@ -22,14 +22,14 @@ const breadcrumbMap: Record<string, string> = {
  * Hook to generate breadcrumbs from current pathname
  * Automatically generates breadcrumbs based on URL segments
  */
-export function useBreadcrumbs(): BreadcrumbItem[] {
+export function useBreadcrumbs(): Array<BreadcrumbItem> {
   const location = useLocation()
   const params = useParams({ strict: false })
 
   const pathname = location.pathname
   const segments = pathname.split('/').filter(Boolean)
 
-  const breadcrumbs: BreadcrumbItem[] = []
+  const breadcrumbs: Array<BreadcrumbItem> = []
   let currentPath = ''
 
   for (let i = 0; i < segments.length; i++) {

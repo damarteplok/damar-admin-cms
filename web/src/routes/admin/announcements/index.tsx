@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { CrudListPage } from '@/components/crud'
-import { announcementsConfig } from '@/features/announcements'
 import type {
   Announcement,
   CreateAnnouncementInput,
   UpdateAnnouncementInput,
 } from '@/types'
+import { CrudListPage } from '@/components/crud'
+import { announcementsConfig } from '@/features/announcements'
 
 export const Route = createFileRoute('/admin/announcements/')({
   component: AnnouncementsPage,

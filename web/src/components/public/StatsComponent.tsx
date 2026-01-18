@@ -7,10 +7,10 @@ interface Stat {
 interface StatsComponentProps {
   heading?: string
   description?: string
-  stats?: Stat[]
+  stats?: Array<Stat>
 }
 
-const defaultStats: Stat[] = [
+const defaultStats: Array<Stat> = [
   {
     id: 'stat-1',
     value: '99.9%',

@@ -13,10 +13,10 @@ import {
   User,
 } from 'lucide-react'
 
+import { useTranslation } from 'react-i18next'
 import { NavMain } from '@/components/nav-main'
 import { NavSecondary } from '@/components/nav-secondary'
 import { NavUser } from '@/components/nav-user'
-import { useTranslation } from 'react-i18next'
 import {
   Sidebar,
   SidebarContent,

@@ -1,7 +1,9 @@
-import { Outlet, useNavigate, Link } from '@tanstack/react-router'
+import { Link, Outlet, useNavigate } from '@tanstack/react-router'
+import { useEffect } from 'react'
+import { StatusPage } from './StatusPage'
 import {
-  SidebarProvider,
   SidebarInset,
+  SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/app-sidebar'
@@ -15,10 +17,8 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { useAuth } from '@/lib/auth-hooks'
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
-import { useEffect } from 'react'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { FullScreenLoading } from '@/components/common/full-screen-loading'
-import { StatusPage } from './StatusPage'
 import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
 
 export function AdminLayout({ children }: { children?: React.ReactNode }) {

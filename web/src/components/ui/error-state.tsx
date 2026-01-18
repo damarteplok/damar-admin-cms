@@ -1,6 +1,6 @@
+import { AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { AlertCircle, AlertTriangle, Info, CheckCircle } from 'lucide-react'
-import { ReactNode } from 'react'
 import { Button } from '@/components/ui/button'
 
 interface ErrorStateProps {

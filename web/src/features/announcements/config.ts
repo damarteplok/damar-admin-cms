@@ -1,16 +1,14 @@
-import type { CrudConfig, CrudTranslations } from '@/types'
-import type {
-  Announcement,
-  CreateAnnouncementInput,
-  UpdateAnnouncementInput,
-} from '@/types'
+import type { Announcement, CreateAnnouncementInput,
+  CrudConfig,
+  CrudTranslations,
+  UpdateAnnouncementInput } from '@/types'
 
 import {
+  CREATE_ANNOUNCEMENT_MUTATION,
+  DELETE_ANNOUNCEMENT_MUTATION,
   GET_ANNOUNCEMENTS_QUERY,
   GET_ANNOUNCEMENT_QUERY,
-  CREATE_ANNOUNCEMENT_MUTATION,
   UPDATE_ANNOUNCEMENT_MUTATION,
-  DELETE_ANNOUNCEMENT_MUTATION,
 } from '@/lib/graphql/announcement.graphql'
 
 import { createAnnouncementColumns } from '@/components/features/admin/announcements/announcement-columns'

@@ -2,15 +2,16 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
 
+import { Loader2 } from 'lucide-react'
+import { MetadataInput } from './metadata-input'
+import { FeaturesInput } from './features-input'
+import type { CreateProductInput, UpdateProductInput } from '@/types'
+import type { MetadataItem } from './metadata-input';
 import { Button } from '@/components/ui/button'
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Loader2 } from 'lucide-react'
-import { CreateProductInput, UpdateProductInput } from '@/types'
-import { MetadataInput, MetadataItem } from './metadata-input'
-import { FeaturesInput } from './features-input'
 
 interface ProductFormProps {
   initialData?: Partial<CreateProductInput>
@@ -34,7 +35,7 @@ export function ProductForm({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Parse metadata and features from JSON strings
-  const parseMetadata = (metadataStr?: string): MetadataItem[] => {
+  const parseMetadata = (metadataStr?: string): Array<MetadataItem> => {
     if (!metadataStr) return []
     try {
       const parsed = JSON.parse(metadataStr)
@@ -47,7 +48,7 @@ export function ProductForm({
     }
   }
 
-  const parseFeatures = (featuresStr?: string): string[] => {
+  const parseFeatures = (featuresStr?: string): Array<string> => {
     if (!featuresStr) return []
     try {
       const parsed = JSON.parse(featuresStr)

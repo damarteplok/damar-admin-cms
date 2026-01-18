@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router'
 import { useAuth } from '@/lib/auth-hooks'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
@@ -8,7 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useNavigate } from '@tanstack/react-router'
 
 export function UserNav() {
   const { user, logout } = useAuth()

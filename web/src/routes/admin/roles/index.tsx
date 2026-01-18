@@ -1,13 +1,13 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
-import { useQuery, useMutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import { useTranslation } from 'react-i18next'
 
+import type { DeleteRoleResponse, Role, RolesResponse } from '@/types'
 import {
-  GET_ROLES_QUERY,
   DELETE_ROLE_MUTATION,
+  GET_ROLES_QUERY,
 } from '@/lib/graphql/rbac.graphql'
-import type { RolesResponse, DeleteRoleResponse, Role } from '@/types'
 
 import { DataTable } from '@/components/data-table'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'

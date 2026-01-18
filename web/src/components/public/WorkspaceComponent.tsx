@@ -22,10 +22,10 @@ interface WorkspaceItem {
 
 interface WorkspaceComponentProps {
   heading?: string
-  items?: WorkspaceItem[]
+  items?: Array<WorkspaceItem>
 }
 
-const defaultItems: WorkspaceItem[] = [
+const defaultItems: Array<WorkspaceItem> = [
   {
     icon: <Building2 />,
     title: 'Acme Corporation',

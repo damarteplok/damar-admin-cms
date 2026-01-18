@@ -1,21 +1,21 @@
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
-import { useQuery, useMutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { ArrowLeft, Loader2 } from 'lucide-react'
+import type {
+  CreatePermissionInput,
+  PermissionResponse,
+  UpdatePermissionInput,
+  UpdatePermissionResponse,
+} from '@/types'
 import {
   GET_PERMISSION_QUERY,
   UPDATE_PERMISSION_MUTATION,
 } from '@/lib/graphql/rbac.graphql'
-import type {
-  PermissionResponse,
-  UpdatePermissionResponse,
-  UpdatePermissionInput,
-  CreatePermissionInput,
-} from '@/types'
 import { PermissionForm } from '@/components/features/admin/permissions'
 
-import { ArrowLeft, Loader2 } from 'lucide-react'
 import { ErrorState } from '@/components/ui/error-state'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'

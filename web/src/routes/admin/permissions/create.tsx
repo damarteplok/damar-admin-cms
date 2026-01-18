@@ -3,17 +3,17 @@ import { useMutation } from 'urql'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-import { CREATE_PERMISSION_MUTATION } from '@/lib/graphql/rbac.graphql'
+import { ArrowLeft } from 'lucide-react'
 import type {
-  CreatePermissionResponse,
   CreatePermissionInput,
+  CreatePermissionResponse,
   UpdatePermissionInput,
 } from '@/types'
+import { CREATE_PERMISSION_MUTATION } from '@/lib/graphql/rbac.graphql'
 import { PermissionForm } from '@/components/features/admin/permissions'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { ArrowLeft } from 'lucide-react'
 
 export const Route = createFileRoute('/admin/permissions/create')({
   component: CreatePermissionPage,

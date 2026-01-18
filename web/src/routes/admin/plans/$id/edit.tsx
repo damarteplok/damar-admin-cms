@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
+import type { CreatePlanInput, Plan, UpdatePlanInput } from '@/types'
 import { CrudEditPage } from '@/components/crud'
 import { plansConfig, transformPlanToFormData } from '@/features/plans'
-import type { Plan, CreatePlanInput, UpdatePlanInput } from '@/types'
 
 export const Route = createFileRoute('/admin/plans/$id/edit')({
   component: EditPlanPage,

@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
 
+import { Loader2 } from 'lucide-react'
+import type { CreatePermissionInput, UpdatePermissionInput } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { Loader2 } from 'lucide-react'
-import { CreatePermissionInput, UpdatePermissionInput } from '@/types'
 
 interface PermissionFormProps {
   initialData?: Partial<CreatePermissionInput>

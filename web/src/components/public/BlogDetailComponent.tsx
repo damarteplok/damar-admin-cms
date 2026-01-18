@@ -1,10 +1,10 @@
 import { useQuery } from 'urql'
 import { useNavigate } from '@tanstack/react-router'
-import { ArrowLeft, Calendar, User, Loader2, Tag } from 'lucide-react'
+import { ArrowLeft, Calendar, Loader2, Tag, User } from 'lucide-react'
 import DOMPurify from 'isomorphic-dompurify'
 
-import { GET_BLOG_POST_BY_SLUG_QUERY } from '@/lib/graphql/blog.graphql'
 import type { GetBlogPostResponse } from '@/types/blog'
+import { GET_BLOG_POST_BY_SLUG_QUERY } from '@/lib/graphql/blog.graphql'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'

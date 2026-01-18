@@ -1,12 +1,13 @@
-import { ColumnDef } from '@tanstack/react-table'
+import { Check, Eye, Pencil, Trash2, X } from 'lucide-react'
+import type { ColumnDef } from '@tanstack/react-table'
 import type { Product } from '@/types'
+import type {
+  DataTableAction} from '@/components/ui/data-table-actions';
+import type { TFunction } from 'i18next'
 import {
-  DataTableActions,
-  DataTableAction,
+  DataTableActions
 } from '@/components/ui/data-table-actions'
 import { Badge } from '@/components/ui/badge'
-import { Check, X, Pencil, Trash2, Eye } from 'lucide-react'
-import type { TFunction } from 'i18next'
 import { formatDateTime } from '@/lib/utils/date'
 
 interface ColumnProps {
@@ -21,7 +22,7 @@ export const createProductColumns = ({
   onEdit,
   onView,
   t,
-}: ColumnProps): ColumnDef<Product>[] => [
+}: ColumnProps): Array<ColumnDef<Product>> => [
   {
     accessorKey: 'name',
     header: t('products.columns.name', { defaultValue: 'Name' }),
@@ -86,7 +87,7 @@ export const createProductColumns = ({
     cell: ({ row }) => {
       const product = row.original
 
-      const actions: DataTableAction<Product>[] = [
+      const actions: Array<DataTableAction<Product>> = [
         {
           label: t('products.actions.view_details', {
             defaultValue: 'View Details',

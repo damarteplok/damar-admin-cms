@@ -1,12 +1,13 @@
-import { ColumnDef } from '@tanstack/react-table'
+import { Eye, Pencil, Trash2 } from 'lucide-react'
+import type { ColumnDef } from '@tanstack/react-table'
 import type { Tenant } from '@/types'
+import type {
+  DataTableAction} from '@/components/ui/data-table-actions';
+import type { TFunction } from 'i18next'
 import {
-  DataTableActions,
-  DataTableAction,
+  DataTableActions
 } from '@/components/ui/data-table-actions'
 import { Badge } from '@/components/ui/badge'
-import { Pencil, Trash2, Eye } from 'lucide-react'
-import type { TFunction } from 'i18next'
 import { formatDateTime } from '@/lib/utils/date'
 
 interface ColumnProps {
@@ -21,7 +22,7 @@ export const createWorkspaceColumns = ({
   onEdit,
   onView,
   t,
-}: ColumnProps): ColumnDef<Tenant>[] => [
+}: ColumnProps): Array<ColumnDef<Tenant>> => [
   {
     accessorKey: 'name',
     header: t('workspaces.columns.name', { defaultValue: 'Name' }),
@@ -76,7 +77,7 @@ export const createWorkspaceColumns = ({
     cell: ({ row }) => {
       const workspace = row.original
 
-      const actions: DataTableAction<Tenant>[] = [
+      const actions: Array<DataTableAction<Tenant>> = [
         {
           label: t('workspaces.actions.view_details', {
             defaultValue: 'View Details',

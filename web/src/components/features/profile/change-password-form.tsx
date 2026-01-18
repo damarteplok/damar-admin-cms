@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
 
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import type { ChangePasswordInput } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { Loader2, Eye, EyeOff } from 'lucide-react'
-import { ChangePasswordInput } from '@/types'
 
 interface ChangePasswordFormProps {
   onSubmit: (data: ChangePasswordInput) => Promise<boolean>

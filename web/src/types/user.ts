@@ -58,7 +58,7 @@ export interface UsersListResponse {
     success: boolean
     message: string
     data: {
-      users: UserProfile[]
+      users: Array<UserProfile>
       total: number
       page: number
       perPage: number

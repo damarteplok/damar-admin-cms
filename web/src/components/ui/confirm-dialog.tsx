@@ -1,6 +1,6 @@
+import type { ReactNode } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { ReactNode } from 'react'
 
 interface ConfirmDialogProps {
   open: boolean

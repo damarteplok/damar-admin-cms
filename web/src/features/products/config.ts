@@ -1,12 +1,11 @@
-import type { CrudConfig, CrudTranslations } from '@/types'
-import type { Product, CreateProductInput, UpdateProductInput } from '@/types'
+import type { CreateProductInput, CrudConfig, CrudTranslations, Product, UpdateProductInput  } from '@/types'
 
 import {
+  CREATE_PRODUCT_MUTATION,
+  DELETE_PRODUCT_MUTATION,
   GET_PRODUCTS_QUERY,
   GET_PRODUCT_QUERY,
-  CREATE_PRODUCT_MUTATION,
   UPDATE_PRODUCT_MUTATION,
-  DELETE_PRODUCT_MUTATION,
 } from '@/lib/graphql/product.graphql'
 
 import { createProductColumns } from '@/components/features/admin/products/product-columns'

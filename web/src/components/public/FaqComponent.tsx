@@ -15,10 +15,10 @@ interface FaqItem {
 
 interface FaqComponentProps {
   heading?: string
-  items?: FaqItem[]
+  items?: Array<FaqItem>
 }
 
-const defaultItems: FaqItem[] = [
+const defaultItems: Array<FaqItem> = [
   {
     id: 'faq-1',
     question: 'What is damar-admin-cms?',

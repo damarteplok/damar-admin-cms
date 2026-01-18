@@ -3,6 +3,7 @@ import { useForm } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
 import { Loader2 } from 'lucide-react'
 
+import type { CreateBlogPostInput, Media, UpdateBlogPostInput } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
@@ -13,7 +14,6 @@ import { ImageUpload } from '@/components/ui/image-upload'
 import { SearchSelect } from '@/components/common/search-select'
 import { GET_USERS_QUERY } from '@/lib/graphql/auth.graphql'
 import { GET_CATEGORIES_QUERY } from '@/lib/graphql/blog.graphql'
-import { CreateBlogPostInput, UpdateBlogPostInput, Media } from '@/types'
 
 interface BlogPostFormProps {
   initialData?: Partial<CreateBlogPostInput>

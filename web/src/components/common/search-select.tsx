@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useQuery, AnyVariables, TypedDocumentNode, gql } from 'urql'
+import { gql, useQuery } from 'urql'
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import type { AnyVariables, TypedDocumentNode} from 'urql';
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -28,7 +29,7 @@ interface SearchSelectProps {
   onChange: (value: string) => void
   query?: TypedDocumentNode<any, AnyVariables> | string
   queryKey?: string
-  staticData?: any[] // Add support for static data
+  staticData?: Array<any> // Add support for static data
   placeholder?: string
   emptyText?: string
   searchPlaceholder?: string
@@ -83,7 +84,7 @@ export function SearchSelect({
   const { data, fetching } = result
 
   // Use static data if provided, otherwise use query result
-  const options: SearchSelectOption[] = staticData
+  const options: Array<SearchSelectOption> = staticData
     ? staticData
         .filter((item) => {
           if (!search) return true

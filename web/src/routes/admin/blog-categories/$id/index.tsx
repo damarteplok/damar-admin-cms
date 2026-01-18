@@ -1,10 +1,10 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useQuery } from 'urql'
 import { useTranslation } from 'react-i18next'
-import { Loader2, ArrowLeft, Pencil } from 'lucide-react'
+import { ArrowLeft, Loader2, Pencil } from 'lucide-react'
 
-import { GET_CATEGORY_QUERY } from '@/lib/graphql/blog.graphql'
 import type { CategoryResponse } from '@/types'
+import { GET_CATEGORY_QUERY } from '@/lib/graphql/blog.graphql'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'

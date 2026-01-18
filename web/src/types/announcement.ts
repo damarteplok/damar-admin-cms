@@ -18,7 +18,7 @@ export interface AnnouncementsResponse {
     success: boolean
     message: string
     data: {
-      announcements: Announcement[]
+      announcements: Array<Announcement>
       total: number
       page: number
       perPage: number
@@ -38,7 +38,7 @@ export interface ActiveAnnouncementsResponse {
   activeAnnouncements: {
     success: boolean
     message: string
-    data: Announcement[]
+    data: Array<Announcement>
   }
 }
 

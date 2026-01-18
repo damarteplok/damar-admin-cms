@@ -48,7 +48,7 @@ export interface MediaByModelResponse {
     success: boolean
     message: string
     data: {
-      media: Media[]
+      media: Array<Media>
       total: number
       page: number
       perPage: number

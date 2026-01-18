@@ -1,12 +1,13 @@
-import { ColumnDef } from '@tanstack/react-table'
+import { Check, Eye, Pencil, Trash2, X } from 'lucide-react'
+import type { ColumnDef } from '@tanstack/react-table'
 import type { Discount } from '@/types'
+import type {
+  DataTableAction} from '@/components/ui/data-table-actions';
+import type { TFunction } from 'i18next'
 import {
-  DataTableActions,
-  DataTableAction,
+  DataTableActions
 } from '@/components/ui/data-table-actions'
 import { Badge } from '@/components/ui/badge'
-import { Check, X, Pencil, Trash2, Eye } from 'lucide-react'
-import type { TFunction } from 'i18next'
 import { formatDateTime } from '@/lib/utils/date'
 
 interface ColumnProps {
@@ -21,7 +22,7 @@ export const createDiscountColumns = ({
   onEdit,
   onView,
   t,
-}: ColumnProps): ColumnDef<Discount>[] => [
+}: ColumnProps): Array<ColumnDef<Discount>> => [
   {
     accessorKey: 'name',
     header: t('discounts.columns.name', { defaultValue: 'Name' }),
@@ -42,7 +43,7 @@ export const createDiscountColumns = ({
     accessorKey: 'type',
     header: t('discounts.columns.type', { defaultValue: 'Type' }),
     cell: ({ row }) => {
-      const type = row.getValue('type') as string
+      const type = row.getValue('type')
       return (
         <Badge variant={type === 'percentage' ? 'default' : 'secondary'}>
           {type === 'percentage' ? 'Percentage' : 'Fixed'}
@@ -55,7 +56,7 @@ export const createDiscountColumns = ({
     header: t('discounts.columns.amount', { defaultValue: 'Amount' }),
     cell: ({ row }) => {
       const type = row.original.type
-      const amount = row.getValue('amount') as number
+      const amount = row.getValue('amount')
       return (
         <span className="font-medium">
           {type === 'percentage' ? `${amount}%` : `$${amount.toFixed(2)}`}
@@ -85,7 +86,7 @@ export const createDiscountColumns = ({
     accessorKey: 'redemptions',
     header: t('discounts.columns.redemptions', { defaultValue: 'Redemptions' }),
     cell: ({ row }) => {
-      const redemptions = row.getValue('redemptions') as number
+      const redemptions = row.getValue('redemptions')
       const maxRedemptions = row.original.maxRedemptions
 
       return (
@@ -126,7 +127,7 @@ export const createDiscountColumns = ({
     cell: ({ row }) => {
       const discount = row.original
 
-      const actions: DataTableAction<Discount>[] = [
+      const actions: Array<DataTableAction<Discount>> = [
         {
           label: t('discounts.actions.view_details', {
             defaultValue: 'View Details',

@@ -6,11 +6,11 @@ import { useState } from 'react'
 import DOMPurify from 'isomorphic-dompurify'
 import { ArrowLeft, Calendar, Clock, Eye, EyeOff, Loader2 } from 'lucide-react'
 
-import {
-  GET_ANNOUNCEMENT_QUERY,
-  DELETE_ANNOUNCEMENT_MUTATION,
-} from '@/lib/graphql/announcement.graphql'
 import type { AnnouncementResponse } from '@/types'
+import {
+  DELETE_ANNOUNCEMENT_MUTATION,
+  GET_ANNOUNCEMENT_QUERY,
+} from '@/lib/graphql/announcement.graphql'
 import { Button } from '@/components/ui/button'
 import { DataTableSkeleton } from '@/components/ui/data-table-skeleton'
 import { ErrorState } from '@/components/ui/error-state'

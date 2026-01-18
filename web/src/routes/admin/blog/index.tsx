@@ -4,17 +4,17 @@ import { useMutation } from 'urql'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import type {
+  BlogPost,
+  PublishBlogPostResponse,
+  UnpublishBlogPostResponse,
+} from '@/types'
 import { useCrudTable } from '@/hooks/crud'
 import { blogConfig } from '@/features/blog'
 import {
   PUBLISH_BLOG_POST_MUTATION,
   UNPUBLISH_BLOG_POST_MUTATION,
 } from '@/lib/graphql/blog.graphql'
-import type {
-  PublishBlogPostResponse,
-  UnpublishBlogPostResponse,
-  BlogPost,
-} from '@/types'
 
 import { DataTable } from '@/components/data-table'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'

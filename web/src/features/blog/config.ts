@@ -1,16 +1,14 @@
-import type { CrudConfig, CrudTranslations } from '@/types'
-import type {
-  BlogPost,
-  CreateBlogPostInput,
-  UpdateBlogPostInput,
-} from '@/types'
+import type { BlogPost, CreateBlogPostInput,
+  CrudConfig,
+  CrudTranslations,
+  UpdateBlogPostInput } from '@/types'
 
 import {
+  CREATE_BLOG_POST_MUTATION,
+  DELETE_BLOG_POST_MUTATION,
   GET_BLOG_POSTS_QUERY,
   GET_BLOG_POST_QUERY,
-  CREATE_BLOG_POST_MUTATION,
   UPDATE_BLOG_POST_MUTATION,
-  DELETE_BLOG_POST_MUTATION,
 } from '@/lib/graphql/blog.graphql'
 
 import { createBlogPostColumns } from '@/components/features/admin/blog/blog-post-columns'

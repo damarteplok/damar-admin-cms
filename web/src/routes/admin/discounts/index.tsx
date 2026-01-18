@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { CrudListPage } from '@/components/crud'
-import { discountsConfig } from '@/features/discounts'
 import type {
-  Discount,
   CreateDiscountInput,
+  Discount,
   UpdateDiscountInput,
 } from '@/types'
+import { CrudListPage } from '@/components/crud'
+import { discountsConfig } from '@/features/discounts'
 
 export const Route = createFileRoute('/admin/discounts/')({
   component: DiscountsPage,

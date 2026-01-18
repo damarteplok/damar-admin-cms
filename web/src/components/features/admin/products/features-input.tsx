@@ -1,31 +1,32 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card } from '@/components/ui/card'
-import { X, Plus, GripVertical } from 'lucide-react'
-import {
-  FieldDescription,
-  FieldLabel,
-  Field as FieldWrapper,
-} from '@/components/ui/field'
+import { GripVertical, Plus, X } from 'lucide-react'
 import {
   DndContext,
-  closestCenter,
   KeyboardSensor,
   PointerSensor,
+  closestCenter,
   useSensor,
-  useSensors,
-  DragEndEvent,
+  useSensors
 } from '@dnd-kit/core'
 import {
-  arrayMove,
   SortableContext,
+  arrayMove,
   sortableKeyboardCoordinates,
   useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import type {
+  DragEndEvent} from '@dnd-kit/core';
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Card } from '@/components/ui/card'
+import {
+  FieldDescription,
+  FieldLabel,
+  Field as FieldWrapper,
+} from '@/components/ui/field'
 
 interface FeatureItem {
   id: string
@@ -33,8 +34,8 @@ interface FeatureItem {
 }
 
 interface FeaturesInputProps {
-  value: string[]
-  onChange: (features: string[]) => void
+  value: Array<string>
+  onChange: (features: Array<string>) => void
   disabled?: boolean
 }
 
@@ -103,7 +104,7 @@ export function FeaturesInput({
   const featureValues = Array.isArray(value) ? value : []
 
   // Convert array to items with IDs for DnD
-  const items: FeatureItem[] = featureValues.map((text, index) => ({
+  const items: Array<FeatureItem> = featureValues.map((text, index) => ({
     id: `feature-${index}`,
     text,
   }))

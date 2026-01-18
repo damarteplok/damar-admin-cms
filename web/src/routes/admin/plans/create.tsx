@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
+import type { CreatePlanInput, Plan, UpdatePlanInput } from '@/types'
 import { CrudCreatePage } from '@/components/crud'
 import { plansConfig } from '@/features/plans'
-import type { Plan, CreatePlanInput, UpdatePlanInput } from '@/types'
 
 export const Route = createFileRoute('/admin/plans/create')({
   component: CreatePlanPage,

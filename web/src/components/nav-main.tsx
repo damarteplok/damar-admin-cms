@@ -1,5 +1,6 @@
-import { ChevronRight, type LucideIcon } from 'lucide-react'
+import { ChevronRight  } from 'lucide-react'
 import { Link, useLocation } from '@tanstack/react-router'
+import type {LucideIcon} from 'lucide-react';
 
 import {
   Collapsible,
@@ -21,16 +22,16 @@ import {
 export function NavMain({
   items,
 }: {
-  items: {
+  items: Array<{
     title: string
     url?: string
     icon: LucideIcon
     isActive?: boolean
-    items?: {
+    items?: Array<{
       title: string
       url: string
-    }[]
-  }[]
+    }>
+  }>
 }) {
   const location = useLocation()
   const pathname =

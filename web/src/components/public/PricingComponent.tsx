@@ -13,7 +13,7 @@ interface PricingPlan {
     yearly: number
     currency: string
   }
-  features: string[]
+  features: Array<string>
   buttonText: string
   buttonUrl: string
   highlighted?: boolean
@@ -22,10 +22,10 @@ interface PricingPlan {
 interface PricingComponentProps {
   heading?: string
   subheading?: string
-  plans?: PricingPlan[]
+  plans?: Array<PricingPlan>
 }
 
-const defaultPlans: PricingPlan[] = [
+const defaultPlans: Array<PricingPlan> = [
   {
     id: 'sandbox',
     name: 'Sandbox',

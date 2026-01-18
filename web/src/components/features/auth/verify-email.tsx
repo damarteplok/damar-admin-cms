@@ -4,9 +4,9 @@ import { useMutation } from 'urql'
 import { useTranslation } from 'react-i18next'
 import { CheckCircle2Icon } from 'lucide-react'
 
+import type { VerifyEmailResponse } from '@/types'
 import { useAuth } from '@/lib/auth-hooks'
 import { VERIFY_EMAIL_MUTATION } from '@/lib/graphql/auth.graphql'
-import type { VerifyEmailResponse } from '@/types'
 
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'

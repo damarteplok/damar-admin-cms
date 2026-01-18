@@ -3,17 +3,17 @@ import { useMutation } from 'urql'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-import { CREATE_ROLE_MUTATION } from '@/lib/graphql/rbac.graphql'
+import { ArrowLeft } from 'lucide-react'
 import type {
-  CreateRoleResponse,
   CreateRoleInput,
+  CreateRoleResponse,
   UpdateRoleInput,
 } from '@/types'
+import { CREATE_ROLE_MUTATION } from '@/lib/graphql/rbac.graphql'
 import { RoleForm } from '@/components/features/admin/roles'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { ArrowLeft } from 'lucide-react'
 
 export const Route = createFileRoute('/admin/roles/create')({
   component: CreateRolePage,

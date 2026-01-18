@@ -1,12 +1,13 @@
 import {
   Client,
+  
   cacheExchange,
-  fetchExchange,
   errorExchange,
-  type CombinedError,
+  fetchExchange
 } from 'urql'
 import { toast } from 'sonner'
 import { getAccessToken, removeAccessToken, removeRefreshToken } from '../auth'
+import type {CombinedError} from 'urql';
 import { env } from '@/config'
 
 export const urqlClient = new Client({

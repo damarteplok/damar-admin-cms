@@ -1,9 +1,9 @@
-import { useState, useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Camera, Loader2, Trash2, User } from 'lucide-react'
+import type { MediaFile } from '@/types'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Camera, Loader2, Trash2, User } from 'lucide-react'
-import { MediaFile } from '@/types'
 
 interface AvatarUploadProps {
   avatar?: MediaFile

@@ -1,17 +1,27 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-  getSortedRowModel,
-  SortingState,
   getFilteredRowModel,
-  ColumnFiltersState,
-  VisibilityState,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table'
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Settings2,
+} from 'lucide-react'
+import type {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState} from '@tanstack/react-table';
 import {
   Table,
   TableBody,
@@ -28,28 +38,19 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import {
-  Plus,
-  ChevronLeft,
-  ChevronRight,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Settings2,
-} from 'lucide-react'
 
 interface DataTableClientProps<TData, TValue> {
   title: string
   description?: string
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: Array<ColumnDef<TData, TValue>>
+  data: Array<TData>
   searchPlaceholder?: string
   searchColumn?: string
   canAdd?: boolean
   addButtonTitle?: string
   onAddClick?: () => void
   showRowNumber?: boolean
-  pageSizeOptions?: number[]
+  pageSizeOptions?: Array<number>
   defaultPageSize?: number
   isLoading?: boolean
 }
