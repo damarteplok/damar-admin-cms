@@ -16,6 +16,9 @@
     "blog_posts": "Blog Posts",
     "blog_categories": "Blog Categories",
     "announcements": "Announcements",
+    "access_control": "Access Control",
+    "roles": "Roles",
+    "permissions": "Permissions",
     "profile": "Profile",
     "notifications": "Notifications",
     "language": "Language"
@@ -711,5 +714,152 @@
       "yes": "Yes",
       "no": "No"
     }
+  },
+
+  "permissions": {
+    "title": "Permissions",
+    "create_title": "Create Permission",
+    "edit_title": "Edit Permission",
+    "view_title": "Permission Details",
+    "create_button": "Create Permission",
+    "search_placeholder": "Search permissions...",
+    "not_found": "Permission Not Found",
+    "load_failed": "Failed to load permission",
+    "failed_to_load": "Failed to load permissions",
+    "error_occurred": "An error occurred while fetching permissions. Please try again.",
+    "unable_to_fetch": "Unable to fetch permissions data.",
+    "delete_success": "Permission deleted successfully",
+    "delete_failed": "Failed to delete permission",
+    "create_description": "Create a new permission for access control",
+    "edit_description": "Update permission details",
+    "delete_title": "Delete Permission?",
+    "delete_description": "This action cannot be undone. This will permanently delete the permission",
+    "delete_button": "Delete",
+    "columns": {
+      "name": "Name",
+      "guard_name": "Guard Name",
+      "created_at": "Created At",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view_details": "View Details",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "form": {
+      "name": "Permission Name",
+      "name_placeholder": "users.create",
+      "name_description": "Use dot notation for grouping (e.g., users.create, posts.edit).",
+      "name_required": "Permission name is required",
+      "guard_name": "Guard Name",
+      "guard_name_placeholder": "web",
+      "guard_name_description": "The guard name for this permission. Default is 'web'.",
+      "save": "Save",
+      "create": "Create",
+      "create_another": "Create & Create Another",
+      "cancel": "Cancel",
+      "created_success": "Permission created successfully!",
+      "created_another": "Permission created! Create another one.",
+      "created_failed": "Failed to create permission",
+      "updated_success": "Permission updated successfully!",
+      "updated_failed": "Failed to update permission"
+    },
+    "metadata": {
+      "title": "Additional Information",
+      "id": "ID",
+      "created_at": "Created",
+      "updated_at": "Last Updated"
+    }
+  },
+
+  "roles": {
+    "title": "Roles",
+    "create_title": "Create Role",
+    "edit_title": "Edit Role",
+    "view_title": "Role Details",
+    "create_button": "Create Role",
+    "search_placeholder": "Search roles...",
+    "not_found": "Role Not Found",
+    "load_failed": "Failed to load role",
+    "failed_to_load": "Failed to load roles",
+    "error_occurred": "An error occurred while fetching roles. Please try again.",
+    "unable_to_fetch": "Unable to fetch roles data.",
+    "delete_success": "Role deleted successfully",
+    "delete_failed": "Failed to delete role",
+    "create_description": "Create a new role for access control",
+    "edit_description": "Update role details",
+    "delete_title": "Delete Role?",
+    "delete_description": "This action cannot be undone. This will permanently delete the role",
+    "delete_button": "Delete",
+    "columns": {
+      "name": "Name",
+      "guard_name": "Guard Name",
+      "permissions_count": "Permissions",
+      "created_at": "Created At",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view_details": "View Details",
+      "edit": "Edit",
+      "delete": "Delete",
+      "manage_permissions": "Manage Permissions"
+    },
+    "form": {
+      "name": "Role Name",
+      "name_placeholder": "admin",
+      "name_description": "The unique name for this role.",
+      "name_required": "Role name is required",
+      "guard_name": "Guard Name",
+      "guard_name_placeholder": "web",
+      "guard_name_description": "The guard name for this role. Default is 'web'.",
+      "save": "Save",
+      "create": "Create",
+      "create_another": "Create & Create Another",
+      "cancel": "Cancel",
+      "created_success": "Role created successfully!",
+      "created_another": "Role created! Create another one.",
+      "created_failed": "Failed to create role",
+      "updated_success": "Role updated successfully!",
+      "updated_failed": "Failed to update role"
+    },
+    "permissions": {
+      "title": "Manage Permissions",
+      "description": "Assign or remove permissions for role",
+      "selected": "selected",
+      "search_placeholder": "Search permissions...",
+      "select_all": "Select All",
+      "deselect_all": "Deselect All",
+      "no_permissions": "No permissions found",
+      "no_search_results": "No permissions match your search.",
+      "create_first": "Create some permissions first.",
+      "save": "Save Permissions",
+      "sync_success": "Permissions updated successfully!",
+      "sync_failed": "Failed to update permissions",
+      "sync_error": "An error occurred while updating permissions"
+    },
+    "metadata": {
+      "title": "Additional Information",
+      "id": "ID",
+      "permissions": "Permissions",
+      "no_permissions": "No permissions assigned",
+      "created_at": "Created",
+      "updated_at": "Last Updated"
+    }
+  },
+
+  "public_blog": {
+    "heading": "Where <1>builders</1> think out loud",
+    "heading_highlight": "builders",
+    "subheading": "Thoughts on building, designing, and shipping. Sometimes technical, always useful.",
+    "search_placeholder": "Search blog posts... (real-time)",
+    "categories": "Categories:",
+    "all": "All",
+    "no_posts_found": "No blog posts found",
+    "no_results_for": "No results found for",
+    "no_published_posts": "No published blog posts available yet.",
+    "clear_filters": "Clear Filters",
+    "read_more": "Read More",
+    "load_more": "Load More",
+    "no_date": "No date"
   }
 }

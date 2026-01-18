@@ -1,18 +1,16 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useMemo, useState, useEffect } from 'react'
-import { useQuery, useMutation } from 'urql'
+import { useMemo } from 'react'
+import { useMutation } from 'urql'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { useCrudTable } from '@/hooks/crud'
+import { blogConfig } from '@/features/blog'
 import {
-  GET_BLOG_POSTS_QUERY,
-  DELETE_BLOG_POST_MUTATION,
   PUBLISH_BLOG_POST_MUTATION,
   UNPUBLISH_BLOG_POST_MUTATION,
 } from '@/lib/graphql/blog.graphql'
 import type {
-  BlogPostsResponse,
-  DeleteBlogPostResponse,
   PublishBlogPostResponse,
   UnpublishBlogPostResponse,
   BlogPost,
@@ -23,8 +21,6 @@ import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { DataTableSkeleton } from '@/components/ui/data-table-skeleton'
 import { ErrorState } from '@/components/ui/error-state'
 
-import { createBlogPostColumns } from '@/components/features/admin/blog'
-
 export const Route = createFileRoute('/admin/blog/')({
   component: BlogPostsPage,
 })
@@ -33,44 +29,50 @@ function BlogPostsPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
-  const [page, setPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
-  const [search, setSearch] = useState('')
-  const [sortBy, setSortBy] = useState<string>('created_at')
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [postToDelete, setPostToDelete] = useState<BlogPost | null>(null)
-
-  const [result] = useQuery<BlogPostsResponse>({
-    query: GET_BLOG_POSTS_QUERY,
-    variables: {
-      page,
-      perPage,
-      publishedOnly: false,
-      search: search || undefined,
-      sortBy: sortBy || undefined,
-      sortOrder: sortOrder || undefined,
+  // Use generic hook for CRUD state management
+  const {
+    data: posts,
+    fetching,
+    error,
+    isInitialLoad,
+    page,
+    perPage,
+    setPerPage,
+    search,
+    setSearch,
+    handlePageChange,
+    handleSortChange,
+    deleteDialogOpen,
+    itemToDelete,
+    closeDeleteDialog,
+    openDeleteDialog,
+    confirmDelete,
+    total,
+    totalPages,
+    querySuccess,
+    queryMessage,
+  } = useCrudTable<BlogPost>({
+    listQuery: blogConfig.queries.list,
+    deleteMutation: blogConfig.queries.delete,
+    dataKey: blogConfig.dataKey,
+    itemsKey: blogConfig.dataKey, // 'blogPosts' inside data
+    defaultSort: blogConfig.defaultSort,
+    onDeleteSuccess: () => {
+      toast.success(
+        t('blog.deleted_success', {
+          defaultValue: 'Blog post deleted successfully!',
+        }),
+      )
     },
-    requestPolicy: 'cache-and-network',
   })
 
-  const [, deleteBlogPostMutation] = useMutation<DeleteBlogPostResponse>(
-    DELETE_BLOG_POST_MUTATION,
-  )
+  // Additional mutations for Publish/Unpublish
   const [, publishBlogPostMutation] = useMutation<PublishBlogPostResponse>(
     PUBLISH_BLOG_POST_MUTATION,
   )
   const [, unpublishBlogPostMutation] = useMutation<UnpublishBlogPostResponse>(
     UNPUBLISH_BLOG_POST_MUTATION,
   )
-
-  const { data: queryData, fetching, error } = result
-  const isInitialLoad = fetching && !queryData
-
-  // Reset page to 1 when search or sort changes
-  useEffect(() => {
-    setPage(1)
-  }, [search, sortBy, sortOrder])
 
   const handleAddPost = () => {
     navigate({ to: '/admin/blog/create' })
@@ -82,16 +84,6 @@ function BlogPostsPage() {
 
   const handleEditPost = (id: string) => {
     navigate({ to: `/admin/blog/${id}/edit` })
-  }
-
-  const handleDeletePost = (id: string) => {
-    const post = queryData?.blogPosts.data.blogPosts.find(
-      (p: BlogPost) => p.id === id,
-    )
-    if (post) {
-      setPostToDelete(post)
-      setDeleteDialogOpen(true)
-    }
   }
 
   const handlePublishPost = async (id: string) => {
@@ -132,48 +124,26 @@ function BlogPostsPage() {
     }
   }
 
-  const confirmDeletePost = async () => {
-    if (!postToDelete) return
-
-    const result = await deleteBlogPostMutation({ id: postToDelete.id })
-
-    if (result.data?.deleteBlogPost.success) {
-      toast.success(
-        t('blog.deleted_success', {
-          defaultValue: 'Blog post deleted successfully!',
-        }),
-      )
-      setDeleteDialogOpen(false)
-      setPostToDelete(null)
-      window.location.reload()
-    } else {
-      toast.error(
-        result.data?.deleteBlogPost.message ||
-          t('blog.deleted_failed', { defaultValue: 'Failed to delete post' }),
-      )
-    }
-  }
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage)
-  }
-
-  const handleSortChange = (columnId: string, order: 'asc' | 'desc') => {
-    setSortBy(columnId)
-    setSortOrder(order)
-  }
-
   const columns = useMemo(
     () =>
-      createBlogPostColumns({
+      blogConfig.createColumns({
         onView: handleViewPost,
         onEdit: handleEditPost,
-        onDelete: handleDeletePost,
+        onDelete: (id: string) => {
+          // Find item to pass to generic openDeleteDialog which expects TModel
+          // But openDeleteDialog expects TModel, not ID.
+          // However, columns normally pass ID if they follow generic pattern.
+          // wait, blog-post-columns.tsx passes ID.
+          // useCrudTable.openDeleteDialog expects TModel.
+          // We need to find the item from 'posts' array.
+          const post = posts.find((p) => p.id === id)
+          if (post) openDeleteDialog(post)
+        },
         onPublish: handlePublishPost,
         onUnpublish: handleUnpublishPost,
         t,
       }),
-    [t],
+    [t, posts, openDeleteDialog], // Added relevant deps
   )
 
   // Loading state
@@ -183,7 +153,7 @@ function BlogPostsPage() {
         showCreateButton={true}
         showSearch={true}
         rows={10}
-        columns={7}
+        columns={blogConfig.skeletonColumns}
       />
     )
   }
@@ -206,15 +176,15 @@ function BlogPostsPage() {
     )
   }
 
-  // Empty or error response
-  if (!queryData?.blogPosts.success || !queryData?.blogPosts.data) {
+  // Empty or error response (if not loading and success is false)
+  if (!fetching && (!querySuccess || !posts)) {
     return (
       <ErrorState
         title={t('blog.failed_to_load', {
           defaultValue: 'Failed to load blog posts',
         })}
         description={
-          queryData?.blogPosts.message ||
+          queryMessage ||
           t('blog.unable_to_fetch', {
             defaultValue: 'Unable to fetch blog posts data.',
           })
@@ -223,19 +193,13 @@ function BlogPostsPage() {
     )
   }
 
-  const posts = queryData.blogPosts.data.blogPosts
-
-  const totalPages = queryData?.blogPosts.data
-    ? Math.ceil(queryData.blogPosts.data.total / perPage)
-    : 0
-
   return (
     <div className="space-y-4">
       <DataTable
         title={t('blog.title', { defaultValue: 'Blog Posts' })}
         columns={columns}
         data={posts}
-        searchColumn="title"
+        searchColumn={blogConfig.searchColumn}
         searchPlaceholder={t('blog.search_placeholder', {
           defaultValue: 'Search blog posts...',
         })}
@@ -252,7 +216,7 @@ function BlogPostsPage() {
         pageSize={perPage}
         onPageSizeChange={setPerPage}
         pageSizeOptions={[5, 10, 20, 50, 100]}
-        totalItems={queryData?.blogPosts.data.total}
+        totalItems={total}
         totalPages={totalPages}
         onPageChange={handlePageChange}
         onSortChange={handleSortChange}
@@ -260,8 +224,8 @@ function BlogPostsPage() {
 
       <ConfirmDialog
         open={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
-        onConfirm={confirmDeletePost}
+        onOpenChange={closeDeleteDialog}
+        onConfirm={confirmDelete}
         title={t('blog.delete_title', {
           defaultValue: 'Delete Blog Post?',
         })}
@@ -271,10 +235,10 @@ function BlogPostsPage() {
               defaultValue:
                 'This action cannot be undone. This will permanently delete the post',
             })}
-            {postToDelete && (
+            {itemToDelete && (
               <>
                 {' '}
-                <span className="font-semibold">{postToDelete.title}</span>
+                <span className="font-semibold">{itemToDelete.title}</span>
               </>
             )}{' '}
             {t('blog.delete_description_and', {

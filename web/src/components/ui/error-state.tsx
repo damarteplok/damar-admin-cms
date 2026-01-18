@@ -45,7 +45,7 @@ const variantStyles = {
  *   variant="info"
  *   action={<Button onClick={handleReset}>Reset Filters</Button>}
  * />
- * 
+ *
  * // With simple action label
  * <ErrorState
  *   title="Something went wrong"
@@ -91,13 +91,13 @@ export function ErrorState({
         {action && <div className="mt-2">{action}</div>}
         {!action && actionLabel && onAction && (
           <div className="mt-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={onAction}
               className={
-                variant === 'destructive' 
-                  ? 'border-destructive/50 hover:bg-destructive/10 hover:text-destructive' 
+                variant === 'destructive'
+                  ? 'border-destructive/50 hover:bg-destructive/10 hover:text-destructive'
                   : ''
               }
             >

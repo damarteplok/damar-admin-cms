@@ -65,10 +65,7 @@ export const LogosComponent = ({
           {/* Logos Grid */}
           <div className="flex w-full flex-wrap items-center justify-center gap-x-12 gap-y-8 opacity-60 grayscale transition-all hover:opacity-100 hover:grayscale-0 lg:gap-x-16">
             {logos.map((logo, index) => (
-              <div
-                key={index}
-                className="transition-transform hover:scale-110"
-              >
+              <div key={index} className="transition-transform hover:scale-110">
                 <img
                   src={logo.logo}
                   alt={`${logo.name} logo`}

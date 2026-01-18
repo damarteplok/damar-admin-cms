@@ -16,7 +16,7 @@ import {
 import { formatDateTime } from '@/lib/utils/date'
 
 interface CategoryColumnsProps {
-  onDelete: (category: Category) => void
+  onDelete: (id: string) => void
   t: TFunction
 }
 
@@ -113,7 +113,7 @@ export function createCategoryColumns({
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => onDelete(category)}
+                onClick={() => onDelete(category.id)}
                 className="text-destructive focus:text-destructive cursor-pointer"
               >
                 <Trash className="mr-2 h-4 w-4" />

@@ -24,7 +24,7 @@ interface BlogPostFormProps {
   onCancel: () => void
   submitLabel?: string
   showCreateAnother?: boolean
-  userId: string
+  userId?: string
   blogPostId?: string // For image uploads
   existingFeaturedImage?: Media // Add existing featured image
 }
@@ -49,7 +49,7 @@ export function BlogPostForm({
       body: initialData?.body || '',
       description: initialData?.description || '',
       blogPostCategoryId: initialData?.blogPostCategoryId || '',
-      authorId: initialData?.authorId || userId,
+      authorId: initialData?.authorId || userId || '',
       isPublished: initialData?.isPublished || false,
       publishedAt: initialData?.publishedAt
         ? new Date(initialData.publishedAt * 1000).toISOString().slice(0, 16)
@@ -64,7 +64,7 @@ export function BlogPostForm({
         const submitData: any = {
           title: value.title,
           body: value.body,
-          userId,
+          userId: userId || '',
           isPublished: value.isPublished,
         }
 
@@ -119,7 +119,7 @@ export function BlogPostForm({
       const submitData: any = {
         title: values.title,
         body: values.body,
-        userId,
+        userId: userId || '',
         isPublished: values.isPublished,
       }
 

@@ -28,31 +28,36 @@ const defaultFeatures: Feature[] = [
     id: '1',
     icon: <Zap className="size-5" />,
     title: 'One-click deployment',
-    description: 'Deploy your apps instantly to the cloud with zero configuration.',
+    description:
+      'Deploy your apps instantly to the cloud with zero configuration.',
   },
   {
     id: '2',
     icon: <Gauge className="size-5" />,
     title: 'Auto-scaling',
-    description: 'Scale automatically based on demand without lifting a finger.',
+    description:
+      'Scale automatically based on demand without lifting a finger.',
   },
   {
     id: '3',
     icon: <Globe className="size-5" />,
     title: 'Global edge network',
-    description: 'Serve content and functions from edge locations close to your users.',
+    description:
+      'Serve content and functions from edge locations close to your users.',
   },
   {
     id: '4',
     icon: <Code2 className="size-5" />,
     title: 'Git integration',
-    description: 'Connect your Git provider and deploy every push with no downtime.',
+    description:
+      'Connect your Git provider and deploy every push with no downtime.',
   },
   {
     id: '5',
     icon: <Lock className="size-5" />,
     title: 'Built-in security',
-    description: 'All deployments are secured with SSL, firewalls, and isolated environments.',
+    description:
+      'All deployments are secured with SSL, firewalls, and isolated environments.',
   },
   {
     id: '6',
@@ -120,7 +125,9 @@ export const FeatureComponent = ({
 
                 {/* Content */}
                 <div className="flex-1 space-y-1">
-                  <h3 className="font-semibold leading-tight">{feature.title}</h3>
+                  <h3 className="font-semibold leading-tight">
+                    {feature.title}
+                  </h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
                     {feature.description}
                   </p>

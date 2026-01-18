@@ -88,7 +88,9 @@ export const Feature43Component = ({
                 </div>
 
                 {/* Content */}
-                <h3 className="mb-3 text-xl font-semibold">{feature.heading}</h3>
+                <h3 className="mb-3 text-xl font-semibold">
+                  {feature.heading}
+                </h3>
                 <p className="text-muted-foreground leading-relaxed">
                   {feature.description}
                 </p>

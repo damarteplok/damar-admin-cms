@@ -2928,6 +2928,661 @@ func (r *mutationResolver) DeleteAnnouncement(ctx context.Context, id string) (*
 	}, nil
 }
 
+// CreatePermission is the resolver for the createPermission field.
+func (r *mutationResolver) CreatePermission(ctx context.Context, input model.CreatePermissionInput) (*model.PermissionResponse, error) {
+	guardName := "web"
+	if input.GuardName != nil {
+		guardName = *input.GuardName
+	}
+
+	resp, err := r.AuthClient.CreatePermission(ctx, &authPb.CreatePermissionRequest{
+		Name:      input.Name,
+		GuardName: guardName,
+	})
+	if err != nil {
+		return &model.PermissionResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to create permission: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.PermissionResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.PermissionResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Permission{
+			ID:        fmt.Sprintf("%d", resp.Data.Id),
+			Name:      resp.Data.Name,
+			GuardName: resp.Data.GuardName,
+			CreatedAt: int32(resp.Data.CreatedAt),
+			UpdatedAt: int32(resp.Data.UpdatedAt),
+		},
+	}, nil
+}
+
+// UpdatePermission is the resolver for the updatePermission field.
+func (r *mutationResolver) UpdatePermission(ctx context.Context, input model.UpdatePermissionInput) (*model.PermissionResponse, error) {
+	permissionID, err := strconv.ParseInt(input.ID, 10, 64)
+	if err != nil {
+		return &model.PermissionResponse{
+			Success: false,
+			Message: "Invalid permission ID",
+		}, nil
+	}
+
+	guardName := "web"
+	if input.GuardName != nil {
+		guardName = *input.GuardName
+	}
+
+	resp, err := r.AuthClient.UpdatePermission(ctx, &authPb.UpdatePermissionRequest{
+		Id:        permissionID,
+		Name:      input.Name,
+		GuardName: guardName,
+	})
+	if err != nil {
+		return &model.PermissionResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to update permission: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.PermissionResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.PermissionResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Permission{
+			ID:        fmt.Sprintf("%d", resp.Data.Id),
+			Name:      resp.Data.Name,
+			GuardName: resp.Data.GuardName,
+			CreatedAt: int32(resp.Data.CreatedAt),
+			UpdatedAt: int32(resp.Data.UpdatedAt),
+		},
+	}, nil
+}
+
+// DeletePermission is the resolver for the deletePermission field.
+func (r *mutationResolver) DeletePermission(ctx context.Context, id string) (*model.DeletePermissionResponse, error) {
+	permissionID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.DeletePermissionResponse{
+			Success: false,
+			Message: "Invalid permission ID",
+		}, nil
+	}
+
+	resp, err := r.AuthClient.DeletePermission(ctx, &authPb.DeletePermissionRequest{
+		Id: permissionID,
+	})
+	if err != nil {
+		return &model.DeletePermissionResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to delete permission: %v", err),
+		}, nil
+	}
+
+	return &model.DeletePermissionResponse{
+		Success: resp.Success,
+		Message: resp.Message,
+	}, nil
+}
+
+// CreateRole is the resolver for the createRole field.
+func (r *mutationResolver) CreateRole(ctx context.Context, input model.CreateRoleInput) (*model.RoleResponse, error) {
+	guardName := "web"
+	if input.GuardName != nil {
+		guardName = *input.GuardName
+	}
+
+	resp, err := r.AuthClient.CreateRole(ctx, &authPb.CreateRoleRequest{
+		Name:      input.Name,
+		GuardName: guardName,
+	})
+	if err != nil {
+		return &model.RoleResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to create role: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.RoleResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.RoleResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Role{
+			ID:        fmt.Sprintf("%d", resp.Data.Id),
+			Name:      resp.Data.Name,
+			GuardName: resp.Data.GuardName,
+			CreatedAt: int32(resp.Data.CreatedAt),
+			UpdatedAt: int32(resp.Data.UpdatedAt),
+		},
+	}, nil
+}
+
+// UpdateRole is the resolver for the updateRole field.
+func (r *mutationResolver) UpdateRole(ctx context.Context, input model.UpdateRoleInput) (*model.RoleResponse, error) {
+	roleID, err := strconv.ParseInt(input.ID, 10, 64)
+	if err != nil {
+		return &model.RoleResponse{
+			Success: false,
+			Message: "Invalid role ID",
+		}, nil
+	}
+
+	guardName := "web"
+	if input.GuardName != nil {
+		guardName = *input.GuardName
+	}
+
+	resp, err := r.AuthClient.UpdateRole(ctx, &authPb.UpdateRoleRequest{
+		Id:        roleID,
+		Name:      input.Name,
+		GuardName: guardName,
+	})
+	if err != nil {
+		return &model.RoleResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to update role: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.RoleResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.RoleResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Role{
+			ID:        fmt.Sprintf("%d", resp.Data.Id),
+			Name:      resp.Data.Name,
+			GuardName: resp.Data.GuardName,
+			CreatedAt: int32(resp.Data.CreatedAt),
+			UpdatedAt: int32(resp.Data.UpdatedAt),
+		},
+	}, nil
+}
+
+// DeleteRole is the resolver for the deleteRole field.
+func (r *mutationResolver) DeleteRole(ctx context.Context, id string) (*model.DeleteRoleResponse, error) {
+	roleID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.DeleteRoleResponse{
+			Success: false,
+			Message: "Invalid role ID",
+		}, nil
+	}
+
+	resp, err := r.AuthClient.DeleteRole(ctx, &authPb.DeleteRoleRequest{
+		Id: roleID,
+	})
+	if err != nil {
+		return &model.DeleteRoleResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to delete role: %v", err),
+		}, nil
+	}
+
+	return &model.DeleteRoleResponse{
+		Success: resp.Success,
+		Message: resp.Message,
+	}, nil
+}
+
+// SyncRolePermissions is the resolver for the syncRolePermissions field.
+func (r *mutationResolver) SyncRolePermissions(ctx context.Context, input model.SyncRolePermissionsInput) (*model.RoleWithPermissionsResponse, error) {
+	roleID, err := strconv.ParseInt(input.RoleID, 10, 64)
+	if err != nil {
+		return &model.RoleWithPermissionsResponse{
+			Success: false,
+			Message: "Invalid role ID",
+		}, nil
+	}
+
+	permissionIDs := make([]int64, len(input.PermissionIds))
+	for i, id := range input.PermissionIds {
+		permID, err := strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			return &model.RoleWithPermissionsResponse{
+				Success: false,
+				Message: fmt.Sprintf("Invalid permission ID: %s", id),
+			}, nil
+		}
+		permissionIDs[i] = permID
+	}
+
+	resp, err := r.AuthClient.SyncRolePermissions(ctx, &authPb.SyncRolePermissionsRequest{
+		RoleId:        roleID,
+		PermissionIds: permissionIDs,
+	})
+	if err != nil {
+		return &model.RoleWithPermissionsResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to sync role permissions: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.RoleWithPermissionsResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	permissions := make([]*model.Permission, len(resp.Data.Permissions))
+	for i, p := range resp.Data.Permissions {
+		permissions[i] = &model.Permission{
+			ID:        fmt.Sprintf("%d", p.Id),
+			Name:      p.Name,
+			GuardName: p.GuardName,
+			CreatedAt: int32(p.CreatedAt),
+			UpdatedAt: int32(p.UpdatedAt),
+		}
+	}
+
+	return &model.RoleWithPermissionsResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.RoleWithPermissions{
+			ID:          fmt.Sprintf("%d", resp.Data.Id),
+			Name:        resp.Data.Name,
+			GuardName:   resp.Data.GuardName,
+			Permissions: permissions,
+			CreatedAt:   int32(resp.Data.CreatedAt),
+			UpdatedAt:   int32(resp.Data.UpdatedAt),
+		},
+	}, nil
+}
+
+// AssignRoleToUser is the resolver for the assignRoleToUser field.
+func (r *mutationResolver) AssignRoleToUser(ctx context.Context, input model.AssignRoleToUserInput) (*model.UserRolesResponse, error) {
+	userID, err := strconv.ParseInt(input.UserID, 10, 64)
+	if err != nil {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: "Invalid user ID",
+		}, nil
+	}
+
+	roleID, err := strconv.ParseInt(input.RoleID, 10, 64)
+	if err != nil {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: "Invalid role ID",
+		}, nil
+	}
+
+	modelType := "users"
+	if input.ModelType != nil {
+		modelType = *input.ModelType
+	}
+
+	resp, err := r.AuthClient.AssignRoleToUser(ctx, &authPb.AssignRoleToUserRequest{
+		UserId:    userID,
+		RoleId:    roleID,
+		ModelType: modelType,
+	})
+	if err != nil {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to assign role: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	roles := make([]*model.Role, len(resp.Roles))
+	for i, role := range resp.Roles {
+		roles[i] = &model.Role{
+			ID:        fmt.Sprintf("%d", role.Id),
+			Name:      role.Name,
+			GuardName: role.GuardName,
+			CreatedAt: int32(role.CreatedAt),
+			UpdatedAt: int32(role.UpdatedAt),
+		}
+	}
+
+	return &model.UserRolesResponse{
+		Success: true,
+		Message: resp.Message,
+		Roles:   roles,
+	}, nil
+}
+
+// RevokeRoleFromUser is the resolver for the revokeRoleFromUser field.
+func (r *mutationResolver) RevokeRoleFromUser(ctx context.Context, input model.RevokeRoleFromUserInput) (*model.UserRolesResponse, error) {
+	userID, err := strconv.ParseInt(input.UserID, 10, 64)
+	if err != nil {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: "Invalid user ID",
+		}, nil
+	}
+
+	roleID, err := strconv.ParseInt(input.RoleID, 10, 64)
+	if err != nil {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: "Invalid role ID",
+		}, nil
+	}
+
+	modelType := "users"
+	if input.ModelType != nil {
+		modelType = *input.ModelType
+	}
+
+	resp, err := r.AuthClient.RevokeRoleFromUser(ctx, &authPb.RevokeRoleFromUserRequest{
+		UserId:    userID,
+		RoleId:    roleID,
+		ModelType: modelType,
+	})
+	if err != nil {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to revoke role: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	roles := make([]*model.Role, len(resp.Roles))
+	for i, role := range resp.Roles {
+		roles[i] = &model.Role{
+			ID:        fmt.Sprintf("%d", role.Id),
+			Name:      role.Name,
+			GuardName: role.GuardName,
+			CreatedAt: int32(role.CreatedAt),
+			UpdatedAt: int32(role.UpdatedAt),
+		}
+	}
+
+	return &model.UserRolesResponse{
+		Success: true,
+		Message: resp.Message,
+		Roles:   roles,
+	}, nil
+}
+
+// SyncUserRoles is the resolver for the syncUserRoles field.
+func (r *mutationResolver) SyncUserRoles(ctx context.Context, input model.SyncUserRolesInput) (*model.UserRolesResponse, error) {
+	userID, err := strconv.ParseInt(input.UserID, 10, 64)
+	if err != nil {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: "Invalid user ID",
+		}, nil
+	}
+
+	roleIDs := make([]int64, len(input.RoleIds))
+	for i, id := range input.RoleIds {
+		roleID, err := strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			return &model.UserRolesResponse{
+				Success: false,
+				Message: fmt.Sprintf("Invalid role ID: %s", id),
+			}, nil
+		}
+		roleIDs[i] = roleID
+	}
+
+	modelType := "users"
+	if input.ModelType != nil {
+		modelType = *input.ModelType
+	}
+
+	resp, err := r.AuthClient.SyncUserRoles(ctx, &authPb.SyncUserRolesRequest{
+		UserId:    userID,
+		RoleIds:   roleIDs,
+		ModelType: modelType,
+	})
+	if err != nil {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to sync user roles: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	roles := make([]*model.Role, len(resp.Roles))
+	for i, role := range resp.Roles {
+		roles[i] = &model.Role{
+			ID:        fmt.Sprintf("%d", role.Id),
+			Name:      role.Name,
+			GuardName: role.GuardName,
+			CreatedAt: int32(role.CreatedAt),
+			UpdatedAt: int32(role.UpdatedAt),
+		}
+	}
+
+	return &model.UserRolesResponse{
+		Success: true,
+		Message: resp.Message,
+		Roles:   roles,
+	}, nil
+}
+
+// AssignPermissionToUser is the resolver for the assignPermissionToUser field.
+func (r *mutationResolver) AssignPermissionToUser(ctx context.Context, input model.AssignPermissionToUserInput) (*model.UserPermissionsResponse, error) {
+	userID, err := strconv.ParseInt(input.UserID, 10, 64)
+	if err != nil {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: "Invalid user ID",
+		}, nil
+	}
+
+	permissionID, err := strconv.ParseInt(input.PermissionID, 10, 64)
+	if err != nil {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: "Invalid permission ID",
+		}, nil
+	}
+
+	modelType := "users"
+	if input.ModelType != nil {
+		modelType = *input.ModelType
+	}
+
+	resp, err := r.AuthClient.AssignPermissionToUser(ctx, &authPb.AssignPermissionToUserRequest{
+		UserId:       userID,
+		PermissionId: permissionID,
+		ModelType:    modelType,
+	})
+	if err != nil {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to assign permission: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	permissions := make([]*model.Permission, len(resp.Permissions))
+	for i, p := range resp.Permissions {
+		permissions[i] = &model.Permission{
+			ID:        fmt.Sprintf("%d", p.Id),
+			Name:      p.Name,
+			GuardName: p.GuardName,
+			CreatedAt: int32(p.CreatedAt),
+			UpdatedAt: int32(p.UpdatedAt),
+		}
+	}
+
+	return &model.UserPermissionsResponse{
+		Success:     true,
+		Message:     resp.Message,
+		Permissions: permissions,
+	}, nil
+}
+
+// RevokePermissionFromUser is the resolver for the revokePermissionFromUser field.
+func (r *mutationResolver) RevokePermissionFromUser(ctx context.Context, input model.RevokePermissionFromUserInput) (*model.UserPermissionsResponse, error) {
+	userID, err := strconv.ParseInt(input.UserID, 10, 64)
+	if err != nil {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: "Invalid user ID",
+		}, nil
+	}
+
+	permissionID, err := strconv.ParseInt(input.PermissionID, 10, 64)
+	if err != nil {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: "Invalid permission ID",
+		}, nil
+	}
+
+	modelType := "users"
+	if input.ModelType != nil {
+		modelType = *input.ModelType
+	}
+
+	resp, err := r.AuthClient.RevokePermissionFromUser(ctx, &authPb.RevokePermissionFromUserRequest{
+		UserId:       userID,
+		PermissionId: permissionID,
+		ModelType:    modelType,
+	})
+	if err != nil {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to revoke permission: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	permissions := make([]*model.Permission, len(resp.Permissions))
+	for i, p := range resp.Permissions {
+		permissions[i] = &model.Permission{
+			ID:        fmt.Sprintf("%d", p.Id),
+			Name:      p.Name,
+			GuardName: p.GuardName,
+			CreatedAt: int32(p.CreatedAt),
+			UpdatedAt: int32(p.UpdatedAt),
+		}
+	}
+
+	return &model.UserPermissionsResponse{
+		Success:     true,
+		Message:     resp.Message,
+		Permissions: permissions,
+	}, nil
+}
+
+// SyncUserPermissions is the resolver for the syncUserPermissions field.
+func (r *mutationResolver) SyncUserPermissions(ctx context.Context, input model.SyncUserPermissionsInput) (*model.UserPermissionsResponse, error) {
+	userID, err := strconv.ParseInt(input.UserID, 10, 64)
+	if err != nil {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: "Invalid user ID",
+		}, nil
+	}
+
+	permissionIDs := make([]int64, len(input.PermissionIds))
+	for i, id := range input.PermissionIds {
+		permID, err := strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			return &model.UserPermissionsResponse{
+				Success: false,
+				Message: fmt.Sprintf("Invalid permission ID: %s", id),
+			}, nil
+		}
+		permissionIDs[i] = permID
+	}
+
+	modelType := "users"
+	if input.ModelType != nil {
+		modelType = *input.ModelType
+	}
+
+	resp, err := r.AuthClient.SyncUserPermissions(ctx, &authPb.SyncUserPermissionsRequest{
+		UserId:        userID,
+		PermissionIds: permissionIDs,
+		ModelType:     modelType,
+	})
+	if err != nil {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to sync user permissions: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	permissions := make([]*model.Permission, len(resp.Permissions))
+	for i, p := range resp.Permissions {
+		permissions[i] = &model.Permission{
+			ID:        fmt.Sprintf("%d", p.Id),
+			Name:      p.Name,
+			GuardName: p.GuardName,
+			CreatedAt: int32(p.CreatedAt),
+			UpdatedAt: int32(p.UpdatedAt),
+		}
+	}
+
+	return &model.UserPermissionsResponse{
+		Success:     true,
+		Message:     resp.Message,
+		Permissions: permissions,
+	}, nil
+}
+
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.UserResponse, error) {
 	userID, err := strconv.ParseInt(id, 10, 64)
@@ -5102,6 +5757,450 @@ func (r *queryResolver) ActiveAnnouncements(ctx context.Context, forCustomers *b
 		Success: true,
 		Message: "Active announcements retrieved successfully",
 		Data:    announcements,
+	}, nil
+}
+
+// Permission is the resolver for the permission field.
+func (r *queryResolver) Permission(ctx context.Context, id string) (*model.PermissionResponse, error) {
+	permissionID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.PermissionResponse{
+			Success: false,
+			Message: "Invalid permission ID",
+		}, nil
+	}
+
+	resp, err := r.AuthClient.GetPermission(ctx, &authPb.GetPermissionRequest{
+		Id: permissionID,
+	})
+	if err != nil {
+		return &model.PermissionResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get permission: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.PermissionResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.PermissionResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Permission{
+			ID:        fmt.Sprintf("%d", resp.Data.Id),
+			Name:      resp.Data.Name,
+			GuardName: resp.Data.GuardName,
+			CreatedAt: int32(resp.Data.CreatedAt),
+			UpdatedAt: int32(resp.Data.UpdatedAt),
+		},
+	}, nil
+}
+
+// Permissions is the resolver for the permissions field.
+func (r *queryResolver) Permissions(ctx context.Context, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string, guardName *string) (*model.PermissionListResponse, error) {
+	reqPage := int32(1)
+	if page != nil {
+		reqPage = *page
+	}
+
+	reqPerPage := int32(10)
+	if perPage != nil {
+		reqPerPage = *perPage
+	}
+
+	reqSortBy := "created_at"
+	if sortBy != nil {
+		reqSortBy = *sortBy
+	}
+
+	reqSortOrder := "desc"
+	if sortOrder != nil {
+		reqSortOrder = *sortOrder
+	}
+
+	req := &authPb.ListPermissionsRequest{
+		Page:      reqPage,
+		PerPage:   reqPerPage,
+		SortBy:    reqSortBy,
+		SortOrder: reqSortOrder,
+	}
+
+	if search != nil {
+		req.Search = *search
+	}
+
+	if guardName != nil {
+		req.GuardName = *guardName
+	}
+
+	resp, err := r.AuthClient.ListPermissions(ctx, req)
+	if err != nil {
+		return &model.PermissionListResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get permissions: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.PermissionListResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	permissions := make([]*model.Permission, len(resp.Permissions))
+	for i, p := range resp.Permissions {
+		permissions[i] = &model.Permission{
+			ID:        fmt.Sprintf("%d", p.Id),
+			Name:      p.Name,
+			GuardName: p.GuardName,
+			CreatedAt: int32(p.CreatedAt),
+			UpdatedAt: int32(p.UpdatedAt),
+		}
+	}
+
+	return &model.PermissionListResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.PermissionList{
+			Permissions: permissions,
+			Total:       resp.Total,
+			Page:        resp.Page,
+			PerPage:     resp.PerPage,
+		},
+	}, nil
+}
+
+// Role is the resolver for the role field.
+func (r *queryResolver) Role(ctx context.Context, id string) (*model.RoleResponse, error) {
+	roleID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.RoleResponse{
+			Success: false,
+			Message: "Invalid role ID",
+		}, nil
+	}
+
+	resp, err := r.AuthClient.GetRole(ctx, &authPb.GetRoleRequest{
+		Id: roleID,
+	})
+	if err != nil {
+		return &model.RoleResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get role: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.RoleResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	return &model.RoleResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.Role{
+			ID:        fmt.Sprintf("%d", resp.Data.Id),
+			Name:      resp.Data.Name,
+			GuardName: resp.Data.GuardName,
+			CreatedAt: int32(resp.Data.CreatedAt),
+			UpdatedAt: int32(resp.Data.UpdatedAt),
+		},
+	}, nil
+}
+
+// RoleWithPermissions is the resolver for the roleWithPermissions field.
+func (r *queryResolver) RoleWithPermissions(ctx context.Context, id string) (*model.RoleWithPermissionsResponse, error) {
+	roleID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return &model.RoleWithPermissionsResponse{
+			Success: false,
+			Message: "Invalid role ID",
+		}, nil
+	}
+
+	resp, err := r.AuthClient.GetRoleWithPermissions(ctx, &authPb.GetRoleRequest{
+		Id: roleID,
+	})
+	if err != nil {
+		return &model.RoleWithPermissionsResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get role with permissions: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.RoleWithPermissionsResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	permissions := make([]*model.Permission, len(resp.Data.Permissions))
+	for i, p := range resp.Data.Permissions {
+		permissions[i] = &model.Permission{
+			ID:        fmt.Sprintf("%d", p.Id),
+			Name:      p.Name,
+			GuardName: p.GuardName,
+			CreatedAt: int32(p.CreatedAt),
+			UpdatedAt: int32(p.UpdatedAt),
+		}
+	}
+
+	return &model.RoleWithPermissionsResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.RoleWithPermissions{
+			ID:          fmt.Sprintf("%d", resp.Data.Id),
+			Name:        resp.Data.Name,
+			GuardName:   resp.Data.GuardName,
+			Permissions: permissions,
+			CreatedAt:   int32(resp.Data.CreatedAt),
+			UpdatedAt:   int32(resp.Data.UpdatedAt),
+		},
+	}, nil
+}
+
+// Roles is the resolver for the roles field.
+func (r *queryResolver) Roles(ctx context.Context, page *int32, perPage *int32, search *string, sortBy *string, sortOrder *string, guardName *string) (*model.RoleListResponse, error) {
+	reqPage := int32(1)
+	if page != nil {
+		reqPage = *page
+	}
+
+	reqPerPage := int32(10)
+	if perPage != nil {
+		reqPerPage = *perPage
+	}
+
+	reqSortBy := "created_at"
+	if sortBy != nil {
+		reqSortBy = *sortBy
+	}
+
+	reqSortOrder := "desc"
+	if sortOrder != nil {
+		reqSortOrder = *sortOrder
+	}
+
+	req := &authPb.ListRolesRequest{
+		Page:      reqPage,
+		PerPage:   reqPerPage,
+		SortBy:    reqSortBy,
+		SortOrder: reqSortOrder,
+	}
+
+	if search != nil {
+		req.Search = *search
+	}
+
+	if guardName != nil {
+		req.GuardName = *guardName
+	}
+
+	resp, err := r.AuthClient.ListRoles(ctx, req)
+	if err != nil {
+		return &model.RoleListResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get roles: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.RoleListResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	roles := make([]*model.Role, len(resp.Roles))
+	for i, role := range resp.Roles {
+		roles[i] = &model.Role{
+			ID:        fmt.Sprintf("%d", role.Id),
+			Name:      role.Name,
+			GuardName: role.GuardName,
+			CreatedAt: int32(role.CreatedAt),
+			UpdatedAt: int32(role.UpdatedAt),
+		}
+	}
+
+	return &model.RoleListResponse{
+		Success: true,
+		Message: resp.Message,
+		Data: &model.RoleList{
+			Roles:   roles,
+			Total:   resp.Total,
+			Page:    resp.Page,
+			PerPage: resp.PerPage,
+		},
+	}, nil
+}
+
+// UserRoles is the resolver for the userRoles field.
+func (r *queryResolver) UserRoles(ctx context.Context, userID string, modelType *string) (*model.UserRolesResponse, error) {
+	userIDInt, err := strconv.ParseInt(userID, 10, 64)
+	if err != nil {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: "Invalid user ID",
+		}, nil
+	}
+
+	reqModelType := "users"
+	if modelType != nil {
+		reqModelType = *modelType
+	}
+
+	resp, err := r.AuthClient.GetUserRoles(ctx, &authPb.GetUserRolesRequest{
+		UserId:    userIDInt,
+		ModelType: reqModelType,
+	})
+	if err != nil {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get user roles: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.UserRolesResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	roles := make([]*model.Role, len(resp.Roles))
+	for i, role := range resp.Roles {
+		roles[i] = &model.Role{
+			ID:        fmt.Sprintf("%d", role.Id),
+			Name:      role.Name,
+			GuardName: role.GuardName,
+			CreatedAt: int32(role.CreatedAt),
+			UpdatedAt: int32(role.UpdatedAt),
+		}
+	}
+
+	return &model.UserRolesResponse{
+		Success: true,
+		Message: resp.Message,
+		Roles:   roles,
+	}, nil
+}
+
+// UserPermissions is the resolver for the userPermissions field.
+func (r *queryResolver) UserPermissions(ctx context.Context, userID string, modelType *string) (*model.UserPermissionsResponse, error) {
+	userIDInt, err := strconv.ParseInt(userID, 10, 64)
+	if err != nil {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: "Invalid user ID",
+		}, nil
+	}
+
+	reqModelType := "users"
+	if modelType != nil {
+		reqModelType = *modelType
+	}
+
+	resp, err := r.AuthClient.GetUserAllPermissions(ctx, &authPb.GetUserPermissionsRequest{
+		UserId:    userIDInt,
+		ModelType: reqModelType,
+	})
+	if err != nil {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: fmt.Sprintf("Failed to get user permissions: %v", err),
+		}, nil
+	}
+
+	if !resp.Success {
+		return &model.UserPermissionsResponse{
+			Success: false,
+			Message: resp.Message,
+		}, nil
+	}
+
+	permissions := make([]*model.Permission, len(resp.Permissions))
+	for i, p := range resp.Permissions {
+		permissions[i] = &model.Permission{
+			ID:        fmt.Sprintf("%d", p.Id),
+			Name:      p.Name,
+			GuardName: p.GuardName,
+			CreatedAt: int32(p.CreatedAt),
+			UpdatedAt: int32(p.UpdatedAt),
+		}
+	}
+
+	return &model.UserPermissionsResponse{
+		Success:     true,
+		Message:     resp.Message,
+		Permissions: permissions,
+	}, nil
+}
+
+// CheckUserHasPermission is the resolver for the checkUserHasPermission field.
+func (r *queryResolver) CheckUserHasPermission(ctx context.Context, userID string, permissionName string, modelType *string) (*model.CheckPermissionResponse, error) {
+	userIDInt, err := strconv.ParseInt(userID, 10, 64)
+	if err != nil {
+		return &model.CheckPermissionResponse{
+			HasPermission: false,
+		}, nil
+	}
+
+	reqModelType := "users"
+	if modelType != nil {
+		reqModelType = *modelType
+	}
+
+	resp, err := r.AuthClient.CheckUserHasPermission(ctx, &authPb.CheckPermissionRequest{
+		UserId:         userIDInt,
+		PermissionName: permissionName,
+		ModelType:      reqModelType,
+	})
+	if err != nil {
+		return &model.CheckPermissionResponse{
+			HasPermission: false,
+		}, nil
+	}
+
+	return &model.CheckPermissionResponse{
+		HasPermission: resp.HasPermission,
+	}, nil
+}
+
+// CheckUserHasRole is the resolver for the checkUserHasRole field.
+func (r *queryResolver) CheckUserHasRole(ctx context.Context, userID string, roleName string, modelType *string) (*model.CheckRoleResponse, error) {
+	userIDInt, err := strconv.ParseInt(userID, 10, 64)
+	if err != nil {
+		return &model.CheckRoleResponse{
+			HasRole: false,
+		}, nil
+	}
+
+	reqModelType := "users"
+	if modelType != nil {
+		reqModelType = *modelType
+	}
+
+	resp, err := r.AuthClient.CheckUserHasRole(ctx, &authPb.CheckRoleRequest{
+		UserId:    userIDInt,
+		RoleName:  roleName,
+		ModelType: reqModelType,
+	})
+	if err != nil {
+		return &model.CheckRoleResponse{
+			HasRole: false,
+		}, nil
+	}
+
+	return &model.CheckRoleResponse{
+		HasRole: resp.HasRole,
 	}, nil
 }
 

@@ -53,6 +53,18 @@ type AnnouncementResponse struct {
 	Data    *Announcement `json:"data,omitempty"`
 }
 
+type AssignPermissionToUserInput struct {
+	UserID       string  `json:"userId"`
+	PermissionID string  `json:"permissionId"`
+	ModelType    *string `json:"modelType,omitempty"`
+}
+
+type AssignRoleToUserInput struct {
+	UserID    string  `json:"userId"`
+	RoleID    string  `json:"roleId"`
+	ModelType *string `json:"modelType,omitempty"`
+}
+
 type BlogPost struct {
 	ID                 string    `json:"id"`
 	Title              string    `json:"title"`
@@ -134,6 +146,14 @@ type ChangePasswordResponse struct {
 	Message string `json:"message"`
 }
 
+type CheckPermissionResponse struct {
+	HasPermission bool `json:"hasPermission"`
+}
+
+type CheckRoleResponse struct {
+	HasRole bool `json:"hasRole"`
+}
+
 type CreateAnnouncementInput struct {
 	Title               string `json:"title"`
 	Content             string `json:"content"`
@@ -183,6 +203,11 @@ type CreateDiscountInput struct {
 	IsEnabledForAllOneTimeProducts *bool   `json:"isEnabledForAllOneTimeProducts,omitempty"`
 }
 
+type CreatePermissionInput struct {
+	Name      string  `json:"name"`
+	GuardName *string `json:"guardName,omitempty"`
+}
+
 type CreatePlanInput struct {
 	Name               string  `json:"name"`
 	Slug               *string `json:"slug,omitempty"`
@@ -208,6 +233,11 @@ type CreateProductInput struct {
 	Features    *string `json:"features,omitempty"`
 	IsPopular   *bool   `json:"isPopular,omitempty"`
 	IsDefault   *bool   `json:"isDefault,omitempty"`
+}
+
+type CreateRoleInput struct {
+	Name      string  `json:"name"`
+	GuardName *string `json:"guardName,omitempty"`
 }
 
 type CreateTenantInput struct {
@@ -251,12 +281,22 @@ type DeleteMediaResponse struct {
 	Message string `json:"message"`
 }
 
+type DeletePermissionResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
 type DeletePlanResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 }
 
 type DeleteProductResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+type DeleteRoleResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 }
@@ -417,6 +457,33 @@ type MediaURLResponse struct {
 type Mutation struct {
 }
 
+type Permission struct {
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	GuardName string `json:"guardName"`
+	CreatedAt int32  `json:"createdAt"`
+	UpdatedAt int32  `json:"updatedAt"`
+}
+
+type PermissionList struct {
+	Permissions []*Permission `json:"permissions"`
+	Total       int32         `json:"total"`
+	Page        int32         `json:"page"`
+	PerPage     int32         `json:"perPage"`
+}
+
+type PermissionListResponse struct {
+	Success bool            `json:"success"`
+	Message string          `json:"message"`
+	Data    *PermissionList `json:"data,omitempty"`
+}
+
+type PermissionResponse struct {
+	Success bool        `json:"success"`
+	Message string      `json:"message"`
+	Data    *Permission `json:"data,omitempty"`
+}
+
 type Plan struct {
 	ID                 string  `json:"id"`
 	Name               string  `json:"name"`
@@ -522,6 +589,60 @@ type ResetPasswordResponse struct {
 	Message string `json:"message"`
 }
 
+type RevokePermissionFromUserInput struct {
+	UserID       string  `json:"userId"`
+	PermissionID string  `json:"permissionId"`
+	ModelType    *string `json:"modelType,omitempty"`
+}
+
+type RevokeRoleFromUserInput struct {
+	UserID    string  `json:"userId"`
+	RoleID    string  `json:"roleId"`
+	ModelType *string `json:"modelType,omitempty"`
+}
+
+type Role struct {
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	GuardName string `json:"guardName"`
+	CreatedAt int32  `json:"createdAt"`
+	UpdatedAt int32  `json:"updatedAt"`
+}
+
+type RoleList struct {
+	Roles   []*Role `json:"roles"`
+	Total   int32   `json:"total"`
+	Page    int32   `json:"page"`
+	PerPage int32   `json:"perPage"`
+}
+
+type RoleListResponse struct {
+	Success bool      `json:"success"`
+	Message string    `json:"message"`
+	Data    *RoleList `json:"data,omitempty"`
+}
+
+type RoleResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+	Data    *Role  `json:"data,omitempty"`
+}
+
+type RoleWithPermissions struct {
+	ID          string        `json:"id"`
+	Name        string        `json:"name"`
+	GuardName   string        `json:"guardName"`
+	Permissions []*Permission `json:"permissions"`
+	CreatedAt   int32         `json:"createdAt"`
+	UpdatedAt   int32         `json:"updatedAt"`
+}
+
+type RoleWithPermissionsResponse struct {
+	Success bool                 `json:"success"`
+	Message string               `json:"message"`
+	Data    *RoleWithPermissions `json:"data,omitempty"`
+}
+
 type SetDefaultTenantInput struct {
 	UserID   string `json:"userId"`
 	TenantID string `json:"tenantId"`
@@ -536,6 +657,23 @@ type SetSettingInput struct {
 	TenantID string `json:"tenantId"`
 	Key      string `json:"key"`
 	Value    string `json:"value"`
+}
+
+type SyncRolePermissionsInput struct {
+	RoleID        string   `json:"roleId"`
+	PermissionIds []string `json:"permissionIds"`
+}
+
+type SyncUserPermissionsInput struct {
+	UserID        string   `json:"userId"`
+	PermissionIds []string `json:"permissionIds"`
+	ModelType     *string  `json:"modelType,omitempty"`
+}
+
+type SyncUserRolesInput struct {
+	UserID    string   `json:"userId"`
+	RoleIds   []string `json:"roleIds"`
+	ModelType *string  `json:"modelType,omitempty"`
 }
 
 type Tenant struct {
@@ -665,6 +803,12 @@ type UpdateDiscountInput struct {
 	IsEnabledForAllOneTimeProducts *bool   `json:"isEnabledForAllOneTimeProducts,omitempty"`
 }
 
+type UpdatePermissionInput struct {
+	ID        string  `json:"id"`
+	Name      string  `json:"name"`
+	GuardName *string `json:"guardName,omitempty"`
+}
+
 type UpdatePlanInput struct {
 	ID                 string  `json:"id"`
 	Name               string  `json:"name"`
@@ -691,6 +835,12 @@ type UpdateProductInput struct {
 	Features    *string `json:"features,omitempty"`
 	IsPopular   *bool   `json:"isPopular,omitempty"`
 	IsDefault   *bool   `json:"isDefault,omitempty"`
+}
+
+type UpdateRoleInput struct {
+	ID        string  `json:"id"`
+	Name      string  `json:"name"`
+	GuardName *string `json:"guardName,omitempty"`
 }
 
 type UpdateTenantInput struct {
@@ -763,10 +913,22 @@ type UserListResponse struct {
 	Data    *UserList `json:"data,omitempty"`
 }
 
+type UserPermissionsResponse struct {
+	Success     bool          `json:"success"`
+	Message     string        `json:"message"`
+	Permissions []*Permission `json:"permissions,omitempty"`
+}
+
 type UserResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 	Data    *User  `json:"data,omitempty"`
+}
+
+type UserRolesResponse struct {
+	Success bool    `json:"success"`
+	Message string  `json:"message"`
+	Roles   []*Role `json:"roles,omitempty"`
 }
 
 type VerifyEmailResponse struct {

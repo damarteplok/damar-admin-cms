@@ -6,7 +6,9 @@ import {
   BookOpen,
   Command,
   Frame,
+  Key,
   PieChart,
+  Shield,
   TrendingUp,
   User,
 } from 'lucide-react'
@@ -91,6 +93,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           {
             title: t('nav.announcements'),
             url: '/admin/announcements',
+          },
+        ],
+      },
+      {
+        title: t('nav.access_control'),
+        icon: Shield,
+        items: [
+          {
+            title: t('nav.roles'),
+            url: '/admin/roles',
+          },
+          {
+            title: t('nav.permissions'),
+            url: '/admin/permissions',
           },
         ],
       },

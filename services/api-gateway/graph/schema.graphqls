@@ -278,6 +278,116 @@ type ActiveAnnouncementsResponse {
   data: [Announcement!]
 }
 
+# RBAC Permission type
+type Permission {
+  id: ID!
+  name: String!
+  guardName: String!
+  createdAt: Int!
+  updatedAt: Int!
+}
+
+# RBAC Role type
+type Role {
+  id: ID!
+  name: String!
+  guardName: String!
+  createdAt: Int!
+  updatedAt: Int!
+}
+
+# Role with permissions
+type RoleWithPermissions {
+  id: ID!
+  name: String!
+  guardName: String!
+  permissions: [Permission!]!
+  createdAt: Int!
+  updatedAt: Int!
+}
+
+# Permission list response
+type PermissionList {
+  permissions: [Permission!]!
+  total: Int!
+  page: Int!
+  perPage: Int!
+}
+
+# Role list response
+type RoleList {
+  roles: [Role!]!
+  total: Int!
+  page: Int!
+  perPage: Int!
+}
+
+# Permission response wrappers
+type PermissionResponse {
+  success: Boolean!
+  message: String!
+  data: Permission
+}
+
+type PermissionListResponse {
+  success: Boolean!
+  message: String!
+  data: PermissionList
+}
+
+type DeletePermissionResponse {
+  success: Boolean!
+  message: String!
+}
+
+# Role response wrappers
+type RoleResponse {
+  success: Boolean!
+  message: String!
+  data: Role
+}
+
+type RoleWithPermissionsResponse {
+  success: Boolean!
+  message: String!
+  data: RoleWithPermissions
+}
+
+type RoleListResponse {
+  success: Boolean!
+  message: String!
+  data: RoleList
+}
+
+type DeleteRoleResponse {
+  success: Boolean!
+  message: String!
+}
+
+# User roles response
+type UserRolesResponse {
+  success: Boolean!
+  message: String!
+  roles: [Role!]
+}
+
+# User permissions response
+type UserPermissionsResponse {
+  success: Boolean!
+  message: String!
+  permissions: [Permission!]
+}
+
+# Check permission response
+type CheckPermissionResponse {
+  hasPermission: Boolean!
+}
+
+# Check role response
+type CheckRoleResponse {
+  hasRole: Boolean!
+}
+
 # Auth types
 type LoginData {
   accessToken: String!
@@ -791,6 +901,72 @@ input UpdateAnnouncementInput {
   showOnUserDashboard: Boolean
 }
 
+# RBAC Permission inputs
+input CreatePermissionInput {
+  name: String!
+  guardName: String
+}
+
+input UpdatePermissionInput {
+  id: ID!
+  name: String!
+  guardName: String
+}
+
+# RBAC Role inputs
+input CreateRoleInput {
+  name: String!
+  guardName: String
+}
+
+input UpdateRoleInput {
+  id: ID!
+  name: String!
+  guardName: String
+}
+
+# RBAC sync/assign inputs
+input SyncRolePermissionsInput {
+  roleId: ID!
+  permissionIds: [ID!]!
+}
+
+input AssignRoleToUserInput {
+  userId: ID!
+  roleId: ID!
+  modelType: String
+}
+
+input RevokeRoleFromUserInput {
+  userId: ID!
+  roleId: ID!
+  modelType: String
+}
+
+input SyncUserRolesInput {
+  userId: ID!
+  roleIds: [ID!]!
+  modelType: String
+}
+
+input AssignPermissionToUserInput {
+  userId: ID!
+  permissionId: ID!
+  modelType: String
+}
+
+input RevokePermissionFromUserInput {
+  userId: ID!
+  permissionId: ID!
+  modelType: String
+}
+
+input SyncUserPermissionsInput {
+  userId: ID!
+  permissionIds: [ID!]!
+  modelType: String
+}
+
 # Queries
 type Query {
   # Get user by ID
@@ -912,6 +1088,43 @@ type Query {
     forFrontend: Boolean
     forUserDashboard: Boolean
   ): ActiveAnnouncementsResponse!
+
+  # Permission queries (admin only)
+  permission(id: ID!): PermissionResponse!
+  permissions(
+    page: Int
+    perPage: Int
+    search: String
+    sortBy: String
+    sortOrder: String
+    guardName: String
+  ): PermissionListResponse!
+
+  # Role queries (admin only)
+  role(id: ID!): RoleResponse!
+  roleWithPermissions(id: ID!): RoleWithPermissionsResponse!
+  roles(
+    page: Int
+    perPage: Int
+    search: String
+    sortBy: String
+    sortOrder: String
+    guardName: String
+  ): RoleListResponse!
+
+  # User RBAC queries
+  userRoles(userId: ID!, modelType: String): UserRolesResponse!
+  userPermissions(userId: ID!, modelType: String): UserPermissionsResponse!
+  checkUserHasPermission(
+    userId: ID!
+    permissionName: String!
+    modelType: String
+  ): CheckPermissionResponse!
+  checkUserHasRole(
+    userId: ID!
+    roleName: String!
+    modelType: String
+  ): CheckRoleResponse!
 }
 
 # Mutations
@@ -983,4 +1196,31 @@ type Mutation {
   createAnnouncement(input: CreateAnnouncementInput!): AnnouncementResponse!
   updateAnnouncement(input: UpdateAnnouncementInput!): AnnouncementResponse!
   deleteAnnouncement(id: ID!): DeleteAnnouncementResponse!
+
+  # Permission mutations (admin only)
+  createPermission(input: CreatePermissionInput!): PermissionResponse!
+  updatePermission(input: UpdatePermissionInput!): PermissionResponse!
+  deletePermission(id: ID!): DeletePermissionResponse!
+
+  # Role mutations (admin only)
+  createRole(input: CreateRoleInput!): RoleResponse!
+  updateRole(input: UpdateRoleInput!): RoleResponse!
+  deleteRole(id: ID!): DeleteRoleResponse!
+  syncRolePermissions(
+    input: SyncRolePermissionsInput!
+  ): RoleWithPermissionsResponse!
+
+  # User RBAC mutations (admin only)
+  assignRoleToUser(input: AssignRoleToUserInput!): UserRolesResponse!
+  revokeRoleFromUser(input: RevokeRoleFromUserInput!): UserRolesResponse!
+  syncUserRoles(input: SyncUserRolesInput!): UserRolesResponse!
+  assignPermissionToUser(
+    input: AssignPermissionToUserInput!
+  ): UserPermissionsResponse!
+  revokePermissionFromUser(
+    input: RevokePermissionFromUserInput!
+  ): UserPermissionsResponse!
+  syncUserPermissions(
+    input: SyncUserPermissionsInput!
+  ): UserPermissionsResponse!
 }

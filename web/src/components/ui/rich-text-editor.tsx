@@ -147,8 +147,15 @@ export function RichTextEditor({
         onChange(editor.getHTML())
       },
     },
-    [value, disabled, placeholder],
+    [disabled, placeholder], // Remove value from dependencies to prevent re-rendering on every keystroke
   )
+
+  // Sync editor content when value changes externally
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value)
+    }
+  }, [editor, value])
 
   const addImage = useCallback(() => {
     if (imageUrl && editor) {

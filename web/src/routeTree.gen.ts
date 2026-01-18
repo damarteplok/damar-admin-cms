@@ -24,32 +24,41 @@ import { Route as LayoutContactRouteImport } from './routes/_layout/contact'
 import { Route as LayoutBlogRouteImport } from './routes/_layout/blog'
 import { Route as AdminWorkspacesIndexRouteImport } from './routes/admin/workspaces/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
+import { Route as AdminRolesIndexRouteImport } from './routes/admin/roles/index'
 import { Route as AdminProfileIndexRouteImport } from './routes/admin/profile/index'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
 import { Route as AdminPlansIndexRouteImport } from './routes/admin/plans/index'
+import { Route as AdminPermissionsIndexRouteImport } from './routes/admin/permissions/index'
 import { Route as AdminDiscountsIndexRouteImport } from './routes/admin/discounts/index'
 import { Route as AdminBlogIndexRouteImport } from './routes/admin/blog/index'
 import { Route as AdminBlogCategoriesIndexRouteImport } from './routes/admin/blog-categories/index'
 import { Route as AdminAnnouncementsIndexRouteImport } from './routes/admin/announcements/index'
 import { Route as LayoutBlogIndexRouteImport } from './routes/_layout/blog/index'
 import { Route as AdminWorkspacesCreateRouteImport } from './routes/admin/workspaces/create'
+import { Route as AdminRolesCreateRouteImport } from './routes/admin/roles/create'
 import { Route as AdminProductsCreateRouteImport } from './routes/admin/products/create'
 import { Route as AdminPlansCreateRouteImport } from './routes/admin/plans/create'
+import { Route as AdminPermissionsCreateRouteImport } from './routes/admin/permissions/create'
 import { Route as AdminDiscountsCreateRouteImport } from './routes/admin/discounts/create'
 import { Route as AdminBlogCreateRouteImport } from './routes/admin/blog/create'
 import { Route as AdminBlogCategoriesCreateRouteImport } from './routes/admin/blog-categories/create'
 import { Route as AdminAnnouncementsCreateRouteImport } from './routes/admin/announcements/create'
 import { Route as LayoutBlogSlugRouteImport } from './routes/_layout/blog/$slug'
 import { Route as AdminWorkspacesIdIndexRouteImport } from './routes/admin/workspaces/$id/index'
+import { Route as AdminRolesIdIndexRouteImport } from './routes/admin/roles/$id/index'
 import { Route as AdminProductsIdIndexRouteImport } from './routes/admin/products/$id/index'
 import { Route as AdminPlansIdIndexRouteImport } from './routes/admin/plans/$id/index'
+import { Route as AdminPermissionsIdIndexRouteImport } from './routes/admin/permissions/$id/index'
 import { Route as AdminDiscountsIdIndexRouteImport } from './routes/admin/discounts/$id/index'
 import { Route as AdminBlogIdIndexRouteImport } from './routes/admin/blog/$id/index'
 import { Route as AdminBlogCategoriesIdIndexRouteImport } from './routes/admin/blog-categories/$id/index'
 import { Route as AdminAnnouncementsIdIndexRouteImport } from './routes/admin/announcements/$id/index'
 import { Route as AdminWorkspacesIdEditRouteImport } from './routes/admin/workspaces/$id/edit'
+import { Route as AdminRolesIdPermissionsRouteImport } from './routes/admin/roles/$id/permissions'
+import { Route as AdminRolesIdEditRouteImport } from './routes/admin/roles/$id/edit'
 import { Route as AdminProductsIdEditRouteImport } from './routes/admin/products/$id/edit'
 import { Route as AdminPlansIdEditRouteImport } from './routes/admin/plans/$id/edit'
+import { Route as AdminPermissionsIdEditRouteImport } from './routes/admin/permissions/$id/edit'
 import { Route as AdminDiscountsIdEditRouteImport } from './routes/admin/discounts/$id/edit'
 import { Route as AdminBlogIdEditRouteImport } from './routes/admin/blog/$id/edit'
 import { Route as AdminBlogCategoriesIdEditRouteImport } from './routes/admin/blog-categories/$id/edit'
@@ -129,6 +138,11 @@ const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   path: '/users/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminRolesIndexRoute = AdminRolesIndexRouteImport.update({
+  id: '/roles/',
+  path: '/roles/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProfileIndexRoute = AdminProfileIndexRouteImport.update({
   id: '/profile/',
   path: '/profile/',
@@ -142,6 +156,11 @@ const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
 const AdminPlansIndexRoute = AdminPlansIndexRouteImport.update({
   id: '/plans/',
   path: '/plans/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPermissionsIndexRoute = AdminPermissionsIndexRouteImport.update({
+  id: '/permissions/',
+  path: '/permissions/',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminDiscountsIndexRoute = AdminDiscountsIndexRouteImport.update({
@@ -175,6 +194,11 @@ const AdminWorkspacesCreateRoute = AdminWorkspacesCreateRouteImport.update({
   path: '/workspaces/create',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminRolesCreateRoute = AdminRolesCreateRouteImport.update({
+  id: '/roles/create',
+  path: '/roles/create',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProductsCreateRoute = AdminProductsCreateRouteImport.update({
   id: '/products/create',
   path: '/products/create',
@@ -183,6 +207,11 @@ const AdminProductsCreateRoute = AdminProductsCreateRouteImport.update({
 const AdminPlansCreateRoute = AdminPlansCreateRouteImport.update({
   id: '/plans/create',
   path: '/plans/create',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPermissionsCreateRoute = AdminPermissionsCreateRouteImport.update({
+  id: '/permissions/create',
+  path: '/permissions/create',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminDiscountsCreateRoute = AdminDiscountsCreateRouteImport.update({
@@ -217,6 +246,11 @@ const AdminWorkspacesIdIndexRoute = AdminWorkspacesIdIndexRouteImport.update({
   path: '/workspaces/$id/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminRolesIdIndexRoute = AdminRolesIdIndexRouteImport.update({
+  id: '/roles/$id/',
+  path: '/roles/$id/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProductsIdIndexRoute = AdminProductsIdIndexRouteImport.update({
   id: '/products/$id/',
   path: '/products/$id/',
@@ -225,6 +259,11 @@ const AdminProductsIdIndexRoute = AdminProductsIdIndexRouteImport.update({
 const AdminPlansIdIndexRoute = AdminPlansIdIndexRouteImport.update({
   id: '/plans/$id/',
   path: '/plans/$id/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPermissionsIdIndexRoute = AdminPermissionsIdIndexRouteImport.update({
+  id: '/permissions/$id/',
+  path: '/permissions/$id/',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminDiscountsIdIndexRoute = AdminDiscountsIdIndexRouteImport.update({
@@ -254,6 +293,16 @@ const AdminWorkspacesIdEditRoute = AdminWorkspacesIdEditRouteImport.update({
   path: '/workspaces/$id/edit',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminRolesIdPermissionsRoute = AdminRolesIdPermissionsRouteImport.update({
+  id: '/roles/$id/permissions',
+  path: '/roles/$id/permissions',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRolesIdEditRoute = AdminRolesIdEditRouteImport.update({
+  id: '/roles/$id/edit',
+  path: '/roles/$id/edit',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProductsIdEditRoute = AdminProductsIdEditRouteImport.update({
   id: '/products/$id/edit',
   path: '/products/$id/edit',
@@ -262,6 +311,11 @@ const AdminProductsIdEditRoute = AdminProductsIdEditRouteImport.update({
 const AdminPlansIdEditRoute = AdminPlansIdEditRouteImport.update({
   id: '/plans/$id/edit',
   path: '/plans/$id/edit',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPermissionsIdEditRoute = AdminPermissionsIdEditRouteImport.update({
+  id: '/permissions/$id/edit',
+  path: '/permissions/$id/edit',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminDiscountsIdEditRoute = AdminDiscountsIdEditRouteImport.update({
@@ -305,32 +359,41 @@ export interface FileRoutesByFullPath {
   '/admin/blog-categories/create': typeof AdminBlogCategoriesCreateRoute
   '/admin/blog/create': typeof AdminBlogCreateRoute
   '/admin/discounts/create': typeof AdminDiscountsCreateRoute
+  '/admin/permissions/create': typeof AdminPermissionsCreateRoute
   '/admin/plans/create': typeof AdminPlansCreateRoute
   '/admin/products/create': typeof AdminProductsCreateRoute
+  '/admin/roles/create': typeof AdminRolesCreateRoute
   '/admin/workspaces/create': typeof AdminWorkspacesCreateRoute
   '/blog/': typeof LayoutBlogIndexRoute
   '/admin/announcements': typeof AdminAnnouncementsIndexRoute
   '/admin/blog-categories': typeof AdminBlogCategoriesIndexRoute
   '/admin/blog': typeof AdminBlogIndexRoute
   '/admin/discounts': typeof AdminDiscountsIndexRoute
+  '/admin/permissions': typeof AdminPermissionsIndexRoute
   '/admin/plans': typeof AdminPlansIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/profile': typeof AdminProfileIndexRoute
+  '/admin/roles': typeof AdminRolesIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/admin/workspaces': typeof AdminWorkspacesIndexRoute
   '/admin/announcements/$id/edit': typeof AdminAnnouncementsIdEditRoute
   '/admin/blog-categories/$id/edit': typeof AdminBlogCategoriesIdEditRoute
   '/admin/blog/$id/edit': typeof AdminBlogIdEditRoute
   '/admin/discounts/$id/edit': typeof AdminDiscountsIdEditRoute
+  '/admin/permissions/$id/edit': typeof AdminPermissionsIdEditRoute
   '/admin/plans/$id/edit': typeof AdminPlansIdEditRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
+  '/admin/roles/$id/edit': typeof AdminRolesIdEditRoute
+  '/admin/roles/$id/permissions': typeof AdminRolesIdPermissionsRoute
   '/admin/workspaces/$id/edit': typeof AdminWorkspacesIdEditRoute
   '/admin/announcements/$id': typeof AdminAnnouncementsIdIndexRoute
   '/admin/blog-categories/$id': typeof AdminBlogCategoriesIdIndexRoute
   '/admin/blog/$id': typeof AdminBlogIdIndexRoute
   '/admin/discounts/$id': typeof AdminDiscountsIdIndexRoute
+  '/admin/permissions/$id': typeof AdminPermissionsIdIndexRoute
   '/admin/plans/$id': typeof AdminPlansIdIndexRoute
   '/admin/products/$id': typeof AdminProductsIdIndexRoute
+  '/admin/roles/$id': typeof AdminRolesIdIndexRoute
   '/admin/workspaces/$id': typeof AdminWorkspacesIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -349,32 +412,41 @@ export interface FileRoutesByTo {
   '/admin/blog-categories/create': typeof AdminBlogCategoriesCreateRoute
   '/admin/blog/create': typeof AdminBlogCreateRoute
   '/admin/discounts/create': typeof AdminDiscountsCreateRoute
+  '/admin/permissions/create': typeof AdminPermissionsCreateRoute
   '/admin/plans/create': typeof AdminPlansCreateRoute
   '/admin/products/create': typeof AdminProductsCreateRoute
+  '/admin/roles/create': typeof AdminRolesCreateRoute
   '/admin/workspaces/create': typeof AdminWorkspacesCreateRoute
   '/blog': typeof LayoutBlogIndexRoute
   '/admin/announcements': typeof AdminAnnouncementsIndexRoute
   '/admin/blog-categories': typeof AdminBlogCategoriesIndexRoute
   '/admin/blog': typeof AdminBlogIndexRoute
   '/admin/discounts': typeof AdminDiscountsIndexRoute
+  '/admin/permissions': typeof AdminPermissionsIndexRoute
   '/admin/plans': typeof AdminPlansIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/profile': typeof AdminProfileIndexRoute
+  '/admin/roles': typeof AdminRolesIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/admin/workspaces': typeof AdminWorkspacesIndexRoute
   '/admin/announcements/$id/edit': typeof AdminAnnouncementsIdEditRoute
   '/admin/blog-categories/$id/edit': typeof AdminBlogCategoriesIdEditRoute
   '/admin/blog/$id/edit': typeof AdminBlogIdEditRoute
   '/admin/discounts/$id/edit': typeof AdminDiscountsIdEditRoute
+  '/admin/permissions/$id/edit': typeof AdminPermissionsIdEditRoute
   '/admin/plans/$id/edit': typeof AdminPlansIdEditRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
+  '/admin/roles/$id/edit': typeof AdminRolesIdEditRoute
+  '/admin/roles/$id/permissions': typeof AdminRolesIdPermissionsRoute
   '/admin/workspaces/$id/edit': typeof AdminWorkspacesIdEditRoute
   '/admin/announcements/$id': typeof AdminAnnouncementsIdIndexRoute
   '/admin/blog-categories/$id': typeof AdminBlogCategoriesIdIndexRoute
   '/admin/blog/$id': typeof AdminBlogIdIndexRoute
   '/admin/discounts/$id': typeof AdminDiscountsIdIndexRoute
+  '/admin/permissions/$id': typeof AdminPermissionsIdIndexRoute
   '/admin/plans/$id': typeof AdminPlansIdIndexRoute
   '/admin/products/$id': typeof AdminProductsIdIndexRoute
+  '/admin/roles/$id': typeof AdminRolesIdIndexRoute
   '/admin/workspaces/$id': typeof AdminWorkspacesIdIndexRoute
 }
 export interface FileRoutesById {
@@ -397,32 +469,41 @@ export interface FileRoutesById {
   '/admin/blog-categories/create': typeof AdminBlogCategoriesCreateRoute
   '/admin/blog/create': typeof AdminBlogCreateRoute
   '/admin/discounts/create': typeof AdminDiscountsCreateRoute
+  '/admin/permissions/create': typeof AdminPermissionsCreateRoute
   '/admin/plans/create': typeof AdminPlansCreateRoute
   '/admin/products/create': typeof AdminProductsCreateRoute
+  '/admin/roles/create': typeof AdminRolesCreateRoute
   '/admin/workspaces/create': typeof AdminWorkspacesCreateRoute
   '/_layout/blog/': typeof LayoutBlogIndexRoute
   '/admin/announcements/': typeof AdminAnnouncementsIndexRoute
   '/admin/blog-categories/': typeof AdminBlogCategoriesIndexRoute
   '/admin/blog/': typeof AdminBlogIndexRoute
   '/admin/discounts/': typeof AdminDiscountsIndexRoute
+  '/admin/permissions/': typeof AdminPermissionsIndexRoute
   '/admin/plans/': typeof AdminPlansIndexRoute
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/profile/': typeof AdminProfileIndexRoute
+  '/admin/roles/': typeof AdminRolesIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/admin/workspaces/': typeof AdminWorkspacesIndexRoute
   '/admin/announcements/$id/edit': typeof AdminAnnouncementsIdEditRoute
   '/admin/blog-categories/$id/edit': typeof AdminBlogCategoriesIdEditRoute
   '/admin/blog/$id/edit': typeof AdminBlogIdEditRoute
   '/admin/discounts/$id/edit': typeof AdminDiscountsIdEditRoute
+  '/admin/permissions/$id/edit': typeof AdminPermissionsIdEditRoute
   '/admin/plans/$id/edit': typeof AdminPlansIdEditRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
+  '/admin/roles/$id/edit': typeof AdminRolesIdEditRoute
+  '/admin/roles/$id/permissions': typeof AdminRolesIdPermissionsRoute
   '/admin/workspaces/$id/edit': typeof AdminWorkspacesIdEditRoute
   '/admin/announcements/$id/': typeof AdminAnnouncementsIdIndexRoute
   '/admin/blog-categories/$id/': typeof AdminBlogCategoriesIdIndexRoute
   '/admin/blog/$id/': typeof AdminBlogIdIndexRoute
   '/admin/discounts/$id/': typeof AdminDiscountsIdIndexRoute
+  '/admin/permissions/$id/': typeof AdminPermissionsIdIndexRoute
   '/admin/plans/$id/': typeof AdminPlansIdIndexRoute
   '/admin/products/$id/': typeof AdminProductsIdIndexRoute
+  '/admin/roles/$id/': typeof AdminRolesIdIndexRoute
   '/admin/workspaces/$id/': typeof AdminWorkspacesIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -445,32 +526,41 @@ export interface FileRouteTypes {
     | '/admin/blog-categories/create'
     | '/admin/blog/create'
     | '/admin/discounts/create'
+    | '/admin/permissions/create'
     | '/admin/plans/create'
     | '/admin/products/create'
+    | '/admin/roles/create'
     | '/admin/workspaces/create'
     | '/blog/'
     | '/admin/announcements'
     | '/admin/blog-categories'
     | '/admin/blog'
     | '/admin/discounts'
+    | '/admin/permissions'
     | '/admin/plans'
     | '/admin/products'
     | '/admin/profile'
+    | '/admin/roles'
     | '/admin/users'
     | '/admin/workspaces'
     | '/admin/announcements/$id/edit'
     | '/admin/blog-categories/$id/edit'
     | '/admin/blog/$id/edit'
     | '/admin/discounts/$id/edit'
+    | '/admin/permissions/$id/edit'
     | '/admin/plans/$id/edit'
     | '/admin/products/$id/edit'
+    | '/admin/roles/$id/edit'
+    | '/admin/roles/$id/permissions'
     | '/admin/workspaces/$id/edit'
     | '/admin/announcements/$id'
     | '/admin/blog-categories/$id'
     | '/admin/blog/$id'
     | '/admin/discounts/$id'
+    | '/admin/permissions/$id'
     | '/admin/plans/$id'
     | '/admin/products/$id'
+    | '/admin/roles/$id'
     | '/admin/workspaces/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -489,32 +579,41 @@ export interface FileRouteTypes {
     | '/admin/blog-categories/create'
     | '/admin/blog/create'
     | '/admin/discounts/create'
+    | '/admin/permissions/create'
     | '/admin/plans/create'
     | '/admin/products/create'
+    | '/admin/roles/create'
     | '/admin/workspaces/create'
     | '/blog'
     | '/admin/announcements'
     | '/admin/blog-categories'
     | '/admin/blog'
     | '/admin/discounts'
+    | '/admin/permissions'
     | '/admin/plans'
     | '/admin/products'
     | '/admin/profile'
+    | '/admin/roles'
     | '/admin/users'
     | '/admin/workspaces'
     | '/admin/announcements/$id/edit'
     | '/admin/blog-categories/$id/edit'
     | '/admin/blog/$id/edit'
     | '/admin/discounts/$id/edit'
+    | '/admin/permissions/$id/edit'
     | '/admin/plans/$id/edit'
     | '/admin/products/$id/edit'
+    | '/admin/roles/$id/edit'
+    | '/admin/roles/$id/permissions'
     | '/admin/workspaces/$id/edit'
     | '/admin/announcements/$id'
     | '/admin/blog-categories/$id'
     | '/admin/blog/$id'
     | '/admin/discounts/$id'
+    | '/admin/permissions/$id'
     | '/admin/plans/$id'
     | '/admin/products/$id'
+    | '/admin/roles/$id'
     | '/admin/workspaces/$id'
   id:
     | '__root__'
@@ -536,32 +635,41 @@ export interface FileRouteTypes {
     | '/admin/blog-categories/create'
     | '/admin/blog/create'
     | '/admin/discounts/create'
+    | '/admin/permissions/create'
     | '/admin/plans/create'
     | '/admin/products/create'
+    | '/admin/roles/create'
     | '/admin/workspaces/create'
     | '/_layout/blog/'
     | '/admin/announcements/'
     | '/admin/blog-categories/'
     | '/admin/blog/'
     | '/admin/discounts/'
+    | '/admin/permissions/'
     | '/admin/plans/'
     | '/admin/products/'
     | '/admin/profile/'
+    | '/admin/roles/'
     | '/admin/users/'
     | '/admin/workspaces/'
     | '/admin/announcements/$id/edit'
     | '/admin/blog-categories/$id/edit'
     | '/admin/blog/$id/edit'
     | '/admin/discounts/$id/edit'
+    | '/admin/permissions/$id/edit'
     | '/admin/plans/$id/edit'
     | '/admin/products/$id/edit'
+    | '/admin/roles/$id/edit'
+    | '/admin/roles/$id/permissions'
     | '/admin/workspaces/$id/edit'
     | '/admin/announcements/$id/'
     | '/admin/blog-categories/$id/'
     | '/admin/blog/$id/'
     | '/admin/discounts/$id/'
+    | '/admin/permissions/$id/'
     | '/admin/plans/$id/'
     | '/admin/products/$id/'
+    | '/admin/roles/$id/'
     | '/admin/workspaces/$id/'
   fileRoutesById: FileRoutesById
 }
@@ -681,6 +789,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/roles/': {
+      id: '/admin/roles/'
+      path: '/roles'
+      fullPath: '/admin/roles'
+      preLoaderRoute: typeof AdminRolesIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/profile/': {
       id: '/admin/profile/'
       path: '/profile'
@@ -700,6 +815,13 @@ declare module '@tanstack/react-router' {
       path: '/plans'
       fullPath: '/admin/plans'
       preLoaderRoute: typeof AdminPlansIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/permissions/': {
+      id: '/admin/permissions/'
+      path: '/permissions'
+      fullPath: '/admin/permissions'
+      preLoaderRoute: typeof AdminPermissionsIndexRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/discounts/': {
@@ -744,6 +866,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminWorkspacesCreateRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/roles/create': {
+      id: '/admin/roles/create'
+      path: '/roles/create'
+      fullPath: '/admin/roles/create'
+      preLoaderRoute: typeof AdminRolesCreateRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/products/create': {
       id: '/admin/products/create'
       path: '/products/create'
@@ -756,6 +885,13 @@ declare module '@tanstack/react-router' {
       path: '/plans/create'
       fullPath: '/admin/plans/create'
       preLoaderRoute: typeof AdminPlansCreateRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/permissions/create': {
+      id: '/admin/permissions/create'
+      path: '/permissions/create'
+      fullPath: '/admin/permissions/create'
+      preLoaderRoute: typeof AdminPermissionsCreateRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/discounts/create': {
@@ -800,6 +936,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminWorkspacesIdIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/roles/$id/': {
+      id: '/admin/roles/$id/'
+      path: '/roles/$id'
+      fullPath: '/admin/roles/$id'
+      preLoaderRoute: typeof AdminRolesIdIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/products/$id/': {
       id: '/admin/products/$id/'
       path: '/products/$id'
@@ -812,6 +955,13 @@ declare module '@tanstack/react-router' {
       path: '/plans/$id'
       fullPath: '/admin/plans/$id'
       preLoaderRoute: typeof AdminPlansIdIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/permissions/$id/': {
+      id: '/admin/permissions/$id/'
+      path: '/permissions/$id'
+      fullPath: '/admin/permissions/$id'
+      preLoaderRoute: typeof AdminPermissionsIdIndexRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/discounts/$id/': {
@@ -849,6 +999,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminWorkspacesIdEditRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/roles/$id/permissions': {
+      id: '/admin/roles/$id/permissions'
+      path: '/roles/$id/permissions'
+      fullPath: '/admin/roles/$id/permissions'
+      preLoaderRoute: typeof AdminRolesIdPermissionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/roles/$id/edit': {
+      id: '/admin/roles/$id/edit'
+      path: '/roles/$id/edit'
+      fullPath: '/admin/roles/$id/edit'
+      preLoaderRoute: typeof AdminRolesIdEditRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/products/$id/edit': {
       id: '/admin/products/$id/edit'
       path: '/products/$id/edit'
@@ -861,6 +1025,13 @@ declare module '@tanstack/react-router' {
       path: '/plans/$id/edit'
       fullPath: '/admin/plans/$id/edit'
       preLoaderRoute: typeof AdminPlansIdEditRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/permissions/$id/edit': {
+      id: '/admin/permissions/$id/edit'
+      path: '/permissions/$id/edit'
+      fullPath: '/admin/permissions/$id/edit'
+      preLoaderRoute: typeof AdminPermissionsIdEditRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/discounts/$id/edit': {
@@ -935,31 +1106,40 @@ interface AdminRouteChildren {
   AdminBlogCategoriesCreateRoute: typeof AdminBlogCategoriesCreateRoute
   AdminBlogCreateRoute: typeof AdminBlogCreateRoute
   AdminDiscountsCreateRoute: typeof AdminDiscountsCreateRoute
+  AdminPermissionsCreateRoute: typeof AdminPermissionsCreateRoute
   AdminPlansCreateRoute: typeof AdminPlansCreateRoute
   AdminProductsCreateRoute: typeof AdminProductsCreateRoute
+  AdminRolesCreateRoute: typeof AdminRolesCreateRoute
   AdminWorkspacesCreateRoute: typeof AdminWorkspacesCreateRoute
   AdminAnnouncementsIndexRoute: typeof AdminAnnouncementsIndexRoute
   AdminBlogCategoriesIndexRoute: typeof AdminBlogCategoriesIndexRoute
   AdminBlogIndexRoute: typeof AdminBlogIndexRoute
   AdminDiscountsIndexRoute: typeof AdminDiscountsIndexRoute
+  AdminPermissionsIndexRoute: typeof AdminPermissionsIndexRoute
   AdminPlansIndexRoute: typeof AdminPlansIndexRoute
   AdminProductsIndexRoute: typeof AdminProductsIndexRoute
   AdminProfileIndexRoute: typeof AdminProfileIndexRoute
+  AdminRolesIndexRoute: typeof AdminRolesIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
   AdminWorkspacesIndexRoute: typeof AdminWorkspacesIndexRoute
   AdminAnnouncementsIdEditRoute: typeof AdminAnnouncementsIdEditRoute
   AdminBlogCategoriesIdEditRoute: typeof AdminBlogCategoriesIdEditRoute
   AdminBlogIdEditRoute: typeof AdminBlogIdEditRoute
   AdminDiscountsIdEditRoute: typeof AdminDiscountsIdEditRoute
+  AdminPermissionsIdEditRoute: typeof AdminPermissionsIdEditRoute
   AdminPlansIdEditRoute: typeof AdminPlansIdEditRoute
   AdminProductsIdEditRoute: typeof AdminProductsIdEditRoute
+  AdminRolesIdEditRoute: typeof AdminRolesIdEditRoute
+  AdminRolesIdPermissionsRoute: typeof AdminRolesIdPermissionsRoute
   AdminWorkspacesIdEditRoute: typeof AdminWorkspacesIdEditRoute
   AdminAnnouncementsIdIndexRoute: typeof AdminAnnouncementsIdIndexRoute
   AdminBlogCategoriesIdIndexRoute: typeof AdminBlogCategoriesIdIndexRoute
   AdminBlogIdIndexRoute: typeof AdminBlogIdIndexRoute
   AdminDiscountsIdIndexRoute: typeof AdminDiscountsIdIndexRoute
+  AdminPermissionsIdIndexRoute: typeof AdminPermissionsIdIndexRoute
   AdminPlansIdIndexRoute: typeof AdminPlansIdIndexRoute
   AdminProductsIdIndexRoute: typeof AdminProductsIdIndexRoute
+  AdminRolesIdIndexRoute: typeof AdminRolesIdIndexRoute
   AdminWorkspacesIdIndexRoute: typeof AdminWorkspacesIdIndexRoute
 }
 
@@ -969,31 +1149,40 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBlogCategoriesCreateRoute: AdminBlogCategoriesCreateRoute,
   AdminBlogCreateRoute: AdminBlogCreateRoute,
   AdminDiscountsCreateRoute: AdminDiscountsCreateRoute,
+  AdminPermissionsCreateRoute: AdminPermissionsCreateRoute,
   AdminPlansCreateRoute: AdminPlansCreateRoute,
   AdminProductsCreateRoute: AdminProductsCreateRoute,
+  AdminRolesCreateRoute: AdminRolesCreateRoute,
   AdminWorkspacesCreateRoute: AdminWorkspacesCreateRoute,
   AdminAnnouncementsIndexRoute: AdminAnnouncementsIndexRoute,
   AdminBlogCategoriesIndexRoute: AdminBlogCategoriesIndexRoute,
   AdminBlogIndexRoute: AdminBlogIndexRoute,
   AdminDiscountsIndexRoute: AdminDiscountsIndexRoute,
+  AdminPermissionsIndexRoute: AdminPermissionsIndexRoute,
   AdminPlansIndexRoute: AdminPlansIndexRoute,
   AdminProductsIndexRoute: AdminProductsIndexRoute,
   AdminProfileIndexRoute: AdminProfileIndexRoute,
+  AdminRolesIndexRoute: AdminRolesIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
   AdminWorkspacesIndexRoute: AdminWorkspacesIndexRoute,
   AdminAnnouncementsIdEditRoute: AdminAnnouncementsIdEditRoute,
   AdminBlogCategoriesIdEditRoute: AdminBlogCategoriesIdEditRoute,
   AdminBlogIdEditRoute: AdminBlogIdEditRoute,
   AdminDiscountsIdEditRoute: AdminDiscountsIdEditRoute,
+  AdminPermissionsIdEditRoute: AdminPermissionsIdEditRoute,
   AdminPlansIdEditRoute: AdminPlansIdEditRoute,
   AdminProductsIdEditRoute: AdminProductsIdEditRoute,
+  AdminRolesIdEditRoute: AdminRolesIdEditRoute,
+  AdminRolesIdPermissionsRoute: AdminRolesIdPermissionsRoute,
   AdminWorkspacesIdEditRoute: AdminWorkspacesIdEditRoute,
   AdminAnnouncementsIdIndexRoute: AdminAnnouncementsIdIndexRoute,
   AdminBlogCategoriesIdIndexRoute: AdminBlogCategoriesIdIndexRoute,
   AdminBlogIdIndexRoute: AdminBlogIdIndexRoute,
   AdminDiscountsIdIndexRoute: AdminDiscountsIdIndexRoute,
+  AdminPermissionsIdIndexRoute: AdminPermissionsIdIndexRoute,
   AdminPlansIdIndexRoute: AdminPlansIdIndexRoute,
   AdminProductsIdIndexRoute: AdminProductsIdIndexRoute,
+  AdminRolesIdIndexRoute: AdminRolesIdIndexRoute,
   AdminWorkspacesIdIndexRoute: AdminWorkspacesIdIndexRoute,
 }
 

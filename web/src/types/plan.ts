@@ -57,6 +57,7 @@ export interface CreatePlanInput {
 }
 
 export interface UpdatePlanInput {
+  id: string
   name: string
   slug?: string
   intervalId: string

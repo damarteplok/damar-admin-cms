@@ -82,13 +82,22 @@ func main() {
 
 	logger.Info("Successfully connected to RabbitMQ")
 
-	// Initialize dependencies
+	// Initialize repositories
 	tokenManager := jwt.NewTokenManager(jwtSecret, 1*time.Hour, 7*24*time.Hour)
 	refreshTokenRepo := repository.NewRefreshTokenRepository(pool)
 	passwordResetRepo := repository.NewPasswordResetTokenRepository(pool)
 	emailVerificationRepo := repository.NewEmailVerificationTokenRepository(pool)
+	permissionRepo := repository.NewPermissionRepository(pool)
+	roleRepo := repository.NewRoleRepository(pool)
+
+	// Initialize services
 	authService := service.NewAuthService(refreshTokenRepo, passwordResetRepo, emailVerificationRepo, tokenManager, userConn, publisher)
-	authHandler := grpc.NewAuthGRPCServer(authService)
+	permissionService := service.NewPermissionService(permissionRepo)
+	roleService := service.NewRoleService(roleRepo, permissionRepo)
+	rbacService := service.NewRBACService(roleRepo, permissionRepo)
+
+	// Initialize combined gRPC handler
+	combinedHandler := grpc.NewCombinedAuthGRPCServer(authService, permissionService, roleService, rbacService)
 
 	// Setup gRPC server
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcPort))
@@ -97,7 +106,7 @@ func main() {
 	}
 
 	grpcServer := grpcLib.NewServer()
-	pb.RegisterAuthServiceServer(grpcServer, authHandler)
+	pb.RegisterAuthServiceServer(grpcServer, combinedHandler)
 
 	logger.Info("Auth service gRPC server listening", zap.Int("port", grpcPort))
 

@@ -74,7 +74,7 @@ export const ContactComponent = ({
   }
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setFormData({
       ...formData,
@@ -103,15 +103,20 @@ export const ContactComponent = ({
             <div>
               <h2 className="mb-6 text-xl font-semibold">Visit our offices</h2>
               <p className="text-muted-foreground mb-8 text-sm">
-                Reach out to us at any of our offices below. Our team is always ready to
-                connect with you.
+                Reach out to us at any of our offices below. Our team is always
+                ready to connect with you.
               </p>
 
               <div className="space-y-6">
                 {offices.map((office, index) => (
-                  <div key={index} className="border-border border-b pb-6 last:border-0">
+                  <div
+                    key={index}
+                    className="border-border border-b pb-6 last:border-0"
+                  >
                     <h3 className="mb-2 font-semibold">{office.name}</h3>
-                    <p className="text-muted-foreground text-sm">{office.address}</p>
+                    <p className="text-muted-foreground text-sm">
+                      {office.address}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -121,8 +126,8 @@ export const ContactComponent = ({
             <div>
               <h2 className="mb-6 text-xl font-semibold">Email us</h2>
               <p className="text-muted-foreground mb-6 text-sm">
-                Prefer email? Choose the department that best fits your needs and we'll
-                get back to you soon.
+                Prefer email? Choose the department that best fits your needs
+                and we'll get back to you soon.
               </p>
 
               <div className="space-y-4">

@@ -1,0 +1,1 @@
+export { blogConfig } from './config'

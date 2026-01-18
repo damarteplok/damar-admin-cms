@@ -580,31 +580,27 @@ function ErrorFallback({ error }: { error: Error }) {
 
 ## Common Tasks
 
-### Adding a New Page
+### Adding a New CRUD Feature
 
-**Reference Implementation**: For a complete CRUD example, please refer to the following folders which serve as the standard reference for implementing new CRUD features, including table listings, forms, and data fetching patterns:
-- **Product Module** (Newer, recommended): `web/src/routes/admin/products` and `web/src/components/features/admin/products`
-- **Workspaces Module**: `web/src/routes/admin/workspaces` and `web/src/components/features/admin/workspaces`
+For most admin features (List, Create, Edit, Delete), use the automated generator.
 
-1. Create route file in `src/routes/`
-2. Define route with `createFileRoute`
-3. Implement component
-4. Add navigation link if needed
+**1. Run the Generator**
 
-### Creating a Form
+```bash
+npx tsx scripts/generate-crud.ts --name "product" --pluralName "Products"
+```
 
-1. Define Zod schema
-2. Create form with `useForm`
-3. Add form fields with validation
-4. Handle submission (usually GraphQL mutation)
-5. Show success/error feedback
+See `/generate-crud` for full documentation and options.
 
-### Fetching Data
+**2. Post-Generation Steps**
 
-1. Write GraphQL query
-2. Use `useQuery` hook
-3. Handle loading/error states
-4. Render data
+After running the script:
+1.  **Export Types**: Add `export * from './product'` in `src/types/index.ts`
+2.  **Generate Routes**: Run `npm run generate-routes` (or let `tilt` handle it)
+3.  **Add to Sidebar**: Update `src/components/layout/sidebar.tsx`
+4.  **Implement Backend**: Ensure GraphQL API exists
+
+For manual custom pages or complex features not fitting the CRUD pattern, follow the "Creating a New Route" section above.
 
 ### Building for Production
 

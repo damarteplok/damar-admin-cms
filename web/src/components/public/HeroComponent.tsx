@@ -79,7 +79,12 @@ export const HeroComponent = ({
               </Button>
             )}
             {buttons.secondary && (
-              <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto"
+              >
                 <a href={buttons.secondary.url}>{buttons.secondary.text}</a>
               </Button>
             )}

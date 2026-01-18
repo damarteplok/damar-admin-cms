@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useQuery } from 'urql'
 import { Search, X, Loader2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import {
   GET_BLOG_POSTS_QUERY,
@@ -16,9 +17,8 @@ interface BlogComponentProps {
   subheading?: string
 }
 
-export const BlogComponent = ({
-  subheading = 'Thoughts on building, designing, and shipping. Sometimes technical, always useful.',
-}: BlogComponentProps) => {
+export const BlogComponent = ({ subheading }: BlogComponentProps) => {
+  const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [searchInput, setSearchInput] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -98,7 +98,7 @@ export const BlogComponent = ({
 
   // Helper to format date
   const formatDate = (timestamp?: number) => {
-    if (!timestamp) return 'No date'
+    if (!timestamp) return t('public_blog.no_date', { defaultValue: 'No date' })
     const date = new Date(timestamp * 1000)
     return date.toLocaleDateString('en-US', {
       day: 'numeric',
@@ -114,10 +114,24 @@ export const BlogComponent = ({
         {/* Header */}
         <div className="mb-12 max-w-4xl">
           <h1 className="mb-4 text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
-            Where <span className="text-primary">builders</span> think out loud
+            {
+              t('public_blog.heading', {
+                defaultValue: 'Where <1>builders</1> think out loud',
+              }).split('<1>')[0]
+            }
+            <span className="text-primary">
+              {t('public_blog.heading_highlight', { defaultValue: 'builders' })}
+            </span>
+            {t('public_blog.heading', {
+              defaultValue: 'Where <1>builders</1> think out loud',
+            }).split('</1>')[1] || ' think out loud'}
           </h1>
           <p className="text-muted-foreground text-lg md:text-xl">
-            {subheading}
+            {subheading ||
+              t('public_blog.subheading', {
+                defaultValue:
+                  'Thoughts on building, designing, and shipping. Sometimes technical, always useful.',
+              })}
           </p>
         </div>
 
@@ -127,7 +141,9 @@ export const BlogComponent = ({
           <div className="relative max-w-xl">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search blog posts... (real-time)"
+              placeholder={t('public_blog.search_placeholder', {
+                defaultValue: 'Search blog posts... (real-time)',
+              })}
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               className="pl-9 pr-9"
@@ -149,14 +165,14 @@ export const BlogComponent = ({
           {!categoriesFetching && categories.length > 0 && (
             <div className="flex flex-wrap gap-2">
               <span className="text-sm font-medium text-muted-foreground mr-2 self-center">
-                Categories:
+                {t('public_blog.categories', { defaultValue: 'Categories:' })}
               </span>
               <Badge
                 variant={selectedCategory === null ? 'default' : 'outline'}
                 className="cursor-pointer"
                 onClick={() => setSelectedCategory(null)}
               >
-                All
+                {t('public_blog.all', { defaultValue: 'All' })}
               </Badge>
               {categories.map((category) => (
                 <Badge
@@ -184,11 +200,17 @@ export const BlogComponent = ({
         {/* No Results */}
         {!postsFetching && posts.length === 0 && (
           <div className="text-center py-12">
-            <h3 className="text-lg font-semibold mb-2">No blog posts found</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              {t('public_blog.no_posts_found', {
+                defaultValue: 'No blog posts found',
+              })}
+            </h3>
             <p className="text-muted-foreground mb-4">
               {searchInput
-                ? `No results found for "${searchInput}"`
-                : 'No published blog posts available yet.'}
+                ? `${t('public_blog.no_results_for', { defaultValue: 'No results found for' })} "${searchInput}"`
+                : t('public_blog.no_published_posts', {
+                    defaultValue: 'No published blog posts available yet.',
+                  })}
             </p>
             {(searchInput || selectedCategory) && (
               <Button
@@ -198,7 +220,9 @@ export const BlogComponent = ({
                   setSelectedCategory(null)
                 }}
               >
-                Clear Filters
+                {t('public_blog.clear_filters', {
+                  defaultValue: 'Clear Filters',
+                })}
               </Button>
             )}
           </div>

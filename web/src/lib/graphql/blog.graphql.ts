@@ -8,6 +8,7 @@ export const GET_BLOG_POSTS_QUERY = gql`
   query GetBlogPosts(
     $page: Int
     $perPage: Int
+    $search: String
     $publishedOnly: Boolean
     $categoryId: ID
     $sortBy: String
@@ -16,6 +17,7 @@ export const GET_BLOG_POSTS_QUERY = gql`
     blogPosts(
       page: $page
       perPage: $perPage
+      search: $search
       publishedOnly: $publishedOnly
       categoryId: $categoryId
       sortBy: $sortBy

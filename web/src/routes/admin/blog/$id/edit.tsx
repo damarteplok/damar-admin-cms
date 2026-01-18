@@ -195,6 +195,8 @@ function EditBlogPostPage() {
     body: blogPost.body,
     description: blogPost.description,
     blogPostCategoryId: blogPost.blogPostCategoryId,
+    isPublished: blogPost.isPublished,
+    publishedAt: blogPost.publishedAt,
   }
 
   return (

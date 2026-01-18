@@ -3,8 +3,9 @@
  */
 
 // API Configuration
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/query';
-export const APP_URL = import.meta.env.VITE_APP_URL || 'http://localhost:3000';
+export const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:8080/query'
+export const APP_URL = import.meta.env.VITE_APP_URL || 'http://localhost:3000'
 
 // Storage Keys
 export const STORAGE_KEYS = {
@@ -13,7 +14,7 @@ export const STORAGE_KEYS = {
   USER: 'user',
   THEME: 'theme',
   LANGUAGE: 'language',
-} as const;
+} as const
 
 // App Configuration
 export const APP_CONFIG = {
@@ -22,14 +23,14 @@ export const APP_CONFIG = {
   APP_VERSION: '1.0.0',
   DEFAULT_LOCALE: 'id',
   SUPPORTED_LOCALES: ['id', 'en'],
-} as const;
+} as const
 
 // Pagination
 export const PAGINATION = {
   DEFAULT_PAGE: 1,
   DEFAULT_LIMIT: 10,
   MAX_LIMIT: 100,
-} as const;
+} as const
 
 // Validation
 export const VALIDATION = {
@@ -38,14 +39,14 @@ export const VALIDATION = {
   MIN_NAME_LENGTH: 2,
   MAX_NAME_LENGTH: 100,
   MAX_EMAIL_LENGTH: 255,
-} as const;
+} as const
 
 // UI Constants
 export const UI = {
   TOAST_DURATION: 3000,
   DEBOUNCE_DELAY: 300,
   ANIMATION_DURATION: 200,
-} as const;
+} as const
 
 // Routes
 export const ROUTES = {
@@ -61,13 +62,13 @@ export const ROUTES = {
   BLOG: '/blog',
   PRICING: '/pricing',
   CONTACT: '/contact',
-} as const;
+} as const
 
 // User Roles
 export const USER_ROLES = {
   ADMIN: 'admin',
   USER: 'user',
-} as const;
+} as const
 
 // HTTP Status Codes
 export const HTTP_STATUS = {
@@ -78,4 +79,4 @@ export const HTTP_STATUS = {
   FORBIDDEN: 403,
   NOT_FOUND: 404,
   SERVER_ERROR: 500,
-} as const;
+} as const

@@ -5,6 +5,7 @@ package auth;
 option go_package = "shared/proto/auth;auth";
 
 service AuthService {
+  // Authentication
   rpc Login(LoginRequest) returns (LoginResponse) {}
   rpc Logout(LogoutRequest) returns (LogoutResponse) {}
   rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {}
@@ -15,6 +16,45 @@ service AuthService {
   rpc VerifyResetToken(VerifyResetTokenRequest) returns (VerifyResetTokenResponse) {}
   rpc SendVerificationEmail(SendVerificationEmailRequest) returns (SendVerificationEmailResponse) {}
   rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {}
+
+  // Permission CRUD
+  rpc CreatePermission(CreatePermissionRequest) returns (PermissionResponse) {}
+  rpc GetPermission(GetPermissionRequest) returns (PermissionResponse) {}
+  rpc UpdatePermission(UpdatePermissionRequest) returns (PermissionResponse) {}
+  rpc DeletePermission(DeletePermissionRequest) returns (DeleteResponse) {}
+  rpc ListPermissions(ListPermissionsRequest) returns (ListPermissionsResponse) {}
+
+  // Role CRUD
+  rpc CreateRole(CreateRoleRequest) returns (RoleResponse) {}
+  rpc GetRole(GetRoleRequest) returns (RoleResponse) {}
+  rpc UpdateRole(UpdateRoleRequest) returns (RoleResponse) {}
+  rpc DeleteRole(DeleteRoleRequest) returns (DeleteResponse) {}
+  rpc ListRoles(ListRolesRequest) returns (ListRolesResponse) {}
+  rpc GetRoleWithPermissions(GetRoleRequest) returns (RoleWithPermissionsResponse) {}
+
+  // Role-Permission Assignment
+  rpc SyncRolePermissions(SyncRolePermissionsRequest) returns (RoleWithPermissionsResponse) {}
+  rpc AssignPermissionToRole(AssignPermissionToRoleRequest) returns (RoleWithPermissionsResponse) {}
+  rpc RevokePermissionFromRole(RevokePermissionFromRoleRequest) returns (RoleWithPermissionsResponse) {}
+
+  // User-Role Assignment
+  rpc AssignRoleToUser(AssignRoleToUserRequest) returns (UserRolesResponse) {}
+  rpc RevokeRoleFromUser(RevokeRoleFromUserRequest) returns (UserRolesResponse) {}
+  rpc GetUserRoles(GetUserRolesRequest) returns (UserRolesResponse) {}
+  rpc SyncUserRoles(SyncUserRolesRequest) returns (UserRolesResponse) {}
+
+  // User-Permission Direct Assignment
+  rpc AssignPermissionToUser(AssignPermissionToUserRequest) returns (UserPermissionsResponse) {}
+  rpc RevokePermissionFromUser(RevokePermissionFromUserRequest) returns (UserPermissionsResponse) {}
+  rpc GetUserDirectPermissions(GetUserPermissionsRequest) returns (UserPermissionsResponse) {}
+  rpc SyncUserPermissions(SyncUserPermissionsRequest) returns (UserPermissionsResponse) {}
+
+  // Permission Checking
+  rpc GetUserAllPermissions(GetUserPermissionsRequest) returns (UserPermissionsResponse) {}
+  rpc CheckUserHasPermission(CheckPermissionRequest) returns (CheckPermissionResponse) {}
+  rpc CheckUserHasRole(CheckRoleRequest) returns (CheckRoleResponse) {}
+  rpc CheckUserHasAnyPermission(CheckAnyPermissionRequest) returns (CheckPermissionResponse) {}
+  rpc CheckUserHasAllPermissions(CheckAllPermissionsRequest) returns (CheckPermissionResponse) {}
 }
 
 message LoginRequest {
@@ -147,3 +187,255 @@ message VerifyEmailResponse {
   string message = 2;
   int64 user_id = 3;
 }
+
+// ==================== RBAC Message Types ====================
+
+// Permission entity
+message Permission {
+  int64 id = 1;
+  string name = 2;
+  string guard_name = 3;
+  int64 created_at = 4;
+  int64 updated_at = 5;
+}
+
+// Role entity
+message Role {
+  int64 id = 1;
+  string name = 2;
+  string guard_name = 3;
+  int64 created_at = 4;
+  int64 updated_at = 5;
+}
+
+// Role with its permissions
+message RoleWithPermissions {
+  int64 id = 1;
+  string name = 2;
+  string guard_name = 3;
+  repeated Permission permissions = 4;
+  int64 created_at = 5;
+  int64 updated_at = 6;
+}
+
+// ==================== Permission CRUD ====================
+
+message CreatePermissionRequest {
+  string name = 1;
+  string guard_name = 2; // optional, defaults to 'web'
+}
+
+message GetPermissionRequest {
+  int64 id = 1;
+}
+
+message UpdatePermissionRequest {
+  int64 id = 1;
+  string name = 2;
+  string guard_name = 3;
+}
+
+message DeletePermissionRequest {
+  int64 id = 1;
+}
+
+message ListPermissionsRequest {
+  int32 page = 1;
+  int32 per_page = 2;
+  string search = 3;
+  string sort_by = 4;
+  string sort_order = 5;
+  string guard_name = 6; // optional filter
+}
+
+message PermissionResponse {
+  bool success = 1;
+  string message = 2;
+  Permission data = 3;
+}
+
+message ListPermissionsResponse {
+  bool success = 1;
+  string message = 2;
+  repeated Permission permissions = 3;
+  int32 total = 4;
+  int32 page = 5;
+  int32 per_page = 6;
+}
+
+// ==================== Role CRUD ====================
+
+message CreateRoleRequest {
+  string name = 1;
+  string guard_name = 2; // optional, defaults to 'web'
+  repeated int64 permission_ids = 3; // optional, assign permissions on create
+}
+
+message GetRoleRequest {
+  int64 id = 1;
+}
+
+message UpdateRoleRequest {
+  int64 id = 1;
+  string name = 2;
+  string guard_name = 3;
+}
+
+message DeleteRoleRequest {
+  int64 id = 1;
+}
+
+message ListRolesRequest {
+  int32 page = 1;
+  int32 per_page = 2;
+  string search = 3;
+  string sort_by = 4;
+  string sort_order = 5;
+  string guard_name = 6; // optional filter
+}
+
+message RoleResponse {
+  bool success = 1;
+  string message = 2;
+  Role data = 3;
+}
+
+message RoleWithPermissionsResponse {
+  bool success = 1;
+  string message = 2;
+  RoleWithPermissions data = 3;
+}
+
+message ListRolesResponse {
+  bool success = 1;
+  string message = 2;
+  repeated Role roles = 3;
+  int32 total = 4;
+  int32 page = 5;
+  int32 per_page = 6;
+}
+
+// ==================== Role-Permission Assignment ====================
+
+message SyncRolePermissionsRequest {
+  int64 role_id = 1;
+  repeated int64 permission_ids = 2; // replaces all existing permissions
+}
+
+message AssignPermissionToRoleRequest {
+  int64 role_id = 1;
+  int64 permission_id = 2;
+}
+
+message RevokePermissionFromRoleRequest {
+  int64 role_id = 1;
+  int64 permission_id = 2;
+}
+
+// ==================== User-Role Assignment ====================
+
+message AssignRoleToUserRequest {
+  int64 user_id = 1;
+  int64 role_id = 2;
+  string model_type = 3; // optional, defaults to 'users'
+}
+
+message RevokeRoleFromUserRequest {
+  int64 user_id = 1;
+  int64 role_id = 2;
+  string model_type = 3; // optional, defaults to 'users'
+}
+
+message GetUserRolesRequest {
+  int64 user_id = 1;
+  string model_type = 2; // optional, defaults to 'users'
+}
+
+message SyncUserRolesRequest {
+  int64 user_id = 1;
+  repeated int64 role_ids = 2; // replaces all existing roles
+  string model_type = 3; // optional, defaults to 'users'
+}
+
+message UserRolesResponse {
+  bool success = 1;
+  string message = 2;
+  repeated Role roles = 3;
+}
+
+// ==================== User-Permission Direct Assignment ====================
+
+message AssignPermissionToUserRequest {
+  int64 user_id = 1;
+  int64 permission_id = 2;
+  string model_type = 3; // optional, defaults to 'users'
+}
+
+message RevokePermissionFromUserRequest {
+  int64 user_id = 1;
+  int64 permission_id = 2;
+  string model_type = 3; // optional, defaults to 'users'
+}
+
+message GetUserPermissionsRequest {
+  int64 user_id = 1;
+  string model_type = 2; // optional, defaults to 'users'
+}
+
+message SyncUserPermissionsRequest {
+  int64 user_id = 1;
+  repeated int64 permission_ids = 2; // replaces all existing direct permissions
+  string model_type = 3; // optional, defaults to 'users'
+}
+
+message UserPermissionsResponse {
+  bool success = 1;
+  string message = 2;
+  repeated Permission permissions = 3;
+}
+
+// ==================== Permission Checking ====================
+
+message CheckPermissionRequest {
+  int64 user_id = 1;
+  string permission_name = 2;
+  string model_type = 3; // optional, defaults to 'users'
+  string guard_name = 4; // optional, defaults to 'web'
+}
+
+message CheckPermissionResponse {
+  bool has_permission = 1;
+}
+
+message CheckRoleRequest {
+  int64 user_id = 1;
+  string role_name = 2;
+  string model_type = 3; // optional, defaults to 'users'
+  string guard_name = 4; // optional, defaults to 'web'
+}
+
+message CheckRoleResponse {
+  bool has_role = 1;
+}
+
+message CheckAnyPermissionRequest {
+  int64 user_id = 1;
+  repeated string permission_names = 2; // check if user has ANY of these
+  string model_type = 3;
+  string guard_name = 4;
+}
+
+message CheckAllPermissionsRequest {
+  int64 user_id = 1;
+  repeated string permission_names = 2; // check if user has ALL of these
+  string model_type = 3;
+  string guard_name = 4;
+}
+
+// ==================== Generic Responses ====================
+
+message DeleteResponse {
+  bool success = 1;
+  string message = 2;
+}
+

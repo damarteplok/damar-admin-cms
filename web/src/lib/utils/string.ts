@@ -6,8 +6,8 @@
  * Truncate a string to a specific length
  */
 export function truncate(str: string, length: number): string {
-  if (str.length <= length) return str;
-  return str.slice(0, length) + '...';
+  if (str.length <= length) return str
+  return str.slice(0, length) + '...'
 }
 
 /**
@@ -19,15 +19,15 @@ export function slugify(str: string): string {
     .trim()
     .replace(/[^\w\s-]/g, '')
     .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/^-+|-+$/g, '')
 }
 
 /**
  * Capitalize first letter of a string
  */
 export function capitalize(str: string): string {
-  if (!str) return '';
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  if (!str) return ''
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 /**
@@ -37,8 +37,8 @@ export function toTitleCase(str: string): string {
   return str
     .toLowerCase()
     .split(' ')
-    .map(word => capitalize(word))
-    .join(' ');
+    .map((word) => capitalize(word))
+    .join(' ')
 }
 
 /**
@@ -47,7 +47,7 @@ export function toTitleCase(str: string): string {
 export function getInitials(name: string): string {
   return name
     .split(' ')
-    .map(word => word.charAt(0).toUpperCase())
+    .map((word) => word.charAt(0).toUpperCase())
     .join('')
-    .slice(0, 2);
+    .slice(0, 2)
 }
