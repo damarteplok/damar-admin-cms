@@ -86,12 +86,12 @@ func (h *ProductHandler) GetProductBySlug(ctx context.Context, req *pb.GetProduc
 func (h *ProductHandler) CreateProduct(ctx context.Context, req *pb.CreateProductRequest) (*pb.CreateProductResponse, error) {
 	metadata := make(map[string]interface{})
 	if req.Metadata != "" {
-		json.Unmarshal([]byte(req.Metadata), &metadata)
+		_ = json.Unmarshal([]byte(req.Metadata), &metadata)
 	}
 
 	features := make(map[string]interface{})
 	if req.Features != "" {
-		json.Unmarshal([]byte(req.Features), &features)
+		_ = json.Unmarshal([]byte(req.Features), &features)
 	}
 
 	product := &domain.Product{
@@ -122,12 +122,12 @@ func (h *ProductHandler) CreateProduct(ctx context.Context, req *pb.CreateProduc
 func (h *ProductHandler) UpdateProduct(ctx context.Context, req *pb.UpdateProductRequest) (*pb.UpdateProductResponse, error) {
 	metadata := make(map[string]interface{})
 	if req.Metadata != "" {
-		json.Unmarshal([]byte(req.Metadata), &metadata)
+		_ = json.Unmarshal([]byte(req.Metadata), &metadata)
 	}
 
 	features := make(map[string]interface{})
 	if req.Features != "" {
-		json.Unmarshal([]byte(req.Features), &features)
+		_ = json.Unmarshal([]byte(req.Features), &features)
 	}
 
 	product := &domain.Product{
@@ -444,7 +444,7 @@ func (h *ProductHandler) GetPlanPricesByPlan(ctx context.Context, req *pb.GetPla
 func (h *ProductHandler) CreatePlanPrice(ctx context.Context, req *pb.CreatePlanPriceRequest) (*pb.CreatePlanPriceResponse, error) {
 	tiers := make(map[string]interface{})
 	if req.Tiers != "" {
-		json.Unmarshal([]byte(req.Tiers), &tiers)
+		_ = json.Unmarshal([]byte(req.Tiers), &tiers)
 	}
 
 	planPrice := &domain.PlanPrice{
@@ -474,7 +474,7 @@ func (h *ProductHandler) CreatePlanPrice(ctx context.Context, req *pb.CreatePlan
 func (h *ProductHandler) UpdatePlanPrice(ctx context.Context, req *pb.UpdatePlanPriceRequest) (*pb.UpdatePlanPriceResponse, error) {
 	tiers := make(map[string]interface{})
 	if req.Tiers != "" {
-		json.Unmarshal([]byte(req.Tiers), &tiers)
+		_ = json.Unmarshal([]byte(req.Tiers), &tiers)
 	}
 
 	planPrice := &domain.PlanPrice{

@@ -32,7 +32,7 @@ func main() {
 
 	// Set default DB_NAME if not provided
 	if os.Getenv("DB_NAME") == "" {
-		os.Setenv("DB_NAME", "damar_admin_cms")
+		_ = os.Setenv("DB_NAME", "damar_admin_cms")
 	}
 
 	grpcPort := env.GetInt("GRPC_PORT", 50051)
@@ -56,7 +56,7 @@ func main() {
 	if err != nil {
 		logger.Fatal("Failed to connect to RabbitMQ", zap.Error(err))
 	}
-	defer rabbitmqConn.Close()
+	defer func() { _ = rabbitmqConn.Close() }()
 
 	// Create publisher for user events
 	publisher, err := amqp.NewPublisher(rabbitmqConn, "damar.events")

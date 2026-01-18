@@ -460,7 +460,7 @@ func (r *TenantRepository) SetDefaultTenant(ctx context.Context, userID, tenantI
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer tx.Rollback(ctx)
+	defer func() { _ = tx.Rollback(ctx) }()
 
 	// Unset all defaults for this user
 	query1 := `UPDATE tenant_user SET is_default = false WHERE user_id = $1`

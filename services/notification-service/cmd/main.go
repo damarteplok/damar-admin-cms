@@ -33,7 +33,7 @@ func main() {
 	if err != nil {
 		logger.Fatal("Failed to connect to RabbitMQ", zap.Error(err))
 	}
-	defer rabbitmqConn.Close()
+	defer func() { _ = rabbitmqConn.Close() }()
 
 	logger.Info("Successfully connected to RabbitMQ")
 

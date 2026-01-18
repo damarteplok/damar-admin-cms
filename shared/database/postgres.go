@@ -50,7 +50,7 @@ func NewPostgresPool(ctx context.Context) (*pgxpool.Pool, error) {
 	// Optional: configure pool size from env
 	if maxConns := os.Getenv("DB_MAX_CONNS"); maxConns != "" {
 		var max int32
-		fmt.Sscanf(maxConns, "%d", &max)
+		_, _ = fmt.Sscanf(maxConns, "%d", &max)
 		if max > 0 {
 			config.MaxConns = max
 		}

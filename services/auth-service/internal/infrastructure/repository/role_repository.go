@@ -275,7 +275,7 @@ func (r *RoleRepository) SyncPermissions(ctx context.Context, roleID int64, perm
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer tx.Rollback(ctx)
+	defer func() { _ = tx.Rollback(ctx) }()
 
 	// Delete all existing permissions for this role
 	deleteQuery := `DELETE FROM role_has_permissions WHERE role_id = $1`
@@ -406,7 +406,7 @@ func (r *RoleRepository) SyncModelRoles(ctx context.Context, modelID int64, mode
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer tx.Rollback(ctx)
+	defer func() { _ = tx.Rollback(ctx) }()
 
 	// Delete all existing roles for this model
 	deleteQuery := `DELETE FROM model_has_roles WHERE model_id = $1 AND model_type = $2`

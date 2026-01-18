@@ -59,7 +59,7 @@ func main() {
 		redisClient = nil
 	}
 	if redisClient != nil {
-		defer redisClient.Close()
+		defer func() { _ = redisClient.Close() }()
 		logger.Info("Connected to Redis", zap.String("addr", redisAddr))
 	}
 
@@ -74,37 +74,37 @@ func main() {
 	if err != nil {
 		logger.Fatal("Failed to connect to auth service", zap.Error(err))
 	}
-	defer authConn.Close()
+	defer func() { _ = authConn.Close() }()
 
 	userConn, err := grpc.NewClient(userAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger.Fatal("Failed to connect to user service", zap.Error(err))
 	}
-	defer userConn.Close()
+	defer func() { _ = userConn.Close() }()
 
 	tenantConn, err := grpc.NewClient(tenantAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger.Fatal("Failed to connect to tenant service", zap.Error(err))
 	}
-	defer tenantConn.Close()
+	defer func() { _ = tenantConn.Close() }()
 
 	productConn, err := grpc.NewClient(productAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger.Fatal("Failed to connect to product service", zap.Error(err))
 	}
-	defer productConn.Close()
+	defer func() { _ = productConn.Close() }()
 
 	mediaConn, err := grpc.NewClient(mediaAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger.Fatal("Failed to connect to media service", zap.Error(err))
 	}
-	defer mediaConn.Close()
+	defer func() { _ = mediaConn.Close() }()
 
 	contentConn, err := grpc.NewClient(contentAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger.Fatal("Failed to connect to content service", zap.Error(err))
 	}
-	defer contentConn.Close()
+	defer func() { _ = contentConn.Close() }()
 
 	authClient := authPb.NewAuthServiceClient(authConn)
 	userClient := userPb.NewUserServiceClient(userConn)
@@ -209,7 +209,7 @@ func main() {
 	router.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"status":"ok","service":"api-gateway"}`))
+		_, _ = w.Write([]byte(`{"status":"ok","service":"api-gateway"}`))
 	})
 
 	// GraphQL Playground routes
@@ -231,7 +231,7 @@ func main() {
 				zap.String("rabbitmq_addr", rabbitAddr),
 			)
 		} else {
-			defer amqpConn.Close()
+			defer func() { _ = amqpConn.Close() }()
 
 			// Declare exchange for media events
 			if err := amqpConn.DeclareExchange("damar.events", "topic"); err != nil {

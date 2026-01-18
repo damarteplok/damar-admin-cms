@@ -2094,7 +2094,7 @@ func (r *mutationResolver) UploadFile(ctx context.Context, input model.UploadFil
 
 	// Delete existing media with same model_type, model_id, and collection_name
 	// This ensures only one avatar exists per user
-	existingMediaResp, err := r.Resolver.MediaClient.GetFilesByModel(ctx, &mediaPb.GetFilesByModelRequest{
+	existingMediaResp, err := r.MediaClient.GetFilesByModel(ctx, &mediaPb.GetFilesByModelRequest{
 		ModelType:      input.ModelType,
 		ModelId:        modelID,
 		CollectionName: input.CollectionName,
@@ -2104,14 +2104,14 @@ func (r *mutationResolver) UploadFile(ctx context.Context, input model.UploadFil
 	if err == nil && existingMediaResp.Success && existingMediaResp.Data != nil {
 		// Delete each existing media
 		for _, media := range existingMediaResp.Data.Media {
-			_, _ = r.Resolver.MediaClient.DeleteFile(ctx, &mediaPb.DeleteFileRequest{
+			_, _ = r.MediaClient.DeleteFile(ctx, &mediaPb.DeleteFileRequest{
 				Id: media.Id,
 			})
 		}
 	}
 
 	// Call media-service via gRPC
-	uploadResp, err := r.Resolver.MediaClient.UploadFile(ctx, &mediaPb.UploadFileRequest{
+	uploadResp, err := r.MediaClient.UploadFile(ctx, &mediaPb.UploadFileRequest{
 		Content:        fileContent,
 		FileName:       input.FileName,
 		MimeType:       input.MimeType,
@@ -2140,11 +2140,11 @@ func (r *mutationResolver) UploadFile(ctx context.Context, input model.UploadFil
 	media := pbMediaToModel(uploadResp.Data)
 
 	// Invalidate media cache for this model
-	if r.Resolver.MediaCache != nil {
-		_ = r.Resolver.MediaCache.InvalidateModelMedia(ctx, input.ModelType, input.ModelID, input.CollectionName)
+	if r.MediaCache != nil {
+		_ = r.MediaCache.InvalidateModelMedia(ctx, input.ModelType, input.ModelID, input.CollectionName)
 		// Also invalidate user avatar cache if this is a user avatar
 		if input.ModelType == "user" && input.CollectionName == "avatar" {
-			_ = r.Resolver.MediaCache.InvalidateUserAvatar(ctx, input.ModelID)
+			_ = r.MediaCache.InvalidateUserAvatar(ctx, input.ModelID)
 		}
 	}
 

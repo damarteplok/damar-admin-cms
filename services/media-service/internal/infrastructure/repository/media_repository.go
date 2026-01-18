@@ -181,10 +181,10 @@ func (r *MediaRepository) GetByID(ctx context.Context, id int64) (*domain.Media,
 	}
 
 	// Unmarshal JSON fields
-	json.Unmarshal(manipulationsJSON, &media.Manipulations)
-	json.Unmarshal(customPropertiesJSON, &media.CustomProperties)
-	json.Unmarshal(generatedConversionsJSON, &media.GeneratedConversions)
-	json.Unmarshal(responsiveImagesJSON, &media.ResponsiveImages)
+	_ = json.Unmarshal(manipulationsJSON, &media.Manipulations)
+	_ = json.Unmarshal(customPropertiesJSON, &media.CustomProperties)
+	_ = json.Unmarshal(generatedConversionsJSON, &media.GeneratedConversions)
+	_ = json.Unmarshal(responsiveImagesJSON, &media.ResponsiveImages)
 
 	return media, nil
 }
@@ -232,10 +232,10 @@ func (r *MediaRepository) GetByUUID(ctx context.Context, uuid string) (*domain.M
 	}
 
 	// Unmarshal JSON fields
-	json.Unmarshal(manipulationsJSON, &media.Manipulations)
-	json.Unmarshal(customPropertiesJSON, &media.CustomProperties)
-	json.Unmarshal(generatedConversionsJSON, &media.GeneratedConversions)
-	json.Unmarshal(responsiveImagesJSON, &media.ResponsiveImages)
+	_ = json.Unmarshal(manipulationsJSON, &media.Manipulations)
+	_ = json.Unmarshal(customPropertiesJSON, &media.CustomProperties)
+	_ = json.Unmarshal(generatedConversionsJSON, &media.GeneratedConversions)
+	_ = json.Unmarshal(responsiveImagesJSON, &media.ResponsiveImages)
 
 	return media, nil
 }
@@ -332,10 +332,10 @@ func (r *MediaRepository) GetByModel(ctx context.Context, modelType string, mode
 		}
 
 		// Unmarshal JSON fields
-		json.Unmarshal(manipulationsJSON, &media.Manipulations)
-		json.Unmarshal(customPropertiesJSON, &media.CustomProperties)
-		json.Unmarshal(generatedConversionsJSON, &media.GeneratedConversions)
-		json.Unmarshal(responsiveImagesJSON, &media.ResponsiveImages)
+		_ = json.Unmarshal(manipulationsJSON, &media.Manipulations)
+		_ = json.Unmarshal(customPropertiesJSON, &media.CustomProperties)
+		_ = json.Unmarshal(generatedConversionsJSON, &media.GeneratedConversions)
+		_ = json.Unmarshal(responsiveImagesJSON, &media.ResponsiveImages)
 
 		mediaList = append(mediaList, media)
 	}
@@ -476,10 +476,10 @@ func (r *MediaRepository) GetAll(ctx context.Context, page, perPage int, modelTy
 		}
 
 		// Unmarshal JSON fields
-		json.Unmarshal(manipulationsJSON, &media.Manipulations)
-		json.Unmarshal(customPropertiesJSON, &media.CustomProperties)
-		json.Unmarshal(generatedConversionsJSON, &media.GeneratedConversions)
-		json.Unmarshal(responsiveImagesJSON, &media.ResponsiveImages)
+		_ = json.Unmarshal(manipulationsJSON, &media.Manipulations)
+		_ = json.Unmarshal(customPropertiesJSON, &media.CustomProperties)
+		_ = json.Unmarshal(generatedConversionsJSON, &media.GeneratedConversions)
+		_ = json.Unmarshal(responsiveImagesJSON, &media.ResponsiveImages)
 
 		mediaList = append(mediaList, media)
 	}

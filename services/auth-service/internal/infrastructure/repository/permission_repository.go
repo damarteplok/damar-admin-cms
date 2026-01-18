@@ -286,7 +286,7 @@ func (r *PermissionRepository) SyncModelPermissions(ctx context.Context, modelID
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer tx.Rollback(ctx)
+	defer func() { _ = tx.Rollback(ctx) }()
 
 	// Delete all existing permissions for this model
 	deleteQuery := `DELETE FROM model_has_permissions WHERE model_id = $1 AND model_type = $2`

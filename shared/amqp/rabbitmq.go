@@ -26,7 +26,7 @@ func NewConnection(url string) (*Connection, error) {
 
 	channel, err := conn.Channel()
 	if err != nil {
-		conn.Close()
+		_ = conn.Close()
 		return nil, fmt.Errorf("failed to open channel: %w", err)
 	}
 
@@ -202,9 +202,9 @@ func (c *Consumer) Consume(handler func([]byte) error) error {
 			logger.Error("Failed to handle message",
 				zap.String("queue", c.queueName),
 				zap.Error(err))
-			msg.Nack(false, true)
+			_ = msg.Nack(false, true)
 		} else {
-			msg.Ack(false)
+			_ = msg.Ack(false)
 		}
 	}
 

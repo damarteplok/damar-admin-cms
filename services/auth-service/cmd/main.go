@@ -33,7 +33,7 @@ func main() {
 	ctx := context.Background()
 
 	if os.Getenv("DB_NAME") == "" {
-		os.Setenv("DB_NAME", "damar_admin_cms")
+		_ = os.Setenv("DB_NAME", "damar_admin_cms")
 	}
 
 	grpcPort := env.GetInt("GRPC_PORT", 50052)
@@ -64,7 +64,7 @@ func main() {
 			zap.Error(err),
 		)
 	}
-	defer userConn.Close()
+	defer func() { _ = userConn.Close() }()
 
 	logger.Info("Successfully connected to user-service", zap.String("address", userServiceAddr))
 
@@ -73,7 +73,7 @@ func main() {
 	if err != nil {
 		logger.Fatal("Failed to connect to RabbitMQ", zap.Error(err))
 	}
-	defer rabbitmqConn.Close()
+	defer func() { _ = rabbitmqConn.Close() }()
 
 	publisher, err := amqp.NewPublisher(rabbitmqConn, "damar.events")
 	if err != nil {

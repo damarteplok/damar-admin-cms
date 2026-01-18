@@ -14,7 +14,7 @@ func init() {
 	validate = validator.New()
 
 	// Register custom validation functions
-	validate.RegisterValidation("alphanum_hyphen", validateAlphanumHyphen)
+	_ = validate.RegisterValidation("alphanum_hyphen", validateAlphanumHyphen)
 }
 
 // validateAlphanumHyphen validates that a string contains only alphanumeric characters and hyphens

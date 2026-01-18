@@ -31,7 +31,7 @@ func main() {
 
 	// Set default DB_NAME if not provided
 	if os.Getenv("DB_NAME") == "" {
-		os.Setenv("DB_NAME", "damar_admin_cms")
+		_ = os.Setenv("DB_NAME", "damar_admin_cms")
 	}
 
 	grpcPort := env.GetInt("GRPC_PORT", 50053)
