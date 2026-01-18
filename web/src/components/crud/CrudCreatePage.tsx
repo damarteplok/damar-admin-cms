@@ -7,7 +7,6 @@ import { useCrudForm } from '@/hooks/crud'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
-
 interface CrudCreatePageProps<
   TModel extends { id: string },
   TCreateInput,
@@ -49,7 +48,7 @@ export function CrudCreatePage<
     config.resourceName.slice(1, -1)
   const createMutationKey = config.queries.createKey || `create${singularName}`
 
-  const { handleSubmit, isSubmitting } = useCrudForm<TCreateInput>({
+  const { handleSubmit } = useCrudForm<TCreateInput>({
     mutation: config.queries.create,
     mutationKey: createMutationKey,
     onSuccess: handleSuccess,

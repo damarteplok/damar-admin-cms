@@ -24,7 +24,7 @@ const breadcrumbMap: Record<string, string> = {
  */
 export function useBreadcrumbs(): Array<BreadcrumbItem> {
   const location = useLocation()
-  const params = useParams({ strict: false })
+  useParams({ strict: false })
 
   const pathname = location.pathname
   const segments = pathname.split('/').filter(Boolean)

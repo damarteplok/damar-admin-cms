@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { gql, useQuery } from 'urql'
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { AnyVariables, TypedDocumentNode} from 'urql';
+import type { AnyVariables, TypedDocumentNode } from 'urql'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {

@@ -1,7 +1,10 @@
-import type { CreateDiscountInput, CrudConfig,
+import type {
+  CreateDiscountInput,
+  CrudConfig,
   CrudTranslations,
   Discount,
-  UpdateDiscountInput } from '@/types'
+  UpdateDiscountInput,
+} from '@/types'
 
 import {
   CREATE_DISCOUNT_MUTATION,

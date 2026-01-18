@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { ErrorState } from '@/components/ui/error-state'
 
-
 interface CrudEditPageProps<
   TModel extends { id: string },
   TCreateInput,
@@ -55,7 +54,7 @@ export function CrudEditPage<
   const { id } = useParams({ from: routePath as never })
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [_isSubmitting, setIsSubmitting] = useState(false)
 
   // Fetch existing data
   const [result] = useQuery({

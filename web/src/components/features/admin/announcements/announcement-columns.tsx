@@ -1,12 +1,9 @@
-import { AlertCircle, Check, Eye, Pencil, Trash2, X } from 'lucide-react'
+import { AlertCircle, Check, Eye, Pencil, Trash2 } from 'lucide-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import type { Announcement } from '@/types'
-import type {
-  DataTableAction} from '@/components/ui/data-table-actions';
+import type { DataTableAction } from '@/components/ui/data-table-actions'
 import type { TFunction } from 'i18next'
-import {
-  DataTableActions
-} from '@/components/ui/data-table-actions'
+import { DataTableActions } from '@/components/ui/data-table-actions'
 import { Badge } from '@/components/ui/badge'
 import { formatDateTime } from '@/lib/utils/date'
 

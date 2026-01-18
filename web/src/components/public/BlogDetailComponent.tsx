@@ -1,6 +1,6 @@
 import { useQuery } from 'urql'
 import { useNavigate } from '@tanstack/react-router'
-import { ArrowLeft, Calendar, Loader2, Tag, User } from 'lucide-react'
+import { ArrowLeft, Calendar, Loader2 } from 'lucide-react'
 import DOMPurify from 'isomorphic-dompurify'
 
 import type { GetBlogPostResponse } from '@/types/blog'

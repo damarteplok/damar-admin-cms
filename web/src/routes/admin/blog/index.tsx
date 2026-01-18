@@ -38,7 +38,6 @@ function BlogPostsPage() {
     page,
     perPage,
     setPerPage,
-    search,
     setSearch,
     handlePageChange,
     handleSortChange,
@@ -142,7 +141,7 @@ function BlogPostsPage() {
         onPublish: handlePublishPost,
         onUnpublish: handleUnpublishPost,
         t,
-      }),
+      } as any),
     [t, posts, openDeleteDialog], // Added relevant deps
   )
 

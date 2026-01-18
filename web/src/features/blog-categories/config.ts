@@ -1,7 +1,10 @@
-import type { Category, CreateCategoryInput,
+import type {
+  Category,
+  CreateCategoryInput,
   CrudConfig,
   CrudTranslations,
-  UpdateCategoryInput } from '@/types'
+  UpdateCategoryInput,
+} from '@/types'
 
 import {
   CREATE_CATEGORY_MUTATION,

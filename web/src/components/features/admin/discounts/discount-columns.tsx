@@ -1,12 +1,9 @@
 import { Check, Eye, Pencil, Trash2, X } from 'lucide-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import type { Discount } from '@/types'
-import type {
-  DataTableAction} from '@/components/ui/data-table-actions';
+import type { DataTableAction } from '@/components/ui/data-table-actions'
 import type { TFunction } from 'i18next'
-import {
-  DataTableActions
-} from '@/components/ui/data-table-actions'
+import { DataTableActions } from '@/components/ui/data-table-actions'
 import { Badge } from '@/components/ui/badge'
 import { formatDateTime } from '@/lib/utils/date'
 
@@ -56,7 +53,7 @@ export const createDiscountColumns = ({
     header: t('discounts.columns.amount', { defaultValue: 'Amount' }),
     cell: ({ row }) => {
       const type = row.original.type
-      const amount = row.getValue('amount')
+      const amount = row.getValue('amount') as number
       return (
         <span className="font-medium">
           {type === 'percentage' ? `${amount}%` : `$${amount.toFixed(2)}`}
@@ -91,7 +88,7 @@ export const createDiscountColumns = ({
 
       return (
         <span className="text-sm">
-          {redemptions}
+          {redemptions as number}
           {maxRedemptions && maxRedemptions > 0 && ` / ${maxRedemptions}`}
         </span>
       )

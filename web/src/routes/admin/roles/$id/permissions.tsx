@@ -19,13 +19,7 @@ import {
 
 import { ErrorState } from '@/components/ui/error-state'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -41,9 +35,9 @@ function ManageRolePermissionsPage() {
   const { t } = useTranslation()
 
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedPermissionIds, setSelectedPermissionIds] = useState<Array<string>>(
-    [],
-  )
+  const [selectedPermissionIds, setSelectedPermissionIds] = useState<
+    Array<string>
+  >([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Fetch role with current permissions

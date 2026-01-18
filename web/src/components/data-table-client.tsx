@@ -6,7 +6,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table'
 import {
   ArrowDown,
@@ -14,14 +14,14 @@ import {
   ArrowUpDown,
   ChevronLeft,
   ChevronRight,
-  Plus,
   Settings2,
 } from 'lucide-react'
 import type {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
-  VisibilityState} from '@tanstack/react-table';
+  VisibilityState,
+} from '@tanstack/react-table'
 import {
   Table,
   TableBody,

@@ -1,7 +1,10 @@
-import type { BlogPost, CreateBlogPostInput,
+import type {
+  BlogPost,
+  CreateBlogPostInput,
   CrudConfig,
   CrudTranslations,
-  UpdateBlogPostInput } from '@/types'
+  UpdateBlogPostInput,
+} from '@/types'
 
 import {
   CREATE_BLOG_POST_MUTATION,

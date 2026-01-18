@@ -11,21 +11,6 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { RichTextEditor } from '@/components/ui/rich-text-editor'
 
-interface AnnouncementFormValues extends Omit<
-  CreateAnnouncementInput,
-  'startsAt' | 'endsAt'
-> {
-  startsAtDate: string
-  startsAtTime: string
-  endsAtDate: string
-  endsAtTime: string
-  isActive: boolean
-  isDismissible: boolean
-  showForCustomers: boolean
-  showOnFrontend: boolean
-  showOnUserDashboard: boolean
-}
-
 interface AnnouncementFormProps {
   initialData?: Partial<CreateAnnouncementInput>
   onSubmit: (
@@ -35,7 +20,6 @@ interface AnnouncementFormProps {
   onCancel: () => void
   submitLabel?: string
   showCreateAnother?: boolean
-  isEditMode?: boolean
 }
 
 // Helper functions for date/time conversion
@@ -63,7 +47,6 @@ export function AnnouncementForm({
   onCancel,
   submitLabel = 'Save',
   showCreateAnother = false,
-  isEditMode = false,
 }: AnnouncementFormProps) {
   const { t } = useTranslation()
   const [isSubmitting, setIsSubmitting] = useState(false)

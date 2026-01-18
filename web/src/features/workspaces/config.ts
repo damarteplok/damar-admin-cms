@@ -1,14 +1,15 @@
-import type { CrudConfig, CrudTranslations, Tenant  } from '@/types'
+import type { CrudConfig, CrudTranslations, Tenant } from '@/types'
 import type {
-  CREATE_TENANT_MUTATION,
   CreateTenantInput,
+  UpdateTenantInput,
+} from '@/lib/graphql/tenant.graphql'
+import {
+  CREATE_TENANT_MUTATION,
   DELETE_TENANT_MUTATION,
   GET_TENANTS_QUERY,
   GET_TENANT_QUERY,
   UPDATE_TENANT_MUTATION,
-  UpdateTenantInput
 } from '@/lib/graphql/tenant.graphql'
-
 
 import { createWorkspaceColumns } from '@/components/features/admin/workspaces/workspace-columns'
 import { WorkspaceForm } from '@/components/features/admin/workspaces/workspace-form'

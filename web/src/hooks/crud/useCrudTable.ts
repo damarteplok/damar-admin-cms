@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { useMutation, useQuery } from 'urql'
 import type { DocumentNode } from 'graphql'
 
-export interface UseCrudTableOptions<TModel extends { id: string }> {
+export interface UseCrudTableOptions {
   /** GraphQL query document for fetching list */
   listQuery: DocumentNode
   /** GraphQL mutation document for deleting item */
@@ -78,7 +78,7 @@ export interface UseCrudTableReturn<TModel extends { id: string }> {
  * ```
  */
 export function useCrudTable<TModel extends { id: string }>(
-  options: UseCrudTableOptions<TModel>,
+  options: UseCrudTableOptions,
 ): UseCrudTableReturn<TModel> {
   const {
     listQuery,

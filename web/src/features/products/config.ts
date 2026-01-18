@@ -1,4 +1,10 @@
-import type { CreateProductInput, CrudConfig, CrudTranslations, Product, UpdateProductInput  } from '@/types'
+import type {
+  CreateProductInput,
+  CrudConfig,
+  CrudTranslations,
+  Product,
+  UpdateProductInput,
+} from '@/types'
 
 import {
   CREATE_PRODUCT_MUTATION,

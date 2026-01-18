@@ -1,12 +1,9 @@
-import { Check, Eye, Globe, Lock, Pencil, Trash2, X } from 'lucide-react'
+import { Eye, Globe, Lock, Pencil, Trash2 } from 'lucide-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import type { BlogPost } from '@/types'
-import type {
-  DataTableAction} from '@/components/ui/data-table-actions';
+import type { DataTableAction } from '@/components/ui/data-table-actions'
 import type { TFunction } from 'i18next'
-import {
-  DataTableActions
-} from '@/components/ui/data-table-actions'
+import { DataTableActions } from '@/components/ui/data-table-actions'
 import { Badge } from '@/components/ui/badge'
 import { formatDateTime } from '@/lib/utils/date'
 
@@ -93,7 +90,7 @@ export const createBlogPostColumns = ({
     accessorKey: 'publishedAt',
     header: t('blog.columns.published_at', { defaultValue: 'Published' }),
     cell: ({ row }) => {
-      const publishedAt = row.getValue('publishedAt')
+      const publishedAt = row.getValue('publishedAt') as string | number | Date
       return publishedAt ? (
         <span className="text-sm">{formatDateTime(publishedAt)}</span>
       ) : (

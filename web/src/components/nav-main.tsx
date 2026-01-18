@@ -1,6 +1,6 @@
-import { ChevronRight  } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { Link, useLocation } from '@tanstack/react-router'
-import type {LucideIcon} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react'
 
 import {
   Collapsible,

@@ -9,7 +9,6 @@ import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { DataTableSkeleton } from '@/components/ui/data-table-skeleton'
 import { ErrorState } from '@/components/ui/error-state'
 
-
 interface CrudListPageProps<
   TModel extends { id: string; name?: string },
   TCreateInput = unknown,

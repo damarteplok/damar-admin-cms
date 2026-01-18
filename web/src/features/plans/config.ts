@@ -1,4 +1,10 @@
-import type { CreatePlanInput, CrudConfig, CrudTranslations, Plan, UpdatePlanInput  } from '@/types'
+import type {
+  CreatePlanInput,
+  CrudConfig,
+  CrudTranslations,
+  Plan,
+  UpdatePlanInput,
+} from '@/types'
 
 import {
   CREATE_PLAN_MUTATION,

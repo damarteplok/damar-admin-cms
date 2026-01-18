@@ -1,7 +1,10 @@
-import type { Announcement, CreateAnnouncementInput,
+import type {
+  Announcement,
+  CreateAnnouncementInput,
   CrudConfig,
   CrudTranslations,
-  UpdateAnnouncementInput } from '@/types'
+  UpdateAnnouncementInput,
+} from '@/types'
 
 import {
   CREATE_ANNOUNCEMENT_MUTATION,

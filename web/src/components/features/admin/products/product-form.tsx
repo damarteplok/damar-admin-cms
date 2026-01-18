@@ -6,7 +6,7 @@ import { Loader2 } from 'lucide-react'
 import { MetadataInput } from './metadata-input'
 import { FeaturesInput } from './features-input'
 import type { CreateProductInput, UpdateProductInput } from '@/types'
-import type { MetadataItem } from './metadata-input';
+import type { MetadataItem } from './metadata-input'
 import { Button } from '@/components/ui/button'
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'

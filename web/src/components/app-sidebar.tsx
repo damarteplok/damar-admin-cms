@@ -6,7 +6,6 @@ import {
   BookOpen,
   Command,
   Frame,
-  Key,
   PieChart,
   Shield,
   TrendingUp,

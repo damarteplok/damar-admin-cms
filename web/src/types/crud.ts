@@ -32,7 +32,9 @@ export interface ColumnFactoryProps {
   t: TFunction
 }
 
-export type ColumnFactory<T> = (props: ColumnFactoryProps) => Array<ColumnDef<T>>
+export type ColumnFactory<T> = (
+  props: ColumnFactoryProps,
+) => Array<ColumnDef<T>>
 
 /**
  * Form component props interface for create/edit forms

@@ -1,12 +1,9 @@
 import { Eye, Pencil, Shield, Trash2 } from 'lucide-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import type { Role } from '@/types'
-import type {
-  DataTableAction} from '@/components/ui/data-table-actions';
+import type { DataTableAction } from '@/components/ui/data-table-actions'
 import type { TFunction } from 'i18next'
-import {
-  DataTableActions
-} from '@/components/ui/data-table-actions'
+import { DataTableActions } from '@/components/ui/data-table-actions'
 import { Badge } from '@/components/ui/badge'
 import { formatDateTime } from '@/lib/utils/date'
 
