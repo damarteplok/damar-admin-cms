@@ -189,7 +189,7 @@ export function WorkspaceForm({
         validators={{
           onChange: ({ value }) => {
             if (value && value.trim().length > 0) {
-              if (!/^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}$/i.test(value)) {
+              if (!/^[a-z0-9]+([-.]?[a-z0-9]+)*\.[a-z]{2,}$/i.test(value)) {
                 return t('workspaces.form.domain_invalid', {
                   defaultValue:
                     'Please enter a valid domain (e.g., example.com)',

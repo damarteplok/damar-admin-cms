@@ -90,7 +90,7 @@ export const createBlogPostColumns = ({
     accessorKey: 'publishedAt',
     header: t('blog.columns.published_at', { defaultValue: 'Published' }),
     cell: ({ row }) => {
-      const publishedAt = row.getValue('publishedAt') as string | number | Date
+      const publishedAt = row.getValue('publishedAt') as number
       return publishedAt ? (
         <span className="text-sm">{formatDateTime(publishedAt)}</span>
       ) : (

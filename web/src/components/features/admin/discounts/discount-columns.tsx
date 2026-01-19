@@ -53,7 +53,7 @@ export const createDiscountColumns = ({
     header: t('discounts.columns.amount', { defaultValue: 'Amount' }),
     cell: ({ row }) => {
       const type = row.original.type
-      const amount = row.getValue('amount') as number
+      const amount = row.original.amount
       return (
         <span className="font-medium">
           {type === 'percentage' ? `${amount}%` : `$${amount.toFixed(2)}`}

@@ -48,12 +48,12 @@ export function NavMain({
           const pathNorm = normalize(pathname)
           const itemUrlNorm = item.url ? normalize(item.url) : null
 
-          const subActive = !!item.items?.some((s) => {
-            const sNorm = normalize(s.url)
-            return pathNorm === sNorm || pathNorm.startsWith(sNorm + '/')
-          })
+          // const subActive = !!item.items?.some((s) => {
+          //   const sNorm = normalize(s.url)
+          //   return pathNorm === sNorm || pathNorm.startsWith(sNorm + '/')
+          // })
           const itemActive = itemUrlNorm === pathNorm
-          const defaultOpen = true || subActive
+          const defaultOpen = true // || subActive
 
           return (
             <Collapsible key={item.title} asChild defaultOpen={defaultOpen}>

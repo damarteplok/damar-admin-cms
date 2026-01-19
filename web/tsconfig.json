@@ -6,6 +6,7 @@
     "prettier.config.js",
     "vite.config.js"
   ],
+  "exclude": [".output", "dist", "node_modules"],
 
   "compilerOptions": {
     "ignoreDeprecations": "5.0",

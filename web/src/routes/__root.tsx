@@ -7,13 +7,12 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { Provider as UrqlProvider } from 'urql'
+import appCss from '../styles.css?url'
 import { urqlClient } from '@/lib/graphql/client'
 import { AuthProvider } from '@/lib/auth-context'
 import { Toaster } from '@/components/ui/sonner'
 import { ErrorState } from '@/components/ui/error-state'
 import '../i18n'
-
-import appCss from '../styles.css?url'
 
 export const Route = createRootRoute({
   head: () => ({
